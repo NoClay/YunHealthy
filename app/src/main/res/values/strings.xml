@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">YunHealth</string>
+    <string name="measure">测量</string>
+    <string name="data">数据</string>
+    <string name="home">主页</string>
+    <string name="doctor">医生</string>
+    <string name="mine">我的</string>
+    <string name="home_health_plan">健康方案选择</string>
+    <string name="home_health_plan_container">选择专属方案，个性化管理您的健康</string>
+    <string name="home_recipe">食谱</string>
+    <string name="home_news">资讯</string>
+    <string name="home_yao">用药</string>
+    <string name="home_report">报告单</string>
+</resources>
