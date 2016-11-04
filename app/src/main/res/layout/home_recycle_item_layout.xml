@@ -16,11 +16,9 @@
         android:layout_height="match_parent"
         android:gravity="center_vertical"
         android:textSize="25sp"
+        android:id="@+id/home_recycle_item_tv"
         android:layout_toRightOf="@+id/home_recycle_item_im"
         android:layout_marginLeft="20dp"
-        android:textColor="@color/black"
-        android:id="@+id/home_recycle_item_tv"
-        />
-
+        android:textColor="@color/black"/>
 
 </RelativeLayout>

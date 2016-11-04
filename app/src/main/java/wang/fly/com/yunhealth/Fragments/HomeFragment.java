@@ -2,10 +2,8 @@ package wang.fly.com.yunhealth.Fragments;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.MainThread;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -82,7 +80,6 @@ public class HomeFragment extends Fragment {
                 myAdapter = new MyAdapter(datas);
                 recyclerView.setAdapter(myAdapter);
                 recyclerView.addItemDecoration(new MyRecyclerViewDivider(context,MyRecyclerViewDivider.ALL));
-
             }
 
             @Override
