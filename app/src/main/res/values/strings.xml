@@ -11,4 +11,12 @@
     <string name="home_news">资讯</string>
     <string name="home_yao">用药</string>
     <string name="home_report">报告单</string>
+    <string name="data_topic">数据</string>
+    <string name="data_dynamic">动态</string>
+    <string name="data_data">数据</string>
+    <string name="data_report">报告单</string>
+    <string name="data_medicate">用药</string>
+    <string name="doctors_topic">医生</string>
+    <string name="measure_topic">实时数据</string>
+    <string name="measure_device_manage">设备管理</string>
 </resources>

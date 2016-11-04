@@ -19,22 +19,40 @@ import wang.fly.com.yunhealth.R;
  */
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
     private List<Map<String,Object>> datas = new ArrayList<>();
-
-    public MyAdapter(List<Map<String,Object>> datas){
+    private OnItemClickListener onItemClickListener = null;
+    private int layout;
+    public MyAdapter(List<Map<String,Object>> datas,int layout){
         this.datas = datas;
+        this.layout = layout;
     }
 
+    public interface OnItemClickListener{
+        void onItemClick(View view,int position);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener){
+        this.onItemClickListener = onItemClickListener;
+    }
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.home_recycle_item_layout,parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(layout,parent,false);
         ViewHolder vh = new ViewHolder(view);
         return vh;
     }
     //将数据与界面进行绑定的操作
     @Override
-    public void onBindViewHolder(MyAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(final MyAdapter.ViewHolder holder, int position) {
         holder.mTextView.setText(datas.get(position).get("text").toString());
         holder.mImageView.setImageResource((Integer) datas.get(position).get("id"));
+        holder.itemView.setTag(datas.get(position));
+        if(onItemClickListener != null){
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onItemClickListener.onItemClick(v,holder.getLayoutPosition());
+                }
+            });
+        }
     }
     //获取数据的数量
     @Override
