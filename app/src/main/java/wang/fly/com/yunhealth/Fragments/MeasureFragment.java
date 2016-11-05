@@ -17,6 +17,8 @@ import java.util.Map;
 
 import rx.Observable;
 import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 import wang.fly.com.yunhealth.Adapter.MyAdapter;
 import wang.fly.com.yunhealth.R;
 
@@ -59,7 +61,9 @@ public class MeasureFragment extends Fragment {
                     subscriber.onError(e);
                 }
             }
-        }).subscribe(new Subscriber<List<Map<String, Object>>>() {
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<List<Map<String, Object>>>() {
             @Override
             public void onCompleted() {
 
