@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="100dp"
+    android:layout_height="88dp"
     >
     <ImageView
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:id="@+id/home_recycle_item_im"
+        android:id="@+id/label_image"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
         android:layout_marginLeft="20dp"
@@ -15,9 +15,9 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:gravity="center_vertical"
-        android:textSize="25sp"
+        android:textSize="23sp"
         android:id="@+id/home_recycle_item_tv"
-        android:layout_toRightOf="@+id/home_recycle_item_im"
+        android:layout_toRightOf="@+id/label_image"
         android:layout_marginLeft="20dp"
         android:textColor="@color/black"/>
 

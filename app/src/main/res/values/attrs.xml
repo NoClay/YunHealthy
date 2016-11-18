@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="ScanView">
+        <attr name="textColor" format="color"></attr>
+        <attr name="textSize" format="dimension"></attr>
+        <attr name="level1Color" format="color"></attr>
+        <attr name="level2Color" format="color"></attr>
+        <attr name="level3Color" format="color"></attr>
+        <attr name="level4Color" format="color"></attr>
+        <attr name="level5Color" format="color"></attr>
+    </declare-styleable>
+
+    <declare-styleable name="HeartWavesView">
+        <!--表格线的颜色-->
+        <!--标题的颜色-->
+        <!--波线的颜色-->
+        <!--标题的文字大小-->
+        <!--xy轴坐标的文字大小-->
+        <attr name="tableLineColor" format="color"/>
+        <attr name="titleColor" format="color"/>
+        <attr name="wavesLineColor" format="color"/>
+        <attr name="titleSize" format="dimension"/>
+        <attr name="xyTextSize" format="dimension"/>
+    </declare-styleable>
+
+    <declare-styleable name="FoldLineView">
+        <attr name="maxColor" format="color"/>
+        <attr name="minColor" format="color"/>
+        <attr name="averageColor" format="color"/>
+        <attr name="backLineColor" format="color"/>
+        <attr name="lineColor" format="color"/>
+        <attr name="labelColor" format="color"/>
+        <attr name="labelSize" format="dimension"/>
+    </declare-styleable>
+    
+    <declare-styleable name="CircleImageView">
+        <attr name="circleColor" format="color"></attr>
+    </declare-styleable>
+</resources>

@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/tool_bar" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/tab_back"
+        android:orientation="horizontal"
+        android:weightSum="4">
+
+        <TextView
+            android:id="@+id/oneDayChecked"
+            style="@style/TabRadioButton"
+            android:text="1天" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/lightseagreen" />
+
+        <TextView
+            android:id="@+id/sevenDayChecked"
+            style="@style/TabRadioButton"
+            android:text="7天" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/lightseagreen" />
+
+        <TextView
+            android:id="@+id/fourteenDayChecked"
+            style="@style/TabRadioButton"
+            android:text="14天" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/lightseagreen" />
+
+        <TextView
+            android:id="@+id/thirtyDayChecked"
+            style="@style/TabRadioButton"
+            android:text="30天" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/data_resolve_back"
+        android:orientation="vertical"
+        android:padding="5dp">
+
+        <TextView
+            android:id="@+id/chart_time_show"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:text="测量时间："
+            android:textColor="@color/contentTextColor" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left|center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="75dp"
+                android:layout_height="match_parent"
+                android:scaleType="fitCenter"
+                android:src="@drawable/data_resolve"
+                android:tint="@color/bg3" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                android:background="#E6E6E6" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="3">
+
+                <LinearLayout style="@style/DataResolveTheme">
+
+                    <TextView
+                        android:id="@+id/chart_average_show"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="67.0"
+                        android:textColor="@color/black"
+                        android:textSize="23sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/averageUnit"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="kg\n平均值"
+                        android:textColor="@color/black"
+                        android:textSize="17sp"
+                        android:textStyle="normal" />
+                </LinearLayout>
+
+                <LinearLayout style="@style/DataResolveTheme">
+
+                    <TextView
+                        android:id="@+id/chart_highest_show"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="67.0"
+                        android:textColor="@color/black"
+                        android:textSize="23sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/highestUnit"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="kg\n峰值"
+                        android:textColor="@color/black"
+                        android:textSize="17sp"
+                        android:textStyle="normal" />
+                </LinearLayout>
+
+                <LinearLayout style="@style/DataResolveTheme">
+
+                    <TextView
+                        android:id="@+id/chart_lowest_show"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="67.0"
+                        android:textColor="@color/black"
+                        android:textSize="23sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/lowestUnit"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="kg\n低谷值"
+                        android:textColor="@color/black"
+                        android:textSize="17sp"
+                        android:textStyle="normal" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <wang.fly.com.yunhealth.MyViewPackage.FoldLineView
+        android:id="@+id/surfaceView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="30dp"
+        android:paddingBottom="40dp"
+        android:paddingLeft="50dp"
+        android:paddingRight="20dp"
+        app:averageColor="@color/bg1"
+        app:labelColor="@color/black"
+        app:labelSize="15sp"
+        app:lineColor="@color/black"
+        app:maxColor="@color/bg2"
+        app:minColor="@color/bg3" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginTop="-30dp"
+        android:gravity="right|center_vertical"
+        android:orientation="horizontal"
+        android:paddingRight="15dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="平均值" />
+
+        <View
+            android:layout_width="20dp"
+            android:layout_height="3dp"
+            android:layout_margin="5dp"
+            android:background="@color/bg1" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="峰值" />
+
+        <View
+            android:layout_width="20dp"
+            android:layout_height="3dp"
+            android:layout_margin="5dp"
+            android:background="@color/bg2" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="低谷值" />
+
+        <View
+            android:layout_width="20dp"
+            android:layout_height="3dp"
+            android:layout_margin="5dp"
+            android:background="@color/bg3" />
+    </LinearLayout>
+</LinearLayout>
