@@ -8,5 +8,25 @@
     <color name="lightseagreen">#20b2aa</color><!--亮海蓝色 -->
     <color name="white">#ffffff</color><!--白色 -->
     <color name="black">#000000</color><!--黑色 -->
+    <color name="red">#F34235</color>
+    <color name="skyBlue">#03A9F4</color>
 
+    <!--这里用于放置8个背景色，用于给测量页面设置背景色-->
+    <color name="bg1">#D08DC9</color>
+    <color name="bg2">#55D1DC</color>
+    <color name="bg3">#92B753</color>
+    <color name="bg4">#7BE4B9</color>
+    <color name="bg5">#4D8682</color>
+    <color name="bg6">#7ED79E</color>
+    <color name="bg7">#5298CB</color>
+    <color name="bg8">#53B0B8</color>
+    <color name="danger">#F34235</color>
+    <color name="warning">#FFA320</color>
+    <color name="normal">#7BE4B9</color>
+    <color name="dangerStart">#FE5621</color>
+    <color name="warningStart">#EAF010</color>
+    <color name="normalStart">#8DE47B</color>
+    <color name="hintTextColor">#C5C5C5</color>
+    <color name="contentTextColor">#556281</color>
+    <color name="titleTextColor">#5E5E5E</color>
 </resources>

@@ -1,65 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/homePageLayout"
+    android:weightSum="10"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    >
-    <RelativeLayout
+    android:orientation="vertical">
+
+    <wang.fly.com.yunhealth.MyViewPackage.ScanView
+        android:id="@+id/scanButton"
+        android:layout_weight="5"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="4"
         android:background="@color/lightseagreen"
-        >
+        app:level1Color="@color/lightseagreen"
+        app:level2Color="@color/lightseagreen"
+        app:level3Color="#FE5621"
+        app:level4Color="#F34235"
+        app:level5Color="#F34235">
 
-    </RelativeLayout>
-   <RelativeLayout
-       android:layout_width="match_parent"
-       android:layout_height="0dp"
-       android:layout_weight="2"
-       android:paddingTop="20dp"
-       android:background="@color/white"
-       >
+    </wang.fly.com.yunhealth.MyViewPackage.ScanView>
 
-       <ImageView
-           android:layout_width="40dp"
-           android:layout_height="40dp"
-           android:src="@drawable/health_plan"
-           android:layout_alignParentLeft="true"
-           android:layout_marginLeft="20dp"
-           android:id="@+id/home_health_plan_im"
-           />
-       <TextView
-           android:layout_width="wrap_content"
-           android:layout_height="40dp"
-           android:layout_toRightOf="@+id/home_health_plan_im"
-           android:text="@string/home_health_plan"
-           android:gravity="center"
-           android:textSize="20sp"
-           android:layout_marginLeft="5dp"
-           android:id="@+id/home_health_plan_tv"
-           android:textColor="@color/dimgray"
-           />
-       <TextView
-           android:layout_width="match_parent"
-           android:layout_height="wrap_content"
-           android:ellipsize="end"
-           android:maxLines="1"
-           android:textSize="27sp"
-           android:layout_marginTop="10dp"
-           android:gravity="center"
-           android:layout_below="@+id/home_health_plan_tv"
-           android:text="@string/home_health_plan_container"
-           android:textColor="@color/black"
-           />
-   </RelativeLayout>
-    <android.support.v7.widget.RecyclerView
+    <LinearLayout
+        android:id="@+id/hint_page"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:scrollbars="vertical"
-        android:background="@color/white"
-        android:id="@+id/home_recycle"
-        />
+        android:layout_weight="5"
+        android:layout_height="0dp"
+        android:layout_gravity="bottom"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:paddingBottom="5dp"
+            android:background="@color/white"
+            android:paddingTop="20dp">
+
+            <ImageView
+                android:id="@+id/home_health_plan_im"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="20dp"
+                android:src="@drawable/health_plan" />
+
+            <TextView
+                android:id="@+id/home_health_plan_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginLeft="5dp"
+                android:layout_toRightOf="@+id/home_health_plan_im"
+                android:gravity="center"
+                android:text="@string/home_health_plan"
+                android:textColor="@color/dimgray"
+                android:textSize="20sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/home_health_plan_tv"
+                android:layout_marginTop="10dp"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:maxLines="1"
+                android:text="@string/home_health_plan_container"
+                android:textColor="@color/black"
+                android:textSize="23sp" />
+        </RelativeLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/home_recycle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:scrollbars="vertical" />
+    </LinearLayout>
+
 
 </LinearLayout>
