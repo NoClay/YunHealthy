@@ -1,4 +1,4 @@
-package wang.fly.com.yunhealth;
+package wang.fly.com.yunhealth.Activity;
 
 import android.media.Image;
 import android.os.Bundle;
@@ -17,6 +17,7 @@ import org.w3c.dom.Text;
 import java.util.Random;
 
 import wang.fly.com.yunhealth.MyViewPackage.HeartWavesView;
+import wang.fly.com.yunhealth.R;
 
 /**
  * Created by 82661 on 2016/11/9.

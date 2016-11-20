@@ -22,9 +22,8 @@ import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import wang.fly.com.yunhealth.Adapter.RecycleAdapterForMeasure;
-import wang.fly.com.yunhealth.InfoActivity;
+import wang.fly.com.yunhealth.Activity.InfoActivity;
 import wang.fly.com.yunhealth.R;
-import wang.fly.com.yunhealth.ShowHeartWaves;
 
 /**
  * Created by 兆鹏 on 2016/11/5.

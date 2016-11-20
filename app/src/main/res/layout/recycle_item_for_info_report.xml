@@ -2,9 +2,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="51dp">
     <ImageView
-        android:layout_margin="10dp"
+        android:layout_margin="5dp"
         android:src="@drawable/jcd_ic_pth"
         android:id="@+id/report_label_view"
         android:layout_width="40dp"
@@ -25,9 +25,13 @@
         android:paddingLeft="25dp"
         android:id="@+id/report_label_check"
         android:button="@drawable/check_btn_drawable"
-        android:layout_marginRight="15dp"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
-        android:layout_width="30dp"
-        android:layout_height="30dp" />
+        android:layout_width="50dp"
+        android:layout_height="match_parent" />
+    <View
+        android:layout_alignParentBottom="true"
+        android:background="@color/hintTextColor"
+        android:layout_width="match_parent"
+        android:layout_height="1px"/>
 </RelativeLayout>
