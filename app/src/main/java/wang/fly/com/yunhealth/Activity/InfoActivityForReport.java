@@ -1,23 +1,18 @@
-package wang.fly.com.yunhealth;
+package wang.fly.com.yunhealth.Activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import wang.fly.com.yunhealth.Adapter.RecycleAdapterForReportMenu;
-import wang.fly.com.yunhealth.DataBasePackage.MyDataBase;
-import wang.fly.com.yunhealth.util.MyRecyclerViewDivider;
+import wang.fly.com.yunhealth.R;
 
 public class InfoActivityForReport extends AppCompatActivity
         implements View.OnClickListener, RecycleAdapterForReportMenu.OnItemClickListener{
@@ -67,7 +62,6 @@ public class InfoActivityForReport extends AppCompatActivity
         menuView.setAdapter(adapter);
         menuView.setLayoutManager(new LinearLayoutManager(context));
         menuView.setHasFixedSize(true);
-        menuView.addItemDecoration(new MyRecyclerViewDivider(context));
     }
 
     @Override

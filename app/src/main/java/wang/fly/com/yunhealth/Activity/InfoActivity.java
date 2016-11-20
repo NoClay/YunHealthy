@@ -1,4 +1,4 @@
-package wang.fly.com.yunhealth;
+package wang.fly.com.yunhealth.Activity;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Random;
 
 import wang.fly.com.yunhealth.MyViewPackage.FoldLineView;
+import wang.fly.com.yunhealth.R;
 import wang.fly.com.yunhealth.util.DataInfo;
 import wang.fly.com.yunhealth.util.UtilClass;
 

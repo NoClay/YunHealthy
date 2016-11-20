@@ -2,7 +2,6 @@ package wang.fly.com.yunhealth.Fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.renderscript.ScriptGroup;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -11,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import wang.fly.com.yunhealth.InfoActivityForReport;
+import wang.fly.com.yunhealth.Activity.InfoActivityForReport;
 import wang.fly.com.yunhealth.R;
 
 /**
