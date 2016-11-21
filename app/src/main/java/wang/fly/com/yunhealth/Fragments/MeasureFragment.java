@@ -478,6 +478,7 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
                     connectDevice.setText("已连接");
                     connectDevice.setVisibility(View.VISIBLE);
                     load.setVisibility(View.INVISIBLE);
+                    connectDevice.setClickable(false);
                     connectThread = new ConnectedThread(bluetoothSocket);
                     connectThread.setFlag(true);
                     connectThread.setDaemon(true);
