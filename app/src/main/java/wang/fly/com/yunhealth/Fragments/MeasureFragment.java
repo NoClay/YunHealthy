@@ -23,6 +23,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,7 +52,9 @@ import static android.R.attr.breadCrumbShortTitle;
 import static android.R.attr.cacheColorHint;
 import static android.R.attr.filter;
 import static android.R.attr.hand_hour;
+import static android.R.attr.process;
 import static android.R.attr.switchMinWidth;
+import static android.R.attr.track;
 import static android.R.id.message;
 import static android.app.Activity.RESULT_OK;
 import static java.security.AccessController.getContext;
@@ -65,6 +68,7 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
     private GridLayoutManager gridLayoutManager;
     private Context context;
     private RecycleAdapterForMeasure myAdapter;
+    private ProgressBar load;
     private boolean isTryingConnecting = false;
     private BluetoothSocket bluetoothSocket;
     String[] titleArrays = {"血氧\n34>=44", "心电\n442>=232", "体重体脂", "血糖",
@@ -162,10 +166,7 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
                     }
                     case BluetoothDevice.ACTION_ACL_CONNECTED:{
                         Log.d(TAG, "onReceive: isConnected" + bluetoothSocket.isConnected());
-                        connectThread = new ConnectedThread(bluetoothSocket);
-                        connectThread.setFlag(true);
-                        connectThread.setDaemon(true);
-                        connectThread.start();
+
                         break;
                     }
                 }
@@ -184,6 +185,8 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
     private void findView(View v) {
         recyclerView = (RecyclerView) v.findViewById(R.id.measure_recycleView);
         connectDevice = (TextView) v.findViewById(R.id.connect_device);
+        load = (ProgressBar) v.findViewById(R.id.load);
+        load.setVisibility(View.INVISIBLE);
         connectDevice.setOnClickListener(this);
 
         gridLayoutManager = new GridLayoutManager(context, 2);
@@ -266,6 +269,8 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.connect_device: {
                 //连接设备
+                connectDevice.setVisibility(View.GONE);
+                load.setVisibility(View.VISIBLE);
                 mayRequestLocation();
                 openBluetooth();
                 break;
@@ -347,19 +352,9 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
 
         public ClientThread() {
             theDestDevice = bluetoothAdapter.getRemoteDevice(deviceAddress);
-//            Method method;
-//            try {
-//                method = theDestDevice.getClass().getMethod("createRfcommSocket", new Class[]{int.class});
-//                bluetoothSocket = (BluetoothSocket) method.invoke(theDestDevice, 1);
-//            } catch (Exception e) {
-//                Log.e("TAG", e.toString());
-//            }
             try {
                 bluetoothSocket = theDestDevice.createRfcommSocketToServiceRecord(
                         UUID.fromString("00001101-0000-1000-8000-00805F9B34FB"));
-//                bluetoothSocket = theDestDevice.createRfcommSocketToServiceRecord(
-//                        UUID.fromString("fa87c0d0-afac-11de-8a39-0800200c9a66")
-//                );
                 Log.d(TAG, "ClientThread: 构造socket");
             } catch (IOException e) {
                 e.printStackTrace();
@@ -368,25 +363,42 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
 
         @Override
         public void run() {
-            if (bluetoothAdapter.isDiscovering()) {
-                bluetoothAdapter.cancelDiscovery();
-            }
+            bluetoothAdapter.cancelDiscovery();
+
             Message message = Message.obtain();
             if (bluetoothSocket != null) {
                 try {
                     bluetoothSocket.connect();
                     Log.d(TAG, "run: connected" + bluetoothSocket.isConnected());
                 } catch (IOException e) {
+                    Log.e(TAG, "run: ", e);
                     e.printStackTrace();
                 }
                 message.what = bluetoothSocket.isConnected() ? MSG_CONNECT_SUCCESS : MSG_CONNECT_FAILED;
                 handler.sendMessage(message);
             }
         }
+        public void cancel(){
+            try {
+                bluetoothSocket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
+    public void initConnect(){
+        if (clientThread != null){
+            clientThread.cancel();
+            clientThread = null;
+        }
+        if (connectThread != null){
+            connectThread.cancel();
+            connectThread = null;
+        }
     }
 
     private class ConnectedThread extends Thread{
-        private BluetoothSocket bluetoothSocket;
         private OutputStream outputStream;
         private InputStream inputStream;
         byte [] bytes = new byte[1024];
@@ -401,10 +413,10 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
         }
 
         public ConnectedThread(BluetoothSocket bluetoothSocket) {
-            this.bluetoothSocket = bluetoothSocket;
+
             try {
-                outputStream = this.bluetoothSocket.getOutputStream();
-                inputStream = this.bluetoothSocket.getInputStream();
+                outputStream = bluetoothSocket.getOutputStream();
+                inputStream = bluetoothSocket.getInputStream();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -440,6 +452,14 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
                 e.printStackTrace();
             }
         }
+
+        public void cancel(){
+            try {
+                bluetoothSocket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
     Handler handler = new Handler() {
         @Override
@@ -448,10 +468,20 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
             switch (msg.what) {
                 case MSG_CONNECT_FAILED: {
                     Log.d(TAG, "handleMessage: 连接失败");
+                    connectDevice.setText("连接失败");
+                    connectDevice.setVisibility(View.VISIBLE);
+                    load.setVisibility(View.INVISIBLE);
                     break;
                 }
                 case MSG_CONNECT_SUCCESS: {
                     Log.d(TAG, "handleMessage: 连接成功");
+                    connectDevice.setText("已连接");
+                    connectDevice.setVisibility(View.VISIBLE);
+                    load.setVisibility(View.INVISIBLE);
+                    connectThread = new ConnectedThread(bluetoothSocket);
+                    connectThread.setFlag(true);
+                    connectThread.setDaemon(true);
+                    connectThread.start();
                     break;
                 }
             }
@@ -461,6 +491,7 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onDestroyView() {
         getContext().unregisterReceiver(receiver);
+
         isTryingConnecting = false;
         super.onDestroyView();
     }
