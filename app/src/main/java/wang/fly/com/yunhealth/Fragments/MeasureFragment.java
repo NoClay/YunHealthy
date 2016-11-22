@@ -47,6 +47,7 @@ import wang.fly.com.yunhealth.Adapter.RecycleAdapterForMeasure;
 import wang.fly.com.yunhealth.R;
 import wang.fly.com.yunhealth.Activity.ShowHeartWaves;
 import wang.fly.com.yunhealth.util.ClsUtils;
+import wang.fly.com.yunhealth.util.UtilClass;
 
 import static android.R.attr.breadCrumbShortTitle;
 import static android.R.attr.cacheColorHint;
@@ -57,6 +58,7 @@ import static android.R.attr.switchMinWidth;
 import static android.R.attr.track;
 import static android.R.id.message;
 import static android.app.Activity.RESULT_OK;
+import static android.content.Context.INPUT_METHOD_SERVICE;
 import static java.security.AccessController.getContext;
 
 /*
@@ -70,7 +72,6 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
     private RecycleAdapterForMeasure myAdapter;
     private ProgressBar load;
     private boolean isTryingConnecting = false;
-    private BluetoothSocket bluetoothSocket;
     String[] titleArrays = {"血氧\n34>=44", "心电\n442>=232", "体重体脂", "血糖",
             "体温", "粉尘", "脑电（待定）", "血压（待定）"};
     int[] idArrays = {R.drawable.bloodoxygen, R.drawable.heartwaves, R.drawable.weight, R.drawable.bloodsugar,
@@ -80,13 +81,14 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
     boolean[] stateArrays = {
             true, true, false, false, false, false, false, false
     };
-    private BluetoothAdapter bluetoothAdapter;
     private final static String deviceAddress = "98:D3:32:70:5A:44";
     private static final String TAG = "MeasureFragment";
+    private BluetoothAdapter bluetoothAdapter;
     private BluetoothDevice theDestDevice;
     BroadcastReceiver receiver;
     private ClientThread clientThread;
     private ConnectedThread connectThread;
+    List<Map<String, Object>> datas = new ArrayList<>();
     //请求
     static final int REQUEST_OPEN_BLUETOOTH = 0;
     static final int MSG_WAIT_CONNECT = 0;
@@ -164,8 +166,7 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
                         }
                         break;
                     }
-                    case BluetoothDevice.ACTION_ACL_CONNECTED:{
-                        Log.d(TAG, "onReceive: isConnected" + bluetoothSocket.isConnected());
+                    case BluetoothDevice.ACTION_ACL_CONNECTED: {
 
                         break;
                     }
@@ -196,7 +197,6 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
             @Override
             public void call(Subscriber<? super List<Map<String, Object>>> subscriber) {
                 try {
-                    List<Map<String, Object>> datas = new ArrayList<>();
                     for (int i = 0; i < titleArrays.length; i++) {
                         Map<String, Object> data = new HashMap<>();
                         data.put("text", titleArrays[i]);
@@ -269,7 +269,8 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.connect_device: {
                 //连接设备
-                connectDevice.setVisibility(View.GONE);
+                connectDevice.setVisibility(View.INVISIBLE);
+                connectDevice.setClickable(false);
                 load.setVisibility(View.VISIBLE);
                 mayRequestLocation();
                 openBluetooth();
@@ -349,6 +350,7 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
     }
 
     private class ClientThread extends Thread {
+        private BluetoothSocket bluetoothSocket;
 
         public ClientThread() {
             theDestDevice = bluetoothAdapter.getRemoteDevice(deviceAddress);
@@ -373,12 +375,14 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
                 } catch (IOException e) {
                     Log.e(TAG, "run: ", e);
                     e.printStackTrace();
+                    initConnect();
                 }
                 message.what = bluetoothSocket.isConnected() ? MSG_CONNECT_SUCCESS : MSG_CONNECT_FAILED;
                 handler.sendMessage(message);
             }
         }
-        public void cancel(){
+
+        public void cancel() {
             try {
                 bluetoothSocket.close();
             } catch (IOException e) {
@@ -386,22 +390,31 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
             }
         }
 
+        public BluetoothSocket getBluetoothSocket() {
+            return bluetoothSocket;
+        }
+
+        public void setBluetoothSocket(BluetoothSocket bluetoothSocket) {
+            this.bluetoothSocket = bluetoothSocket;
+        }
     }
-    public void initConnect(){
-        if (clientThread != null){
+
+    public void initConnect() {
+        if (clientThread != null) {
             clientThread.cancel();
             clientThread = null;
         }
-        if (connectThread != null){
+        if (connectThread != null) {
             connectThread.cancel();
             connectThread = null;
         }
     }
 
-    private class ConnectedThread extends Thread{
+    private class ConnectedThread extends Thread {
+        private BluetoothSocket bluetoothSocket;
         private OutputStream outputStream;
         private InputStream inputStream;
-        byte [] bytes = new byte[1024];
+        byte[] bytes = new byte[512];
         private boolean flag = false;
 
         public boolean isFlag() {
@@ -413,10 +426,10 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
         }
 
         public ConnectedThread(BluetoothSocket bluetoothSocket) {
-
+            this.bluetoothSocket = bluetoothSocket;
             try {
-                outputStream = bluetoothSocket.getOutputStream();
-                inputStream = bluetoothSocket.getInputStream();
+                outputStream = this.bluetoothSocket.getOutputStream();
+                inputStream = this.bluetoothSocket.getInputStream();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -425,26 +438,94 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
 
         @Override
         public void run() {
-            while (flag){
-                if(inputStream == null)
+            String data = "";
+            while (flag) {
+                if (inputStream == null)
                     return;
                 try {
                     inputStream.read(bytes);
-                    Log.d(TAG, "run: receive" + bytes.toString());
-                    Message message = new Message();
-                    message.what = MSG_READ_STRING;
-                    String string = new String(bytes);
-                    message.obj = string;
-                    handler.sendMessage(message);
+                    data = resolveData(UtilClass.valueOfBytes(bytes) + data);
+                    Log.d(TAG, "run: receive" + data);
+                    Log.d(TAG, "run: connet" + bluetoothSocket.isConnected());
                 } catch (IOException e) {
+                    cancel();
+                    Message message = Message.obtain();
+                    message.what = MSG_CONNECT_FAILED;
+                    handler.sendMessage(message);
                     e.printStackTrace();
                 }
             }
 
         }
 
-        public void write(String string){
-            byte [] bytes;
+        private String resolveData(String data) {
+            int start = 0;
+            int end = 0;
+            while (start != -1 && end != -1) {
+                start = data.indexOf("dcba");
+                if (start != -1 && data.length() > 4) {
+                    end = data.indexOf("dcba", start + 1);
+                }
+                if (start != -1 && end != -1 && start != end) {
+                    analysisData(data.substring(start, end));
+                    data = data.substring(end);
+                }
+            }
+            return data;
+        }
+
+        /**
+         * 处理的字符串应该符合如下规则
+         * dcba + e[0~9] + [0~9][0~9] + [0~9][0~9] + ~ + sum
+         *
+         * @param substring
+         */
+        private boolean analysisData(String substring) {
+            //字符串的长度
+            if (substring == null) {
+                return false;
+            }
+            int len = substring.length();
+            if (len < 12) {
+                return false;
+            }
+            if (!UtilClass.checkHexString(substring)) {
+                return false;
+            }
+            if (!substring.startsWith("dcbae")) {
+                return false;
+            }
+            int type = Integer.valueOf(substring.substring(5, 6), 16);
+            int highLength = Integer.valueOf(substring.substring(6, 8), 16);
+            int lowLength = Integer.valueOf(substring.substring(8, 10), 16);
+            if (len != (12 + (highLength + lowLength) * 2)) {
+                //长度不符合
+                return false;
+            }
+            int sum = 0;
+            for (int i = 2; i < len; ) {
+                sum += Integer.valueOf(substring.substring(i - 2, i), 16);
+                i += 2;
+            }
+            String sumString = Integer.toHexString(sum);
+            if (!sumString.substring(sumString.length() - 2, sumString.length())
+                    .equals(substring.substring(substring.length() - 2, substring.length()))) {
+                return false;
+            }
+            String dataString = substring.substring(10, 10 + (highLength + lowLength) * 2);
+            if (dataString.length() <= 0) {
+                return false;
+            }
+            Message message = Message.obtain();
+            message.what = MSG_READ_STRING;
+            message.arg1 = type;
+            message.obj = dataString;
+            handler.sendMessage(message);
+            return true;
+        }
+
+        public void write(String string) {
+            byte[] bytes;
             bytes = string.getBytes();
             try {
                 outputStream.write(bytes);
@@ -453,7 +534,8 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
             }
         }
 
-        public void cancel(){
+        public void cancel() {
+            this.flag = false;
             try {
                 bluetoothSocket.close();
             } catch (IOException e) {
@@ -461,6 +543,7 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
             }
         }
     }
+
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -468,6 +551,7 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
             switch (msg.what) {
                 case MSG_CONNECT_FAILED: {
                     Log.d(TAG, "handleMessage: 连接失败");
+                    connectDevice.setClickable(true);
                     connectDevice.setText("连接失败");
                     connectDevice.setVisibility(View.VISIBLE);
                     load.setVisibility(View.INVISIBLE);
@@ -479,11 +563,91 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
                     connectDevice.setVisibility(View.VISIBLE);
                     load.setVisibility(View.INVISIBLE);
                     connectDevice.setClickable(false);
-                    connectThread = new ConnectedThread(bluetoothSocket);
+                    connectThread = new ConnectedThread(clientThread.getBluetoothSocket());
                     connectThread.setFlag(true);
                     connectThread.setDaemon(true);
                     connectThread.start();
                     break;
+                }
+                case MSG_READ_STRING: {
+                    //进行数据的分类设定
+                    String data = (String) msg.obj;
+                    switch (msg.arg1) {
+                        //每次都要求获取数据的字符串
+                        case 0: {
+                            //保留
+                            break;
+                        }
+                        case 1: {
+                            //血氧
+                            if (data.length() == 4){
+                                titleArrays[0] = "血糖\n" + Integer.valueOf((int) data.charAt(0));
+                            }
+                            break;
+                        }
+                        case 2: {
+                            //心电
+                            break;
+                        }
+                        case 3: {
+                            //血糖
+                            break;
+                        }
+                        case 4: {
+                            //体温
+                            Log.d("handler", "handleMessage: 体温" + data);
+                            if (data.length() == 4){
+                                titleArrays[4] = "体温\n" + Integer.valueOf(data, 16)/ 100;
+                                int i = 4;
+                                Map<String, Object> data2 = new HashMap<>();
+                                data2.put("text", titleArrays[i]);
+                                data2.put("id", idArrays[i]);
+                                data2.put("color", colorArrays[i]);
+                                data2.put("isDanger", stateArrays[i]);
+                                datas.set(4, data2);
+                                Log.d("handler", "handleMessage: " + titleArrays[4]);
+                                myAdapter.notifyItemChanged(4);
+                            }
+                            break;
+                        }
+                        case 5: {
+                            //粉尘
+                            break;
+                        }
+                        case 6: {
+                            //脑电（待定）
+                            break;
+                        }
+                        case 7: {
+                            //血压（待定）
+                            break;
+                        }
+                        case 8: {
+                            break;
+                        }
+                        case 9: {
+                            break;
+                        }
+                        case 10: {
+                            break;
+                        }
+                        case 11: {
+                            break;
+                        }
+                        case 12: {
+                            break;
+                        }
+                        case 13: {
+                            break;
+                        }
+                        case 14: {
+                            break;
+                        }
+                        case 15: {
+                            break;
+                        }
+                    }
+//                    myAdapter.notifyDataSetChanged();
                 }
             }
         }
@@ -492,8 +656,8 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onDestroyView() {
         getContext().unregisterReceiver(receiver);
-
         isTryingConnecting = false;
+        initConnect();
         super.onDestroyView();
     }
 }

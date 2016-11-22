@@ -11,6 +11,7 @@ import java.text.DecimalFormat;
 public class UtilClass {
     /**
      * dp到px转换
+     *
      * @param context
      * @param dp
      * @return
@@ -22,6 +23,7 @@ public class UtilClass {
 
     /**
      * px到dp的转换
+     *
      * @param context
      * @param px
      * @return
@@ -33,11 +35,69 @@ public class UtilClass {
 
     /**
      * 保留两位小数，并返回字符串
+     *
      * @param value
      * @return
      */
-    public static String getTwoShortValue(float value){
-        DecimalFormat decimalFormat=new DecimalFormat(".00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
+    public static String getTwoShortValue(float value) {
+        DecimalFormat decimalFormat = new DecimalFormat(".00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
         return decimalFormat.format(value);//format 返回的是字符串
     }
+
+    /**
+     * 字节流转换为十六进制字符串
+     *
+     * @param src
+     * @return
+     */
+    public static String valueOfBytes(byte[] src) {
+        StringBuilder stringBuilder = new StringBuilder("");
+        if (src == null || src.length <= 0) {
+            return null;
+        }
+        for (int i = 0; i < src.length; i++) {
+            int v = src[i] & 0xFF;
+            String hv = Integer.toHexString(v);
+            if (hv.length() < 2) {
+                stringBuilder.append(0);
+            }
+            stringBuilder.append(hv);
+        }
+        return stringBuilder.toString();
+    }
+
+    /**
+     * 十六进制字符串转换为bytes
+     *
+     * @param hexString
+     * @return
+     */
+    public static byte[] valueOfString(String hexString) {
+        if (hexString == null || hexString.equals("")) {
+            return null;
+        }
+        hexString = hexString.toUpperCase().replace(" ", "");
+        int length = hexString.length() / 2;
+        char[] hexChars = hexString.toCharArray();
+        byte[] d = new byte[length];
+        for (int i = 0; i < length; i++) {
+            int pos = i * 2;
+            d[i] = (byte) (charToByte(hexChars[pos]) << 4 | charToByte(hexChars[pos + 1]));
+        }
+        return d;
+    }
+
+    private static byte charToByte(char c) {
+        return (byte) "0123456789ABCDEF".indexOf(c);
+    }
+
+    public static boolean checkHexString(String src) {
+        for (char c : src.toCharArray()) {
+            if ("0123456789AaBbCcDdEeFf".indexOf(c) == -1){
+                return false;
+            }
+        }
+        return true;
+    }
+
 }
