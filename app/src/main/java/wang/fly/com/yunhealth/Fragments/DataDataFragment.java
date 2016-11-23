@@ -21,7 +21,8 @@ import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
-import wang.fly.com.yunhealth.Adapter.RecycleAdapterForMeasure;
+import wang.fly.com.yunhealth.Adapter.RecycleAdapterForData;
+import wang.fly.com.yunhealth.Adapter.RecycleAdapterForMeasureOnly;
 import wang.fly.com.yunhealth.Activity.InfoActivity;
 import wang.fly.com.yunhealth.R;
 
@@ -32,7 +33,7 @@ public class DataDataFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private Context context;
-    private RecycleAdapterForMeasure myAdapter;
+    private RecycleAdapterForData myAdapter;
     String[] titleArrays = {"血氧", "心电", "体重体脂", "血糖",
             "体温", "粉尘", "脑电（待定）", "血压（待定）"};
     int[] idArrays = {R.drawable.bloodoxygen, R.drawable.heartwaves, R.drawable.weight, R.drawable.bloodsugar,
@@ -89,10 +90,10 @@ public class DataDataFragment extends Fragment {
 
                     @Override
                     public void onNext(List<Map<String, Object>> maps) {
-                        myAdapter = new RecycleAdapterForMeasure(maps,
+                        myAdapter = new RecycleAdapterForData(maps,
                                 R.layout.measure_recycle_item_layout, getContext());
                         recyclerView.setAdapter(myAdapter);
-                        myAdapter.setOnItemClickListener(new RecycleAdapterForMeasure.OnItemClickListener() {
+                        myAdapter.setOnItemClickListener(new RecycleAdapterForData.OnItemClickListener() {
                             @Override
                             public void onItemClick(View view, int position) {
                                 switch (position){

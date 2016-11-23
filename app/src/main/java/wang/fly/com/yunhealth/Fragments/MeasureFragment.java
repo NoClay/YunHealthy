@@ -3,7 +3,6 @@ package wang.fly.com.yunhealth.Fragments;
 import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothProfile;
 import android.bluetooth.BluetoothSocket;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -16,7 +15,9 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
@@ -30,36 +31,20 @@ import android.widget.Toast;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-import rx.Observable;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-import wang.fly.com.yunhealth.Adapter.RecycleAdapterForMeasure;
+import wang.fly.com.yunhealth.Adapter.RecycleAdapterForMeasureOnly;
+import wang.fly.com.yunhealth.DataBasePackage.MeasureData;
 import wang.fly.com.yunhealth.R;
-import wang.fly.com.yunhealth.Activity.ShowHeartWaves;
 import wang.fly.com.yunhealth.util.ClsUtils;
 import wang.fly.com.yunhealth.util.UtilClass;
 
-import static android.R.attr.breadCrumbShortTitle;
-import static android.R.attr.cacheColorHint;
-import static android.R.attr.filter;
-import static android.R.attr.hand_hour;
-import static android.R.attr.process;
-import static android.R.attr.switchMinWidth;
-import static android.R.attr.track;
-import static android.R.id.message;
 import static android.app.Activity.RESULT_OK;
-import static android.content.Context.INPUT_METHOD_SERVICE;
-import static java.security.AccessController.getContext;
 
 /*
  * Created by 兆鹏 on 2016/11/2.
@@ -69,18 +54,9 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
     private RecyclerView recyclerView;
     private GridLayoutManager gridLayoutManager;
     private Context context;
-    private RecycleAdapterForMeasure myAdapter;
+    private RecycleAdapterForMeasureOnly myAdapter;
     private ProgressBar load;
     private boolean isTryingConnecting = false;
-    String[] titleArrays = {"血氧\n34>=44", "心电\n442>=232", "体重体脂", "血糖",
-            "体温", "粉尘", "脑电（待定）", "血压（待定）"};
-    int[] idArrays = {R.drawable.bloodoxygen, R.drawable.heartwaves, R.drawable.weight, R.drawable.bloodsugar,
-            R.drawable.temperature, R.drawable.dirty, R.drawable.headwaves, R.drawable.bloodpress};
-    int[] colorArrays = {R.color.bg1, R.color.bg2, R.color.bg3, R.color.bg4, R.color.bg5, R.color.bg6,
-            R.color.bg7, R.color.bg8};
-    boolean[] stateArrays = {
-            true, true, false, false, false, false, false, false
-    };
     private final static String deviceAddress = "98:D3:32:70:5A:44";
     private static final String TAG = "MeasureFragment";
     private BluetoothAdapter bluetoothAdapter;
@@ -88,8 +64,27 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
     BroadcastReceiver receiver;
     private ClientThread clientThread;
     private ConnectedThread connectThread;
-    List<Map<String, Object>> datas = new ArrayList<>();
+    private List<MeasureData> measureDataList;
+    private static final String[] LABEL = {
+            "血氧",
+            "脉搏",
+            "心电",
+            "体温",
+            "粉尘浓度",
+            "血糖（待定）",
+            "脑电（待定）",
+            "血压（待定）"
+    };
+    private long last;
     //请求
+    static final int DATA_XUEYANG = 0;
+    static final int DATA_MAIBO = 1;
+    static final int DATA_XINDIAN = 2;
+    static final int DATA_TIWEN = 3;
+    static final int DATA_FENCHEN = 4;
+    static final int DATA_XUETANG = 5;
+    static final int DATA_NAODIAN = 6;
+    static final int DATA_XUEYA = 7;
     static final int REQUEST_OPEN_BLUETOOTH = 0;
     static final int MSG_WAIT_CONNECT = 0;
     static final int MSG_CONNECT_SUCCESS = 1;
@@ -105,6 +100,33 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
         findView(v);
         registerBroadReceiver();
         return v;
+    }
+
+    private void findView(View v) {
+        recyclerView = (RecyclerView) v.findViewById(R.id.measure_recycleView);
+        connectDevice = (TextView) v.findViewById(R.id.connect_device);
+        load = (ProgressBar) v.findViewById(R.id.load);
+        measureDataList = new ArrayList<>();
+        for (int i = 0; i < LABEL.length; i++) {
+            MeasureData measure = new MeasureData();
+            measure.setName(LABEL[i]);
+            measureDataList.add(measure);
+        }
+        load.setVisibility(View.INVISIBLE);
+        connectDevice.setOnClickListener(this);
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        recyclerView.setHasFixedSize(true);
+        DefaultItemAnimator d = new DefaultItemAnimator();
+//        d.setAddDuration(0);
+//        d.setMoveDuration(0);
+//        d.setChangeDuration(0);
+//        d.setRemoveDuration(0);
+        d.setMoveDuration(0);
+        d.setSupportsChangeAnimations(false);
+        recyclerView.setItemAnimator(d);
+        myAdapter = new RecycleAdapterForMeasureOnly(R.layout.measure_data_show_item,
+                context, measureDataList);
+        recyclerView.setAdapter(myAdapter);
     }
 
     private void registerBroadReceiver() {
@@ -181,72 +203,6 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
         getContext().registerReceiver(receiver, filter);
         filter = new IntentFilter(BluetoothDevice.ACTION_ACL_CONNECTED);
         getContext().registerReceiver(receiver, filter);
-    }
-
-    private void findView(View v) {
-        recyclerView = (RecyclerView) v.findViewById(R.id.measure_recycleView);
-        connectDevice = (TextView) v.findViewById(R.id.connect_device);
-        load = (ProgressBar) v.findViewById(R.id.load);
-        load.setVisibility(View.INVISIBLE);
-        connectDevice.setOnClickListener(this);
-
-        gridLayoutManager = new GridLayoutManager(context, 2);
-        recyclerView.setLayoutManager(gridLayoutManager);
-        recyclerView.setHasFixedSize(true);
-        Observable.create(new Observable.OnSubscribe<List<Map<String, Object>>>() {
-            @Override
-            public void call(Subscriber<? super List<Map<String, Object>>> subscriber) {
-                try {
-                    for (int i = 0; i < titleArrays.length; i++) {
-                        Map<String, Object> data = new HashMap<>();
-                        data.put("text", titleArrays[i]);
-                        data.put("id", idArrays[i]);
-                        data.put("color", colorArrays[i]);
-                        data.put("isDanger", stateArrays[i]);
-                        datas.add(data);
-                    }
-                    subscriber.onNext(datas);
-                } catch (Exception e) {
-                    subscriber.onError(e);
-                }
-            }
-        }).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<List<Map<String, Object>>>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onNext(List<Map<String, Object>> maps) {
-                        myAdapter = new RecycleAdapterForMeasure(maps,
-                                R.layout.measure_recycle_item_layout, getContext());
-                        recyclerView.setAdapter(myAdapter);
-                        myAdapter.setOnItemClickListener(new RecycleAdapterForMeasure.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(View view, int position) {
-                                switch (position) {
-                                    case 1: {
-                                        //点击心电图的子项
-                                        Toast.makeText(context, "打开心电图", Toast.LENGTH_SHORT).show();
-                                        Intent intent = new Intent(context, ShowHeartWaves.class);
-                                        context.startActivity(intent);
-                                        break;
-                                    }
-                                    default:
-                                        Toast.makeText(context, "暂无更多", Toast.LENGTH_SHORT).show();
-
-                                }
-                            }
-                        });
-                    }
-                });
     }
 
     /**
@@ -572,6 +528,7 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
                 case MSG_READ_STRING: {
                     //进行数据的分类设定
                     String data = (String) msg.obj;
+                    MeasureData temp;
                     switch (msg.arg1) {
                         //每次都要求获取数据的字符串
                         case 0: {
@@ -580,38 +537,75 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
                         }
                         case 1: {
                             //血氧
-                            if (data.length() == 4){
-                                titleArrays[0] = "血糖\n" + Integer.valueOf((int) data.charAt(0));
+                            if (data.length() == 8){
+                                float result = UtilClass.valueOfHexString(data.substring(0, 2));
+                                temp = measureDataList.get(DATA_XUEYANG);
+                                if (result > 0 && result < 100 && compareData(temp, result)){
+                                    myAdapter.notifyItemChanged(DATA_XUEYANG);
+                                }
+                                result = UtilClass.valueOfHexString(data.substring(2, 4));
+                                temp = measureDataList.get(DATA_MAIBO);
+                                if (result > 0 && result < 255 && compareData(temp, result)){
+                                    Log.d("handler", "handleMessage: data" + result);
+                                    Log.d("handler", "handleMessage: count" + temp.getCount());
+                                    myAdapter.notifyItemChanged(DATA_MAIBO);
+                                }
                             }
                             break;
                         }
                         case 2: {
                             //心电
+                            if (data.length() == 4){
+                                long now = Calendar.getInstance().getTimeInMillis();
+                                if (now - last >= 200){
+                                    int result = UtilClass.valueOfHexString(data);
+                                    Log.d("heart", "handleMessage: result" + result);
+                                    temp = measureDataList.get(DATA_XINDIAN);
+                                    myAdapter.heartWavesView.
+                                            drawNextPoint(result);
+                                    if (compareData(temp, (float)(result))){
+                                        myAdapter.notifyItemChanged(DATA_XUETANG);
+                                    }
+                                    last = now;
+                                }
+                            }
                             break;
                         }
                         case 3: {
                             //血糖
+                            if (data.length() == 12){
+                                float result = UtilClass.valueOfHexString(
+                                        data.substring(10, 12)) / 10.0f;
+                                temp = measureDataList.get(DATA_XUETANG);
+                                if (result > 0 && result < 300 && compareData(temp, result)){
+                                    myAdapter.notifyItemChanged(DATA_XUETANG);
+                                }
+                            }
                             break;
                         }
                         case 4: {
                             //体温
-                            Log.d("handler", "handleMessage: 体温" + data);
                             if (data.length() == 4){
-                                titleArrays[4] = "体温\n" + Integer.valueOf(data, 16)/ 100;
-                                int i = 4;
-                                Map<String, Object> data2 = new HashMap<>();
-                                data2.put("text", titleArrays[i]);
-                                data2.put("id", idArrays[i]);
-                                data2.put("color", colorArrays[i]);
-                                data2.put("isDanger", stateArrays[i]);
-                                datas.set(4, data2);
-                                Log.d("handler", "handleMessage: " + titleArrays[4]);
-                                myAdapter.notifyItemChanged(4);
+                                Log.d("tiwen", "handleMessage: 提问" + data);
+                                float result = UtilClass.valueOfHexString(
+                                        data) / 100.0f;
+                                temp = measureDataList.get(DATA_TIWEN);
+                                if (compareData(temp, result)){
+                                    myAdapter.notifyItemChanged(DATA_TIWEN);
+                                }
                             }
                             break;
                         }
                         case 5: {
                             //粉尘
+                            if (data.length() == 8){
+                                float result = UtilClass.valueOfHexString(
+                                        data) / 100.0f;
+                                temp = measureDataList.get(DATA_FENCHEN);
+                                if (result > 0 && result < 800 && compareData(temp, result)){
+                                    myAdapter.notifyItemChanged(DATA_FENCHEN);
+                                }
+                            }
                             break;
                         }
                         case 6: {
@@ -652,6 +646,19 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
             }
         }
     };
+
+    /**
+     * 比较一些数据
+     * @param temp
+     * @param result
+     */
+    private boolean compareData(MeasureData temp, float result) {
+        boolean flag1, flag2, flag3;
+        flag1 = temp.setAverageData(result);
+        flag2 = temp.setMaxData(result);
+        flag3 = temp.setMinData(result);
+        return flag1 || flag2 || flag3;
+    }
 
     @Override
     public void onDestroyView() {
