@@ -3,11 +3,9 @@ package wang.fly.com.yunhealth.Adapter;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -18,10 +16,10 @@ import wang.fly.com.yunhealth.MyViewPackage.CircleImageView;
 import wang.fly.com.yunhealth.R;
 
 /**
- * Created by 82661 on 2016/11/9.
+ * Created by 82661 on 2016/11/23.
  */
 
-public class RecycleAdapterForMeasure extends RecyclerView.Adapter<RecycleAdapterForMeasure.ViewHolder>{
+public class RecycleAdapterForData extends RecyclerView.Adapter<RecycleAdapterForData.ViewHolder>{
 
     private static final String TAG = "RecycleAdapterForMeasur";
     private List<Map<String,Object>> datas = new ArrayList<>();
@@ -31,7 +29,7 @@ public class RecycleAdapterForMeasure extends RecyclerView.Adapter<RecycleAdapte
     private static final int COLOR_NORMAL = Color.BLACK;
     private static final int COLOR_DANGER = R.color.danger;
 
-    public RecycleAdapterForMeasure(List<Map<String,Object>> datas,int layout, Context context){
+    public RecycleAdapterForData(List<Map<String,Object>> datas, int layout, Context context){
         this.datas = datas;
         this.layout = layout;
         this.context = context;
@@ -45,7 +43,7 @@ public class RecycleAdapterForMeasure extends RecyclerView.Adapter<RecycleAdapte
         this.onItemClickListener = onItemClickListener;
     }
     @Override
-    public RecycleAdapterForMeasure.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecycleAdapterForData.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(layout,parent,false);
         ViewHolder vh = new ViewHolder(view);
         return vh;

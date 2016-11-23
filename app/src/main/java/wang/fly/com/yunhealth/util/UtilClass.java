@@ -40,7 +40,7 @@ public class UtilClass {
      * @return
      */
     public static String getTwoShortValue(float value) {
-        DecimalFormat decimalFormat = new DecimalFormat(".00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
+        DecimalFormat decimalFormat = new DecimalFormat("0.00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
         return decimalFormat.format(value);//format 返回的是字符串
     }
 
@@ -100,4 +100,28 @@ public class UtilClass {
         return true;
     }
 
+
+    /**
+     * 将一个十六进制字符串转换为十进制整型
+     */
+    public static int valueOfHexString(String data){
+        int result = Integer.valueOf(data, 16).intValue();
+        String value = Integer.toBinaryString(result);
+        if (value.length() == data.length() * 4 && value.startsWith("1")){
+            result --;
+            value = Integer.toBinaryString(result);
+            StringBuilder string = new StringBuilder(value.length());
+            for (int i = 0; i < value.length(); i++) {
+                if (i == 0){
+                    string.append(1);
+                }else if (value.charAt(i) == '1'){
+                    string.append(0);
+                }else{
+                    string.append(1);
+                }
+            }
+            result = -Integer.valueOf(string.toString(), 2);
+        }
+        return result;
+    }
 }

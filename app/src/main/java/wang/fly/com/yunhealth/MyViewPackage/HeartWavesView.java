@@ -45,8 +45,8 @@ public class HeartWavesView extends View {
     private int topPadding;
     private int bottomPadding;
 
-    private int maxY = 2100;
-    private int minY = -2100;
+    private int maxY = 4100;
+    private int minY = 0;
     private int maxX = 120;
     private int x_num = 25;
     private int y_num;
@@ -76,8 +76,9 @@ public class HeartWavesView extends View {
     onDataChangedlistener onDataChangedlistener = null;
 
     //定义接口
-    public interface onDataChangedlistener{
+    public interface onDataChangedlistener {
         void getMaxData(float max);
+
         void getAverage(float average);
     }
 
@@ -87,6 +88,7 @@ public class HeartWavesView extends View {
 
     /**
      * 在代码中动态生成的时候用
+     *
      * @param context
      */
     public HeartWavesView(Context context) {
@@ -97,6 +99,7 @@ public class HeartWavesView extends View {
 
     /**
      * 在布局中使用了自定义属性的时候使用
+     *
      * @param context
      * @param attrs
      */
@@ -119,6 +122,7 @@ public class HeartWavesView extends View {
 
     /**
      * 在使用了自定义style集的时候使用
+     *
      * @param context
      * @param attrs
      * @param defStyleAttr
@@ -234,9 +238,11 @@ public class HeartWavesView extends View {
 
     public void drawNextPoint(float y) {
         //获取数据的平均值和最大值
-        if(y >= maxData){
+        if (y >= maxData) {
             maxData = y;
-            this.onDataChangedlistener.getMaxData(maxData);
+            if (this.onDataChangedlistener != null) {
+                this.onDataChangedlistener.getMaxData(maxData);
+            }
         }
         averageData = (pointList.size() * averageData + y) / (pointList.size() + 1);
 
@@ -250,8 +256,10 @@ public class HeartWavesView extends View {
             }
             PointXY lastPoint = pointList.get(pointList.size() - 1);
             Log.d(TAG, "drawNextPoint: size" + pointList.size());
-            if (pointList.size() == maxX- 1) {
-                this.onDataChangedlistener.getAverage(averageData);
+            if (pointList.size() == maxX - 1) {
+                if (this.onDataChangedlistener != null) {
+                    this.onDataChangedlistener.getAverage(averageData);
+                }
                 pointList.clear();
                 lastPoint.setX(leftPadding);
             }
