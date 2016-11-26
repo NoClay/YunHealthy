@@ -11,11 +11,16 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.bmob.v3.Bmob;
+import cn.bmob.v3.BmobConfig;
+import cn.smssdk.SMSSDK;
 import wang.fly.com.yunhealth.Fragments.DataFragment;
 import wang.fly.com.yunhealth.Fragments.DoctorsFragment;
 import wang.fly.com.yunhealth.Fragments.HomeFragment;
 import wang.fly.com.yunhealth.Fragments.MeasureFragment;
 import wang.fly.com.yunhealth.Fragments.MineFragment;
+
+import static android.Manifest.permission_group.SMS;
 
 public class MainActivity extends FragmentActivity implements View.OnClickListener{
     private ViewPager viewPager;
@@ -34,10 +39,29 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         color = getResources().getColor(R.color.lightseagreen);
+        initDependencies();
         findView();
         setEvent();
         viewPager.setCurrentItem(2);
         setTab(2);
+    }
+
+    /**
+     * 初始化依赖第三方：
+     * Bmob
+     * Mob
+     */
+    private void initDependencies() {
+        BmobConfig config = new BmobConfig.Builder(this)
+                .setApplicationId("d2e2a48caabc1e5c399b20b2adea85eb")
+                .setConnectTimeout(15)
+                .setUploadBlockSize(1024 * 1024)
+                .setFileExpiration(2500)
+                .build();
+        Bmob.initialize(config);
+
+        //初始化Mob
+        SMSSDK.initSDK(this, "195be1e7755e2", "5bdd8a14d2e2f5734797443c982b0db4");
     }
 
     private void setEvent() {
