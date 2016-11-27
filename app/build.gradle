@@ -42,4 +42,6 @@ dependencies {
     compile 'io.reactivex:rxandroid:1.2.0'
     compile files('libs/MobCommons-2016.1012.1447.jar')
     compile files('libs/MobTools-2016.1012.1447.jar')
+    //Glide imageloader
+    compile 'com.github.bumptech.glide:glide:3.6.1'
 }
