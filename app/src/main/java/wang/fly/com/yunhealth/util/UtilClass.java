@@ -124,4 +124,12 @@ public class UtilClass {
         }
         return result;
     }
+
+    /**
+     * 判断一个字符串可能是手机号码
+     */
+    public static boolean isMobileNum(String mobiles) {
+        String regex = "1[3|5|7|8|][0-9]{9}";
+        return mobiles.matches(regex);
+    }
 }

@@ -1,5 +1,7 @@
 package wang.fly.com.yunhealth;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -19,6 +21,7 @@ import wang.fly.com.yunhealth.Fragments.DoctorsFragment;
 import wang.fly.com.yunhealth.Fragments.HomeFragment;
 import wang.fly.com.yunhealth.Fragments.MeasureFragment;
 import wang.fly.com.yunhealth.Fragments.MineFragment;
+import wang.fly.com.yunhealth.LoginAndSign.LoginActivity;
 
 import static android.Manifest.permission_group.SMS;
 
@@ -44,6 +47,15 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         setEvent();
         viewPager.setCurrentItem(2);
         setTab(2);
+        checkIsLogined();
+    }
+    private void checkIsLogined() {
+        SharedPreferences shared = getSharedPreferences("LoginState", MODE_PRIVATE);
+        boolean isLogined = shared.getBoolean("loginRememberState", false);
+        if (!isLogined) {
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+        }
     }
 
     /**
