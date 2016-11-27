@@ -1,9 +1,11 @@
 package wang.fly.com.yunhealth.Fragments;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,10 +14,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import wang.fly.com.yunhealth.MainActivity;
+import com.bumptech.glide.Glide;
+
 import wang.fly.com.yunhealth.R;
 
-import static android.os.Build.VERSION_CODES.M;
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * Created by 兆鹏 on 2016/11/2.
@@ -24,8 +27,12 @@ public class MineFragment extends Fragment implements View.OnClickListener{
 
     private TextView title;
     private ImageView back;
+    private ImageView userImage;
+    private TextView userName;
+    private TextView userPhoneNumber;
     private RelativeLayout[] layouts;
     private Context context;
+    private static final String TAG = "MineFragment";
 
     @Nullable
     @Override
@@ -59,6 +66,9 @@ public class MineFragment extends Fragment implements View.OnClickListener{
         layouts[3] = (RelativeLayout) v.findViewById(R.id.fourthLayout);
         layouts[4] = (RelativeLayout) v.findViewById(R.id.fifthLayout);
         layouts[5] = (RelativeLayout) v.findViewById(R.id.sixthLayout);
+        userImage = (ImageView) v.findViewById(R.id.userImageShow);
+        userName = (TextView) v.findViewById(R.id.userNameShow);
+        userPhoneNumber = (TextView) v.findViewById(R.id.userPhoneNumberShow);
     }
 
     @Override
@@ -90,5 +100,21 @@ public class MineFragment extends Fragment implements View.OnClickListener{
                 break;
             }
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        //在唤醒的时候加载数据
+        SharedPreferences sharedPreferences = 
+                getContext().getSharedPreferences("LoginState", MODE_PRIVATE);
+        userName.setText(sharedPreferences.getString("userName", "你还没有登录") );
+        String phone = sharedPreferences.getString("phoneNumber", "你还没有登录");
+        Log.d(TAG, "onResume: " + phone);
+        userPhoneNumber.setText(sharedPreferences.getString("phoneNumber", "你还没有登录"));
+        String url = sharedPreferences.getString("userImage", null);
+        Glide.with(context).load(url)
+                .placeholder(R.drawable.head_image_default)
+                .crossFade().into(userImage);
     }
 }

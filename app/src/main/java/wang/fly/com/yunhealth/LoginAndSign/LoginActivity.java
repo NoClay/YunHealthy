@@ -103,10 +103,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                     //登陆成功
                                     toToast("登录成功");
                                     editLoginState(one);
-                                    Intent intent = new Intent("LOGIN_SUCCESS");
-                                    LocalBroadcastManager localBroadcastManager =
-                                            LocalBroadcastManager.getInstance(LoginActivity.this);
-                                    localBroadcastManager.sendBroadcast(intent);
+//                                    Intent intent = new Intent("LOGIN_SUCCESS");
+//                                    LocalBroadcastManager localBroadcastManager =
+//                                            LocalBroadcastManager.getInstance(LoginActivity.this);
+//                                    localBroadcastManager.sendBroadcast(intent);
                                     finish();
                                 }
                             }
@@ -128,6 +128,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         editor.putBoolean("isMan", user.getMan());
         editor.putInt("height", user.getHeight());
         editor.putInt("weight", user.getWeight());
+        if (user.getUserImage() != null){
+            editor.putString("userImage", user.getUserImage().getUrl());
+        }else{
+            editor.putString("userImage", "");
+        }
         if (rememberLoginStateButton.isChecked()) {
             editor.putBoolean("loginRememberState", true);
         } else {

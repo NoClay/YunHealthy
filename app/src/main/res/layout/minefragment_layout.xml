@@ -11,6 +11,7 @@
         android:layout_marginTop="20dp"
         android:layout_height="80dp">
         <ImageView
+            android:id="@+id/userImageShow"
             android:layout_margin="10dp"
             android:src="@drawable/head_image_default"
             android:layout_width="60dp"
@@ -24,6 +25,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" >
             <TextView
+                android:id="@+id/userNameShow"
                 android:textSize="19sp"
                 android:textColor="@color/black"
                 android:text="用户名"
@@ -31,6 +33,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
             <TextView
+                android:id="@+id/userPhoneNumberShow"
                 android:textSize="19sp"
                 android:text="15667027286"
                 android:layout_width="match_parent"
