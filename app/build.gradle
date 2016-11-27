@@ -12,6 +12,7 @@ android {
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
+
     }
     buildTypes {
         release {
@@ -22,6 +23,8 @@ android {
     sourceSets{
         main.jniLibs.srcDirs = ["libs"]
     }
+
+
 }
 repositories{
     flatDir{
