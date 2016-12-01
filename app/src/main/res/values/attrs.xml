@@ -34,6 +34,7 @@
     </declare-styleable>
     
     <declare-styleable name="CircleImageView">
+        <attr name="isScale" format="boolean"></attr>
         <attr name="circleColor" format="color"></attr>
     </declare-styleable>
 </resources>

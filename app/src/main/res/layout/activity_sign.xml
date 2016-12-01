@@ -3,9 +3,10 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
    <include layout="@layout/tool_bar"/>
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+
+    <!--<ScrollView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content">-->
         <LinearLayout
             android:layout_gravity="center"
             android:orientation="vertical"
@@ -190,11 +191,11 @@
                 android:text="完成注册"
                 android:textColor="@color/white"
                 android:backgroundTint="@color/lightseagreen"
-                android:layout_marginTop="3dp"
+                android:layout_marginTop="15dp"
                 android:layout_gravity="center_horizontal"
                 android:background="@drawable/circle_button_bg01"
                 android:layout_width="300dp"
                 android:layout_height="50dp"/>
         </LinearLayout>
-    </ScrollView>
+    <!--</ScrollView>-->
 </LinearLayout>

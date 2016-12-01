@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +27,8 @@ import wang.fly.com.yunhealth.Adapter.RecycleAdapterForMeasureOnly;
 import wang.fly.com.yunhealth.Activity.InfoActivity;
 import wang.fly.com.yunhealth.R;
 
+import static android.icu.lang.UCharacter.GraphemeClusterBreak.L;
+
 /**
  * Created by 兆鹏 on 2016/11/5.
  */
@@ -34,11 +37,19 @@ public class DataDataFragment extends Fragment {
     private RecyclerView recyclerView;
     private Context context;
     private RecycleAdapterForData myAdapter;
-    String[] titleArrays = {"血氧", "心电", "体重体脂", "血糖",
-            "体温", "粉尘", "脑电（待定）", "血压（待定）"};
-    int[] idArrays = {R.drawable.bloodoxygen, R.drawable.heartwaves, R.drawable.weight, R.drawable.bloodsugar,
-            R.drawable.temperature, R.drawable.dirty, R.drawable.headwaves, R.drawable.bloodpress};
-    int[] colorArrays = {R.color.bg1, R.color.bg2, R.color.bg3, R.color.bg4, R.color.bg5, R.color.bg6,
+    String[] titleArrays = {"血氧", "脉搏", "心电", "体温",
+            "粉尘浓度", "血糖（待定）", "脑电（待定）", "血压（待定）"};
+    int[] idArrays = {
+            R.drawable.bloodoxygen,
+            R.drawable.file_icon_ecg,
+            R.drawable.home_page_ic_ecg,
+            R.drawable.home_icon_temperature,
+            R.drawable.dirty,
+            R.drawable.ft_ic_tanghuaxuehong,
+            R.drawable.icon_toulu,
+            R.drawable.home_icon_pressure
+    };
+    int[] colorArrays = {R.color.white, R.color.bg2, R.color.bg3, R.color.bg4, R.color.bg5, R.color.bg6,
             R.color.bg7, R.color.bg8};
     boolean[] stateArrays = {
             false,false,false,false,false,false,false,false
@@ -55,7 +66,8 @@ public class DataDataFragment extends Fragment {
 
     private void initView(View v) {
         recyclerView = (RecyclerView) v.findViewById(R.id.data_data_recycleView);
-        recyclerView.setLayoutManager(new GridLayoutManager(context,2));
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+//        recyclerView.setLayoutManager(new GridLayoutManager(context,2));
         recyclerView.setHasFixedSize(true);
         Observable.create(new Observable.OnSubscribe<List<Map<String,Object>>>() {
             @Override

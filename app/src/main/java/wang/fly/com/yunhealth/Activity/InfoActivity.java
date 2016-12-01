@@ -48,10 +48,17 @@ public class InfoActivity extends AppCompatActivity
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_info);
+        ActivityCollector.addActivity(this);
         initView();
         setInfo();
         List<DataInfo> mLineList = getData();
         foldLineView.setmLines(mLineList);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ActivityCollector.removeActivity(this);
     }
 
     private List<DataInfo> getData() {

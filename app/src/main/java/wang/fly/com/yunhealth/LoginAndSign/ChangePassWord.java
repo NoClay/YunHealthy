@@ -23,6 +23,7 @@ import cn.bmob.v3.listener.UpdateListener;
 import cn.smssdk.EventHandler;
 import cn.smssdk.OnSendMessageHandler;
 import cn.smssdk.SMSSDK;
+import wang.fly.com.yunhealth.Activity.ActivityCollector;
 import wang.fly.com.yunhealth.DataBasePackage.SignUserData;
 import wang.fly.com.yunhealth.R;
 
@@ -48,6 +49,7 @@ public class ChangePassWord extends AppCompatActivity implements View.OnClickLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_pass_word);
+        ActivityCollector.addActivity(this);
         findView();
 
         EventHandler eh = new EventHandler() {
@@ -87,6 +89,11 @@ public class ChangePassWord extends AppCompatActivity implements View.OnClickLis
         });
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ActivityCollector.removeActivity(this);
+    }
 
     private void findView() {
         signedPhoneNumber = (EditText) findViewById(R.id.signed_phoneNumber);
