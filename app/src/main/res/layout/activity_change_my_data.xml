@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:id="@+id/mainLayout"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
     <RelativeLayout
         android:layout_width="match_parent"
@@ -25,8 +28,12 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="15dp"
             android:src="@drawable/back" />
-        <Button
+        <TextView
+            android:gravity="center"
+            android:id="@+id/saveData"
             android:textSize="17sp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
             android:textColor="@color/white"
             android:text="保存"
             android:background="@color/lightseagreen"
@@ -53,10 +60,12 @@
                     android:src="@drawable/right_arrow"
                     android:layout_width="20dp"
                     android:layout_height="20dp" />
-                <ImageView
+                <wang.fly.com.yunhealth.MyViewPackage.CircleImageView
+                    android:id="@+id/userImageShow"
                     android:layout_marginRight="50dp"
                     android:layout_marginBottom="5dp"
                     android:layout_marginTop="5dp"
+                    app:circleColor="@color/black"
                     android:layout_alignParentRight="true"
                     android:src="@drawable/head_image_default"
                     android:layout_width="70dp"
@@ -82,12 +91,15 @@
                     android:src="@drawable/right_arrow"
                     android:layout_width="20dp"
                     android:layout_height="20dp" />
-                <TextView
+                <EditText
+                    android:background="@null"
+                    android:gravity="right"
+                    android:hint="姓名"
+                    android:id="@+id/nameEdit"
                     android:textSize="19sp"
                     android:layout_marginRight="50dp"
                     android:layout_marginBottom="5dp"
                     android:layout_marginTop="5dp"
-                    android:text="罗汉"
                     android:layout_centerVertical="true"
                     android:layout_alignParentRight="true"
                     android:layout_width="wrap_content"
@@ -113,12 +125,15 @@
                     android:src="@drawable/right_arrow"
                     android:layout_width="20dp"
                     android:layout_height="20dp" />
-                <TextView
+                <EditText
+                    android:hint="身份证号"
+                    android:background="@null"
+                    android:gravity="right"
+                    android:id="@+id/idCardEdit"
                     android:textSize="19sp"
                     android:layout_marginRight="50dp"
                     android:layout_marginBottom="5dp"
                     android:layout_marginTop="5dp"
-                    android:text="罗汉"
                     android:layout_centerVertical="true"
                     android:layout_alignParentRight="true"
                     android:layout_width="wrap_content"
@@ -145,11 +160,13 @@
                     android:layout_width="20dp"
                     android:layout_height="20dp" />
                 <TextView
+                    android:gravity="right"
+                    android:id="@+id/maleEdit"
                     android:textSize="19sp"
                     android:layout_marginRight="50dp"
                     android:layout_marginBottom="5dp"
                     android:layout_marginTop="5dp"
-                    android:text="罗汉"
+                    android:text="男"
                     android:layout_centerVertical="true"
                     android:layout_alignParentRight="true"
                     android:layout_width="wrap_content"
@@ -176,11 +193,12 @@
                     android:layout_width="20dp"
                     android:layout_height="20dp" />
                 <TextView
+                    android:id="@+id/birthdayEdit"
+                    android:hint="选择生日"
                     android:textSize="19sp"
                     android:layout_marginRight="50dp"
                     android:layout_marginBottom="5dp"
                     android:layout_marginTop="5dp"
-                    android:text="罗汉"
                     android:layout_centerVertical="true"
                     android:layout_alignParentRight="true"
                     android:layout_width="wrap_content"
@@ -206,12 +224,16 @@
                     android:src="@drawable/right_arrow"
                     android:layout_width="20dp"
                     android:layout_height="20dp" />
-                <TextView
+                <EditText
+                    android:inputType="number"
+                    android:background="@null"
+                    android:id="@+id/heightEdit"
                     android:textSize="19sp"
+                    android:gravity="right"
+                    android:hint="身高"
                     android:layout_marginRight="50dp"
                     android:layout_marginBottom="5dp"
                     android:layout_marginTop="5dp"
-                    android:text="罗汉"
                     android:layout_centerVertical="true"
                     android:layout_alignParentRight="true"
                     android:layout_width="wrap_content"
@@ -237,12 +259,16 @@
                     android:src="@drawable/right_arrow"
                     android:layout_width="20dp"
                     android:layout_height="20dp" />
-                <TextView
+                <EditText
+                    android:inputType="numberDecimal"
+                    android:background="@null"
+                    android:gravity="right"
+                    android:id="@+id/weightEdit"
+                    android:hint="体重"
                     android:textSize="19sp"
                     android:layout_marginRight="50dp"
                     android:layout_marginBottom="5dp"
                     android:layout_marginTop="5dp"
-                    android:text="罗汉"
                     android:layout_centerVertical="true"
                     android:layout_alignParentRight="true"
                     android:layout_width="wrap_content"
@@ -256,39 +282,40 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
             </RelativeLayout>
-            <RelativeLayout
-                android:layout_marginTop="1px"
-                android:background="@color/white"
-                android:layout_width="match_parent"
-                android:layout_height="50dp">
-                <ImageView
-                    android:layout_marginRight="25dp"
-                    android:layout_centerVertical="true"
-                    android:layout_alignParentRight="true"
-                    android:src="@drawable/right_arrow"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp" />
-                <TextView
-                    android:textSize="19sp"
-                    android:layout_marginRight="50dp"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginTop="5dp"
-                    android:text="罗汉"
-                    android:layout_centerVertical="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-                <TextView
-                    android:textSize="19sp"
-                    android:textColor="@color/black"
-                    android:layout_marginLeft="10dp"
-                    android:layout_centerVertical="true"
-                    android:text="身体状况"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </RelativeLayout>
+            <!--<RelativeLayout-->
+                <!--android:layout_marginTop="1px"-->
+                <!--android:background="@color/white"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="50dp">-->
+                <!--<ImageView-->
+                    <!--android:layout_marginRight="25dp"-->
+                    <!--android:layout_centerVertical="true"-->
+                    <!--android:layout_alignParentRight="true"-->
+                    <!--android:src="@drawable/right_arrow"-->
+                    <!--android:layout_width="20dp"-->
+                    <!--android:layout_height="20dp" />-->
+                <!--<TextView-->
+                    <!--android:textSize="19sp"-->
+                    <!--android:layout_marginRight="50dp"-->
+                    <!--android:layout_marginBottom="5dp"-->
+                    <!--android:layout_marginTop="5dp"-->
+                    <!--android:text="罗汉"-->
+                    <!--android:layout_centerVertical="true"-->
+                    <!--android:layout_alignParentRight="true"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content" />-->
+                <!--<TextView-->
+                    <!--android:textSize="19sp"-->
+                    <!--android:textColor="@color/black"-->
+                    <!--android:layout_marginLeft="10dp"-->
+                    <!--android:layout_centerVertical="true"-->
+                    <!--android:text="身体状况"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content" />-->
+            <!--</RelativeLayout>-->
 
             <Button
+                android:id="@+id/exitButton"
                 android:layout_margin="10dp"
                 android:textSize="17sp"
                 android:textColor="@color/white"

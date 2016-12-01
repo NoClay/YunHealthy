@@ -14,7 +14,6 @@
         android:layout_width="match_parent"
         android:layout_height="50dp" />
 
-
     <!--帐号密码填充区-->
     <LinearLayout
         android:orientation="vertical"
@@ -126,6 +125,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent" />
     </LinearLayout>
+
     <!--<RelativeLayout-->
     <!--android:layout_gravity="center_horizontal"-->
     <!--android:layout_marginTop="20dp"-->

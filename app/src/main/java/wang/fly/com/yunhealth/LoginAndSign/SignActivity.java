@@ -26,6 +26,7 @@ import cn.bmob.v3.listener.SaveListener;
 import cn.smssdk.EventHandler;
 import cn.smssdk.OnSendMessageHandler;
 import cn.smssdk.SMSSDK;
+import wang.fly.com.yunhealth.Activity.ActivityCollector;
 import wang.fly.com.yunhealth.DataBasePackage.SignUserData;
 import wang.fly.com.yunhealth.R;
 
@@ -45,7 +46,7 @@ public class SignActivity extends AppCompatActivity implements View.OnClickListe
 //    private TextView accessText;
     private Button completeSignButton;
     private Context context = this;
-    private int cur = 0;
+    private int cur = 1;
     private int i = 30;
     private static final int MSG_WHAT_FOR_THREAD = 0;
     private static final int MSG_WHAT_FOR_THREAD_DEATH = 2;
@@ -55,6 +56,7 @@ public class SignActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign);
+        ActivityCollector.addActivity(this);
         findView();
         EventHandler eh = new EventHandler() {
             @Override
@@ -94,6 +96,13 @@ public class SignActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ActivityCollector.removeActivity(this);
+    }
+
     public static boolean isMobileNum(String mobiles) {
         String regex = "1[3|5|7|8|][0-9]{9}";
         return mobiles.matches(regex);
@@ -169,8 +178,6 @@ public class SignActivity extends AppCompatActivity implements View.OnClickListe
                 if (signUserName.getText().toString().length() > 20
                         || signUserName.getText().toString().length() <= 0) {
                     Toast.makeText(context, "姓名过长或过短", Toast.LENGTH_SHORT).show();
-                } else if (cur == 0) {
-                    Toast.makeText(context, "未选择性别", Toast.LENGTH_SHORT).show();
                 } else if (signUserPassWord.getText().toString().length() > 16 || signUserPassWord.
                         getText().toString().length() < 6) {
                     Toast.makeText(context, "密码过长或过短", Toast.LENGTH_SHORT).show();

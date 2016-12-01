@@ -12,14 +12,23 @@ import cn.bmob.v3.datatype.BmobFile;
  */
 
 public class SignUserData extends BmobObject {
-    private String userName = "";//昵称
-    private String passWord = "";//用于修改密码
-    private String phoneNumber = "";//用于储存手机号
+    private String userName;//昵称
+    private String passWord;//用于修改密码
+    private String phoneNumber;//用于储存手机号
     private BmobFile userImage;//用户头像
-    private Boolean isMan = true;//true为  man    false 为woman
-    private Integer height = 0;
-    private Integer weight = 0;
+    private String idNumber;
+    private Boolean isMan;//true为  man    false 为woman
+    private Integer height;
+    private Float weight;
     private BmobDate birthday;
+
+    public String getIdNumber() {
+        return idNumber;
+    }
+
+    public void setIdNumber(String idNumber) {
+        this.idNumber = idNumber;
+    }
 
     public String getUserName() {
         return userName;
@@ -69,11 +78,11 @@ public class SignUserData extends BmobObject {
         this.height = height;
     }
 
-    public Integer getWeight() {
+    public Float getWeight() {
         return weight;
     }
 
-    public void setWeight(Integer weight) {
+    public void setWeight(Float weight) {
         this.weight = weight;
     }
 

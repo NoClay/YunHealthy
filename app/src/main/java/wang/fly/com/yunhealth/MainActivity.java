@@ -1,8 +1,11 @@
 package wang.fly.com.yunhealth;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -10,18 +13,21 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.TextView;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobConfig;
 import cn.smssdk.SMSSDK;
+import wang.fly.com.yunhealth.Activity.ActivityCollector;
 import wang.fly.com.yunhealth.Fragments.DataFragment;
 import wang.fly.com.yunhealth.Fragments.DoctorsFragment;
 import wang.fly.com.yunhealth.Fragments.HomeFragment;
 import wang.fly.com.yunhealth.Fragments.MeasureFragment;
 import wang.fly.com.yunhealth.Fragments.MineFragment;
 import wang.fly.com.yunhealth.LoginAndSign.LoginActivity;
+import wang.fly.com.yunhealth.util.UtilClass;
 
 import static android.Manifest.permission_group.SMS;
 
@@ -37,18 +43,40 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private TextView measure_tv,data_tv,doctor_tv,home_tv,mine_tv;
     int color;
 
+    public static final String PATH_ADD = Environment.getExternalStorageDirectory() +
+            "/CloudHealthy/userImage/";
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ActivityCollector.addActivity(this);
         color = getResources().getColor(R.color.lightseagreen);
         initDependencies();
         findView();
         setEvent();
+        initDir();
         viewPager.setCurrentItem(2);
         setTab(2);
         checkIsLogined();
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ActivityCollector.removeActivity(this);
+    }
+
+    private void initDir() {
+        UtilClass.requestPermission(this,
+                android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        File file = new File(Environment.getExternalStorageDirectory() + "/CloudHealthy/userImage");
+        if (!file.exists()) {
+            file.mkdirs();
+        }
+    }
+
     private void checkIsLogined() {
         SharedPreferences shared = getSharedPreferences("LoginState", MODE_PRIVATE);
         boolean isLogined = shared.getBoolean("loginRememberState", false);

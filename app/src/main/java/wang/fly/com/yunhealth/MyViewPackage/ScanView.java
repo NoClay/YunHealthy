@@ -42,7 +42,7 @@ public class ScanView extends View{
     private int height;
     private int width;
     private boolean isFirstDrawBackground = true;
-    private boolean isScaning = false;
+    private boolean isScanning = false;
     private String scanTitle = "正在扫描：";
     private int score = 100;
     private int startAngle = 0;
@@ -115,7 +115,7 @@ public class ScanView extends View{
 
         drawBackground(canvas);
         drawText(canvas);
-        if(isScaning){
+        if(isScanning){
             Log.d(TAG, "onDraw: drawTitle");
             drawText.setTextAlign(Paint.Align.LEFT);
             drawText.setTextSize(60);
@@ -173,12 +173,12 @@ public class ScanView extends View{
 
     public void startScan(){
         angleSize = 5;
-        isScaning = true;
+        isScanning = true;
         invalidate();
     }
 
     public void stopScan(){
-        isScaning = false;
+        isScanning = false;
         angleSize = 1;
         invalidate();
     }

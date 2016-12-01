@@ -20,6 +20,7 @@ import java.io.ByteArrayOutputStream;
 
 import wang.fly.com.yunhealth.R;
 
+import static android.R.attr.bitmap;
 import static android.graphics.Bitmap.createScaledBitmap;
 
 /**
@@ -31,6 +32,10 @@ public class CircleImageView extends ImageView {
     private Paint paint;
     private int backgroundColor = Color.WHITE;
     private int deepBackgroundColor = Color.WHITE;
+    private static final String TAG = "CircleImageView";
+    private boolean isScaled = false;
+    private boolean isPng = false;
+
     public CircleImageView(Context context) {
         super(context);
         paint = new Paint();
@@ -41,6 +46,7 @@ public class CircleImageView extends ImageView {
         super(context, attrs, defStyleAttr);
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.CircleImageView);
         backgroundColor = a.getColor(R.styleable.CircleImageView_circleColor, Color.WHITE);
+        isScaled = a.getBoolean(R.styleable.CircleImageView_isScale, false);
         a.recycle();
         paint = new Paint();
 
@@ -50,6 +56,7 @@ public class CircleImageView extends ImageView {
         super(context, attrs);
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.CircleImageView);
         backgroundColor = a.getColor(R.styleable.CircleImageView_circleColor, Color.WHITE);
+        isScaled = a.getBoolean(R.styleable.CircleImageView_isScale, false);
         a.recycle();
         paint = new Paint();
     }
@@ -71,29 +78,41 @@ public class CircleImageView extends ImageView {
     @Override
     protected void onDraw(Canvas canvas) {
 
-        canvas.drawColor(deepBackgroundColor);
-        paint.setColor(backgroundColor);
-        paint.setAntiAlias(true);
-        canvas.drawCircle(getWidth()/2, getHeight()/2, getWidth()/2, paint);
-        paint.reset();
-
-
         Drawable drawable = getDrawable();
         if (drawable != null) {
             Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
-            final Rect rectSrc = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
-            final Rect rectDest = new Rect(getWidth() / 4 , getHeight() / 4,
-                    getWidth() * 3 / 4, getHeight() * 3 / 4);
+            if (isScaled){
+                bitmap = Bitmap.createScaledBitmap(bitmap, getWidth() / 3, getWidth() / 3, true);
+            }
+            Bitmap bitmap1 = setBitmapBack(bitmap);
+            Bitmap b = getCircleBitmap(bitmap1);
+            final Rect rectSrc = new Rect(0, 0, b.getWidth(), b.getHeight());
+            Rect rectDest = new Rect(0, 0, getWidth(), getHeight());
             paint.reset();
-            //压缩图片
-            bitmap = Bitmap.createScaledBitmap(bitmap, getWidth() / 2, getHeight() / 2, true);
-            canvas.drawBitmap(bitmap, rectSrc, rectDest, paint);
-
+            paint.setAntiAlias(true);
+            canvas.drawBitmap(b, rectSrc, rectDest, paint);
         } else {
             super.onDraw(canvas);
         }
     }
 
+
+    private Bitmap setBitmapBack(Bitmap bitmap){
+        Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),
+                bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(output);
+        final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
+        paint.setAntiAlias(true);
+        //设置背景色
+        paint.setColor(backgroundColor);
+        canvas.drawRect(0, 0, getWidth(), getHeight(), paint);
+        int x = bitmap.getWidth();
+        canvas.drawCircle(x / 2, x / 2, x / 2, paint);
+        //实现一个遮罩层
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_OVER));
+        canvas.drawBitmap(bitmap, rect, rect, paint);
+        return output;
+    }
     /**
      * 获取圆形图片方法
      *

@@ -38,8 +38,15 @@ public class ShowHeartWaves extends AppCompatActivity implements HeartWavesView.
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_heart_waves);
+        ActivityCollector.addActivity(this);
         initView();
         initData();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ActivityCollector.removeActivity(this);
     }
 
     private void initData() {
