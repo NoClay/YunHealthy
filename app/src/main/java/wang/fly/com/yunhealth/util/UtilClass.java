@@ -29,20 +29,43 @@ import static android.R.attr.key;
  */
 
 public class UtilClass {
+    public static boolean booleanValueOfInteger(Integer integer){
+        if (integer == null){
+            return false;
+        }
+        if (integer == 0){
+            return false;
+        }
+        return true;
+    }
+    /**
+     * 将Date转换为字符串
+     *
+     */
+    public static String valueOfDate(Date date, String timeFormat){
+        if (date == null){
+            return null;
+        }
+        if (timeFormat == null){
+            timeFormat = "yyyy-MM-dd HH:mm:00";
+        }
+        SimpleDateFormat format = new SimpleDateFormat(timeFormat);
+        return format.format(date);
+    }
     /**
      * 解析形如 20XX-XX-XX XX:XX:XX
      * 标志位 -, - ,  , :, :
      * @param bmobDate
      * @return
      */
-    public static Date resolveBmobDate(String bmobDate, String timtFormat){
+    public static Date resolveBmobDate(String bmobDate, String timeFormat){
         if (bmobDate == null){
             return null;
         }
-        if (timtFormat == null){
-            timtFormat = "yyyy-MM-dd HH:mm:ss";
+        if (timeFormat == null){
+            timeFormat = "yyyy-MM-dd HH:mm:ss";
         }
-        SimpleDateFormat format = new SimpleDateFormat(timtFormat);
+        SimpleDateFormat format = new SimpleDateFormat(timeFormat);
         try {
             return format.parse(bmobDate);
         } catch (ParseException e) {

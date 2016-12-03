@@ -1,6 +1,7 @@
 package wang.fly.com.yunhealth.Fragments;
 
 import android.Manifest;
+import android.app.Application;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
@@ -9,6 +10,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteCursorDriver;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteQuery;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -33,18 +38,28 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.SaveListener;
 import wang.fly.com.yunhealth.Adapter.RecycleAdapterForMeasureOnly;
-import wang.fly.com.yunhealth.DataBasePackage.MeasureData;
+import wang.fly.com.yunhealth.DataBasePackage.MeasureData.MeasureData;
+import wang.fly.com.yunhealth.DataBasePackage.MeasureData.MeasureXueYang;
+import wang.fly.com.yunhealth.DataBasePackage.MyDataBase;
+import wang.fly.com.yunhealth.DataBasePackage.SignUserData;
+import wang.fly.com.yunhealth.MainActivity;
 import wang.fly.com.yunhealth.R;
 import wang.fly.com.yunhealth.util.ClsUtils;
 import wang.fly.com.yunhealth.util.UtilClass;
 
+import static android.R.attr.type;
 import static android.app.Activity.RESULT_OK;
+import static android.media.CamcorderProfile.get;
+import static wang.fly.com.yunhealth.R.drawable.min;
 
 /*
  * Created by 兆鹏 on 2016/11/2.
@@ -57,40 +72,25 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
     private RecycleAdapterForMeasureOnly myAdapter;
     private ProgressBar load;
     private boolean isTryingConnecting = false;
-    private final static String deviceAddress = "98:D3:32:70:5A:44";
-    private static final String TAG = "MeasureFragment";
+    private MyDataBase myDataBase;
+    private SQLiteDatabase database;
     private BluetoothAdapter bluetoothAdapter;
     private BluetoothDevice theDestDevice;
     BroadcastReceiver receiver;
     private ClientThread clientThread;
     private ConnectedThread connectThread;
     private List<MeasureData> measureDataList;
-    private static final String[] LABEL = {
-            "血氧",
-            "脉搏",
-            "心电",
-            "体温",
-            "粉尘浓度",
-            "血糖（待定）",
-            "脑电（待定）",
-            "血压（待定）"
-    };
+    private Date date;
     private long last;
     //请求
-    static final int DATA_XUEYANG = 0;
-    static final int DATA_MAIBO = 1;
-    static final int DATA_XINDIAN = 2;
-    static final int DATA_TIWEN = 3;
-    static final int DATA_FENCHEN = 4;
-    static final int DATA_XUETANG = 5;
-    static final int DATA_NAODIAN = 6;
-    static final int DATA_XUEYA = 7;
     static final int REQUEST_OPEN_BLUETOOTH = 0;
     static final int MSG_WAIT_CONNECT = 0;
     static final int MSG_CONNECT_SUCCESS = 1;
     static final int MSG_START_CONNECT = 2;
     static final int MSG_READ_STRING = 3;
     static final int MSG_CONNECT_FAILED = 4;
+    private final static String deviceAddress = MainActivity.DEVICE_ADDRESS;
+    private static final String TAG = "MeasureFragment";
 
     @Nullable
     @Override
@@ -107,9 +107,9 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
         connectDevice = (TextView) v.findViewById(R.id.connect_device);
         load = (ProgressBar) v.findViewById(R.id.load);
         measureDataList = new ArrayList<>();
-        for (int i = 0; i < LABEL.length; i++) {
+        for (int i = 0; i < MainActivity.LABEL_STRING.length; i++) {
             MeasureData measure = new MeasureData();
-            measure.setName(LABEL[i]);
+            measure.setName(MainActivity.LABEL_STRING[i]);
             measureDataList.add(measure);
         }
         load.setVisibility(View.INVISIBLE);
@@ -117,16 +117,32 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         recyclerView.setHasFixedSize(true);
         DefaultItemAnimator d = new DefaultItemAnimator();
-//        d.setAddDuration(0);
-//        d.setMoveDuration(0);
-//        d.setChangeDuration(0);
-//        d.setRemoveDuration(0);
         d.setMoveDuration(0);
         d.setSupportsChangeAnimations(false);
         recyclerView.setItemAnimator(d);
         myAdapter = new RecycleAdapterForMeasureOnly(R.layout.measure_data_show_item,
                 context, measureDataList);
         recyclerView.setAdapter(myAdapter);
+        //本地缓存所需要的初始化
+        date = new Date();
+        myDataBase = new MyDataBase(getActivity().getApplicationContext(),
+                "LocalStore.db", null, MainActivity.DATABASE_VERSION);
+        database = myDataBase.getWritableDatabase();
+
+        /**
+         * 数据库测试
+         */
+        Cursor cursor = database.query("MeasureDataCache", null, null, null, null, null, null, null);
+        if (cursor.moveToFirst()) {
+            do {
+                Log.d("dataCache", "findView: name " + cursor.getString(cursor.getColumnIndex("name")));
+                Log.d("dataCache", "findView: isAverageDanger " + cursor.getString(cursor.getColumnIndex("isAverageDanger")));
+                Log.d("dataCache", "findView: average " + cursor.getFloat(cursor.getColumnIndex("average")));
+                Log.d("dataCache", "findView: createTime " + cursor.getString(cursor.getColumnIndex("createTime")));
+            } while (cursor.moveToNext());
+        }
+
+
     }
 
     private void registerBroadReceiver() {
@@ -224,12 +240,25 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.connect_device: {
-                //连接设备
-                connectDevice.setVisibility(View.INVISIBLE);
-                connectDevice.setClickable(false);
-                load.setVisibility(View.VISIBLE);
-                mayRequestLocation();
-                openBluetooth();
+//                //连接设备
+//                connectDevice.setVisibility(View.INVISIBLE);
+//                connectDevice.setClickable(false);
+//                load.setVisibility(View.VISIBLE);
+//                mayRequestLocation();
+//                openBluetooth();
+                /**
+                 * 尝试上传数据
+                 */
+                String id = context.getSharedPreferences("LoginState",
+                        Context.MODE_PRIVATE).getString("userId", null);
+                if (id == null){
+                    UtilClass.toToast(context, "上传失败,用户未登录");
+                }
+                if (myDataBase.upLoadMeasureData(database, id)){
+                    UtilClass.toToast(context, "上传成功");
+                }else{
+                    UtilClass.toToast(context, "上传失败");
+                }
                 break;
             }
         }
@@ -527,44 +556,49 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
                 }
                 case MSG_READ_STRING: {
                     //进行数据的分类设定
+                    date.setTime(System.currentTimeMillis());
+                    int minute = date.getMinutes();
                     String data = (String) msg.obj;
                     MeasureData temp;
                     switch (msg.arg1) {
                         //每次都要求获取数据的字符串
-                        case 0: {
-                            //保留
+                        case 0: {//保留
                             break;
                         }
                         case 1: {
                             //血氧
-                            if (data.length() == 8){
+                            if (data.length() == 8) {
+                                Log.d("workItem", "handleMessage: 血氧");
+                                Log.d("workItem", "handleMessage: 脉搏");
+                                checkMinuteAndCache(MainActivity.MEASURE_TYPE_XUEYANG, minute);
+                                checkMinuteAndCache(MainActivity.MEASURE_TYPE_MAIBO, minute);
+                                //进行血氧的结果解析
                                 float result = UtilClass.valueOfHexString(data.substring(0, 2));
-                                temp = measureDataList.get(DATA_XUEYANG);
-                                if (result > 0 && result < 100 && compareData(temp, result)){
-                                    myAdapter.notifyItemChanged(DATA_XUEYANG);
+                                temp = measureDataList.get(MainActivity.MEASURE_TYPE_XUEYANG);
+                                if (result > 0 && result < 100 && compareData(temp, result)) {
+                                    myAdapter.notifyItemChanged(MainActivity.MEASURE_TYPE_XUEYANG);
                                 }
+                                //进行脉搏的结果解析
                                 result = UtilClass.valueOfHexString(data.substring(2, 4));
-                                temp = measureDataList.get(DATA_MAIBO);
-                                if (result > 0 && result < 255 && compareData(temp, result)){
-                                    Log.d("handler", "handleMessage: data" + result);
-                                    Log.d("handler", "handleMessage: count" + temp.getCount());
-                                    myAdapter.notifyItemChanged(DATA_MAIBO);
+                                temp = measureDataList.get(MainActivity.MEASURE_TYPE_MAIBO);
+                                if (result > 0 && result < 255 && compareData(temp, result)) {
+                                    myAdapter.notifyItemChanged(MainActivity.MEASURE_TYPE_MAIBO);
                                 }
                             }
                             break;
                         }
                         case 2: {
                             //心电
-                            if (data.length() == 4){
+                            if (data.length() == 4) {
+                                Log.d("workItem", "handleMessage: 心电");
                                 long now = Calendar.getInstance().getTimeInMillis();
-                                if (now - last >= 200){
+                                if (now - last >= 200) {
+                                    checkMinuteAndCache(MainActivity.MEASURE_TYPE_XINDIAN, minute);
                                     int result = UtilClass.valueOfHexString(data);
-                                    Log.d("heart", "handleMessage: result" + result);
-                                    temp = measureDataList.get(DATA_XINDIAN);
-                                    myAdapter.heartWavesView.
-                                            drawNextPoint(result);
-                                    if (compareData(temp, (float)(result))){
-                                        myAdapter.notifyItemChanged(DATA_XUETANG);
+                                    temp = measureDataList.get(MainActivity.MEASURE_TYPE_XINDIAN);
+                                    myAdapter.heartWavesView.drawNextPoint(result);
+                                    if (compareData(temp, (float) (result))) {
+                                        myAdapter.notifyItemChanged(MainActivity.MEASURE_TYPE_XINDIAN);
                                     }
                                     last = now;
                                 }
@@ -573,37 +607,41 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
                         }
                         case 3: {
                             //血糖
-                            if (data.length() == 12){
+                            if (data.length() == 12) {
+                                Log.d("workItem", "handleMessage: 血糖");
+                                checkMinuteAndCache(MainActivity.MEASURE_TYPE_XUETANG, minute);
                                 float result = UtilClass.valueOfHexString(
                                         data.substring(10, 12)) / 10.0f;
-                                temp = measureDataList.get(DATA_XUETANG);
-                                if (result > 0 && result < 300 && compareData(temp, result)){
-                                    myAdapter.notifyItemChanged(DATA_XUETANG);
+                                temp = measureDataList.get(MainActivity.MEASURE_TYPE_XUETANG);
+                                if (result > 0 && result < 300 && compareData(temp, result)) {
+                                    myAdapter.notifyItemChanged(MainActivity.MEASURE_TYPE_XUETANG);
                                 }
                             }
                             break;
                         }
                         case 4: {
                             //体温
-                            if (data.length() == 4){
-                                Log.d("tiwen", "handleMessage: 提问" + data);
-                                float result = UtilClass.valueOfHexString(
-                                        data) / 100.0f;
-                                temp = measureDataList.get(DATA_TIWEN);
-                                if (compareData(temp, result)){
-                                    myAdapter.notifyItemChanged(DATA_TIWEN);
+                            if (data.length() == 4) {
+                                Log.d("workItem", "handleMessage: 体温");
+                                checkMinuteAndCache(MainActivity.MEASURE_TYPE_TIWEN, minute);
+                                float result = UtilClass.valueOfHexString(data) / 100.0f;
+                                temp = measureDataList.get(MainActivity.MEASURE_TYPE_TIWEN);
+                                if (compareData(temp, result)) {
+                                    //修改各项
+                                    myAdapter.notifyItemChanged(MainActivity.MEASURE_TYPE_TIWEN);
                                 }
                             }
                             break;
                         }
                         case 5: {
                             //粉尘
-                            if (data.length() == 8){
-                                float result = UtilClass.valueOfHexString(
-                                        data) / 100.0f;
-                                temp = measureDataList.get(DATA_FENCHEN);
-                                if (result > 0 && result < 800 && compareData(temp, result)){
-                                    myAdapter.notifyItemChanged(DATA_FENCHEN);
+                            if (data.length() == 8) {
+                                Log.d("workItem", "handleMessage: 粉尘");
+                                checkMinuteAndCache(MainActivity.MEASURE_TYPE_FENCHEN, minute);
+                                float result = UtilClass.valueOfHexString(data) / 100.0f;
+                                temp = measureDataList.get(MainActivity.MEASURE_TYPE_FENCHEN);
+                                if (result > 0 && result < 800 && compareData(temp, result)) {
+                                    myAdapter.notifyItemChanged(MainActivity.MEASURE_TYPE_FENCHEN);
                                 }
                             }
                             break;
@@ -641,14 +679,31 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
                             break;
                         }
                     }
-//                    myAdapter.notifyDataSetChanged();
                 }
             }
         }
     };
 
     /**
-     * 比较一些数据
+     * 检查本时段缓存处理
+     *
+     * @param type
+     * @param minute
+     */
+    public void checkMinuteAndCache(int type, int minute) {
+        if (database.isOpen()
+                && minute % MainActivity.CACHE_TIME_LENGTH == 0
+                && !myDataBase.checkOneMeasureDataCache(database,
+                type, date)) {
+            myDataBase.addOneMeasureData(database,
+                    measureDataList.get(type), type, date);
+            measureDataList.get(type).reset();
+        }
+    }
+
+    /**
+     * 比较一些数据，相同返回
+     *
      * @param temp
      * @param result
      */

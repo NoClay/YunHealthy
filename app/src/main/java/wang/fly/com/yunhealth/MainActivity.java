@@ -42,9 +42,35 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private FragmentPagerAdapter mAdapter;
     private TextView measure_tv,data_tv,doctor_tv,home_tv,mine_tv;
     int color;
-
+    //需要连接的蓝牙地址
+    public static final String DEVICE_ADDRESS = "98:D3:32:70:5A:44";
+    //缓存头像使用的目录
     public static final String PATH_ADD = Environment.getExternalStorageDirectory() +
             "/CloudHealthy/userImage/";
+    //目前已经可以使用的功能
+    public static final String []LABEL_STRING = {
+            "血氧",
+            "脉搏",
+            "心电",
+            "体温",
+            "粉尘浓度",
+            "血糖（待定）",
+            "脑电（待定）",
+            "血压（待定）"
+    };
+    //功能对应的标志位
+    public static final int MEASURE_TYPE_XUEYANG = 0;
+    public static final int MEASURE_TYPE_MAIBO = 1;
+    public static final int MEASURE_TYPE_XINDIAN = 2;
+    public static final int MEASURE_TYPE_TIWEN = 3;
+    public static final int MEASURE_TYPE_FENCHEN = 4;
+    public static final int MEASURE_TYPE_XUETANG = 5;
+    public static final int MEASURE_TYPE_NAODIAN = 6;
+    public static final int MEASURE_TYPE_XUEYA = 7;
+    //数据库版本
+    public static final int DATABASE_VERSION = 1;
+    //进行本地数据库缓存的间隔, 每小时的0, 15, 30 , 45
+    public static final int CACHE_TIME_LENGTH = 2;
 
 
     @Override
