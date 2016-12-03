@@ -74,6 +74,7 @@
 
 
             <TextView
+                android:maxLines="1"
                 android:id="@+id/averageData"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -100,6 +101,7 @@
                 app:circleColor="@color/bg2" />
 
             <TextView
+                android:maxLines="1"
                 android:id="@+id/maxData"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -126,6 +128,7 @@
                 app:circleColor="@color/bg3" />
 
             <TextView
+                android:maxLines="1"
                 android:id="@+id/minData"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"

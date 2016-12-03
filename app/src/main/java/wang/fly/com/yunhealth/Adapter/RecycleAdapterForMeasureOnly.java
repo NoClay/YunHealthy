@@ -1,13 +1,11 @@
 package wang.fly.com.yunhealth.Adapter;
 
-import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -16,7 +14,7 @@ import android.widget.Toast;
 
 import java.util.List;
 
-import wang.fly.com.yunhealth.DataBasePackage.MeasureData;
+import wang.fly.com.yunhealth.DataBasePackage.MeasureData.MeasureData;
 import wang.fly.com.yunhealth.MyViewPackage.HeartWavesView;
 import wang.fly.com.yunhealth.R;
 import wang.fly.com.yunhealth.util.UtilClass;
@@ -93,7 +91,7 @@ public class RecycleAdapterForMeasureOnly extends RecyclerView.Adapter<RecycleAd
         holder.averageData.setText("平均值：" + UtilClass.getTwoShortValue(
                 temp.getAverageData()
         ));
-        if (temp.isAgerageDanger()){
+        if (temp.getAverageDanger()){
             holder.averageData.setTextColor(COLOR_DANGER);
         }else{
             holder.averageData.setTextColor(COLOR_NORMAL);
@@ -101,7 +99,7 @@ public class RecycleAdapterForMeasureOnly extends RecyclerView.Adapter<RecycleAd
         holder.maxData.setText("高峰值：" + UtilClass.getTwoShortValue(
                 temp.getMaxData()
         ));
-        if (temp.isMaxDanger()){
+        if (temp.getMaxDanger()){
             holder.maxData.setTextColor(COLOR_DANGER);
         }else{
             holder.maxData.setTextColor(COLOR_NORMAL);
@@ -109,7 +107,7 @@ public class RecycleAdapterForMeasureOnly extends RecyclerView.Adapter<RecycleAd
         holder.minData.setText("低谷值：" + UtilClass.getTwoShortValue(
                 temp.getMinData()
         ));
-        if (temp.isMinDanger()){
+        if (temp.getMinDanger()){
             holder.minData.setTextColor(COLOR_DANGER);
         }else{
             holder.minData.setTextColor(COLOR_NORMAL);
@@ -142,7 +140,6 @@ public class RecycleAdapterForMeasureOnly extends RecyclerView.Adapter<RecycleAd
             averageData = (TextView) itemView.findViewById(R.id.averageData);
             maxData = (TextView) itemView.findViewById(R.id.maxData);
             minData = (TextView) itemView.findViewById(R.id.minData);
-
         }
     }
 }
