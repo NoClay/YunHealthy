@@ -6,6 +6,8 @@ import android.content.ContentUris;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Build;
@@ -20,7 +22,10 @@ import android.widget.Toast;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+
+import wang.fly.com.yunhealth.R;
 
 import static android.R.attr.key;
 
@@ -29,6 +34,35 @@ import static android.R.attr.key;
  */
 
 public class UtilClass {
+    /**
+     * 将Calendar转转为时间字符串
+     */
+    public static String valueOfCalendar(Calendar calendar){
+        if (calendar == null){
+            return null;
+        }
+        return calendar.get(Calendar.YEAR) + "-"
+                + (calendar.get(Calendar.MONTH) + 1) + "-"
+                + calendar.get(Calendar.DAY_OF_MONTH) + " "
+                + calendar.get(Calendar.HOUR_OF_DAY) + ":"
+                + calendar.get(Calendar.MINUTE) + ":"
+                + calendar.get(Calendar.SECOND) + ":"
+                + calendar.get(Calendar.MILLISECOND);
+    }
+    /**
+     * 获取资源转换为bitmap，不存在设置为默认图片
+     * @param context
+     * @param id
+     * @return
+     */
+    public static Bitmap resToBitmap(Context context, int id){
+        return BitmapFactory.decodeResource(context.getResources(), id);
+    }
+    /**
+     * 将整型转换为布尔型
+     * @param integer
+     * @return
+     */
     public static boolean booleanValueOfInteger(Integer integer){
         if (integer == null){
             return false;

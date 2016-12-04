@@ -20,20 +20,15 @@ import cn.bmob.v3.listener.QueryListListener;
 import wang.fly.com.yunhealth.DataBasePackage.MeasureData.MeasureData;
 import wang.fly.com.yunhealth.DataBasePackage.MeasureData.MeasureFenChen;
 import wang.fly.com.yunhealth.DataBasePackage.MeasureData.MeasureMaiBo;
+import wang.fly.com.yunhealth.DataBasePackage.MeasureData.MeasureNaoDian;
 import wang.fly.com.yunhealth.DataBasePackage.MeasureData.MeasureTiWen;
 import wang.fly.com.yunhealth.DataBasePackage.MeasureData.MeasureXinDian;
+import wang.fly.com.yunhealth.DataBasePackage.MeasureData.MeasureXueTang;
+import wang.fly.com.yunhealth.DataBasePackage.MeasureData.MeasureXueYa;
 import wang.fly.com.yunhealth.DataBasePackage.MeasureData.MeasureXueYang;
 import wang.fly.com.yunhealth.MainActivity;
 import wang.fly.com.yunhealth.R;
 import wang.fly.com.yunhealth.util.UtilClass;
-
-import static android.R.attr.breadCrumbShortTitle;
-import static android.R.attr.cacheColorHint;
-import static android.R.attr.firstDayOfWeek;
-import static android.R.attr.track;
-import static android.R.attr.type;
-import static wang.fly.com.yunhealth.R.drawable.average;
-import static wang.fly.com.yunhealth.R.drawable.check;
 
 /**
  * Created by 82661 on 2016/11/17.
@@ -41,6 +36,7 @@ import static wang.fly.com.yunhealth.R.drawable.check;
 
 public class MyDataBase extends SQLiteOpenHelper {
     private static final String TAG = "MyDataBase";
+    public static final int ERROR_LOAD = -1;
     public static final String CREATE_REPORT_MENU = "" +
             "create table report_menu (" +
             "id integer primary key autoincrement," +
@@ -462,9 +458,10 @@ public class MyDataBase extends SQLiteOpenHelper {
 
 
 
-    public boolean upLoadMeasureData(SQLiteDatabase db, String objectId){
+    public int upLoadMeasureData(SQLiteDatabase db, String objectId){
         if (db == null){
-            return false;
+            Log.d(TAG, "upLoadMeasureData: db is null");
+            return ERROR_LOAD;
         }
         Cursor cursor = db.query("MeasureDataCache", null, null, null, null, null, null);
         List<BmobObject> datas = new ArrayList<>();
@@ -525,26 +522,73 @@ public class MyDataBase extends SQLiteOpenHelper {
                         datas.add(measureFenChen);
                         break;
                     }
+                    case MainActivity.MEASURE_TYPE_NAODIAN:{
+                        MeasureNaoDian measureNaoDian = new MeasureNaoDian();
+                        measureData.copyTo(measureNaoDian);
+                        measureNaoDian.setOwner(owner);
+                        datas.add(measureNaoDian);
+                        break;
+                    }
+                    case MainActivity.MEASURE_TYPE_XUEYA:{
+                        MeasureXueYa measureXueYa = new MeasureXueYa();
+                        measureData.copyTo(measureXueYa);
+                        measureXueYa.setOwner(owner);
+                        datas.add(measureXueYa);
+                        break;
+                    }
+                    case MainActivity.MEASURE_TYPE_XUETANG:{
+                        MeasureXueTang measureXueTang = new MeasureXueTang();
+                        measureData.copyTo(measureXueTang);
+                        measureXueTang.setOwner(owner);
+                        datas.add(measureXueTang);
+                        break;
+                    }
                 }
-            }while (cursor.moveToNext() && datas.size() < 50);
+            }while (cursor.moveToNext());
+        }else{
+            return 0;
         }
-        new BmobBatch().insertBatch(datas).doBatch(new QueryListListener<BatchResult>() {
+        Log.d(TAG, "upLoadMeasureData: datas.size" + datas.size());
+        boolean [] flags = new boolean[datas.size() / 50 + 1];
+        for (int i = 0; i < datas.size(); i += 50) {
+            flags[i / 50] = upLoadFiftyData(datas, i);
+            Log.d(TAG, "upLoadMeasureData: i = " + i);
+            Log.d(TAG, "upLoadMeasureData: load = " + flags[i / 50]);
+        }
+        boolean flag = false;
+        for (int i = 0; i < flags.length; i++) {
+            if (flags[i]){
+                flag = true;
+                break;
+            }
+        }
+        if (flag){
+            //有一批上传成功
+            db.delete("MeasureDataCache", null, null);
+            return datas.size();
+        }else{
+            return ERROR_LOAD;
+        }
+    }
+    public boolean upLoadFiftyData(List<BmobObject> dataArray, int length){
+        if (dataArray == null){
+            return true;
+        }
+        List<BmobObject> item = new ArrayList<>();
+        for (int i = length; i < length + 50 && i < dataArray.size(); i++) {
+            item.add(dataArray.get(i));
+        }
+        final boolean []flag = new boolean[1];
+        //进行上传操作
+        new BmobBatch().insertBatch(item);
+        new BmobBatch().doBatch(new QueryListListener<BatchResult>() {
             @Override
             public void done(List<BatchResult> list, BmobException e) {
                 if (e == null){
-                    for (int i = 0; i < list.size(); i++) {
-                        BmobException ex = list.get(i).getError();
-                        if (ex != null){
-                            Log.d(TAG, "done: 第" + i + "上传失败");
-                            Log.e(TAG, "done: ", ex);
-                        }
-                    }
-                }else{
-                    Log.d(TAG, "done: 上传失败");
-                    Log.e(TAG, "done: ", e);
+                    flag[0] = true;
                 }
             }
         });
-        return true;
+        return flag[0];
     }
 }

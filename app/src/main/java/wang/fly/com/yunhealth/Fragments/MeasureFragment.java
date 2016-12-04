@@ -240,26 +240,26 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.connect_device: {
-//                //连接设备
-//                connectDevice.setVisibility(View.INVISIBLE);
-//                connectDevice.setClickable(false);
-//                load.setVisibility(View.VISIBLE);
-//                mayRequestLocation();
-//                openBluetooth();
-                /**
-                 * 尝试上传数据
-                 */
-                String id = context.getSharedPreferences("LoginState",
-                        Context.MODE_PRIVATE).getString("userId", null);
-                if (id == null){
-                    UtilClass.toToast(context, "上传失败,用户未登录");
-                }
-                if (myDataBase.upLoadMeasureData(database, id)){
-                    UtilClass.toToast(context, "上传成功");
-                }else{
-                    UtilClass.toToast(context, "上传失败");
-                }
-                break;
+                //连接设备
+                connectDevice.setVisibility(View.INVISIBLE);
+                connectDevice.setClickable(false);
+                load.setVisibility(View.VISIBLE);
+                mayRequestLocation();
+                openBluetooth();
+//                /**
+//                 * 尝试上传数据
+//                 */
+//                String id = context.getSharedPreferences("LoginState",
+//                        Context.MODE_PRIVATE).getString("userId", null);
+//                if (id == null){
+//                    UtilClass.toToast(context, "上传失败,用户未登录");
+//                }
+//                if (myDataBase.upLoadMeasureData(database, id)){
+//                    UtilClass.toToast(context, "上传成功");
+//                }else{
+//                    UtilClass.toToast(context, "上传失败");
+//                }
+//                break;
             }
         }
     }
@@ -695,6 +695,8 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
                 && minute % MainActivity.CACHE_TIME_LENGTH == 0
                 && !myDataBase.checkOneMeasureDataCache(database,
                 type, date)) {
+            Log.d("Cache", "checkMinuteAndCache: cache + " +
+                    MainActivity.LABEL_STRING[type] + "\tminute" + minute);
             myDataBase.addOneMeasureData(database,
                     measureDataList.get(type), type, date);
             measureDataList.get(type).reset();
