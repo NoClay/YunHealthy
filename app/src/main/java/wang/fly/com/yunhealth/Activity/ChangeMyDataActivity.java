@@ -277,7 +277,6 @@ public class ChangeMyDataActivity extends AppCompatActivity
                 break;
             }
             case R.id.birthdayEdit: {
-                Date date = new Date(System.currentTimeMillis());
                 new DatePickerDialog(context, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
@@ -286,13 +285,14 @@ public class ChangeMyDataActivity extends AppCompatActivity
                                 + "-" + birthdayDate.getMonth()
                                 + "-" + birthdayDate.getDay());
                     }
-                }, date.getYear(), date.getMonth(), date.getDay()).show();
+                }, birthdayDate.getYear(), birthdayDate.getMonth() - 1, birthdayDate.getDay()).show();
                 break;
             }
             case R.id.exitButton: {
                 SharedPreferences.Editor editor =
                         getSharedPreferences("LoginState", MODE_PRIVATE).edit();
                 editor.putBoolean("loginRememberState", false);
+                editor.commit();
                 ActivityCollector.finishAll();
                 break;
             }
@@ -385,6 +385,7 @@ public class ChangeMyDataActivity extends AppCompatActivity
                                 MainActivity.PATH_ADD + user.getPhoneNumber() + "userImage.jpg",
                                 null);
                         UtilClass.toToast(context, "资料已修改");
+                        finish();
                     } else {
                         UtilClass.toToast(context, "资料修改失败，请稍后重试");
                     }
