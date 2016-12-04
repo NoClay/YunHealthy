@@ -1,35 +1,49 @@
 package wang.fly.com.yunhealth;
 
+import android.app.AlarmManager;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobConfig;
 import cn.smssdk.SMSSDK;
 import wang.fly.com.yunhealth.Activity.ActivityCollector;
+import wang.fly.com.yunhealth.DataBasePackage.MyDataBase;
 import wang.fly.com.yunhealth.Fragments.DataFragment;
 import wang.fly.com.yunhealth.Fragments.DoctorsFragment;
 import wang.fly.com.yunhealth.Fragments.HomeFragment;
 import wang.fly.com.yunhealth.Fragments.MeasureFragment;
 import wang.fly.com.yunhealth.Fragments.MineFragment;
 import wang.fly.com.yunhealth.LoginAndSign.LoginActivity;
+import wang.fly.com.yunhealth.Service.UpLoadService;
 import wang.fly.com.yunhealth.util.UtilClass;
 
 import static android.Manifest.permission_group.SMS;
+import static android.R.string.no;
+import static android.os.Build.VERSION_CODES.N;
 
 public class MainActivity extends FragmentActivity implements View.OnClickListener{
     private ViewPager viewPager;
@@ -70,7 +84,10 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     //数据库版本
     public static final int DATABASE_VERSION = 1;
     //进行本地数据库缓存的间隔, 每小时的0, 15, 30 , 45
-    public static final int CACHE_TIME_LENGTH = 2;
+    public static final int CACHE_TIME_LENGTH = 15;
+    public static final int LOAD_CACHE_MINUTE = 5;
+    public static final int RECEIVER_TYPE_UPLOAD = 0;
+    public static final int REQUEST_LOGIN = 0;
 
 
     @Override
@@ -87,6 +104,17 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         setTab(2);
         checkIsLogined();
     }
+
+    /**
+     * 初始化定时上传的线程
+     */
+    private void initUpLoadThread() {
+        Intent in = new Intent(this, UpLoadService.class);
+        in.putExtra("type", MainActivity.RECEIVER_TYPE_UPLOAD);
+        in.putExtra("isFirst", true);
+        this.startService(in);
+    }
+
 
     @Override
     protected void onDestroy() {
@@ -108,7 +136,18 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         boolean isLogined = shared.getBoolean("loginRememberState", false);
         if (!isLogined) {
             Intent intent = new Intent(this, LoginActivity.class);
-            startActivity(intent);
+            startActivityForResult(intent, REQUEST_LOGIN);
+        }else{
+            initUpLoadThread();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode){
+            case REQUEST_LOGIN:{
+                initUpLoadThread();
+            }
         }
     }
 
@@ -199,7 +238,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         home_tv.setTextColor(getResources().getColor(R.color.lightgrey));
         doctor_tv.setTextColor(getResources().getColor(R.color.lightgrey));
         mine_tv.setTextColor(getResources().getColor(R.color.lightgrey));
-
     }
     @Override
     public void onClick(View view) {

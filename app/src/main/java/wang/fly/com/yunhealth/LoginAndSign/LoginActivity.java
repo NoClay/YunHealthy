@@ -172,7 +172,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 //                                    LocalBroadcastManager localBroadcastManager =
 //                                            LocalBroadcastManager.getInstance(LoginActivity.this);
 //                                    localBroadcastManager.sendBroadcast(intent);
-                                    finish();
                                 }
                             }
 
