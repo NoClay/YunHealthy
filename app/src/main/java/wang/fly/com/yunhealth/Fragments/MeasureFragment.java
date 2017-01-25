@@ -1,7 +1,6 @@
 package wang.fly.com.yunhealth.Fragments;
 
 import android.Manifest;
-import android.app.Application;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
@@ -9,11 +8,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteCursorDriver;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteQuery;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -26,6 +23,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,22 +42,17 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.SaveListener;
 import wang.fly.com.yunhealth.Adapter.RecycleAdapterForMeasureOnly;
 import wang.fly.com.yunhealth.DataBasePackage.MeasureData.MeasureData;
-import wang.fly.com.yunhealth.DataBasePackage.MeasureData.MeasureXueYang;
 import wang.fly.com.yunhealth.DataBasePackage.MyDataBase;
-import wang.fly.com.yunhealth.DataBasePackage.SignUserData;
 import wang.fly.com.yunhealth.MainActivity;
+import wang.fly.com.yunhealth.MyViewPackage.InputBlueMacDialog;
 import wang.fly.com.yunhealth.R;
 import wang.fly.com.yunhealth.util.ClsUtils;
 import wang.fly.com.yunhealth.util.UtilClass;
 
-import static android.R.attr.type;
 import static android.app.Activity.RESULT_OK;
-import static android.media.CamcorderProfile.get;
-import static wang.fly.com.yunhealth.R.drawable.min;
+import static android.content.Context.MODE_PRIVATE;
 
 /*
  * Created by 兆鹏 on 2016/11/2.
@@ -67,6 +60,7 @@ import static wang.fly.com.yunhealth.R.drawable.min;
 public class MeasureFragment extends Fragment implements View.OnClickListener {
     private TextView connectDevice;
     private RecyclerView recyclerView;
+    InputBlueMacDialog dialog;
     private GridLayoutManager gridLayoutManager;
     private Context context;
     private RecycleAdapterForMeasureOnly myAdapter;
@@ -89,14 +83,16 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
     static final int MSG_START_CONNECT = 2;
     static final int MSG_READ_STRING = 3;
     static final int MSG_CONNECT_FAILED = 4;
-    private final static String deviceAddress = MainActivity.DEVICE_ADDRESS;
+    private String deviceAddress;
     private static final String TAG = "MeasureFragment";
+    View mView;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.measurefragment_layout, container, false);
         context = getContext();
+        mView = v;
         findView(v);
         registerBroadReceiver();
         return v;
@@ -128,20 +124,6 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
         myDataBase = new MyDataBase(getActivity().getApplicationContext(),
                 "LocalStore.db", null, MainActivity.DATABASE_VERSION);
         database = myDataBase.getWritableDatabase();
-
-        /**
-         * 数据库测试
-         */
-        Cursor cursor = database.query("MeasureDataCache", null, null, null, null, null, null, null);
-        if (cursor.moveToFirst()) {
-            do {
-                Log.d("dataCache", "findView: name " + cursor.getString(cursor.getColumnIndex("name")));
-                Log.d("dataCache", "findView: isAverageDanger " + cursor.getString(cursor.getColumnIndex("isAverageDanger")));
-                Log.d("dataCache", "findView: average " + cursor.getFloat(cursor.getColumnIndex("average")));
-                Log.d("dataCache", "findView: createTime " + cursor.getString(cursor.getColumnIndex("createTime")));
-            } while (cursor.moveToNext());
-        }
-
 
     }
 
@@ -236,16 +218,77 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    /**
+     * 用于连接
+     * @param macAddress
+     */
+    public void connectProc(String macAddress){
+        deviceAddress = macAddress;
+        connectDevice.setVisibility(View.INVISIBLE);
+        connectDevice.setClickable(false);
+        load.setVisibility(View.VISIBLE);
+        mayRequestLocation();
+        openBluetooth();
+    }
+
+    /**
+     * String 形如 "98:D3:32:70:5A:44"
+     * @param string
+     * @return
+     */
+    public boolean isMacAddress(String string){
+        if (string == null || string.length() <= 0){
+            return false;
+        }
+        if (string.length() > 17){
+            return false;
+        }
+        for (int i = 0; i < 5; i++) {
+            if (string.charAt(3 * i + 2) != ':'){
+                return false;
+            }
+        }
+        return true;
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.connect_device: {
-                //连接设备
-                connectDevice.setVisibility(View.INVISIBLE);
-                connectDevice.setClickable(false);
-                load.setVisibility(View.VISIBLE);
-                mayRequestLocation();
-                openBluetooth();
+//                此处首先获取蓝牙智能设备的mac地址
+                //获取默认的蓝牙mac地址
+                SharedPreferences sp = context.getSharedPreferences(
+                        "LoginState", MODE_PRIVATE);
+                final SharedPreferences.Editor editor = sp.edit();
+                String mac = sp.getString("macAddress", "");
+                dialog = new InputBlueMacDialog(context,
+                        new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                        switch (view.getId()){
+                           case R.id.connect_mac_device:{
+                               String macAddress = dialog.getMacAddress();
+                               if (isMacAddress(macAddress)){
+                                   toToast("正在连接设备");
+                                   editor.putString("macAddress", macAddress);
+                                   editor.commit();
+                                   connectProc(macAddress);
+                               }else{
+                                   toToast("设备地址不合法");
+                               }
+                               break;
+                           }
+                           case R.id.cancel_action:{
+                               break;
+                           }
+                       }
+                    }
+                });
+                dialog.showAtLocation(mView.findViewById(R.id.main_layout),
+                        Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
+                dialog.setMacHint(mac);
+
 //                /**
 //                 * 尝试上传数据
 //                 */

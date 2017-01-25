@@ -5,7 +5,7 @@
     </corners>
     <stroke
         android:width="2dp"
-        android:color="@color/lightseagreen" />
+        android:color="@color/lightSeaGreen" />
 
     <padding
         android:bottom="2dp"

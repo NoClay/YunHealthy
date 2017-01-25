@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+              android:id="@+id/main_layout"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@color/lightseagreen">
+        android:background="@color/lightSeaGreen">
 
         <TextView
             android:layout_width="wrap_content"
@@ -16,7 +17,7 @@
             android:gravity="center"
             android:text="@string/measure_topic"
             android:textColor="@color/white"
-            android:textSize="25sp" />
+            android:textSize="25sp"/>
 
         <RelativeLayout
             android:layout_width="wrap_content"
@@ -28,7 +29,7 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_centerInParent="true"
-                android:indeterminateTint="@color/white" />
+                android:indeterminateTint="@color/white"/>
 
             <TextView
                 android:id="@+id/connect_device"
@@ -39,24 +40,24 @@
                 android:gravity="center"
                 android:text="连接设备"
                 android:textColor="@color/white"
-                android:textSize="20sp" />
+                android:textSize="20sp"/>
         </RelativeLayout>
 
     </RelativeLayout>
 
     <!--<ImageView-->
-        <!--android:id="@+id/firstLayout"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="150dp"-->
-        <!--android:drawingCacheQuality="auto"-->
-        <!--android:scaleType="fitXY"-->
-        <!--android:src="@drawable/to_be_healthy" />-->
+    <!--android:id="@+id/firstLayout"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="150dp"-->
+    <!--android:drawingCacheQuality="auto"-->
+    <!--android:scaleType="fitXY"-->
+    <!--android:src="@drawable/to_be_healthy" />-->
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/measure_recycleView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:scrollbars="vertical" />
+        android:scrollbars="vertical"/>
 
 
 </LinearLayout>

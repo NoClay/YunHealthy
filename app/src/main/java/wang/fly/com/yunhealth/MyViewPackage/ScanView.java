@@ -5,13 +5,7 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Rect;
 import android.graphics.RectF;
-import android.os.Build;
-import android.os.Handler;
-import android.os.Message;
-import android.support.annotation.AnimatorRes;
-import android.support.annotation.RequiresApi;
 import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -20,10 +14,6 @@ import android.view.View;
 import java.util.Arrays;
 
 import wang.fly.com.yunhealth.R;
-
-import static android.R.attr.end;
-import static android.R.attr.left;
-import static android.R.attr.logoDescription;
 
 /**
  * Created by 82661 on 2016/11/6.
@@ -67,7 +57,7 @@ public class ScanView extends View{
     }
 
     public void init(AttributeSet attrs){
-        defaultColor = getResources().getColor(R.color.lightseagreen);
+        defaultColor = getResources().getColor(R.color.lightSeaGreen);
         Arrays.fill(colorArray, defaultColor);
         textColor = Color.WHITE;
         textSize = 20;

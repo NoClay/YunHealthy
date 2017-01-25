@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <attr name="titleText" format="string"/>
+
     <declare-styleable name="ScanView">
         <attr name="textColor" format="color"></attr>
         <attr name="textSize" format="dimension"></attr>

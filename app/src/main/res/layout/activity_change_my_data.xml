@@ -8,7 +8,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@color/lightseagreen">
+        android:background="@color/lightSeaGreen">
 
         <TextView
             android:text="个人信息"
@@ -36,7 +36,7 @@
             android:paddingRight="15dp"
             android:textColor="@color/white"
             android:text="保存"
-            android:background="@color/lightseagreen"
+            android:background="@color/lightSeaGreen"
             android:layout_alignParentRight="true"
             android:layout_width="wrap_content"
             android:layout_height="match_parent" />

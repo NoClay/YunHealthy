@@ -56,7 +56,7 @@
         android:layout_height="50dp">
         <ImageView
             android:layout_centerVertical="true"
-            android:tint="@color/dimgray"
+            android:tint="@color/dimGray"
             android:layout_marginLeft="10dp"
             android:padding="7dp"
             android:src="@drawable/icon_manage"
@@ -87,7 +87,7 @@
         android:layout_height="50dp">
         <ImageView
             android:layout_centerVertical="true"
-            android:tint="@color/dimgray"
+            android:tint="@color/dimGray"
             android:layout_marginLeft="10dp"
             android:padding="7dp"
             android:src="@drawable/icon_contact"
@@ -118,7 +118,7 @@
         android:layout_height="50dp">
         <ImageView
             android:layout_centerVertical="true"
-            android:tint="@color/dimgray"
+            android:tint="@color/dimGray"
             android:layout_marginLeft="10dp"
             android:padding="7dp"
             android:src="@drawable/icon_account"
@@ -149,7 +149,7 @@
         android:layout_height="50dp">
         <ImageView
             android:layout_centerVertical="true"
-            android:tint="@color/dimgray"
+            android:tint="@color/dimGray"
             android:layout_marginLeft="10dp"
             android:padding="7dp"
             android:src="@drawable/icon_setting"
@@ -180,7 +180,7 @@
         android:layout_height="50dp">
         <ImageView
             android:layout_centerVertical="true"
-            android:tint="@color/dimgray"
+            android:tint="@color/dimGray"
             android:layout_marginLeft="10dp"
             android:padding="7dp"
             android:src="@drawable/icon_healthy"

@@ -18,7 +18,7 @@
             android:layout_width="3dp"
             android:layout_height="match_parent"
             android:layout_margin="10dp"
-            android:background="@color/lightseagreen" />
+            android:background="@color/lightSeaGreen" />
 
         <TextView
             android:id="@+id/title"
@@ -98,6 +98,7 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:src="@drawable/max"
+                android:scaleType="fitCenter"
                 app:circleColor="@color/bg2" />
 
             <TextView
@@ -145,7 +146,7 @@
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:text="以上数据为每小时内数据分析结果"
-            android:textColor="@color/dimgray"
+            android:textColor="@color/dimGray"
             android:textSize="10sp" />
     </LinearLayout>
 
