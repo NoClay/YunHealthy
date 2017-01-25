@@ -8,9 +8,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.DisplayMetrics;
 import android.view.Display;
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -19,7 +17,6 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-import wang.fly.com.yunhealth.MainActivity;
 import wang.fly.com.yunhealth.R;
 
 /*
@@ -42,7 +39,7 @@ public class DataFragment extends Fragment implements View.OnClickListener{
             v = inflater.inflate(R.layout.datafragmet_layout, container, false);
             context = getContext();
             colorUnselected = getResources().getColor(R.color.black);
-            colorSelected = getResources().getColor(R.color.lightseagreen);
+            colorSelected = getResources().getColor(R.color.lightSeaGreen);
             tabLine = v.findViewById(R.id.data_line);
             initTabView();
             findView(v);

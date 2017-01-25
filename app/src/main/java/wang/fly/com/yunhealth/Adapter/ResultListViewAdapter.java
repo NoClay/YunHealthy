@@ -47,7 +47,7 @@ public class ResultListViewAdapter extends ArrayAdapter<ResultMessage> {
             viewHolder.labelTitle.setText(resultMessage.getMessage() + "  " + resultMessage.getScore());
 
         }else{
-            viewHolder.labelTitle.setTextColor(getContext().getResources().getColor(R.color.dimgray));
+            viewHolder.labelTitle.setTextColor(getContext().getResources().getColor(R.color.dimGray));
             viewHolder.labelTitle.setText(resultMessage.getMessage());
         }
         return view;

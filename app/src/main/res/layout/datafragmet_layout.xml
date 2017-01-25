@@ -8,7 +8,7 @@
     Android:clipToPadding = "true"
     >
     <TextView
-        android:background="@color/lightseagreen"
+        android:background="@color/lightSeaGreen"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:gravity="center"
@@ -65,7 +65,7 @@
     <View
         android:layout_width="120dp"
         android:layout_height="2dp"
-        android:background="@color/lightseagreen"
+        android:background="@color/lightSeaGreen"
         android:id="@+id/data_line"
         />
     <android.support.v4.view.ViewPager

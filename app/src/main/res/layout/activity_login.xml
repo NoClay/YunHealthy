@@ -5,7 +5,7 @@
     android:layout_height="match_parent">
     <!--头部栏-->
     <TextView
-        android:background="@color/lightseagreen"
+        android:background="@color/lightSeaGreen"
         android:textSize="20dp"
         android:textColor="@color/white"
         android:layout_centerInParent="true"
@@ -19,7 +19,7 @@
         android:orientation="vertical"
         android:layout_marginTop="30dp"
         android:layout_gravity="center_horizontal"
-        android:background="@color/dimgray"
+        android:background="@color/dimGray"
         android:layout_width="332dp"
         android:layout_height="103dp">
         <LinearLayout
@@ -75,7 +75,7 @@
         android:layout_width="332dp"
         android:layout_height="25dp">
         <CheckBox
-            android:drawableTint="@color/lightseagreen"
+            android:drawableTint="@color/lightSeaGreen"
             android:id="@+id/rememberLoginState"
             android:textColor="@color/skyBlue"
             android:layout_marginLeft="10dp"
@@ -110,7 +110,7 @@
         android:layout_height="wrap_content">
         <TextView
             android:textSize="20dp"
-            android:textColor="@color/dimgray"
+            android:textColor="@color/dimGray"
             android:layout_alignParentLeft="true"
             android:text="还没有帐号？"
             android:layout_width="wrap_content"

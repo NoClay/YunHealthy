@@ -10,7 +10,7 @@
         android:layout_marginTop="20dp"
         android:layout_height="50dp">
         <View
-            android:background="@color/lightseagreen"
+            android:background="@color/lightSeaGreen"
             android:layout_margin="10dp"
             android:layout_width="3dp"
             android:layout_height="match_parent"/>
@@ -37,7 +37,7 @@
         android:layout_marginTop="20dp"
         android:layout_height="50dp">
         <View
-            android:background="@color/lightseagreen"
+            android:background="@color/lightSeaGreen"
             android:layout_margin="10dp"
             android:layout_width="3dp"
             android:layout_height="match_parent"/>

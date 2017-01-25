@@ -74,7 +74,7 @@
         android:id="@+id/complete_change"
         android:text="修改密码"
         android:textColor="@color/white"
-        android:backgroundTint="@color/lightseagreen"
+        android:backgroundTint="@color/lightSeaGreen"
         android:layout_marginTop="20dp"
         android:layout_gravity="center_horizontal"
         android:background="@drawable/circle_button_bg01"

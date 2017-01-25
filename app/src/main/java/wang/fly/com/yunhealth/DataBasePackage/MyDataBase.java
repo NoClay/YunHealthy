@@ -457,7 +457,8 @@ public class MyDataBase extends SQLiteOpenHelper {
     }
 
 
-
+    public static final int UPLOAD_NO_DATABASE = -1;
+    public static final int UPLOAD_SUCCESS = 0;
     public int upLoadMeasureData(SQLiteDatabase db, String objectId){
         if (db == null){
             Log.d(TAG, "upLoadMeasureData: db is null");
@@ -570,6 +571,7 @@ public class MyDataBase extends SQLiteOpenHelper {
             return ERROR_LOAD;
         }
     }
+
     public boolean upLoadFiftyData(List<BmobObject> dataArray, int length){
         if (dataArray == null){
             return true;

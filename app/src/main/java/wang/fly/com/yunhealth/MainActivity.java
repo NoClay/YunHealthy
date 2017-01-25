@@ -1,37 +1,24 @@
 package wang.fly.com.yunhealth;
 
-import android.app.AlarmManager;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.sqlite.SQLiteDatabase;
-import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobConfig;
 import cn.smssdk.SMSSDK;
 import wang.fly.com.yunhealth.Activity.ActivityCollector;
-import wang.fly.com.yunhealth.DataBasePackage.MyDataBase;
 import wang.fly.com.yunhealth.Fragments.DataFragment;
 import wang.fly.com.yunhealth.Fragments.DoctorsFragment;
 import wang.fly.com.yunhealth.Fragments.HomeFragment;
@@ -40,10 +27,6 @@ import wang.fly.com.yunhealth.Fragments.MineFragment;
 import wang.fly.com.yunhealth.LoginAndSign.LoginActivity;
 import wang.fly.com.yunhealth.Service.UpLoadService;
 import wang.fly.com.yunhealth.util.UtilClass;
-
-import static android.Manifest.permission_group.SMS;
-import static android.R.string.no;
-import static android.os.Build.VERSION_CODES.N;
 
 public class MainActivity extends FragmentActivity implements View.OnClickListener{
     private ViewPager viewPager;
@@ -57,7 +40,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private TextView measure_tv,data_tv,doctor_tv,home_tv,mine_tv;
     int color;
     //需要连接的蓝牙地址
-    public static final String DEVICE_ADDRESS = "98:D3:32:70:5A:44";
     //缓存头像使用的目录
     public static final String PATH_ADD = Environment.getExternalStorageDirectory() +
             "/CloudHealthy/userImage/";
@@ -95,7 +77,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ActivityCollector.addActivity(this);
-        color = getResources().getColor(R.color.lightseagreen);
+        color = getResources().getColor(R.color.lightSeaGreen);
         initDependencies();
         findView();
         setEvent();
@@ -233,11 +215,11 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     将Tab的文字全部初始化为亮灰色
      */
     public void resetView(){
-        measure_tv.setTextColor(getResources().getColor(R.color.lightgrey));
-        data_tv.setTextColor(getResources().getColor(R.color.lightgrey));
-        home_tv.setTextColor(getResources().getColor(R.color.lightgrey));
-        doctor_tv.setTextColor(getResources().getColor(R.color.lightgrey));
-        mine_tv.setTextColor(getResources().getColor(R.color.lightgrey));
+        measure_tv.setTextColor(getResources().getColor(R.color.lightGray));
+        data_tv.setTextColor(getResources().getColor(R.color.lightGray));
+        home_tv.setTextColor(getResources().getColor(R.color.lightGray));
+        doctor_tv.setTextColor(getResources().getColor(R.color.lightGray));
+        mine_tv.setTextColor(getResources().getColor(R.color.lightGray));
     }
     @Override
     public void onClick(View view) {

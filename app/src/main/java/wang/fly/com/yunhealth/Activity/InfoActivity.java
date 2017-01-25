@@ -16,6 +16,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
+import wang.fly.com.yunhealth.DataBasePackage.MeasureData.MeasureXueYang;
 import wang.fly.com.yunhealth.MyViewPackage.FoldLineView;
 import wang.fly.com.yunhealth.R;
 import wang.fly.com.yunhealth.util.DataInfo;
@@ -118,6 +122,13 @@ public class InfoActivity extends AppCompatActivity
             }
             case R.id.oneDayChecked: {
                 setTabCheck(0);
+                BmobQuery<MeasureXueYang> query = new BmobQuery<>();
+                query.findObjects(new FindListener<MeasureXueYang>() {
+                    @Override
+                    public void done(List<MeasureXueYang> list, BmobException e) {
+                        Log.d(TAG, "done: size" + list.size());
+                    }
+                });
                 break;
             }
             case R.id.sevenDayChecked: {
@@ -142,7 +153,7 @@ public class InfoActivity extends AppCompatActivity
             tabText[i].setBackgroundColor(Color.WHITE);
         }
         tabText[tabCheck].setTextColor(Color.WHITE);
-        tabText[tabCheck].setBackgroundColor(context.getResources().getColor(R.color.lightseagreen));
+        tabText[tabCheck].setBackgroundColor(context.getResources().getColor(R.color.lightSeaGreen));
     }
 
 

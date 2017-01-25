@@ -12,9 +12,9 @@
         android:layout_weight="5"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="@color/lightseagreen"
-        app:level1Color="@color/lightseagreen"
-        app:level2Color="@color/lightseagreen"
+        android:background="@color/lightSeaGreen"
+        app:level1Color="@color/lightSeaGreen"
+        app:level2Color="@color/lightSeaGreen"
         app:level3Color="#FE5621"
         app:level4Color="#F34235"
         app:level5Color="#F34235">
@@ -52,7 +52,7 @@
                 android:layout_toRightOf="@+id/home_health_plan_im"
                 android:gravity="center"
                 android:text="@string/home_health_plan"
-                android:textColor="@color/dimgray"
+                android:textColor="@color/dimGray"
                 android:textSize="20sp" />
 
             <TextView
