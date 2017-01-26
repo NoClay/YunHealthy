@@ -1,6 +1,5 @@
 package wang.fly.com.yunhealth.util;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.ContentUris;
 import android.content.Context;
@@ -9,14 +8,12 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
-import android.support.annotation.RequiresApi;
-import android.support.v4.app.ActivityCompat;
-import android.util.Log;
 import android.widget.Toast;
 
 import java.text.DecimalFormat;
@@ -25,20 +22,66 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-import wang.fly.com.yunhealth.R;
-
-import static android.R.attr.key;
-
 /**
  * Created by 82661 on 2016/11/6.
  */
 
 public class UtilClass {
+
+    /**
+     * 比较两个double类型变量的大小，相等返回0，大于返回1，小于返回-1
+     * @param d1
+     * @param d2
+     * @return
+     */
+    public static int compareDouble(double d1, double d2){
+        if (Math.abs(d1 - d2) < 1e-6){
+            return 0;
+        }else if ((d1 - d2) > 0){
+            return 1;
+        }else {
+            return -1;
+        }
+    }
+    public static int compareDouble(double d1, double d2, double d3){
+        if (Math.abs(d1 - d2) < d3){
+            return 0;
+        }else if ((d1 - d2) > 0){
+            return 1;
+        }else {
+            return -1;
+        }
+    }
+    /**
+     * 检查网络状态
+     *
+     * @param context
+     */
+    public static boolean checkNetwork(Context context) {
+        ConnectivityManager conMan = (ConnectivityManager) context.
+                getSystemService(Context.CONNECTIVITY_SERVICE);
+
+//mobile 3G Data Network
+        NetworkInfo.State mobile = conMan.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState();
+//wifi
+        NetworkInfo.State wifi = conMan.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState();
+
+//如果3G网络和wifi网络都未连接，且不是处于正在连接状态 则进入Network Setting界面 由用户配置网络连接
+        if (mobile == NetworkInfo.State.CONNECTED || mobile == NetworkInfo.State.CONNECTING)
+            return true;
+        if (wifi == NetworkInfo.State.CONNECTED || wifi == NetworkInfo.State.CONNECTING)
+            return true;
+//        context.startActivity(new Intent(Settings.ACTION_WIRELESS_SETTINGS));
+        //进入无线网络配置界面
+//startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS)); //进入手机中的wifi网络设置界面
+        return false;
+    }
+
     /**
      * 将Calendar转转为时间字符串
      */
-    public static String valueOfCalendar(Calendar calendar){
-        if (calendar == null){
+    public static String valueOfCalendar(Calendar calendar) {
+        if (calendar == null) {
             return null;
         }
         return calendar.get(Calendar.YEAR) + "-"
@@ -49,54 +92,60 @@ public class UtilClass {
                 + calendar.get(Calendar.SECOND) + ":"
                 + calendar.get(Calendar.MILLISECOND);
     }
+
     /**
      * 获取资源转换为bitmap，不存在设置为默认图片
+     *
      * @param context
      * @param id
      * @return
      */
-    public static Bitmap resToBitmap(Context context, int id){
+    public static Bitmap resToBitmap(Context context, int id) {
         return BitmapFactory.decodeResource(context.getResources(), id);
     }
+
     /**
      * 将整型转换为布尔型
+     *
      * @param integer
      * @return
      */
-    public static boolean booleanValueOfInteger(Integer integer){
-        if (integer == null){
+    public static boolean booleanValueOfInteger(Integer integer) {
+        if (integer == null) {
             return false;
         }
-        if (integer == 0){
+        if (integer == 0) {
             return false;
         }
         return true;
     }
+
     /**
      * 将Date转换为字符串
-     *
      */
-    public static String valueOfDate(Date date, String timeFormat){
-        if (date == null){
+    public static String valueOfDate(Date date, String timeFormat) {
+        if (date == null) {
             return null;
         }
-        if (timeFormat == null){
+        if (timeFormat == null) {
             timeFormat = "yyyy-MM-dd HH:mm:00";
         }
         SimpleDateFormat format = new SimpleDateFormat(timeFormat);
         return format.format(date);
     }
+
     /**
      * 解析形如 20XX-XX-XX XX:XX:XX
      * 标志位 -, - ,  , :, :
+     *
      * @param bmobDate
      * @return
      */
-    public static Date resolveBmobDate(String bmobDate, String timeFormat){
-        if (bmobDate == null){
+    public static Date resolveBmobDate(String bmobDate, String timeFormat) {
+        if (bmobDate == null) {
             return null;
         }
-        if (timeFormat == null){
+        if (timeFormat == null) {
             timeFormat = "yyyy-MM-dd HH:mm:ss";
         }
         SimpleDateFormat format = new SimpleDateFormat(timeFormat);
@@ -107,8 +156,10 @@ public class UtilClass {
             return null;
         }
     }
+
     /**
      * 判断网络链接状态
+     *
      * @param context
      * @return
      */
@@ -120,6 +171,7 @@ public class UtilClass {
         }
         return false;
     }
+
     /**
      * dp到px转换
      *
@@ -204,7 +256,7 @@ public class UtilClass {
 
     public static boolean checkHexString(String src) {
         for (char c : src.toCharArray()) {
-            if ("0123456789AaBbCcDdEeFf".indexOf(c) == -1){
+            if ("0123456789AaBbCcDdEeFf".indexOf(c) == -1) {
                 return false;
             }
         }
@@ -215,19 +267,19 @@ public class UtilClass {
     /**
      * 将一个十六进制字符串转换为十进制整型
      */
-    public static int valueOfHexString(String data){
+    public static int valueOfHexString(String data) {
         int result = Integer.valueOf(data, 16).intValue();
         String value = Integer.toBinaryString(result);
-        if (value.length() == data.length() * 4 && value.startsWith("1")){
-            result --;
+        if (value.length() == data.length() * 4 && value.startsWith("1")) {
+            result--;
             value = Integer.toBinaryString(result);
             StringBuilder string = new StringBuilder(value.length());
             for (int i = 0; i < value.length(); i++) {
-                if (i == 0){
+                if (i == 0) {
                     string.append(1);
-                }else if (value.charAt(i) == '1'){
+                } else if (value.charAt(i) == '1') {
                     string.append(0);
-                }else{
+                } else {
                     string.append(1);
                 }
             }
@@ -246,6 +298,7 @@ public class UtilClass {
 
     /**
      * 安卓4.4从uri获取图片文件
+     *
      * @param context
      * @param uri
      * @return
@@ -294,7 +347,7 @@ public class UtilClass {
                     }
 
                     final String selection = "_id=?";
-                    final String[] selectionArgs = new String[] {
+                    final String[] selectionArgs = new String[]{
                             split[1]
                     };
 
@@ -323,9 +376,9 @@ public class UtilClass {
      * Get the value of the data column for this Uri. This is useful for
      * MediaStore Uris, and other file-based ContentProviders.
      *
-     * @param context The context.
-     * @param uri The Uri to query.
-     * @param selection (Optional) Filter used in the query.
+     * @param context       The context.
+     * @param uri           The Uri to query.
+     * @param selection     (Optional) Filter used in the query.
      * @param selectionArgs (Optional) Selection arguments used in the query.
      * @return The value of the _data column, which is typically a file path.
      */
@@ -394,10 +447,10 @@ public class UtilClass {
         int check = 0;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
             check = activity.checkSelfPermission(permission);
-        }else{
+        } else {
             check = activity.checkCallingOrSelfPermission(permission);
         }
-        if (check != PackageManager.PERMISSION_GRANTED){
+        if (check != PackageManager.PERMISSION_GRANTED) {
             //没有获取该权限
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 activity.requestPermissions(new String[]{
@@ -410,14 +463,14 @@ public class UtilClass {
     /**
      * Toast
      */
-    public static void toToast(Context context, String content){
+    public static void toToast(Context context, String content) {
         Toast.makeText(context, content, Toast.LENGTH_SHORT).show();
     }
 
-    public static boolean isAllNumber(String data){
+    public static boolean isAllNumber(String data) {
         for (int i = 0; i < data.length(); i++) {
             char c = data.charAt(i);
-            if (c < '0' && c > '9'){
+            if (c < '0' && c > '9') {
                 return false;
             }
         }

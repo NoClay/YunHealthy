@@ -1,73 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="wang.fly.com.yunhealth.MainActivity"
-    android:orientation="vertical"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:id="@+id/main_activity"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              tools:context="wang.fly.com.yunhealth.MainActivity"
     >
 
     <android.support.v4.view.ViewPager
+        android:id="@+id/main_vPager"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:id="@+id/main_vPager"
         >
     </android.support.v4.view.ViewPager>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:background="@color/dimGray"
         >
+
         <TextView
+            android:id="@+id/main_tv01"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:gravity="center"
             android:layout_weight="1"
-            android:textSize="25sp"
+            android:gravity="center"
             android:text="@string/measure"
             android:textColor="@color/lightGray"
-            android:id="@+id/main_tv01"
+            android:textSize="25sp"
             />
+
         <TextView
+            android:id="@+id/main_tv02"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:gravity="center"
             android:layout_weight="1"
-            android:textSize="25sp"
+            android:gravity="center"
             android:text="@string/data"
             android:textColor="@color/lightGray"
-            android:id="@+id/main_tv02"
+            android:textSize="25sp"
             />
+
         <TextView
+            android:id="@+id/main_tv03"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:gravity="center"
             android:layout_weight="1"
-            android:textSize="25sp"
+            android:gravity="center"
             android:text="@string/home"
             android:textColor="@color/lightGray"
-            android:id="@+id/main_tv03"
+            android:textSize="25sp"
             />
+
         <TextView
+            android:id="@+id/main_tv04"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:gravity="center"
             android:layout_weight="1"
-            android:textSize="25sp"
+            android:gravity="center"
             android:text="@string/doctor"
             android:textColor="@color/lightGray"
-            android:id="@+id/main_tv04"
+            android:textSize="25sp"
             />
+
         <TextView
+            android:id="@+id/main_tv05"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:gravity="center"
             android:layout_weight="1"
-            android:textSize="25sp"
+            android:gravity="center"
             android:text="@string/mine"
             android:textColor="@color/lightGray"
-            android:id="@+id/main_tv05"
+            android:textSize="25sp"
             />
     </LinearLayout>
 </LinearLayout>

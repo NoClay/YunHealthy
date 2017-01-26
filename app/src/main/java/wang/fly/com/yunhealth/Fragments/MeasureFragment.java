@@ -734,14 +734,16 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
      * @param minute
      */
     public void checkMinuteAndCache(int type, int minute) {
+        String userId = context.getSharedPreferences("LoginState",
+                Context.MODE_PRIVATE).getString("userId", null);
         if (database.isOpen()
                 && minute % MainActivity.CACHE_TIME_LENGTH == 0
                 && !myDataBase.checkOneMeasureDataCache(database,
-                type, date)) {
+                type, date, userId)) {
             Log.d("Cache", "checkMinuteAndCache: cache + " +
                     MainActivity.LABEL_STRING[type] + "\tminute" + minute);
             myDataBase.addOneMeasureData(database,
-                    measureDataList.get(type), type, date);
+                    measureDataList.get(type), type, date, userId);
             measureDataList.get(type).reset();
         }
     }

@@ -1,6 +1,5 @@
 package wang.fly.com.yunhealth.Adapter;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -36,6 +35,7 @@ public class RecycleAdapterForReportMenu extends
     private MyDataBase dbHelper;
     private SQLiteDatabase db;
     private static final String TAG = "RecycleAdapterForReport";
+    String userId;
     public interface OnItemClickListener{
         void onItemClick(View view, String title);
     }
@@ -76,7 +76,9 @@ public class RecycleAdapterForReportMenu extends
                 "LocalStore.db", null,
                 MainActivity.DATABASE_VERSION);
         db = dbHelper.getWritableDatabase();
-        dbHelper.initMenuData(db);
+        String userId = context.getSharedPreferences("LoginState",
+                Context.MODE_PRIVATE).getString("userId", null);
+        dbHelper.initMenuData(db, userId);
         menuInfoList = new ArrayList<>();
         notifyList();
     }
@@ -84,9 +86,10 @@ public class RecycleAdapterForReportMenu extends
     private void notifyList() {
         //清除备份
         menuInfoList.clear();
-
+        userId = context.getSharedPreferences("LoginState",
+                Context.MODE_PRIVATE).getString("userId", null);
         Cursor cursor = db.rawQuery("select * from report_menu " +
-                "where type = " + type, null);
+                "where type = " + type + " and userId = '" + userId + "'", null);
         if (cursor.moveToFirst()){
             do {
                 MenuInfo m = new MenuInfo();
@@ -125,14 +128,17 @@ public class RecycleAdapterForReportMenu extends
             holder.checkBox.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ContentValues values = new ContentValues();
+                    int i = 0;
                     if (holder.checkBox.isChecked()){
-                        values.put("checked", 1);
+                        i = 1;
                     }else{
-                        values.put("checked", 0);
+                        i = 0;
                     }
-                    db.update("report_menu", values, "content = ?",
-                            new String[]{menuInfoList.get(position).getTitle()});
+                    //更新表单
+                    db.execSQL("update report_menu" +
+                            "set checked = " + i +
+                            " where content = '" + menuInfoList.get(position).getTitle() + "'" +
+                            " and userId = '" + userId + "'");
                 }
             });
             holder.checkBox.setVisibility(View.VISIBLE);
