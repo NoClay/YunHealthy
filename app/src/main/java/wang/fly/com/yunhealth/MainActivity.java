@@ -2,33 +2,41 @@ package wang.fly.com.yunhealth;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobConfig;
 import cn.smssdk.SMSSDK;
 import wang.fly.com.yunhealth.Activity.ActivityCollector;
+import wang.fly.com.yunhealth.DataBasePackage.HeightAndWeight;
+import wang.fly.com.yunhealth.DataBasePackage.MyDataBase;
+import wang.fly.com.yunhealth.DataBasePackage.SignUserData;
 import wang.fly.com.yunhealth.Fragments.DataFragment;
 import wang.fly.com.yunhealth.Fragments.DoctorsFragment;
 import wang.fly.com.yunhealth.Fragments.HomeFragment;
 import wang.fly.com.yunhealth.Fragments.MeasureFragment;
 import wang.fly.com.yunhealth.Fragments.MineFragment;
 import wang.fly.com.yunhealth.LoginAndSign.LoginActivity;
+import wang.fly.com.yunhealth.MyViewPackage.InputWeightDialog;
 import wang.fly.com.yunhealth.Service.UpLoadService;
 import wang.fly.com.yunhealth.util.UtilClass;
 
 public class MainActivity extends FragmentActivity implements View.OnClickListener{
+    InputWeightDialog mInputWeightDialog;
     private ViewPager viewPager;
     private DataFragment dataFragment;
     private DoctorsFragment doctorsFragment;
@@ -70,7 +78,9 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     public static final int LOAD_CACHE_MINUTE = 5;
     public static final int RECEIVER_TYPE_UPLOAD = 0;
     public static final int REQUEST_LOGIN = 0;
-
+    public static boolean sLoginState = false;
+    public static String userId;
+    private static final String TAG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +95,45 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         viewPager.setCurrentItem(2);
         setTab(2);
         checkIsLogined();
+    }
+
+    /**
+     * 每次启动后检查体重时候输入
+     */
+    private void checkWeight() {
+        mInputWeightDialog = new InputWeightDialog(this, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (v.getId()){
+                    case R.id.commit_action:{
+                        if (mInputWeightDialog.checkData()){
+                            SignUserData login = new SignUserData();
+                            login.setObjectId(userId);
+                            HeightAndWeight data = new HeightAndWeight(
+                                    mInputWeightDialog.getInputHeight(),
+                                    mInputWeightDialog.getInputWeight(),
+                                    login);
+                            data.setDate(new Date());
+                            MyDataBase myDataBase = new MyDataBase(getApplicationContext(),
+                                    "LocalStore.db", null, MainActivity.DATABASE_VERSION);
+                            SQLiteDatabase database = myDataBase.getWritableDatabase();
+                            myDataBase.insertHeightAndWeight(database,
+                                    data,
+                                    userId,
+                                    new Date());
+                        }
+                        break;
+                    }
+                    case R.id.cancel_action:{
+                        break;
+                    }
+                }
+                mInputWeightDialog.dismiss();
+            }
+        });
+        mInputWeightDialog.showAtLocation(findViewById(R.id.main_activity),
+                Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
+
     }
 
     /**
@@ -121,6 +170,26 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             startActivityForResult(intent, REQUEST_LOGIN);
         }else{
             initUpLoadThread();
+            sLoginState = true;
+        }
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        userId = getSharedPreferences(
+                "LoginState", MODE_PRIVATE).getString("userId", null);
+        if (hasFocus && sLoginState){
+            //窗口获取焦点并且已经登陆
+            MyDataBase myDataBase = new MyDataBase(getApplicationContext(),
+                    "LocalStore.db", null, MainActivity.DATABASE_VERSION);
+            SQLiteDatabase database = myDataBase.getWritableDatabase();
+            if (!myDataBase.checkTodayWeight(database,
+                    new Date(),
+                    userId)){
+                //当天没有输入了体重
+                checkWeight();
+            }
         }
     }
 

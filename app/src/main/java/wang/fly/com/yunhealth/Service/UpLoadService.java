@@ -9,14 +9,11 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.BitmapFactory;
 import android.os.IBinder;
-import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
-import android.widget.RemoteViews;
 
 import java.util.Calendar;
-import java.util.Date;
 
 import wang.fly.com.yunhealth.DataBasePackage.MyDataBase;
 import wang.fly.com.yunhealth.MainActivity;
@@ -30,6 +27,7 @@ import wang.fly.com.yunhealth.util.UtilClass;
 
 public class UpLoadService extends Service{
     private static final String TAG = "tongzhi";
+
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -39,9 +37,6 @@ public class UpLoadService extends Service{
     @Override
     public void onCreate() {
         super.onCreate();
-        String i = getApplicationContext()
-                .getSharedPreferences("LoginState", MODE_PRIVATE).getString("userId", null);
-        Log.d(TAG, "onCreate: " + i);
     }
 
     @Override
@@ -53,6 +48,9 @@ public class UpLoadService extends Service{
             @Override
             public void run() {
                 //在这里进行上传操作
+                if (UtilClass.checkNetwork(getApplicationContext())){
+                    makeANotification("网络异常，无法同步");
+                }
                 String id = getApplicationContext()
                         .getSharedPreferences("LoginState", MODE_PRIVATE)
                         .getString("userId", "");
@@ -66,9 +64,12 @@ public class UpLoadService extends Service{
                 int count = myDataBase.upLoadMeasureData(database, id);
                 if (count == MyDataBase.ERROR_LOAD){
                     makeANotification("测量信息上传失败");
+                }else if (count == 0){
+                    makeANotification("本地无缓存");
                 }else{
                     makeANotification("测量信息上传" + count + "条成功！");
                 }
+
             }
         }).start();
         AlarmManager manager = (AlarmManager) getSystemService(ALARM_SERVICE);

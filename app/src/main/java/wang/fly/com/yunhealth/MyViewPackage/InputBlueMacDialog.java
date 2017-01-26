@@ -20,7 +20,7 @@ public class InputBlueMacDialog extends PopupWindow {
     EditText macAddress;
     View mView;
 
-    public InputBlueMacDialog(Context context, View.OnClickListener mOnClickListener){
+    public InputBlueMacDialog(Context context, View.OnClickListener mOnClickListener) {
         super(context);
         this.mContext = context;
         this.mOnClickListener = mOnClickListener;
@@ -41,17 +41,18 @@ public class InputBlueMacDialog extends PopupWindow {
 //        this.getBackground().setAlpha(200);
         ColorDrawable dw = new ColorDrawable(0x88000000);
         this.setBackgroundDrawable(dw);
-        this.setAnimationStyle(R.style.PopupAnimation);    }
+        this.setAnimationStyle(R.style.PopupAnimation);
+    }
 
     public void setOnClickListener(View.OnClickListener onClickListener) {
         mOnClickListener = onClickListener;
     }
 
-    public String getMacAddress(){
+    public String getMacAddress() {
         return macAddress.getText().toString();
     }
 
-    public void setMacHint(String string){
+    public void setMacHint(String string) {
         macAddress.setHint(string);
     }
 }
