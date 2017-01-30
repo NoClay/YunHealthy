@@ -14,6 +14,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.widget.Toast;
 
 import java.text.DecimalFormat;
@@ -27,31 +28,190 @@ import java.util.Date;
  */
 
 public class UtilClass {
+    /**
+     * 计算已经过去的某一年的某一个月的天数
+     * @param year
+     * @param month
+     * @return
+     */
+    public static int getDayOfMonthPast(int year, int month){
+        if (year <= 0 || month <= 0 || month > 12) {
+            return 0;
+        }
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        int year1 = calendar.get(Calendar.YEAR);
+        int month1 = calendar.get(Calendar.MONTH) + 1;
+        int day1 = calendar.get(Calendar.DAY_OF_MONTH);
+        if (year > year1){
+            return 0;
+        }else if (year == year1 && month > month1){
+            return 0;
+        }
+        return getDayOfMonth(year, month);
+    }
+    /**
+     * 返回某一年某一个月的天数
+     * @param year
+     * @param month
+     * @return
+     */
+    public static int getDayOfMonth(int year, int month){
+        if (year <= 0 || month <= 0 || month > 12) {
+            return 0;
+        }
+        switch (month){
+            case 1:
+            case 3:
+            case 5:
+            case 7:
+            case 8:
+            case 10:
+            case 12:{
+                return 31;
+            }
+            case 4:
+            case 6:
+            case 9:
+            case 11:{
+                return 30;
+            }
+            case 2:{
+                if ((year % 400 == 0) || (year % 4 == 0 && year % 100 != 0)) {
+                    return 29;
+                }else{
+                    return 28;
+                }
+            }
+            default:return 0;
+        }
+    }
+    /**
+     * 检查某一年的某一天存在，避免如2017.2.29
+     * 必须已经经过了
+     * @param year
+     * @param month
+     * @param day
+     * @return
+     */
+    public static boolean checkDatePast(int year, int month, int day) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        int year1 = calendar.get(Calendar.YEAR);
+        int month1 = calendar.get(Calendar.MONTH) + 1;
+        int day1 = calendar.get(Calendar.DAY_OF_MONTH);
+        if (year > year1){
+            return false;
+        }else if (year == year1){
+            if (month > month1){
+                return false;
+            }else if (month == month1){
+                if (day > day1){
+                    return false;
+                }
+            }
+        }
+        return checkDate(year, month, day);
+    }
+    public static boolean checkDate(int year, int month, int day){
+        if (year <= 0 || month <= 0 || day <= 0) {
+            return false;
+        }
+        if (month == 1 ||
+                month == 3 ||
+                month == 5 ||
+                month == 7 ||
+                month == 8 ||
+                month == 10 ||
+                month == 12) {
+            if (day <= 31) {
+                return true;
+            } else {
+                return false;
+            }
+        } else if (month == 4 ||
+                month == 6 ||
+                month == 9 ||
+                month == 11) {
+            if (day <= 30) {
+                return true;
+            }
+            return false;
+        } else {
+            if ((year % 400 == 0) || (year % 4 == 0 && year % 100 != 0)) {
+                if (day <= 29) {
+                    return true;
+                }
+                return false;
+            }
+            if (day <= 28) {
+                return true;
+            }
+            return false;
+        }
+    }
+
+    /**
+     * 比较两个日期在天数的大小
+     *
+     * @param date1
+     * @param date2
+     * @return
+     */
+    public static int compareDate(Date date1, Date date2) {
+        Calendar calendar = Calendar.getInstance();
+        Calendar calendar1 = Calendar.getInstance();
+        calendar1.setTime(date2);
+        calendar.setTime(date1);
+        if (calendar.get(Calendar.YEAR) != calendar1.get(Calendar.YEAR)){
+            return calendar.get(Calendar.YEAR) - calendar1.get(Calendar.YEAR);
+        }
+        long day1 = calendar.get(Calendar.DAY_OF_YEAR);
+        long day2 = calendar1.get(Calendar.DAY_OF_YEAR);
+        Log.d("test", "compareDate: day1  " + day1);
+        Log.d("test", "compareDate: day2  " + day2);
+        return (int) (day1 - day2);
+    }
+    public static int compareDate(int year, int month, int day, Calendar calendar){
+        if (year != calendar.get(Calendar.YEAR)){
+            return year - calendar.get(Calendar.YEAR);
+        }
+        Calendar calendar1 = Calendar.getInstance();
+        calendar1.set(Calendar.YEAR, year);
+        calendar1.set(Calendar.MONTH, month - 1);
+        calendar1.set(Calendar.DAY_OF_MONTH, day);
+        long day1 = calendar1.get(Calendar.DAY_OF_YEAR);
+        long day2 = calendar.get(Calendar.DAY_OF_YEAR);
+        return (int) (day1 - day2);
+    }
 
     /**
      * 比较两个double类型变量的大小，相等返回0，大于返回1，小于返回-1
+     *
      * @param d1
      * @param d2
      * @return
      */
-    public static int compareDouble(double d1, double d2){
-        if (Math.abs(d1 - d2) < 1e-6){
+    public static int compareDouble(double d1, double d2) {
+        if (Math.abs(d1 - d2) < 1e-6) {
             return 0;
-        }else if ((d1 - d2) > 0){
+        } else if ((d1 - d2) > 0) {
             return 1;
-        }else {
+        } else {
             return -1;
         }
     }
-    public static int compareDouble(double d1, double d2, double d3){
-        if (Math.abs(d1 - d2) < d3){
+
+    public static int compareDouble(double d1, double d2, double d3) {
+        if (Math.abs(d1 - d2) < d3) {
             return 0;
-        }else if ((d1 - d2) > 0){
+        } else if ((d1 - d2) > 0) {
             return 1;
-        }else {
+        } else {
             return -1;
         }
     }
+
     /**
      * 检查网络状态
      *

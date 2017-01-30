@@ -114,9 +114,62 @@ public class MyDataBase extends SQLiteOpenHelper {
         values.put("height", data.getHeight());
         values.put("weight", data.getWeight());
         values.put("userId", userId);
-        values.put("createTime", UtilClass.valueOfDate(date, "yyyy-MM-dd 00:00:00"));
+        values.put("createTime", UtilClass.valueOfDate(date, "yyyy-MM-dd HH:MM:00"));
         db.insert("HeightWeightCache", null, values);
     }
+    public void addOneMeasureData(SQLiteDatabase db,
+                                  MeasureData measureData,
+                                  int type,
+                                  Date date, String userId) {
+        ContentValues values = new ContentValues();
+        values.put("userId", userId);
+        values.put("name", MainActivity.LABEL_STRING[type]);
+        values.put("type", type);
+        values.put("average", measureData.getAverageData());
+        values.put("max", measureData.getMaxData());
+        values.put("min", measureData.getMinData());
+        values.put("count", measureData.getCount());
+        values.put("isAverageDanger", measureData.getAverageDanger());
+        values.put("isMaxDanger", measureData.getMaxDanger());
+        values.put("isMinDanger", measureData.getMinDanger());
+        values.put("createTime", UtilClass.valueOfDate(date, null));
+        db.insert("MeasureDataCache", null, values);
+    }
+
+    public boolean checkTodayWeight(SQLiteDatabase db, Date date, String userId){
+        if (db == null || date == null || userId == null){
+            return false;
+        }
+        Cursor cursor = db.rawQuery("select * from HeightWeightCache" +
+                " where userId = '" + userId + "'" +
+                " and createTime like '"
+                + UtilClass.valueOfDate(date, "yyyy-MM-dd 00:00:00").substring(0, 10) + "%'", null);
+        return cursor.moveToFirst();
+    }
+
+
+    /**
+     * 查询一个数据，存在返回true，否则为false
+     *
+     * @param database
+     * @param type
+     * @param date
+     * @return
+     */
+    public boolean checkOneMeasureDataCache(SQLiteDatabase database,
+                                            int type,
+                                            Date date,
+                                            String userId) {
+        if (date == null || database == null || !database.isOpen() || userId == null) {
+            return true;
+        }
+        Cursor cursor = database.rawQuery("select * from MeasureDataCache " +
+                "where createTime = " + "'" + UtilClass.valueOfDate(date, null) + " ' and "
+                + "type = " + type + " and userId = '" + userId + "'" +
+                "", null);
+        return cursor.moveToFirst();
+    }
+
     public void initMenuData(SQLiteDatabase db, String userId) {
         if (userId == null) {
             return;
@@ -561,57 +614,6 @@ public class MyDataBase extends SQLiteOpenHelper {
 
         db.insert("report_menu", null, values);
         values.clear();
-    }
-
-    public void addOneMeasureData(SQLiteDatabase db,
-                                  MeasureData measureData,
-                                  int type,
-                                  Date date, String userId) {
-        ContentValues values = new ContentValues();
-        values.put("userId", userId);
-        values.put("name", MainActivity.LABEL_STRING[type]);
-        values.put("type", type);
-        values.put("average", measureData.getAverageData());
-        values.put("max", measureData.getMaxData());
-        values.put("min", measureData.getMinData());
-        values.put("count", measureData.getCount());
-        values.put("isAverageDanger", measureData.getAverageDanger());
-        values.put("isMaxDanger", measureData.getMaxDanger());
-        values.put("isMinDanger", measureData.getMinDanger());
-        values.put("createTime", UtilClass.valueOfDate(date, null));
-        db.insert("MeasureDataCache", null, values);
-    }
-
-
-    public boolean checkTodayWeight(SQLiteDatabase db, Date date, String userId){
-        if (db == null || date == null || userId == null){
-            return false;
-        }
-        Cursor cursor = db.rawQuery("select * from HeightWeightCache" +
-                " where userId = '" + userId + "'" +
-                " and createTime = '" + UtilClass.valueOfDate(date, "yyyy-MM-dd 00:00:00") + "'", null);
-        return cursor.moveToFirst();
-    }
-    /**
-     * 查询一个数据，存在返回true，否则为false
-     *
-     * @param database
-     * @param type
-     * @param date
-     * @return
-     */
-    public boolean checkOneMeasureDataCache(SQLiteDatabase database,
-                                            int type,
-                                            Date date,
-                                            String userId) {
-        if (date == null || database == null || !database.isOpen() || userId == null) {
-            return true;
-        }
-        Cursor cursor = database.rawQuery("select * from MeasureDataCache " +
-                "where createTime = " + "'" + UtilClass.valueOfDate(date, null) + " ' and "
-                + "type = " + type + " and userId = '" + userId + "'" +
-                "", null);
-        return cursor.moveToFirst();
     }
 
 

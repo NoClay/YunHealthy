@@ -6,55 +6,16 @@
     android:orientation="vertical">
 
     <include layout="@layout/tool_bar" />
-
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/tab_back"
         android:orientation="horizontal"
-        android:weightSum="4">
-
-        <TextView
-            android:id="@+id/oneDayChecked"
-            style="@style/TabRadioButton"
-            android:text="1天" />
-
-        <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="@color/lightSeaGreen" />
-
-        <TextView
-            android:id="@+id/sevenDayChecked"
-            style="@style/TabRadioButton"
-            android:text="7天" />
-
-        <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="@color/lightSeaGreen" />
-
-        <TextView
-            android:id="@+id/fourteenDayChecked"
-            style="@style/TabRadioButton"
-            android:text="14天" />
-
-        <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="@color/lightSeaGreen" />
-
-        <TextView
-            android:id="@+id/thirtyDayChecked"
-            style="@style/TabRadioButton"
-            android:text="30天" />
-
+        android:layout_width="match_parent"
+        android:layout_height="40dp">
+        <wang.fly.com.yunhealth.MyViewPackage.DatePickerView
+            android:id="@+id/date_picker"
+            android:layout_width="match_parent"
+            android:layout_height="40dp">
+        </wang.fly.com.yunhealth.MyViewPackage.DatePickerView>
     </LinearLayout>
-
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -62,18 +23,9 @@
         android:layout_marginBottom="10dp"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
-        android:layout_marginTop="10dp"
         android:background="@drawable/data_resolve_back"
         android:orientation="vertical"
         android:padding="5dp">
-
-        <TextView
-            android:id="@+id/chart_time_show"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:text="测量时间："
-            android:textColor="@color/contentTextColor" />
 
         <LinearLayout
             android:layout_width="match_parent"
