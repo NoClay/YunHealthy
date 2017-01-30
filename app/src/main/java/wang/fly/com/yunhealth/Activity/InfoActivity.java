@@ -1,7 +1,6 @@
 package wang.fly.com.yunhealth.Activity;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -16,10 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import cn.bmob.v3.BmobQuery;
-import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.FindListener;
-import wang.fly.com.yunhealth.DataBasePackage.MeasureData.MeasureXueYang;
+import wang.fly.com.yunhealth.MyViewPackage.DatePickerView;
 import wang.fly.com.yunhealth.MyViewPackage.FoldLineView;
 import wang.fly.com.yunhealth.R;
 import wang.fly.com.yunhealth.util.DataInfo;
@@ -31,16 +27,16 @@ import wang.fly.com.yunhealth.util.UtilClass;
 
 public class InfoActivity extends AppCompatActivity
         implements View.OnClickListener,
-        FoldLineView.onScrollChartListener {
+        FoldLineView.onScrollChartListener,
+        DatePickerView.OnDateChangedListener{
 
     private TextView infoText;
     private ImageView back;
     private FoldLineView foldLineView;
-    private TextView[] tabText;
     private TextView averageText, maxText, minText;
     private TextView[] titleText;
-    private TextView timeText;
     private Context context = this;
+    private DatePickerView mDatePickerView;
     private float average, max, min;
     private int start;
     private int end;
@@ -80,32 +76,22 @@ public class InfoActivity extends AppCompatActivity
 
     private void initView() {
         //初始化
-        tabText = new TextView[4];
         titleText = new TextView[3];
         type = getIntent().getIntExtra("position", 0);
         //绑定控件
         infoText = (TextView) findViewById(R.id.info_title);
         back = (ImageView) findViewById(R.id.back);
-        tabText[0] = (TextView) findViewById(R.id.oneDayChecked);
-        tabText[1] = (TextView) findViewById(R.id.sevenDayChecked);
-        tabText[2] = (TextView) findViewById(R.id.fourteenDayChecked);
-        tabText[3] = (TextView) findViewById(R.id.thirtyDayChecked);
+
         titleText[0] = (TextView) findViewById(R.id.averageUnit);
         titleText[1] = (TextView) findViewById(R.id.highestUnit);
         titleText[2] = (TextView) findViewById(R.id.lowestUnit);
         averageText = (TextView) findViewById(R.id.chart_average_show);
         maxText = (TextView) findViewById(R.id.chart_highest_show);
         minText = (TextView) findViewById(R.id.chart_lowest_show);
-        timeText = (TextView) findViewById(R.id.chart_time_show);
         foldLineView = (FoldLineView) findViewById(R.id.surfaceView);
+        mDatePickerView = (DatePickerView) findViewById(R.id.date_picker);
+        mDatePickerView.setOnDateChangedListener(this);
         //设置listener
-        for (int i = 0; i < tabText.length; i++) {
-            tabText[i].setOnClickListener(this);
-        }
-        back.setOnClickListener(this);
-        foldLineView.setOnScrollChartListener(this);
-        //初始化View
-        setTabCheck(2);
         String[] title = {"\n平均值", "\n峰值", "\n低谷值"};
         String[] unit = {"g/bl", "mV", "kg/m^2", "mg/dl", "℃", "mg/m^3", "mV", "mmHg"};
         for (int i = 0; i < titleText.length; i++) {
@@ -120,41 +106,9 @@ public class InfoActivity extends AppCompatActivity
                 finish();
                 break;
             }
-            case R.id.oneDayChecked: {
-                setTabCheck(0);
-                BmobQuery<MeasureXueYang> query = new BmobQuery<>();
-                query.findObjects(new FindListener<MeasureXueYang>() {
-                    @Override
-                    public void done(List<MeasureXueYang> list, BmobException e) {
-                        Log.d(TAG, "done: size" + list.size());
-                    }
-                });
-                break;
-            }
-            case R.id.sevenDayChecked: {
-                setTabCheck(1);
-                break;
-            }
-            case R.id.fourteenDayChecked: {
-                setTabCheck(2);
-                break;
-            }
-            case R.id.thirtyDayChecked: {
-                setTabCheck(3);
-                break;
-            }
         }
     }
 
-    public void setTabCheck(int tabCheck) {
-        //清除选中状态
-        for (int i = 0; i < tabText.length; i++) {
-            tabText[i].setTextColor(context.getResources().getColor(R.color.titleTextColor));
-            tabText[i].setBackgroundColor(Color.WHITE);
-        }
-        tabText[tabCheck].setTextColor(Color.WHITE);
-        tabText[tabCheck].setBackgroundColor(context.getResources().getColor(R.color.lightSeaGreen));
-    }
 
 
     @Override
@@ -192,7 +146,6 @@ public class InfoActivity extends AppCompatActivity
             super.handleMessage(msg);
             switch (msg.what) {
                 case MSG_DATA_CHANGE:{
-                    timeText.setText("测量时间：" + start + "~" + end);
                     minText.setText(UtilClass.getTwoShortValue(min));
                     maxText.setText(UtilClass.getTwoShortValue(max));
                     averageText.setText(UtilClass.getTwoShortValue(average));
@@ -203,4 +156,8 @@ public class InfoActivity extends AppCompatActivity
         }
     };
 
+    @Override
+    public void onDateChanged(int year, int month, int day) {
+
+    }
 }

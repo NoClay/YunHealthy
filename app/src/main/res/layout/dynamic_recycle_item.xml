@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    app:cardCornerRadius="10dp"
+    app:cardElevation="5dp"
+    app:cardBackgroundColor="@color/white">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -10,41 +15,43 @@
         android:orientation="horizontal">
 
         <View
-            android:layout_centerVertical="true"
             android:layout_width="5dp"
             android:layout_height="30dp"
+            android:layout_centerVertical="true"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="20dp"
-            android:background="#38D3D2" />
+            android:background="#38D3D2"/>
 
         <TextView
-            android:layout_centerVertical="true"
             android:id="@+id/dateText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
             android:layout_gravity="center_vertical|left"
             android:layout_marginLeft="40dp"
             android:text="今天"
             android:textColor="@color/titleTextColor"
-            android:textSize="19sp" />
-        
+            android:textSize="19sp"/>
+
         <TextView
             android:id="@+id/timeText"
-            android:textColor="@color/hintTextColor"
-            android:text="11:34"
-            android:layout_marginRight="15dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_marginRight="15dp"
+            android:text="11:34"
+            android:textColor="@color/hintTextColor"/>
     </RelativeLayout>
 
     <View
+        android:layout_marginTop="50dp"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/hintTextColor" />
+        android:layout_height="1.5px"
+        android:background="@color/hintTextColor"/>
 
     <LinearLayout
+        android:layout_marginTop="30dp"
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:orientation="horizontal">
@@ -54,7 +61,7 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="15dp" />
+            android:layout_marginLeft="15dp"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -71,20 +78,20 @@
                 android:paddingLeft="25dp">
 
                 <TextView
-                    android:textColor="@color/hintTextColor"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="体重" />
+                    android:text="体重"
+                    android:textColor="@color/hintTextColor"/>
 
                 <TextView
-                    android:singleLine="true"
                     android:id="@+id/weightShow"
-                    android:textColor="@color/contentTextColor"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical|left"
+                    android:singleLine="true"
                     android:text="85kg"
-                    android:textSize="25sp" />
+                    android:textColor="@color/contentTextColor"
+                    android:textSize="25sp"/>
             </LinearLayout>
 
             <LinearLayout
@@ -95,26 +102,23 @@
                 android:paddingLeft="25dp">
 
                 <TextView
-                    android:textColor="@color/hintTextColor"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="BMI" />
+                    android:text="BMI"
+                    android:textColor="@color/hintTextColor"/>
 
                 <TextView
-                    android:maxEms="6"
-                    android:singleLine="true"
                     android:id="@+id/BMIShow"
-                    android:textColor="@color/contentTextColor"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical|left"
+                    android:maxEms="6"
+                    android:singleLine="true"
                     android:text="85kg"
-                    android:textSize="25sp" />
+                    android:textColor="@color/contentTextColor"
+                    android:textSize="25sp"/>
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/hintTextColor" />
-</LinearLayout>
+
+</android.support.v7.widget.CardView>

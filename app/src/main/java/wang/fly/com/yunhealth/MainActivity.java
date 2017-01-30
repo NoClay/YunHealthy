@@ -190,6 +190,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 //当天没有输入了体重
                 checkWeight();
             }
+
         }
     }
 
