@@ -2,7 +2,6 @@ package wang.fly.com.yunhealth.DataBasePackage.MeasureData;
 
 import cn.bmob.v3.BmobObject;
 import cn.bmob.v3.datatype.BmobDate;
-import cn.bmob.v3.datatype.BmobPointer;
 import wang.fly.com.yunhealth.DataBasePackage.SignUserData;
 
 /**
@@ -18,7 +17,7 @@ public class MeasureData extends BmobObject{
     private Boolean isAverageDanger;
     private Boolean isMaxDanger;
     private Boolean isMinDanger;
-//    public SignUserData owner;
+    public SignUserData owner;
     private BmobDate measureTime;
 
     public BmobDate getMeasureTime() {
@@ -29,13 +28,13 @@ public class MeasureData extends BmobObject{
         this.measureTime = measureTime;
     }
 
-//    public SignUserData getOwner() {
-//        return owner;
-//    }
-//
-//    public void setOwner(SignUserData owner) {
-//        this.owner = owner;
-//    }
+    public SignUserData getOwner() {
+        return owner;
+    }
+
+    public void setOwner(SignUserData owner) {
+        this.owner = owner;
+    }
 
     public MeasureData() {
         name = "";
@@ -151,5 +150,7 @@ public class MeasureData extends BmobObject{
         return count * averageData;
     }
 
-
+    public String getDate(){
+        return measureTime.getDate().substring(10, 16);
+    }
 }

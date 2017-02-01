@@ -1,6 +1,5 @@
 package wang.fly.com.yunhealth.DataBasePackage.MeasureData;
 
-import wang.fly.com.yunhealth.DataBasePackage.SignUserData;
 import wang.fly.com.yunhealth.MainActivity;
 
 /**
@@ -9,15 +8,7 @@ import wang.fly.com.yunhealth.MainActivity;
 
 public class MeasureFenChen extends MeasureData{
     private Integer type = MainActivity.MEASURE_TYPE_FENCHEN;
-    private SignUserData owner;
 
-    public SignUserData getOwner() {
-        return owner;
-    }
-
-    public void setOwner(SignUserData owner) {
-        this.owner = owner;
-    }
     public MeasureFenChen() {
         super();
         setName(MainActivity.LABEL_STRING[type]);
