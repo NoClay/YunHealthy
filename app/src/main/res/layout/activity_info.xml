@@ -17,166 +17,203 @@
         </wang.fly.com.yunhealth.MyViewPackage.DatePickerView>
     </LinearLayout>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:background="@drawable/data_resolve_back"
-        android:orientation="vertical"
-        android:padding="5dp">
-
+        android:layout_height="match_parent">
         <LinearLayout
+            android:id="@+id/content"
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="left|center_vertical"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="75dp"
-                android:layout_height="match_parent"
-                android:scaleType="fitCenter"
-                android:src="@drawable/data_resolve"
-                android:tint="@color/bg3" />
-
-            <View
-                android:layout_width="1dp"
-                android:layout_height="match_parent"
-                android:layout_margin="5dp"
-                android:background="#E6E6E6" />
+            android:layout_height="match_parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:weightSum="3">
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:background="@drawable/data_resolve_back"
+                android:orientation="vertical"
+                android:padding="5dp">
 
-                <LinearLayout style="@style/DataResolveTheme">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="left|center_vertical"
+                    android:orientation="horizontal">
 
-                    <TextView
-                        android:id="@+id/chart_average_show"
+                    <ImageView
+                        android:layout_width="75dp"
+                        android:layout_height="match_parent"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/data_resolve"
+                        android:tint="@color/bg3" />
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:layout_margin="5dp"
+                        android:background="#E6E6E6" />
+
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="67.0"
-                        android:textColor="@color/black"
-                        android:textSize="23sp"
-                        android:textStyle="bold" />
+                        android:weightSum="3">
 
-                    <TextView
-                        android:id="@+id/averageUnit"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="kg\n平均值"
-                        android:textColor="@color/black"
-                        android:textSize="17sp"
-                        android:textStyle="normal" />
-                </LinearLayout>
+                        <LinearLayout style="@style/DataResolveTheme">
 
-                <LinearLayout style="@style/DataResolveTheme">
+                            <TextView
+                                android:id="@+id/chart_average_show"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="67.0"
+                                android:textColor="@color/black"
+                                android:textSize="23sp"
+                                android:textStyle="bold" />
 
-                    <TextView
-                        android:id="@+id/chart_highest_show"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="67.0"
-                        android:textColor="@color/black"
-                        android:textSize="23sp"
-                        android:textStyle="bold" />
+                            <TextView
+                                android:id="@+id/averageUnit"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="kg\n平均值"
+                                android:textColor="@color/black"
+                                android:textSize="17sp"
+                                android:textStyle="normal" />
+                        </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/highestUnit"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="kg\n峰值"
-                        android:textColor="@color/black"
-                        android:textSize="17sp"
-                        android:textStyle="normal" />
-                </LinearLayout>
+                        <LinearLayout style="@style/DataResolveTheme">
 
-                <LinearLayout style="@style/DataResolveTheme">
+                            <TextView
+                                android:id="@+id/chart_highest_show"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="67.0"
+                                android:textColor="@color/black"
+                                android:textSize="23sp"
+                                android:textStyle="bold" />
 
-                    <TextView
-                        android:id="@+id/chart_lowest_show"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="67.0"
-                        android:textColor="@color/black"
-                        android:textSize="23sp"
-                        android:textStyle="bold" />
+                            <TextView
+                                android:id="@+id/highestUnit"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="kg\n峰值"
+                                android:textColor="@color/black"
+                                android:textSize="17sp"
+                                android:textStyle="normal" />
+                        </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/lowestUnit"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="kg\n低谷值"
-                        android:textColor="@color/black"
-                        android:textSize="17sp"
-                        android:textStyle="normal" />
+                        <LinearLayout style="@style/DataResolveTheme">
+
+                            <TextView
+                                android:id="@+id/chart_lowest_show"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="67.0"
+                                android:textColor="@color/black"
+                                android:textSize="23sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/lowestUnit"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="kg\n低谷值"
+                                android:textColor="@color/black"
+                                android:textSize="17sp"
+                                android:textStyle="normal" />
+                        </LinearLayout>
+                    </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
+
+            <wang.fly.com.yunhealth.MyViewPackage.FoldLineView
+                android:id="@+id/surfaceView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="30dp"
+                android:paddingBottom="40dp"
+                android:paddingLeft="50dp"
+                android:paddingRight="20dp"
+                app:averageColor="@color/bg1"
+                app:labelColor="@color/black"
+                app:labelSize="15sp"
+                app:lineColor="@color/black"
+                app:maxColor="@color/bg2"
+                app:minColor="@color/bg3" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_marginTop="-30dp"
+                android:gravity="right|center_vertical"
+                android:orientation="horizontal"
+                android:paddingRight="15dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="平均值" />
+
+                <View
+                    android:layout_width="20dp"
+                    android:layout_height="3dp"
+                    android:layout_margin="5dp"
+                    android:background="@color/bg1" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="峰值" />
+
+                <View
+                    android:layout_width="20dp"
+                    android:layout_height="3dp"
+                    android:layout_margin="5dp"
+                    android:background="@color/bg2" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="低谷值" />
+
+                <View
+                    android:layout_width="20dp"
+                    android:layout_height="3dp"
+                    android:layout_margin="5dp"
+                    android:background="@color/bg3" />
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
+        <include layout="@layout/load_layout_to_use"/>
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:id="@+id/null_data"
+            android:background="@color/white"
+            android:layout_height="match_parent">
+            <ImageView
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:src="@drawable/null_data"
+                android:layout_gravity="center"
+                />
 
-    <wang.fly.com.yunhealth.MyViewPackage.FoldLineView
-        android:id="@+id/surfaceView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="30dp"
-        android:paddingBottom="40dp"
-        android:paddingLeft="50dp"
-        android:paddingRight="20dp"
-        app:averageColor="@color/bg1"
-        app:labelColor="@color/black"
-        app:labelSize="15sp"
-        app:lineColor="@color/black"
-        app:maxColor="@color/bg2"
-        app:minColor="@color/bg3" />
+            <TextView
+                android:id="@+id/title"
+                android:textColor="@color/skyBlue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dip"
+                android:textSize="18sp"
+                android:text="当天没有测量数据哦"
+                />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:layout_marginTop="-30dp"
-        android:gravity="right|center_vertical"
-        android:orientation="horizontal"
-        android:paddingRight="15dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="平均值" />
-
-        <View
-            android:layout_width="20dp"
-            android:layout_height="3dp"
-            android:layout_margin="5dp"
-            android:background="@color/bg1" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="峰值" />
-
-        <View
-            android:layout_width="20dp"
-            android:layout_height="3dp"
-            android:layout_margin="5dp"
-            android:background="@color/bg2" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="低谷值" />
-
-        <View
-            android:layout_width="20dp"
-            android:layout_height="3dp"
-            android:layout_margin="5dp"
-            android:background="@color/bg3" />
-    </LinearLayout>
+        </LinearLayout>
+    </RelativeLayout>
 </LinearLayout>

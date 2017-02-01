@@ -8,29 +8,16 @@ import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.text.TextPaint;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
-import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.VelocityTracker;
-import android.widget.Toast;
 
 import java.util.List;
 
+import wang.fly.com.yunhealth.DataBasePackage.MeasureData.MeasureData;
 import wang.fly.com.yunhealth.R;
-import wang.fly.com.yunhealth.util.DataInfo;
-
-import static android.R.attr.breadCrumbShortTitle;
-import static android.R.attr.factor;
-import static android.R.attr.height;
-import static android.R.attr.logo;
-import static android.R.attr.offset;
-import static android.R.attr.paddingBottom;
-import static android.R.attr.width;
-import static android.R.attr.x;
-import static android.R.attr.y;
 
 /**
  * Created by 82661 on 2016/11/13.
@@ -44,7 +31,7 @@ public class FoldLineView extends SurfaceView implements SurfaceHolder.Callback,
     /** 当前画布 */
     private Canvas mCanvas;
     /** 是否开始绘画 */
-    private boolean mIsDrawing;
+    private boolean mIsDrawing = false;
     /** 最后一次点击的x坐标 */
     private int lastX;
     /** 偏移量，用来实现平滑移动 */
@@ -64,7 +51,7 @@ public class FoldLineView extends SurfaceView implements SurfaceHolder.Callback,
     /** 每个y轴刻度的宽度 */
     private int mYScaleWidth;
     /** 外部的list，用来存放折线上的值 */
-    private List<DataInfo> mLines;
+    private List<MeasureData> mLines;
     /** x轴上的格子数量 */
     private int mXScaleNum = 6;
     /** y轴上的格子数量 */
@@ -72,6 +59,7 @@ public class FoldLineView extends SurfaceView implements SurfaceHolder.Callback,
     /**
      * 左、上、右、下四个内边距
      */
+    private Thread drawThread;
     private int offsetMax;
     private int offsetMin = 0;
     private int mPaddingLeft, mPaddingTop, mPaddingRight, mPaddingBottom;
@@ -159,8 +147,8 @@ public class FoldLineView extends SurfaceView implements SurfaceHolder.Callback,
      */
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
-        mIsDrawing = true;
-        new Thread(this).start();
+        drawThread = new Thread(this);
+        drawThread.start();
     }
 
     @Override
@@ -180,6 +168,11 @@ public class FoldLineView extends SurfaceView implements SurfaceHolder.Callback,
         /**
          * 获取大小
          */
+        getMeasure();
+    }
+
+
+    public void getMeasure(){
         mWidth = getWidth();
         mHeight = getHeight();
         mPaddingLeft = getPaddingLeft();
@@ -195,10 +188,26 @@ public class FoldLineView extends SurfaceView implements SurfaceHolder.Callback,
         while (mIsDrawing){
             //进行画图
             // 绘制方法
+            getMeasure();
             setSpeedCut();
             setOffsetRange();
             drawing();
         }
+    }
+
+    public boolean startDrawing(){
+        if (mLines == null || mLines.size() == 0){
+            return false;
+        }
+        mIsDrawing = true;
+        if (drawThread == null){
+            drawThread = new Thread(this);
+        }
+        return true;
+    }
+
+    public void stopDrawing(){
+        mIsDrawing = false;
     }
 
     private void drawing() {
@@ -224,10 +233,11 @@ public class FoldLineView extends SurfaceView implements SurfaceHolder.Callback,
         }
     }
 
+
     private void drawLine() {
         //判定每一条线
-        DataInfo now;
-        int number = 0;
+        MeasureData now;
+        float number = 0;
         int max = 0;
         int min = 0;
         float sum = 0;
@@ -247,7 +257,7 @@ public class FoldLineView extends SurfaceView implements SurfaceHolder.Callback,
                     //该点在折线内
                     //计算平均值等
                     number ++;
-                    sum += now.getData();
+                    sum += now.getAverageData();
                     if (!flag[2]){
                         end = i;
                         flag[2] = true;
@@ -256,46 +266,74 @@ public class FoldLineView extends SurfaceView implements SurfaceHolder.Callback,
                     if (!flag[0]){
                         max = i;
                         flag[0] = true;
-                    }else if (mLines.get(max).getData() < now.getData()){
+                    }else if (mLines.get(max).getAverageData() < now.getAverageData()){
                         max = i;
                     }
                     if (!flag[1]){
                         min = i;
                         flag[1] = true;
-                    }else if (mLines.get(min).getData() > now.getData()){
+                    }else if (mLines.get(min).getAverageData() > now.getAverageData()){
                         min = i;
                     }
                     mCanvas.drawLine(temp, mPaddingTop,
                             temp, mHeight - mPaddingBottom,
                             backPaint);
                     mCanvas.drawText(now.getDate(), temp, mHeight - mPaddingBottom/ 4, textPaint);
-                    mCanvas.drawCircle(temp, computeY((int) now.getData()), 5, backPaint);
+                    backPaint.setColor(averageColor);
+                    backPaint.setStrokeWidth(3f);
+                    mCanvas.drawCircle(temp, computeY((int) now.getAverageData()), 5, backPaint);
+                    /**
+                     * 尝试添加最大值，最小值的曲线
+                     */
+                    backPaint.setColor(maxColor);
+                    mCanvas.drawCircle(temp, computeY((int) now.getMaxData()), 5, backPaint);
+                    backPaint.setColor(minColor);
+                    mCanvas.drawCircle(temp, computeY((int) now.getMinData()), 5, backPaint);
+                    backPaint.setColor(backLineColor);
+                    backPaint.setStrokeWidth(1f);
+                    linePaint.setStrokeWidth(2f);
                     if (i != 0 && checkIsInChart(computeX(i - 1))){
                         //上一个点在折线图内,且存在上一个点
-                        mCanvas.drawLine(computeX(i - 1), computeY((int) mLines.get(i - 1).getData()),
-                                temp, computeY((int) now.getData()), linePaint);
+                        linePaint.setColor(averageColor);
+                        mCanvas.drawLine(computeX(i - 1),
+                                computeY((int) mLines.get(i - 1).getAverageData()),
+                                temp,
+                                computeY((int) now.getAverageData()),
+                                linePaint
+                        );
+                        linePaint.setColor(maxColor);
+                        mCanvas.drawLine(computeX(i - 1),
+                                computeY((int) mLines.get(i - 1).getMaxData()),
+                                temp,
+                                computeY((int) now.getMaxData()),
+                                linePaint
+                        );
+                        linePaint.setColor(minColor);
+                        mCanvas.drawLine(computeX(i - 1),
+                                computeY((int) mLines.get(i - 1).getMinData()),
+                                temp,
+                                computeY((int) now.getMinData()),
+                                linePaint
+                        );
+                        linePaint.setColor(lineColor);
                     }
                 }
             }
         }
-        Log.d(TAG, "drawLine: num" + number);
-        Log.d(TAG, "drawLine: sum " + sum);
-        Log.d(TAG, "drawLine: max " + max);
-        Log.d(TAG, "drawLine: min " + min);
         //进行值传递
-        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        paint.setStrokeWidth(2f);
-        paint.setColor(maxColor);
-        mCanvas.drawCircle(computeX(max), computeY((int) mLines.get(max).getData()), 5, paint);
-        paint.setColor(minColor);
-        mCanvas.drawCircle(computeX(min), computeY((int) mLines.get(min).getData()), 5, paint);
-        paint.setColor(averageColor);
-        mCanvas.drawLine(mPaddingLeft, computeY((int) (sum / number)),
-                mWidth - mPaddingRight, computeY((int) (sum / number)),
-                paint);
-        onScrollChartListener.onScroll((float)(sum / number),
-                mLines.get(max).getData(),
-                mLines.get(min).getData(),
+//        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+//        paint.setStrokeWidth(4f);
+//        paint.setColor(maxColor);
+//        mCanvas.drawCircle(computeX(max), computeY((int) mLines.get(max).getAverageData()), 5, paint);
+//        paint.setColor(minColor);
+//        mCanvas.drawCircle(computeX(min), computeY((int) mLines.get(min).getAverageData()), 5, paint);
+//        paint.setColor(averageColor);
+//        mCanvas.drawLine(computeX(start), computeY((int) (sum / number)),
+//                computeX(end), computeY((int) (sum / number)),
+//                paint);
+        onScrollChartListener.onScroll((sum / number),
+                mLines.get(max).getAverageData(),
+                mLines.get(min).getAverageData(),
                 start, end);
     }
 
@@ -308,7 +346,9 @@ public class FoldLineView extends SurfaceView implements SurfaceHolder.Callback,
      * @return
      */
     private int computeX(int i){
+
         return (i - mLines.size()) * mXScaleWidth + mOffset + mWidth - mPaddingRight;
+
     }
 
     /**
@@ -434,12 +474,12 @@ public class FoldLineView extends SurfaceView implements SurfaceHolder.Callback,
         return yEnd;
     }
 
-    public List<DataInfo> getmLines() {
+    public List<MeasureData> getLines() {
         return mLines;
     }
 
-    public void setmLines(List<DataInfo> mLines) {
-        this.mLines = mLines;
+    public void setLines(List<MeasureData> lines) {
+        mLines = lines;
     }
 
     /** dp转化为px工具 */

@@ -1,7 +1,5 @@
 package wang.fly.com.yunhealth.DataBasePackage.MeasureData;
 
-import wang.fly.com.yunhealth.DataBasePackage.MeasureData.MeasureData;
-import wang.fly.com.yunhealth.DataBasePackage.SignUserData;
 import wang.fly.com.yunhealth.MainActivity;
 
 /**
@@ -10,15 +8,7 @@ import wang.fly.com.yunhealth.MainActivity;
 
 public class MeasureXueYang extends MeasureData {
     private Integer type = MainActivity.MEASURE_TYPE_XUEYANG;
-    private SignUserData owner;
 
-    public SignUserData getOwner() {
-        return owner;
-    }
-
-    public void setOwner(SignUserData owner) {
-        this.owner = owner;
-    }
 
     public MeasureXueYang() {
         super();
