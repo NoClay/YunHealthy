@@ -17,17 +17,164 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.Toast;
 
+import java.io.UnsupportedEncodingException;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by 82661 on 2016/11/6.
  */
 
 public class UtilClass {
+    /**
+     * 获取常见编码格式
+     * @param str
+     * @return
+     */
+    public static String getEncoding(String str) {
+        String encode = "GB2312";
+        try {
+            if (str.equals(new String(str.getBytes(encode), encode))) {      //判断是不是GB2312
+                String s = encode;
+                return s;      //是的话，返回“GB2312“，以下代码同理
+            }
+        } catch (Exception exception) {
+        }
+        encode = "ISO-8859-1";
+        try {
+            if (str.equals(new String(str.getBytes(encode), encode))) {      //判断是不是ISO-8859-1
+                String s1 = encode;
+                return s1;
+            }
+        } catch (Exception exception1) {
+        }
+        encode = "UTF-8";
+        try {
+            if (str.equals(new String(str.getBytes(encode), encode))) {   //判断是不是UTF-8
+                String s2 = encode;
+                return s2;
+            }
+        } catch (Exception exception2) {
+        }
+        encode = "GBK";
+        try {
+            if (str.equals(new String(str.getBytes(encode), encode))) {      //判断是不是GBK
+                String s3 = encode;
+                return s3;
+            }
+        } catch (Exception exception3) {
+        }
+        return "";        //如果都不是，说明输入的内容不属于常见的编码格式。
+    }
+    /**
+     * 字符串编码转换的实现方法
+     * @param str  待转换编码的字符串
+     * @param newCharset 目标编码
+     * @return
+     * @throws UnsupportedEncodingException
+     */
+    public static String changeCharset(String str, String newCharset)
+            throws UnsupportedEncodingException {
+        if (str != null) {
+            //用默认字符编码解码字符串。
+            byte[] bs = str.getBytes();
+            //用新的字符编码生成字符串
+            return new String(bs, newCharset);
+        }
+        return null;
+    }
+    /**
+     * 字符串编码转换的实现方法
+     * @param str  待转换编码的字符串
+     * @param oldCharset 原编码
+     * @param newCharset 目标编码
+     * @return
+     * @throws UnsupportedEncodingException
+     */
+    public static String changeCharset(String str, String oldCharset, String newCharset)
+            throws UnsupportedEncodingException {
+        if (str != null) {
+            //用旧的字符编码解码字符串。解码可能会出现异常。
+            byte[] bs = str.getBytes(oldCharset);
+            //用新的字符编码生成字符串
+            return new String(bs, newCharset);
+        }
+        return null;
+    }
+    /**
+     * 获取html超文本语言中的内容
+     * @param html
+     * @return
+     */
+    public static String getContent(String html) {
+        //String html = "<ul><li>1.hehe</li><li>2.hi</li><li>3.hei</li></ul>";
+        String ss = ">[^<]+<";
+        String temp = null;
+        Pattern pa = Pattern.compile(ss);
+        Matcher ma = null;
+        ma = pa.matcher(html);
+        String result = null;
+        while(ma.find()){
+            temp = ma.group();
+            if(temp!=null){
+                if(temp.startsWith(">")){
+                    temp = temp.substring(1);
+                }
+                if(temp.endsWith("<")){
+                    temp = temp.substring(0, temp.length()-1);
+                }
+                if(!temp.equalsIgnoreCase("")){
+                    if(result==null){
+                        result = temp;
+                    }
+                    else{
+                        result+="____"+temp;
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
+    /**
+     * 获取文本语言中的标签
+     * @param html
+     * @return
+     */
+    public static String getLabel(String html) {
+        //String html = "<ul><li>1.hehe</li><li>2.hi</li><li>3.hei</li></ul>";
+        String ss = "<[^>]+>";
+        String temp = null;
+        Pattern pa = Pattern.compile(ss);
+        Matcher ma = null;
+        ma = pa.matcher(html);
+        String result = null;
+        while(ma.find()){
+            temp = ma.group();
+            if(temp!=null){
+                if(temp.startsWith(">")){
+                    temp = temp.substring(1);
+                }
+                if(temp.endsWith("<")){
+                    temp = temp.substring(0, temp.length()-1);
+                }
+                if(!temp.equalsIgnoreCase("")){
+                    if(result==null){
+                        result = temp;
+                    }
+                    else{
+                        result+="____"+temp;
+                    }
+                }
+            }
+        }
+        return result;
+    }
     /**
      * 计算已经过去的某一年的某一个月的天数
      * @param year

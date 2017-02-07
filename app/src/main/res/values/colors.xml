@@ -30,4 +30,8 @@
     <color name="contentTextColor">#556281</color>
     <color name="titleTextColor">#5E5E5E</color>
     <color name="dialogBackground">#FBFBFB</color>
+
+    <color name="color_03a9f4">#2861FE</color>
+    <color name="lightBlue">#8ABEE6</color>
+    <color name="lightLightBlue">#EEF5FB</color>
 </resources>
