@@ -179,21 +179,17 @@ public class InfoActivity extends AppCompatActivity
     public void onScroll(float average, float max, float min, int start, int end) {
         Message message = Message.obtain();
         boolean flag = false;
-        Log.d(TAG, "onScroll: ");
         if (this.average != average) {
             this.average = average;
             flag = true;
-            Log.d(TAG, "average: average" + this.average);
         }
         if (this.max != max) {
             this.max = max;
             flag = true;
-            Log.d(TAG, "max: max" + this.max);
         }
         if (this.min != min) {
             this.min = min;
             flag = true;
-            Log.d(TAG, "min: min " + this.min);
         }
         if (this.start != start || this.end != end) {
             this.start = start;
@@ -282,7 +278,7 @@ public class InfoActivity extends AppCompatActivity
 //添加复合与查询
         query.and(and);
         query.setLimit(100)
-                .order("-measureTime")
+                .order("measureTime")
                 .findObjectsByTable(new QueryListener<JSONArray>() {
                     @Override
                     public void done(JSONArray jsonArray, BmobException e) {
@@ -295,6 +291,7 @@ public class InfoActivity extends AppCompatActivity
                             message.what = MSG_LOAD_SUCCESS;
                             message.arg1 = size;
                             temp = new ArrayList<MeasureData>();
+                            Log.d(TAG, "done: size " + size);
                             for (int i = 0; i < size; i++) {
                                 try {
                                     JSONObject obj = (JSONObject) jsonArray.get(i);
@@ -321,6 +318,7 @@ public class InfoActivity extends AppCompatActivity
 
     @Override
     public void onDateChanged(int year, int month, int day) {
+        Log.d(TAG, "onDateChanged: time = " + year + "-" + month + "-" + day);
         showLoading();
         getDatas(year, month, day);
     }

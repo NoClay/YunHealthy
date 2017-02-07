@@ -1,6 +1,7 @@
 package wang.fly.com.yunhealth.Fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -10,8 +11,6 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -23,15 +22,14 @@ import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
+import wang.fly.com.yunhealth.Activity.NewsActivity;
 import wang.fly.com.yunhealth.Adapter.MyAdapter;
 import wang.fly.com.yunhealth.Adapter.ResultListViewAdapter;
-import wang.fly.com.yunhealth.MyViewPackage.ResultBox;
 import wang.fly.com.yunhealth.MyViewPackage.ResultDialog;
 import wang.fly.com.yunhealth.MyViewPackage.ScanView;
 import wang.fly.com.yunhealth.R;
 import wang.fly.com.yunhealth.util.MyRecyclerViewDivider;
 import wang.fly.com.yunhealth.util.ResultMessage;
-import wang.fly.com.yunhealth.util.UtilClass;
 
 /*
  * Created by 兆鹏 on 2016/11/2.
@@ -117,7 +115,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                                         Toast.makeText(context,"点击了"+position,Toast.LENGTH_SHORT).show();
                                         break;
                                     case 1:
-                                        Toast.makeText(context,"点击了"+position,Toast.LENGTH_SHORT).show();
+                                        Intent intent = new Intent(getContext(), NewsActivity.class);
+                                        startActivity(intent);
                                         break;
                                     case 2:
                                         Toast.makeText(context,"点击了"+position,Toast.LENGTH_SHORT).show();

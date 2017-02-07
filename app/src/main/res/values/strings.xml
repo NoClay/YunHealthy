@@ -19,4 +19,13 @@
     <string name="doctors_topic">医生</string>
     <string name="measure_topic">实时数据</string>
     <string name="measure_device_manage">设备管理</string>
+    <string name="test">02月06日17时健康医疗要闻回顾：唾液测出孩子天赋？唾液的神奇功效；湖南H7N9疫情上升，专家支招预防方法；村民疑似误食醇基燃料中毒，2死19伤。</string>
+
+    <!-- 共享过度动画 -->
+    <string name="transition_photos">transition_animation_news_photos</string>
+    <string name="title_activity_photo">PhotoActivity</string>
+    <string name="title_activity_test">Test</string>
+    <string name="title_activity_movie_detail">MovieDetailActivity</string>
+    <string name="title_activity_search">SearchActivity</string>
+    <string name="title_activity_add_channel">AddChannel</string>
 </resources>

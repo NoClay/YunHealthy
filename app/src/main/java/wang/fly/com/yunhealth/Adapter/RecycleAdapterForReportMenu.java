@@ -135,7 +135,7 @@ public class RecycleAdapterForReportMenu extends
                         i = 0;
                     }
                     //更新表单
-                    db.execSQL("update report_menu" +
+                    db.execSQL("update report_menu " +
                             "set checked = " + i +
                             " where content = '" + menuInfoList.get(position).getTitle() + "'" +
                             " and userId = '" + userId + "'");
