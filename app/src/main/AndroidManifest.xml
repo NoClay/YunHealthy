@@ -75,7 +75,12 @@
 
         <activity android:name=".Activity.NewsActivity">
         </activity>
-        <activity android:name=".Activity.NewDetailActivity"></activity>
+        <!--利用另一个进程加载WebView-->
+        <activity
+            android:name=".Activity.NewDetailActivity"
+            android:theme="@style/ActivityTheme"
+            android:process=":newsDetail">
+        </activity>
     </application>
 
 </manifest>

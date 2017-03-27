@@ -17,7 +17,8 @@ import wang.fly.com.yunhealth.R;
  * Created by no_clay on 2017/2/7.
  */
 
-public class LoadItemAdapterForNews extends RecyclerView.Adapter<LoadItemAdapterForNews.ViewHolder> {
+public class LoadItemAdapterForNews
+        extends RecyclerView.Adapter<LoadItemAdapterForNews.ViewHolder> {
 
     private List<NewsData> mNewsDatas;
     OnItemClickListener mOnItemClickListener;
@@ -43,7 +44,7 @@ public class LoadItemAdapterForNews extends RecyclerView.Adapter<LoadItemAdapter
     }
 
     public interface OnItemClickListener{
-        public void onItemClick(View view, int position);
+        void onItemClick(View view, int position);
     }
 
     @Override

@@ -1,10 +1,10 @@
 package wang.fly.com.yunhealth.MyViewPackage;
 
 import android.content.Context;
-import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.PopupWindow;
 
@@ -17,28 +17,29 @@ import wang.fly.com.yunhealth.util.UtilClass;
 
 public class InputWeightDialog extends PopupWindow {
     View.OnClickListener mOnClickListener;
-    EditText height;
-    EditText weight;
+    EditText mHeightInput;
+    EditText mWeightInput;
     float mHeight;
     float mWeight;
+
 
     public InputWeightDialog(Context context, View.OnClickListener listener) {
         super(context);
         this.mOnClickListener = listener;
         View view = LayoutInflater.from(context).inflate(R.layout.dialog_input_height_and_weight, null);
         view.findViewById(R.id.commit_action).setOnClickListener(listener);
-        height = (EditText) view.findViewById(R.id.input_height);
-        weight = (EditText) view.findViewById(R.id.input_weight);
+        mHeightInput = (EditText) view.findViewById(R.id.input_height);
+        mWeightInput = (EditText) view.findViewById(R.id.input_weight);
         this.setContentView(view);
         this.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
-        this.setHeight(ViewGroup.LayoutParams.MATCH_PARENT);
+        this.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
         this.setFocusable(true);
 //        this.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.dialog_window_background));
 //        this.getBackground().setAlpha(200);
-        ColorDrawable dw = new ColorDrawable(0x88000000);
-//        this.setBackgroundDrawable(dw);
+//        ColorDrawable dw = new ColorDrawable(0x88000000);
         this.setBackgroundDrawable(null);
         this.setAnimationStyle(R.style.PopupAnimation);
+        //设置wiindow软启动
     }
 
     /**
@@ -47,12 +48,12 @@ public class InputWeightDialog extends PopupWindow {
      * @return
      */
     public boolean checkData(){
-        if (!height.getText().toString().matches("^[0-9]+\\.{0,1}[0-9]{0,6}$")
-                || !weight.getText().toString().matches("^[0-9]+\\.{0,1}[0-9]{0,6}$")){
+        if (!mHeightInput.getText().toString().matches("^[0-9]+\\.{0,1}[0-9]{0,6}$")
+                || !mWeightInput.getText().toString().matches("^[0-9]+\\.{0,1}[0-9]{0,6}$")){
             return false;
         }
-        mHeight = Float.valueOf(height.getText().toString());
-        mWeight = Float.valueOf(weight.getText().toString());
+        mHeight = Float.valueOf(mHeightInput.getText().toString());
+        mWeight = Float.valueOf(mWeightInput.getText().toString());
         if (UtilClass.compareDouble(mHeight, 0) <= 0
                 || UtilClass.compareDouble(mWeight, 0) <= 0){
             //有小于0的数
@@ -62,6 +63,13 @@ public class InputWeightDialog extends PopupWindow {
         }
     }
 
+    public void updateLocation(int x, int y){
+        update(x, y,
+                WindowManager.LayoutParams.MATCH_PARENT,
+                WindowManager.LayoutParams.WRAP_CONTENT, true);
+    }
+
+
 
     public float getInputHeight() {
         return mHeight;
@@ -69,5 +77,10 @@ public class InputWeightDialog extends PopupWindow {
 
     public float getInputWeight() {
         return mWeight;
+    }
+
+    public void setInput(float height, float weight){
+        mHeightInput.setText(height + "");
+        mWeightInput.setText(weight + "");
     }
 }

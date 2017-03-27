@@ -163,7 +163,10 @@ public class NewsActivity extends AppCompatActivity
     @Override
     public void onItemClick(View view, int position) {
         Intent intent = new Intent(this, NewDetailActivity.class);
-        intent.putExtra("url", newsList.get(position).getUrl());
+        //利用Bundle传输信息
+        Bundle data = new Bundle();
+        data.putString("url", newsList.get(position).getUrl());
+        intent.putExtra("data", data);
         startActivity(intent);
     }
 }

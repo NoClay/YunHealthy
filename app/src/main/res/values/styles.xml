@@ -41,4 +41,25 @@
         <item name="android:layout_marginStart">48dp</item>
         <item name="android:layout_marginEnd">24dp</item>
     </style>
+
+    <style name="ActivityTheme" parent="AppTheme">
+        <item name="android:windowBackground">@color/white</item>
+        <!--设置窗口透明-->
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
+
+    <style name="Animation">
+        <item name="android:activityOpenEnterAnimation">@null</item>
+        <item name="android:activityOpenExitAnimation">@null</item>
+        <item name="android:activityCloseEnterAnimation">@null</item>
+        <item name="android:activityCloseExitAnimation">@null</item>
+        <item name="android:taskOpenEnterAnimation">@null</item>
+        <item name="android:taskOpenExitAnimation">@null</item>
+        <item name="android:taskCloseEnterAnimation">@null</item>
+        <item name="android:taskCloseExitAnimation">@null</item>
+        <item name="android:taskToFrontEnterAnimation">@null</item>
+        <item name="android:taskToFrontExitAnimation">@null</item>
+        <item name="android:taskToBackEnterAnimation">@null</item>
+        <item name="android:taskToBackExitAnimation">@null</item>
+    </style>
 </resources>

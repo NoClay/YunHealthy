@@ -76,10 +76,10 @@ public class ResultBox extends ViewGroup {
         int heightSpaceMode = MeasureSpec.getMode(heightMeasureSpec);
         Log.d(TAG, "onMeasure: child" + childCount);
         if(childCount == 0){
-            //no child -- no width, no height
+            //no child -- no width, no mHeightInput
             setMeasuredDimension(0, 0);
         }else{
-            //width is wrap but height not
+            //width is wrap but mHeightInput not
             final View childView = getChildAt(0);
             measuredWidth = childView.getMeasuredWidth() * childCount;
             setMeasuredDimension(measuredWidth, heightSpaceSize);

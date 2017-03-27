@@ -3,6 +3,7 @@ package wang.fly.com.yunhealth;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.Fragment;
@@ -11,6 +12,9 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewTreeObserver;
+import android.view.WindowManager;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import java.io.File;
@@ -95,12 +99,33 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         viewPager.setCurrentItem(2);
         setTab(2);
         checkIsLogined();
+        initRootView();
+    }
+
+    private void initRootView() {
+        final View rootView = getWindow().getDecorView().getRootView();
+        rootView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                //下面的代码主要是为了解决软键盘弹出后遮挡住文字录入PopWindow的问题
+                Rect r = new Rect();
+                rootView.getWindowVisibleDisplayFrame(r);//获取rootView的可视区域
+                int screenHeight = rootView.getHeight();//获取rootView的高度
+                int keyboardHeight = screenHeight - r.bottom;
+                //用rootView的高度减去rootView的可视区域高度得到软键盘高度
+                if (mInputWeightDialog != null && mInputWeightDialog.isShowing()){
+                    //调整PopWindow的位置
+                    mInputWeightDialog.updateLocation(0, keyboardHeight);
+                }
+            }
+        });
     }
 
     /**
      * 每次启动后检查体重时候输入
+     * @param body
      */
-    private void checkWeight() {
+    private void checkWeight(final HeightAndWeight body) {
         mInputWeightDialog = new InputWeightDialog(this, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -121,6 +146,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                                     data,
                                     userId,
                                     new Date());
+                            mInputWeightDialog.dismiss();
                         }
                         break;
                     }
@@ -131,10 +157,16 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 mInputWeightDialog.dismiss();
             }
         });
+        if (mInputWeightDialog != null && body != null){
+            mInputWeightDialog.setInput(body.getHeight(), body.getWeight());
+        }
+        mInputWeightDialog.setSoftInputMode(PopupWindow.INPUT_METHOD_NEEDED);
+        mInputWeightDialog.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         mInputWeightDialog.showAtLocation(findViewById(R.id.main_activity),
                 Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
 
     }
+
 
     /**
      * 初始化定时上传的线程
@@ -184,13 +216,12 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             MyDataBase myDataBase = new MyDataBase(getApplicationContext(),
                     "LocalStore.db", null, MainActivity.DATABASE_VERSION);
             SQLiteDatabase database = myDataBase.getWritableDatabase();
-            if (!myDataBase.checkTodayWeight(database,
-                    new Date(),
-                    userId)){
+            HeightAndWeight body = myDataBase.checkTodayWeight(database, new Date(), userId);
+            if (body == null){
                 //当天没有输入了体重
-                checkWeight();
+                body = myDataBase.checkLastWeight(database, userId);
+                checkWeight(body);
             }
-
         }
     }
 

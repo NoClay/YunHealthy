@@ -13,6 +13,8 @@ import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.util.Log;
 import android.view.MenuItem;
+import android.webkit.WebView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.jsoup.Jsoup;
@@ -40,12 +42,14 @@ public class NewDetailActivity extends AppCompatActivity {
     TextView mTimeText;
     @BindView(R.id.guideText)
     TextView mGuideText;
-    @BindView(R.id.contentText)
-    TextView mContentText;
     @BindView(R.id.fab)
     FloatingActionButton mFab;
     @BindView(R.id.activity_news)
     CoordinatorLayout mActivityNews;
+    @BindView(R.id.contentLayout)
+    LinearLayout mContentLayout;
+    WebView content;
+
 
     private String url;
     private Document document;
@@ -63,7 +67,7 @@ public class NewDetailActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                if (url != null){
+                if (url != null) {
                     try {
                         document = Jsoup.connect(url).get();
                         Message message = Message.obtain();
@@ -83,13 +87,15 @@ public class NewDetailActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-        url = getIntent().getStringExtra("url");
+        Bundle data = getIntent().getBundleExtra("data");
+        url = data.getString("url");
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home: {
+                System.exit(0);
                 finish();
                 return true;
             }
@@ -97,13 +103,17 @@ public class NewDetailActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    Handler handler = new Handler(){
+    Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            switch (msg.what){
-                case 0:break;
-                case 1:{
+            switch (msg.what) {
+                case 0:
+                    break;
+                case 1: {
+                    content = new WebView(NewDetailActivity.this);
+                    mContentLayout.addView(content);
+
                     Elements element = document.select("#Page > div.con_left > " +
                             "div.art_con.cc > div > div.title > h1");
                     Log.d("test", "handleMessage: title = " + element.text());
@@ -116,11 +126,35 @@ public class NewDetailActivity extends AppCompatActivity {
                             "div.art_con.cc > div > div.article_con > div.art_intro > p").text();
                     mGuideText.setText(Html.fromHtml(html));
                     html = document.select("#Page > div.con_left > div.art_con.cc > " +
-                            "div > div.article_con > div.detail_con").text();
-                    mContentText.setText(Html.fromHtml(html));
+                            "div > div.article_con > div.detail_con").html();
+                    Log.d("content", "handleMessage: content = " + html);
+                    content.loadDataWithBaseURL(null, html,
+                            "text/html", "utf-8", null);
                     break;
                 }
             }
         }
     };
+
+    @Override
+    public void onBackPressed() {
+        System.exit(0);
+        super.onBackPressed();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        System.exit(0);
+        super.onDestroy();
+    }
+
+    @Override
+    public void overridePendingTransition(int enterAnim, int exitAnim) {
+        super.overridePendingTransition(enterAnim, exitAnim);
+    }
 }
