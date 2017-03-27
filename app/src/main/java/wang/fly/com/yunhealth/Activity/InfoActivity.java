@@ -155,6 +155,7 @@ public class InfoActivity extends AppCompatActivity
         title = (TextView) findViewById(R.id.title);
         mDatePickerView.setOnDateChangedListener(this);
         foldLineView.setOnScrollChartListener(this);
+        back.setOnClickListener(this);
         //设置listener
         String[] title = {"\n平均值", "\n峰值", "\n低谷值"};
         String[] unit = {"g/bl", "mV", "kg/m^2", "mg/dl", "℃", "mg/m^3", "mV", "mmHg"};

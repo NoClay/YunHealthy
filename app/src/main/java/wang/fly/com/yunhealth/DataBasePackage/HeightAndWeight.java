@@ -24,6 +24,22 @@ public class HeightAndWeight {
         mDate = date;
     }
 
+    public void setHeight(float height) {
+        this.height = height;
+    }
+
+    public void setWeight(float weight) {
+        this.weight = weight;
+    }
+
+    public void setQuality(float quality) {
+        this.quality = quality;
+    }
+
+    public void setState(int state) {
+        this.state = state;
+    }
+
     public HeightAndWeight(float height, float weight, SignUserData owner) {
         this.height = height;
         this.weight = weight;
@@ -31,6 +47,13 @@ public class HeightAndWeight {
         setWeight(weight, height);
     }
 
+    public HeightAndWeight() {
+    }
+
+    public HeightAndWeight(float height, float weight) {
+        this.height = height;
+        this.weight = weight;
+    }
 
     public float getWeight() {
         return weight;

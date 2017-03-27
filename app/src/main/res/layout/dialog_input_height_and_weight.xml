@@ -1,23 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android">
     <LinearLayout
-        android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginRight="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginBottom="10dp"
-        android:paddingBottom="20dp"
+        android:layout_margin="10dp"
         android:background="@drawable/rectangle_block_dialog"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingBottom="20dp">
 
-        <ImageView
+        <TextView
+            android:layout_margin="10dp"
+            android:gravity="center"
+            android:textColor="@color/titleTextColor"
+            android:textSize="@dimen/text"
+            android:text="记录自己的体重"
             android:layout_width="match_parent"
-            android:layout_height="300dp"
-            android:src="@drawable/input_weight"/>
+            android:layout_height="wrap_content"/>
+        <!--<ImageView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="300dp"-->
+            <!--android:src="@drawable/input_weight"/>-->
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -25,11 +30,13 @@
             android:layout_marginTop="10dp"
             android:orientation="horizontal"
             android:paddingLeft="20dp"
-            android:paddingRight="20dp">
+            android:paddingRight="20dp"
+            android:weightSum="10">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:layout_weight="3.5"
                 android:gravity="center"
                 android:text="身高（cm）"
                 android:textColor="@color/titleTextColor"
@@ -37,10 +44,11 @@
 
             <EditText
                 android:id="@+id/input_height"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="50dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginLeft="20dp"
+                android:layout_weight="6.5"
                 android:background="@drawable/rectangle_block"
                 android:gravity="center"
                 android:inputType="numberDecimal"
@@ -55,11 +63,13 @@
             android:layout_marginTop="15dp"
             android:orientation="horizontal"
             android:paddingLeft="20dp"
-            android:paddingRight="20dp">
+            android:paddingRight="20dp"
+            android:weightSum="10">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:layout_weight="3.5"
                 android:gravity="center"
                 android:text="体重（kg）"
                 android:textColor="@color/titleTextColor"
@@ -67,10 +77,11 @@
 
             <EditText
                 android:id="@+id/input_weight"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="50dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginLeft="20dp"
+                android:layout_weight="6.5"
                 android:background="@drawable/rectangle_block"
                 android:gravity="center"
                 android:inputType="numberDecimal"
@@ -89,16 +100,17 @@
             android:weightSum="10">
 
             <ImageButton
-                android:background="@null"
-                android:layout_centerInParent="true"
-                android:scaleType="fitCenter"
-                android:src="@drawable/commit"
                 android:id="@+id/commit_action"
                 android:layout_width="50dp"
-                android:layout_height="50dp"/>
+                android:layout_height="50dp"
+                android:layout_centerInParent="true"
+                android:background="@null"
+                android:scaleType="fitCenter"
+                android:src="@drawable/commit"/>
 
         </RelativeLayout>
 
     </LinearLayout>
+</ScrollView>
 
-</RelativeLayout>
+

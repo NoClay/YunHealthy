@@ -136,15 +136,38 @@ public class MyDataBase extends SQLiteOpenHelper {
         db.insert("MeasureDataCache", null, values);
     }
 
-    public boolean checkTodayWeight(SQLiteDatabase db, Date date, String userId){
+    public HeightAndWeight checkTodayWeight(SQLiteDatabase db, Date date, String userId){
         if (db == null || date == null || userId == null){
-            return false;
+            return null;
         }
         Cursor cursor = db.rawQuery("select * from HeightWeightCache" +
                 " where userId = '" + userId + "'" +
                 " and createTime like '"
                 + UtilClass.valueOfDate(date, "yyyy-MM-dd 00:00:00").substring(0, 10) + "%'", null);
-        return cursor.moveToFirst();
+        if (cursor.moveToFirst()){
+            HeightAndWeight data = new HeightAndWeight();
+            data.setHeight(cursor.getFloat(cursor.getColumnIndex("height")));
+            data.setWeight(cursor.getFloat(cursor.getColumnIndex("weight")));
+            return data;
+        }
+        return null;
+    }
+
+    public HeightAndWeight checkLastWeight(SQLiteDatabase db, String userId){
+        if (db == null || userId == null){
+            return null;
+        }
+        Cursor cursor = db.rawQuery("select * from HeightWeightCache" +
+                " where userId = '" + userId + "'" +
+                " order by createTime desc ", null);
+
+        if (cursor.moveToFirst()){
+            HeightAndWeight data = new HeightAndWeight();
+            data.setHeight(cursor.getFloat(cursor.getColumnIndex("height")));
+            data.setWeight(cursor.getFloat(cursor.getColumnIndex("weight")));
+            return data;
+        }
+        return null;
     }
 
 
