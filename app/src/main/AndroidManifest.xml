@@ -69,8 +69,9 @@
         <activity android:name=".LoginAndSign.ChangePassWord"/>
         <activity android:name=".Activity.ChangeMyDataActivity"/>
 
+        <!--上传服务-->
         <service android:name=".Service.UpLoadService"/>
-
+        <!--上传服务接收器-->
         <receiver android:name=".ReceiverPackage.UpLoadReceiver"/>
 
         <activity android:name=".Activity.NewsActivity">
@@ -78,8 +79,8 @@
         <!--利用另一个进程加载WebView-->
         <activity
             android:name=".Activity.NewDetailActivity"
-            android:theme="@style/ActivityTheme"
-            android:process=":newsDetail">
+            android:process=":newsDetail"
+            android:theme="@style/ActivityTheme">
         </activity>
     </application>
 
