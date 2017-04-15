@@ -6,4 +6,6 @@
     <dimen name="text">17sp</dimen>
     <dimen name="rectangle_block_width">35dp</dimen>
     <dimen name="rectangle_block_height">30dp</dimen>
+    <dimen name="title_text_size">25sp</dimen>
+    <dimen name="pic_size">100dp</dimen>
 </resources>

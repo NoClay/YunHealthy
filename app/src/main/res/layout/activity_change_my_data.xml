@@ -60,7 +60,7 @@
                     android:src="@drawable/right_arrow"
                     android:layout_width="20dp"
                     android:layout_height="20dp" />
-                <wang.fly.com.yunhealth.MyViewPackage.CircleImageView
+                <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/userImageShow"
                     android:layout_marginRight="50dp"
                     android:layout_marginBottom="5dp"

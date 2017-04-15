@@ -22,6 +22,7 @@ import wang.fly.com.yunhealth.DataBasePackage.SignUserData;
 import wang.fly.com.yunhealth.MainActivity;
 import wang.fly.com.yunhealth.MyViewPackage.AutoLoadMoreRecyclerView;
 import wang.fly.com.yunhealth.R;
+import wang.fly.com.yunhealth.util.MyConstants;
 import wang.fly.com.yunhealth.util.UtilClass;
 
 import static cn.bmob.v3.Bmob.getApplicationContext;
@@ -52,7 +53,7 @@ public class DataDynamicFragment extends Fragment
         View v = inflater.inflate(R.layout.data_dynamic_fragment,container,false);
         initView(v);
         mMyDataBase = new MyDataBase(getApplicationContext(),
-                "LocalStore.db", null, MainActivity.DATABASE_VERSION);
+                "LocalStore.db", null, MyConstants.DATABASE_VERSION);
         mSQLiteDatabase = mMyDataBase.getReadableDatabase();
         onRefresh();
         return v;

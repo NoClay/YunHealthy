@@ -16,8 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import wang.fly.com.yunhealth.DataBasePackage.MyDataBase;
-import wang.fly.com.yunhealth.MainActivity;
 import wang.fly.com.yunhealth.R;
+import wang.fly.com.yunhealth.util.MyConstants;
 
 /**
  * Created by 82661 on 2016/11/16.
@@ -74,7 +74,7 @@ public class RecycleAdapterForReportMenu extends
         //构造List
         dbHelper = new MyDataBase(context,
                 "LocalStore.db", null,
-                MainActivity.DATABASE_VERSION);
+                MyConstants.DATABASE_VERSION);
         db = dbHelper.getWritableDatabase();
         String userId = context.getSharedPreferences("LoginState",
                 Context.MODE_PRIVATE).getString("userId", null);

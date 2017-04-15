@@ -1,14 +1,11 @@
 package wang.fly.com.yunhealth.Activity;
 
-import android.animation.ObjectAnimator;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
@@ -24,11 +21,11 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -40,26 +37,18 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
-import java.util.jar.Manifest;
 
-import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.datatype.BmobDate;
 import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.UpdateListener;
 import cn.bmob.v3.listener.UploadFileListener;
+import de.hdodenhof.circleimageview.CircleImageView;
 import wang.fly.com.yunhealth.DataBasePackage.SignUserData;
-import wang.fly.com.yunhealth.LoginAndSign.LoginActivity;
-import wang.fly.com.yunhealth.MainActivity;
+import wang.fly.com.yunhealth.MVP.Presenters.LoginActivityPresenter;
 import wang.fly.com.yunhealth.MyViewPackage.ChooseImageDialog;
-import wang.fly.com.yunhealth.MyViewPackage.CircleImageView;
 import wang.fly.com.yunhealth.R;
 import wang.fly.com.yunhealth.util.UtilClass;
-
-import static android.R.attr.id;
-import static java.security.AccessController.getContext;
-import static wang.fly.com.yunhealth.R.id.data_data;
-import static wang.fly.com.yunhealth.R.id.userName;
 
 /**
  * Created by 82661 on 2016/11/29.
@@ -80,7 +69,7 @@ public class ChangeMyDataActivity extends AppCompatActivity
     private long mExitTime;//退出的时间
     private Uri userImageUri;
     private Context context = this;
-    private Date birthdayDate;
+    private Calendar birthdayDate;
     private boolean isMan = false;
     private static final String TAG = "ChangeMyDataActivity";
     private static final String PATH_ADD = "/CloudHealthy/userImage/";
@@ -104,7 +93,6 @@ public class ChangeMyDataActivity extends AppCompatActivity
     }
 
 
-
     private void initData() {
         SharedPreferences shared = getSharedPreferences("LoginState", MODE_PRIVATE);
         Map<String, Object> data = (Map<String, Object>) shared.getAll();
@@ -117,14 +105,22 @@ public class ChangeMyDataActivity extends AppCompatActivity
         String string = (String) data.get("birthday");
         if (string != null) {
             Log.d(TAG, "initData: birthday" + string);
-            birthdayDate = UtilClass.resolveBmobDate(string, null);
-            Log.d(TAG, "initData: birthday" + birthdayDate.toString());
-//            birthdayDate = new Date(string);
+            Date temp = UtilClass.resolveBmobDate("1995-06-02 00:00:00", null);
+            if (temp != null){
+                birthdayDate = Calendar.getInstance();
+                birthdayDate.setTime(temp);
+            }
+            Log.d(TAG, "initData: birthday" + birthdayDate.get(Calendar.YEAR) + "-"
+                    + (birthdayDate.get(Calendar.MONTH) + 1) + "-"
+                    + birthdayDate.get(Calendar.DAY_OF_MONTH));
+            Log.d(TAG, "initData: " + birthdayDate.toString());
         } else {
-            birthdayDate = new Date(System.currentTimeMillis());
+            birthdayDate = Calendar.getInstance();
+            birthdayDate.setTimeInMillis(System.currentTimeMillis());
         }
-        birthdayEdit.setText(birthdayDate.getYear() + "-" +
-                birthdayDate.getMonth() + "-" + birthdayDate.getDay() + "");
+        birthdayEdit.setText(birthdayDate.get(Calendar.YEAR) + "-"
+                + (birthdayDate.get(Calendar.MONTH) + 1) + "-"
+                + birthdayDate.get(Calendar.DAY_OF_MONTH));
         Integer height = (Integer) data.get("height");
         if (height != null) {
             heightEdit.setText(height.toString());
@@ -140,22 +136,15 @@ public class ChangeMyDataActivity extends AppCompatActivity
             maleEdit.setText("女" + "");
         }
         String path = (String) data.get("userImage");
-        Log.d(TAG, "initData: " + path);
-        File file = new File(path);
-        Log.d(TAG, "initData: file" + file.getPath());
-        if (file.exists() && file.isFile()) {
-            try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(context.
-                        getContentResolver(), Uri.fromFile(file));
-                userImageShow.setImageBitmap(bitmap);
-                Log.d(TAG, "initData: 设置图片");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else {
-            userImageShow.setImageDrawable(getResources()
-                    .getDrawable(R.drawable.head_image_default));
-        }
+        AlphaAnimation alpha = new AlphaAnimation(0.1f, 1.0f);
+        alpha.setDuration(100);
+        Glide.with(context)
+                .load(path)
+                .animate(alpha)
+                .placeholder(R.drawable.head_image_default)
+                .error(R.drawable.head_image_default)
+                .fitCenter()
+                .into(userImageShow);
     }
 
 
@@ -206,9 +195,9 @@ public class ChangeMyDataActivity extends AppCompatActivity
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         isMan = male[0];
-                        if (isMan){
+                        if (isMan) {
                             maleEdit.setText("男");
-                        }else{
+                        } else {
                             maleEdit.setText("女");
                         }
                     }
@@ -228,7 +217,7 @@ public class ChangeMyDataActivity extends AppCompatActivity
             }
             case R.id.saveData: {
                 //保存数据
-                if (!UtilClass.isOpenNetWork(context)){
+                if (!UtilClass.isOpenNetWork(context)) {
                     UtilClass.toToast(context, "网络状况不佳");
                     return;
                 }
@@ -240,7 +229,7 @@ public class ChangeMyDataActivity extends AppCompatActivity
                     UtilClass.toToast(context, "名字过长或为空");
                 } else if (!maleEdit.getText().toString().equals("男")
                         && !maleEdit.getText().toString().equals("女")) {
-                    UtilClass.toToast(context, "性别为“男”或“");
+                    UtilClass.toToast(context, "性别为“男”或“女”");
                 } else if (!idCardEdit.getText().toString().isEmpty() &&
                         !(idCardEdit.getText().toString().length() == 15)
                         && !(idCardEdit.getText().toString().length() == 18)) {
@@ -250,12 +239,13 @@ public class ChangeMyDataActivity extends AppCompatActivity
                     user.setIdNumber(idCardEdit.getText().toString());
                     user.setMan(isMan);
                     if (birthdayDate != null) {
-                        user.setBirthday(new BmobDate(birthdayDate));
+                        Date date = new Date(birthdayDate.getTimeInMillis());
+                        user.setBirthday(new BmobDate(date));
                     }
-                    if (!heightEdit.getText().toString().isEmpty()){
+                    if (!heightEdit.getText().toString().isEmpty()) {
                         user.setHeight(Integer.valueOf(heightEdit.getText().toString()));
                     }
-                    if (!weightEdit.getText().toString().isEmpty()){
+                    if (!weightEdit.getText().toString().isEmpty()) {
                         user.setWeight(Float.valueOf(weightEdit.getText().toString()));
                     }
                     user.update(new UpdateListener() {
@@ -280,12 +270,17 @@ public class ChangeMyDataActivity extends AppCompatActivity
                 new DatePickerDialog(context, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
-                        birthdayDate = new Date(i, i1, i2);
-                        birthdayEdit.setText(birthdayDate.getYear()
-                                + "-" + birthdayDate.getMonth()
-                                + "-" + birthdayDate.getDay());
+                        Log.d(TAG, "onDateSet: " + i + "-" + i1 + "-" + i2);
+                        birthdayDate.set(Calendar.YEAR, i);
+                        birthdayDate.set(Calendar.MONTH, i1);
+                        birthdayDate.set(Calendar.DAY_OF_MONTH, i2);
+                        birthdayEdit.setText(birthdayDate.get(Calendar.YEAR) + "-"
+                                + (birthdayDate.get(Calendar.MONTH) + 1) + "-"
+                                + birthdayDate.get(Calendar.DAY_OF_MONTH));
                     }
-                }, birthdayDate.getYear(), birthdayDate.getMonth() - 1, birthdayDate.getDay()).show();
+                }, birthdayDate.get(Calendar.YEAR),
+                        birthdayDate.get(Calendar.MONTH),
+                        birthdayDate.get(Calendar.DAY_OF_MONTH)).show();
                 break;
             }
             case R.id.exitButton: {
@@ -364,26 +359,10 @@ public class ChangeMyDataActivity extends AppCompatActivity
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             switch (msg.what) {
-//                case MESSAGE_FROM_USER_IMAGE: {
-//                    if (msg.arg1 == 1) {
-//                        //修改头像
-//                        Log.d(TAG, "handleMessage: uri" + userImageUri);
-//
-//                    } else {
-//                        //设置为默认头像
-//                    }
-//                    break;
-//                }
-                case MESSAGE_UP_USER_IMAGE_START: {
-                    break;
-                }
                 case MESSAGE_UPDATE_DATA: {
                     if (msg.arg1 == 0) {
                         SignUserData user = (SignUserData) msg.obj;
-                        LoginActivity.editLoginState(context,
-                                user,
-                                MainActivity.PATH_ADD + user.getPhoneNumber() + "userImage.jpg",
-                                null);
+                        LoginActivityPresenter.editLoginState(user, true);
                         UtilClass.toToast(context, "资料已修改");
                         finish();
                     } else {
@@ -469,13 +448,10 @@ public class ChangeMyDataActivity extends AppCompatActivity
                     if (userImageUri == null) {
                         Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show();
                     } else {//截取图片完成
-
                         Log.d(TAG, "onActivityResult: 剪切完毕");
                         String phoneNumber = getSharedPreferences("LoginState", MODE_PRIVATE).
                                 getString("userName", null);
-
                         //新旧文件的替换
-
                         String path = Environment.getExternalStorageDirectory() +
                                 PATH_ADD;
                         File oldFile = new File(path + phoneNumber + "userImage.jpg");

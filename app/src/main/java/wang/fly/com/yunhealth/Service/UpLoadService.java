@@ -19,6 +19,7 @@ import wang.fly.com.yunhealth.DataBasePackage.MyDataBase;
 import wang.fly.com.yunhealth.MainActivity;
 import wang.fly.com.yunhealth.R;
 import wang.fly.com.yunhealth.ReceiverPackage.UpLoadReceiver;
+import wang.fly.com.yunhealth.util.MyConstants;
 import wang.fly.com.yunhealth.util.UtilClass;
 
 /**
@@ -59,7 +60,7 @@ public class UpLoadService extends Service{
                     makeANotification("您还没有登录");
                 }
                 MyDataBase myDataBase = new MyDataBase(getApplicationContext(),
-                        "LocalStore.db", null, MainActivity.DATABASE_VERSION);
+                        "LocalStore.db", null, MyConstants.DATABASE_VERSION);
                 SQLiteDatabase database = myDataBase.getWritableDatabase();
                 int count = myDataBase.upLoadMeasureData(database, id);
                 if (count == MyDataBase.ERROR_LOAD){
@@ -76,13 +77,13 @@ public class UpLoadService extends Service{
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
         Log.d(TAG, "onStartCommand: nowTime " + UtilClass.valueOfCalendar(calendar));
-        if (calendar.get(Calendar.MINUTE) < MainActivity.LOAD_CACHE_MINUTE){
-            calendar.set(Calendar.MINUTE, MainActivity.LOAD_CACHE_MINUTE);
+        if (calendar.get(Calendar.MINUTE) < MyConstants.LOAD_CACHE_MINUTE){
+            calendar.set(Calendar.MINUTE, MyConstants.LOAD_CACHE_MINUTE);
             calendar.set(Calendar.SECOND, 0);
             calendar.set(Calendar.MILLISECOND, 0);
         }else{
             calendar.set(Calendar.HOUR_OF_DAY, calendar.get(Calendar.HOUR_OF_DAY) + 1);
-            calendar.set(Calendar.MINUTE, MainActivity.LOAD_CACHE_MINUTE);
+            calendar.set(Calendar.MINUTE, MyConstants.LOAD_CACHE_MINUTE);
             calendar.set(Calendar.SECOND, 0);
             calendar.set(Calendar.MILLISECOND, 0);
         }

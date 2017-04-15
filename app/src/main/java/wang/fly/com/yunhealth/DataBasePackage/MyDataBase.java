@@ -26,8 +26,8 @@ import wang.fly.com.yunhealth.DataBasePackage.MeasureData.MeasureXinDian;
 import wang.fly.com.yunhealth.DataBasePackage.MeasureData.MeasureXueTang;
 import wang.fly.com.yunhealth.DataBasePackage.MeasureData.MeasureXueYa;
 import wang.fly.com.yunhealth.DataBasePackage.MeasureData.MeasureXueYang;
-import wang.fly.com.yunhealth.MainActivity;
 import wang.fly.com.yunhealth.R;
+import wang.fly.com.yunhealth.util.MyConstants;
 import wang.fly.com.yunhealth.util.UtilClass;
 
 /**
@@ -123,7 +123,7 @@ public class MyDataBase extends SQLiteOpenHelper {
                                   Date date, String userId) {
         ContentValues values = new ContentValues();
         values.put("userId", userId);
-        values.put("name", MainActivity.LABEL_STRING[type]);
+        values.put("name", MyConstants.LABEL_STRING[type]);
         values.put("type", type);
         values.put("average", measureData.getAverageData());
         values.put("max", measureData.getMaxData());
@@ -673,56 +673,56 @@ public class MyDataBase extends SQLiteOpenHelper {
                 );
                 measureData.setMeasureTime(new BmobDate(createTime));
                 switch (type) {
-                    case MainActivity.MEASURE_TYPE_XUEYANG: {
+                    case MyConstants.MEASURE_TYPE_XUEYANG: {
                         MeasureXueYang measureXueYang = new MeasureXueYang();
                         measureData.copyTo(measureXueYang);
                         measureXueYang.setOwner(owner);
                         datas.add(measureXueYang);
                         break;
                     }
-                    case MainActivity.MEASURE_TYPE_MAIBO: {
+                    case MyConstants.MEASURE_TYPE_MAIBO: {
                         MeasureMaiBo measureMaiBo = new MeasureMaiBo();
                         measureData.copyTo(measureMaiBo);
                         measureMaiBo.setOwner(owner);
                         datas.add(measureMaiBo);
                         break;
                     }
-                    case MainActivity.MEASURE_TYPE_XINDIAN: {
+                    case MyConstants.MEASURE_TYPE_XINDIAN: {
                         MeasureXinDian measureXinDian = new MeasureXinDian();
                         measureData.copyTo(measureXinDian);
                         measureXinDian.setOwner(owner);
                         datas.add(measureXinDian);
                         break;
                     }
-                    case MainActivity.MEASURE_TYPE_TIWEN: {
+                    case MyConstants.MEASURE_TYPE_TIWEN: {
                         MeasureTiWen measureTiWen = new MeasureTiWen();
                         measureData.copyTo(measureTiWen);
                         measureTiWen.setOwner(owner);
                         datas.add(measureTiWen);
                         break;
                     }
-                    case MainActivity.MEASURE_TYPE_FENCHEN: {
+                    case MyConstants.MEASURE_TYPE_FENCHEN: {
                         MeasureFenChen measureFenChen = new MeasureFenChen();
                         measureData.copyTo(measureFenChen);
                         measureFenChen.setOwner(owner);
                         datas.add(measureFenChen);
                         break;
                     }
-                    case MainActivity.MEASURE_TYPE_NAODIAN: {
+                    case MyConstants.MEASURE_TYPE_NAODIAN: {
                         MeasureNaoDian measureNaoDian = new MeasureNaoDian();
                         measureData.copyTo(measureNaoDian);
                         measureNaoDian.setOwner(owner);
                         datas.add(measureNaoDian);
                         break;
                     }
-                    case MainActivity.MEASURE_TYPE_XUEYA: {
+                    case MyConstants.MEASURE_TYPE_XUEYA: {
                         MeasureXueYa measureXueYa = new MeasureXueYa();
                         measureData.copyTo(measureXueYa);
                         measureXueYa.setOwner(owner);
                         datas.add(measureXueYa);
                         break;
                     }
-                    case MainActivity.MEASURE_TYPE_XUETANG: {
+                    case MyConstants.MEASURE_TYPE_XUETANG: {
                         MeasureXueTang measureXueTang = new MeasureXueTang();
                         measureData.copyTo(measureXueTang);
                         measureXueTang.setOwner(owner);

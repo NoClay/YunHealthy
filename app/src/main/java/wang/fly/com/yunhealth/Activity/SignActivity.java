@@ -1,11 +1,11 @@
-package wang.fly.com.yunhealth.LoginAndSign;
+package wang.fly.com.yunhealth.Activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -26,12 +26,8 @@ import cn.bmob.v3.listener.SaveListener;
 import cn.smssdk.EventHandler;
 import cn.smssdk.OnSendMessageHandler;
 import cn.smssdk.SMSSDK;
-import wang.fly.com.yunhealth.Activity.ActivityCollector;
 import wang.fly.com.yunhealth.DataBasePackage.SignUserData;
 import wang.fly.com.yunhealth.R;
-
-import static android.R.id.list;
-import static wang.fly.com.yunhealth.R.id.signUser;
 
 public class SignActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -56,7 +52,6 @@ public class SignActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign);
-        ActivityCollector.addActivity(this);
         findView();
         EventHandler eh = new EventHandler() {
             @Override
@@ -69,32 +64,7 @@ public class SignActivity extends AppCompatActivity implements View.OnClickListe
             }
         };
         SMSSDK.registerEventHandler(eh);
-        signUserPhoneNumber.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (isMobileNum(signUserPhoneNumber.getText().toString())) {
-                    //发送短信
-                    sendMessage.setClickable(true);
-                    sendMessage.setBackgroundDrawable(getResources().
-                            getDrawable(R.drawable.circle_button_def));
-                } else {
-                    sendMessage.setClickable(false);
-                    sendMessage.setBackgroundDrawable(getResources().
-                            getDrawable(R.drawable.circle_button_2));
-
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
-        });
     }
 
     @Override
@@ -130,6 +100,30 @@ public class SignActivity extends AppCompatActivity implements View.OnClickListe
         TextView title = (TextView) findViewById(R.id.info_title);
         title.setText("注册");
         manChecked.setChecked(true);
+        signUserPhoneNumber.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (isMobileNum(signUserPhoneNumber.getText().toString())) {
+                    //发送短信
+                    sendMessage.setClickable(true);
+                    sendMessage.setBackgroundDrawable(getResources().
+                            getDrawable(R.drawable.circle_button_def));
+                } else {
+                    sendMessage.setClickable(false);
+                    sendMessage.setBackgroundDrawable(getResources().
+                            getDrawable(R.drawable.circle_button_2));
+
+                }
+            }
+            @Override
+            public void afterTextChanged(Editable editable) {
+            }
+        });
     }
 
     @Override
@@ -261,15 +255,11 @@ public class SignActivity extends AppCompatActivity implements View.OnClickListe
                                             }
                                             message.arg1 = i;
                                             handler.sendMessage(message);
-//                                            Log.d(TAG, "run() called with: " + i);
                                         }
                                     }
                                 }).start();
-//                                Log.d(TAG, "afterEvent() called with: 验证码发送成功");
-                                //验证码已发送
                             } else {
                                 Toast.makeText(context, "验证码发送失败", Toast.LENGTH_SHORT).show();
-//                                Log.d(TAG, "afterEvent() called with: 验证码发送失败");
                                 //获取验证码失败
                             }
                         }

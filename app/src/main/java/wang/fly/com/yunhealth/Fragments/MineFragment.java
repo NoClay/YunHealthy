@@ -3,17 +3,13 @@ package wang.fly.com.yunhealth.Fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -21,29 +17,11 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
-import java.io.File;
-import java.io.IOException;
-
-import cn.bmob.v3.BmobQuery;
-import cn.bmob.v3.datatype.BmobFile;
-import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.DownloadFileListener;
-import cn.bmob.v3.listener.QueryListener;
+import de.hdodenhof.circleimageview.CircleImageView;
 import wang.fly.com.yunhealth.Activity.ChangeMyDataActivity;
-import wang.fly.com.yunhealth.DataBasePackage.SignUserData;
-import wang.fly.com.yunhealth.LoginAndSign.LoginActivity;
-import wang.fly.com.yunhealth.MainActivity;
-import wang.fly.com.yunhealth.MyViewPackage.CircleImageView;
 import wang.fly.com.yunhealth.R;
 
-import static android.R.attr.breadCrumbShortTitle;
-import static android.R.attr.contextUri;
-import static android.R.attr.editorExtras;
-import static android.R.attr.path;
-import static android.R.attr.phoneNumber;
-import static android.R.attr.switchMinWidth;
 import static android.content.Context.MODE_PRIVATE;
-import static android.os.Build.VERSION_CODES.M;
 
 /**
  * Created by 兆鹏 on 2016/11/2.
@@ -136,49 +114,18 @@ public class MineFragment extends Fragment implements View.OnClickListener{
         String id = sharedPreferences.getString("userId", "");
         String phone = sharedPreferences.getString("phoneNumber", "");
         String name = sharedPreferences.getString("userName", "");
-        String userImagePath = MainActivity.PATH_ADD + phone + "userImage.jpg";
-        final File image = new File(userImagePath);
-        if (!image.exists() || !image.isFile()){
-            BmobQuery<SignUserData> query = new BmobQuery<>();
-            query.getObject(id, new QueryListener<SignUserData>() {
-                @Override
-                public void done(final SignUserData signUserData, BmobException e) {
-                    if (e == null && signUserData.getUserImage() != null){
-                        BmobFile file = signUserData.getUserImage();
-                        file.download(image, new DownloadFileListener() {
-                            @Override
-                            public void done(String s, BmobException e) {
-                                if (e == null){
-                                    LoginActivity.editLoginState(getContext(),
-                                            signUserData,
-                                            image.getPath(),
-                                            null);
-                                }
-                            }
-
-                            @Override
-                            public void onProgress(Integer integer, long l) {
-
-                            }
-                        });
-                    }
-                }
-            });
-        }
+        String userImagePath = sharedPreferences.getString("userImage", null);
+        AlphaAnimation alpha = new AlphaAnimation(0.1f, 1.0f);
+        alpha.setDuration(100);
+        Glide.with(context)
+                .load(userImagePath)
+                .animate(alpha)
+                .placeholder(R.drawable.head_image_default)
+                .error(R.drawable.head_image_default)
+                .fitCenter()
+                .into(userImage);
         userName.setText(name);
         userPhoneNumber.setText(phone);
-        if (image.exists() && image.isFile()){
-            try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(context.
-                        getContentResolver(), Uri.fromFile(image));
-                userImage.setImageBitmap(bitmap);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }else{
-            userImage.setImageDrawable(getResources()
-                    .getDrawable(R.drawable.head_image_default));
-        }
     }
 
 
