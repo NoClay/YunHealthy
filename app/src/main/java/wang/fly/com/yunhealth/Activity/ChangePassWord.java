@@ -1,4 +1,4 @@
-package wang.fly.com.yunhealth.LoginAndSign;
+package wang.fly.com.yunhealth.Activity;
 
 import android.content.Intent;
 import android.os.Handler;
@@ -23,11 +23,11 @@ import cn.bmob.v3.listener.UpdateListener;
 import cn.smssdk.EventHandler;
 import cn.smssdk.OnSendMessageHandler;
 import cn.smssdk.SMSSDK;
-import wang.fly.com.yunhealth.Activity.ActivityCollector;
 import wang.fly.com.yunhealth.DataBasePackage.SignUserData;
+import wang.fly.com.yunhealth.LoginAndSign.LoginActivity;
 import wang.fly.com.yunhealth.R;
 
-import static wang.fly.com.yunhealth.LoginAndSign.SignActivity.isMobileNum;
+import static wang.fly.com.yunhealth.Activity.SignActivity.isMobileNum;
 
 public class ChangePassWord extends AppCompatActivity implements View.OnClickListener {
 
@@ -63,6 +63,29 @@ public class ChangePassWord extends AppCompatActivity implements View.OnClickLis
             }
         };
         SMSSDK.registerEventHandler(eh);
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ActivityCollector.removeActivity(this);
+    }
+
+    private void findView() {
+        signedPhoneNumber = (EditText) findViewById(R.id.signed_phoneNumber);
+        sendMessage = (Button) findViewById(R.id.send_message_button);
+        newPassWord = (EditText) findViewById(R.id.new_password);
+        cancelButton = (ImageView) findViewById(R.id.back);
+        completeChangePassWord = (Button) findViewById(R.id.complete_change);
+        checkNumber = (EditText) findViewById(R.id.input_checkNumber);
+        TextView title = (TextView) findViewById(R.id.info_title);
+        title.setText("修改密码");
+        sendMessage.setOnClickListener(this);
+        completeChangePassWord.setOnClickListener(this);
+        cancelButton.setOnClickListener(this);
+        Intent intent = getIntent();
+        isFromLogin = intent.getBooleanExtra("isLogin", true);
         signedPhoneNumber.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -87,28 +110,6 @@ public class ChangePassWord extends AppCompatActivity implements View.OnClickLis
 
             }
         });
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        ActivityCollector.removeActivity(this);
-    }
-
-    private void findView() {
-        signedPhoneNumber = (EditText) findViewById(R.id.signed_phoneNumber);
-        sendMessage = (Button) findViewById(R.id.send_message_button);
-        newPassWord = (EditText) findViewById(R.id.new_password);
-        cancelButton = (ImageView) findViewById(R.id.back);
-        completeChangePassWord = (Button) findViewById(R.id.complete_change);
-        checkNumber = (EditText) findViewById(R.id.input_checkNumber);
-        TextView title = (TextView) findViewById(R.id.info_title);
-        title.setText("修改密码");
-        sendMessage.setOnClickListener(this);
-        completeChangePassWord.setOnClickListener(this);
-        cancelButton.setOnClickListener(this);
-        Intent intent = getIntent();
-        isFromLogin = intent.getBooleanExtra("isLogin", true);
     }
 
     Handler handler = new Handler() {

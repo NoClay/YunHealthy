@@ -3,8 +3,8 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/lightSeaGreen</item>
-        <item name="colorPrimaryDark">@color/lightSeaGreen</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
@@ -46,6 +46,11 @@
         <item name="android:windowBackground">@color/white</item>
         <!--设置窗口透明-->
         <item name="android:windowIsTranslucent">true</item>
+    </style>
+    
+    <style name="AppTheme.TabLayoutTextStyle"
+           parent="TextAppearance.AppCompat">
+        <item name="android:textSize">125px</item>
     </style>
 
     <style name="Animation">

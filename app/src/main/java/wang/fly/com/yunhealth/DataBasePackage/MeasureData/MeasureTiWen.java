@@ -1,18 +1,18 @@
 package wang.fly.com.yunhealth.DataBasePackage.MeasureData;
 
 
-import wang.fly.com.yunhealth.MainActivity;
+import wang.fly.com.yunhealth.util.MyConstants;
 
 /**
  * Created by 82661 on 2016/12/2.
  */
 
 public class MeasureTiWen extends MeasureData {
-    private Integer type = MainActivity.MEASURE_TYPE_TIWEN;
+    private Integer type = MyConstants.MEASURE_TYPE_TIWEN;
 
     public MeasureTiWen() {
         super();
-        setName(MainActivity.LABEL_STRING[type]);
+        setName(MyConstants.LABEL_STRING[type]);
     }
 
     public Integer getType() {

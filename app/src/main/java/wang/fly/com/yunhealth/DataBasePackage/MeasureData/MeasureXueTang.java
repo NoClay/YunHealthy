@@ -1,17 +1,17 @@
 package wang.fly.com.yunhealth.DataBasePackage.MeasureData;
 
-import wang.fly.com.yunhealth.MainActivity;
+import wang.fly.com.yunhealth.util.MyConstants;
 
 /**
  * Created by 82661 on 2016/12/2.
  */
 
 public class MeasureXueTang extends MeasureData{
-    private Integer type = MainActivity.MEASURE_TYPE_XUETANG;
+    private Integer type = MyConstants.MEASURE_TYPE_XUETANG;
 
     public MeasureXueTang() {
         super();
-        setName(MainActivity.LABEL_STRING[type]);
+        setName(MyConstants.LABEL_STRING[type]);
     }
 
     public Integer getType() {

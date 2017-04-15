@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="primary_text">#212121</color>
+    <color name="secondary_text">#757575</color>
+    <color name="icons">#FFFFFF</color>
+    <color name="divider">#BDBDBD</color>
+
+    <color name="colorPrimary">#00BCD4</color>
+    <color name="colorPrimaryDark">#0097A7</color>
+    <color name="colorPrimaryLight">#B2EBF2</color>
+    <color name="colorAccent">#448AFF</color>
     <color name="dimGray">#696969</color><!--暗灰色 -->
     <color name="lightGray">#d3d3d3</color><!--亮灰色 -->
     <color name="lightSeaGreen">#20b2aa</color><!--亮海蓝色 -->
@@ -34,4 +40,5 @@
     <color name="color_03a9f4">#2861FE</color>
     <color name="lightBlue">#8ABEE6</color>
     <color name="lightLightBlue">#EEF5FB</color>
+    <color name="mainBackground">#ECEDF1</color>
 </resources>

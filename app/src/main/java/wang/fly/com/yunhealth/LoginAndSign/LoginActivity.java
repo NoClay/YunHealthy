@@ -28,9 +28,11 @@ import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.DownloadFileListener;
 import cn.bmob.v3.listener.FindListener;
 import wang.fly.com.yunhealth.Activity.ActivityCollector;
+import wang.fly.com.yunhealth.Activity.ChangePassWord;
+import wang.fly.com.yunhealth.Activity.SignActivity;
 import wang.fly.com.yunhealth.DataBasePackage.SignUserData;
-import wang.fly.com.yunhealth.MainActivity;
 import wang.fly.com.yunhealth.R;
+import wang.fly.com.yunhealth.util.MyConstants;
 import wang.fly.com.yunhealth.util.UtilClass;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
@@ -118,7 +120,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                 } else {
                                     toToast("登录成功，正在更新信息");
                                     //用户登陆成功，下载头像
-                                    final String path = MainActivity.PATH_ADD
+                                    final String path = MyConstants.PATH_ADD
                                             + one.getPhoneNumber()
                                             + "userImage.jpg";
                                     Log.d(TAG, "done: path" + path);

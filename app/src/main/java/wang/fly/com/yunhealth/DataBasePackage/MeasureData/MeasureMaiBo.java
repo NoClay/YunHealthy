@@ -1,16 +1,16 @@
 package wang.fly.com.yunhealth.DataBasePackage.MeasureData;
 
-import wang.fly.com.yunhealth.MainActivity;
+import wang.fly.com.yunhealth.util.MyConstants;
 
 /**
  * Created by 82661 on 2016/12/2.
  */
 
 public class MeasureMaiBo extends MeasureData {
-    private Integer type = MainActivity.MEASURE_TYPE_MAIBO;
+    private Integer type = MyConstants.MEASURE_TYPE_MAIBO;
     public MeasureMaiBo() {
         super();
-        setName(MainActivity.LABEL_STRING[type]);
+        setName(MyConstants.LABEL_STRING[type]);
     }
 
     public Integer getType() {
