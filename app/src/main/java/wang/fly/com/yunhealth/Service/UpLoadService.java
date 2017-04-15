@@ -16,7 +16,6 @@ import android.util.Log;
 import java.util.Calendar;
 
 import wang.fly.com.yunhealth.DataBasePackage.MyDataBase;
-import wang.fly.com.yunhealth.MainActivity;
 import wang.fly.com.yunhealth.R;
 import wang.fly.com.yunhealth.ReceiverPackage.UpLoadReceiver;
 import wang.fly.com.yunhealth.util.MyConstants;
@@ -42,7 +41,7 @@ public class UpLoadService extends Service{
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        int type = intent.getIntExtra("type", MainActivity.RECEIVER_TYPE_UPLOAD);
+        int type = intent.getIntExtra("type", MyConstants.RECEIVER_TYPE_UPLOAD);
         boolean isFirstStart = intent.getBooleanExtra("isFirst", false);
         Log.d(TAG, "onStartCommand: isFirstStart" + isFirstStart);
         new Thread(new Runnable() {

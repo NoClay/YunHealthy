@@ -30,10 +30,10 @@ import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.QueryListener;
 import wang.fly.com.yunhealth.DataBasePackage.MeasureData.MeasureData;
 import wang.fly.com.yunhealth.DataBasePackage.SignUserData;
-import wang.fly.com.yunhealth.MainActivity;
 import wang.fly.com.yunhealth.MyViewPackage.DatePickerView;
 import wang.fly.com.yunhealth.MyViewPackage.FoldLineView;
 import wang.fly.com.yunhealth.R;
+import wang.fly.com.yunhealth.util.MyConstants;
 import wang.fly.com.yunhealth.util.UtilClass;
 
 /**
@@ -273,7 +273,7 @@ public class InfoActivity extends AppCompatActivity
         and.add(q2);
         BmobQuery q3 = new BmobQuery(tableName[type]);
         SignUserData login = new SignUserData();
-        login.setObjectId(MainActivity.userId);
+        login.setObjectId(MyConstants.userId);
         q3.addWhereEqualTo("owner", login);
         and.add(q3);
 //添加复合与查询

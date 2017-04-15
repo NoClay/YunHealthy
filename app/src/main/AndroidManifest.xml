@@ -71,7 +71,6 @@
         <activity android:name=".Activity.ShowHeartWaves"/>
         <activity android:name=".Activity.InfoActivity"/>
         <activity android:name=".Activity.InfoActivityForReport"/>
-        <activity android:name=".LoginAndSign.LoginActivity"/>
         <activity android:name=".Activity.SignActivity"/>
         <activity android:name=".Activity.ChangePassWord"/>
         <activity android:name=".Activity.ChangeMyDataActivity"/>

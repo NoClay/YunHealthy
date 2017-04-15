@@ -24,7 +24,6 @@ import cn.smssdk.EventHandler;
 import cn.smssdk.OnSendMessageHandler;
 import cn.smssdk.SMSSDK;
 import wang.fly.com.yunhealth.DataBasePackage.SignUserData;
-import wang.fly.com.yunhealth.LoginAndSign.LoginActivity;
 import wang.fly.com.yunhealth.R;
 
 import static wang.fly.com.yunhealth.Activity.SignActivity.isMobileNum;
@@ -214,7 +213,7 @@ public class ChangePassWord extends AppCompatActivity implements View.OnClickLis
             }
         } else {
             if (isSuccess) {
-                Intent intent = new Intent(ChangePassWord.this, LoginActivity.class);
+                Intent intent = new Intent(ChangePassWord.this, LoginActivityCopy.class);
                 intent.putExtra("userName", signedPhoneNumber.getText().toString());
                 startActivity(intent);
             }
