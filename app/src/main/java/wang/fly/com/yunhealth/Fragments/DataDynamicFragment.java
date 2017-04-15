@@ -19,7 +19,6 @@ import wang.fly.com.yunhealth.Adapter.LoadItemAdapterForDynamic;
 import wang.fly.com.yunhealth.DataBasePackage.HeightAndWeight;
 import wang.fly.com.yunhealth.DataBasePackage.MyDataBase;
 import wang.fly.com.yunhealth.DataBasePackage.SignUserData;
-import wang.fly.com.yunhealth.MainActivity;
 import wang.fly.com.yunhealth.MyViewPackage.AutoLoadMoreRecyclerView;
 import wang.fly.com.yunhealth.R;
 import wang.fly.com.yunhealth.util.MyConstants;
@@ -138,14 +137,14 @@ public class DataDynamicFragment extends Fragment
         }
         List<HeightAndWeight> result = new ArrayList<>();
         String sql= "select * from " + tableName +
-                " where userId = '" + MainActivity.userId + "' " +
+                " where userId = '" + MyConstants.userId + "' " +
                 " order by createTime desc " +
                 " Limit "+String.valueOf(PAGE_SIZE)+ " Offset " +String.valueOf(skip * PAGE_SIZE);
         Cursor rec = mSQLiteDatabase.rawQuery(sql, null);
         if (rec.moveToFirst()){
             do {
                 SignUserData login = new SignUserData();
-                login.setObjectId(MainActivity.userId);
+                login.setObjectId(MyConstants.userId);
                 HeightAndWeight data = new HeightAndWeight(
                         rec.getFloat(rec.getColumnIndex("height")),
                         rec.getFloat(rec.getColumnIndex("weight")),

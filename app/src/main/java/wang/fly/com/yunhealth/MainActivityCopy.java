@@ -31,7 +31,7 @@ import wang.fly.com.yunhealth.Service.UpLoadService;
 import wang.fly.com.yunhealth.util.MyConstants;
 import wang.fly.com.yunhealth.util.TabLayoutViewPagerAdapter;
 
-import static wang.fly.com.yunhealth.MainActivity.userId;
+import static wang.fly.com.yunhealth.util.MyConstants.userId;
 
 /**
  * Created by noclay on 2017/4/15.
