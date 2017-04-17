@@ -45,7 +45,6 @@ import cn.bmob.v3.listener.UpdateListener;
 import cn.bmob.v3.listener.UploadFileListener;
 import de.hdodenhof.circleimageview.CircleImageView;
 import wang.fly.com.yunhealth.DataBasePackage.SignUserData;
-import wang.fly.com.yunhealth.MVP.Presenters.LoginActivityPresenter;
 import wang.fly.com.yunhealth.MyViewPackage.ChooseImageDialog;
 import wang.fly.com.yunhealth.R;
 import wang.fly.com.yunhealth.util.UtilClass;
@@ -362,7 +361,7 @@ public class ChangeMyDataActivity extends AppCompatActivity
                 case MESSAGE_UPDATE_DATA: {
                     if (msg.arg1 == 0) {
                         SignUserData user = (SignUserData) msg.obj;
-                        LoginActivityPresenter.editLoginState(user, true);
+//                        LoginActivityPresenter.editLoginState(user, true);
                         UtilClass.toToast(context, "资料已修改");
                         finish();
                     } else {
@@ -472,7 +471,7 @@ public class ChangeMyDataActivity extends AppCompatActivity
                                     user.setObjectId(getSharedPreferences("LoginState", MODE_PRIVATE).
                                             getString("userId", null));
                                     Log.d(TAG, "done: id" + user.getObjectId());
-                                    user.setUserImage(bmobFile);
+//                                    user.setUserImage(bmobFile);
                                     user.update(new UpdateListener() {
                                         @Override
                                         public void onStart() {

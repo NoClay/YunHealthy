@@ -18,7 +18,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import wang.fly.com.yunhealth.Activity.ChangeMyDataActivity;
+import wang.fly.com.yunhealth.Activity.ChangeMyDataActivityCopy;
 import wang.fly.com.yunhealth.R;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -81,7 +81,7 @@ public class MineFragment extends Fragment implements View.OnClickListener{
         switch (v.getId()){
             case R.id.firstLayout:{
                 //打开个人资料
-                Intent intent = new Intent(getContext(), ChangeMyDataActivity.class);
+                Intent intent = new Intent(getContext(), ChangeMyDataActivityCopy.class);
                 startActivityForResult(intent, REQUEST_CHANGE_DATA);
                 break;
             }

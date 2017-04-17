@@ -50,6 +50,7 @@ public class WelcomeActivity extends AppCompatActivity implements Animation.Anim
     public void onAnimationEnd(Animation animation) {
         Intent intent = new Intent(WelcomeActivity.this, LoginActivityCopy.class);
         startActivity(intent);
+        finish();
     }
 
     @Override

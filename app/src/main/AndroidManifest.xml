@@ -89,8 +89,8 @@
             android:theme="@style/ActivityTheme">
         </activity>
         <activity android:name=".MainActivityCopy"/>
-        <activity android:name=".Activity.LoginActivityCopy">
-        </activity>
+        <activity android:name=".Activity.LoginActivityCopy"></activity>
+        <activity android:name=".Activity.ChangeMyDataActivityCopy"></activity>
     </application>
 
 </manifest>
