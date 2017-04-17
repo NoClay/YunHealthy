@@ -83,7 +83,7 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
     static final int MSG_START_CONNECT = 2;
     static final int MSG_READ_STRING = 3;
     static final int MSG_CONNECT_FAILED = 4;
-    private String deviceAddress;
+    private String deviceAddress = "98:D3:32:70:5A:44";
     private static final String TAG = "MeasureFragment";
     View mView;
 
@@ -137,6 +137,10 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
                                           /* 从intent中取得搜索结果数据 */
                         BluetoothDevice device = intent
                                 .getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                        Log.d("blue", "onReceive: name" + device.getName());
+                        Log.d("blue", "onReceive: address" + device.getAddress());
+                        Log.d("blue", "onReceive: state" + device.getBondState());
+
                         if (TextUtils.equals(device.getAddress(), deviceAddress)) {
                             theDestDevice = device;
                             if (theDestDevice.getBondState() == BluetoothDevice.BOND_NONE) {
@@ -285,6 +289,7 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
                                 }
                             }
                         });
+                dialog.setMacAddress(deviceAddress);
                 dialog.showAtLocation(mView.findViewById(R.id.main_layout),
                         Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
                 dialog.setMacHint(mac);

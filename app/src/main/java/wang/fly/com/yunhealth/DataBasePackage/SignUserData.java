@@ -2,10 +2,8 @@ package wang.fly.com.yunhealth.DataBasePackage;
 
 //import cn.bmob.v3.BmobObject;
 
-import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobObject;
 import cn.bmob.v3.datatype.BmobDate;
-import cn.bmob.v3.datatype.BmobFile;
 
 /**
  * Created by 82661 on 2016/11/25.
@@ -15,7 +13,7 @@ public class SignUserData extends BmobObject {
     private String userName;//昵称
     private String passWord;//用于修改密码
     private String phoneNumber;//用于储存手机号
-    private BmobFile userImage;//用户头像
+    private String userImage;//用户头像
     private String idNumber;
     private Boolean isMan;//true为  man    false 为woman
     private Integer height;
@@ -54,11 +52,11 @@ public class SignUserData extends BmobObject {
         this.phoneNumber = phoneNumber;
     }
 
-    public BmobFile getUserImage() {
+    public String getUserImage() {
         return userImage;
     }
 
-    public void setUserImage(BmobFile userImage) {
+    public void setUserImage(String userImage) {
         this.userImage = userImage;
     }
 

@@ -52,6 +52,9 @@ public class InputBlueMacDialog extends PopupWindow {
         return macAddress.getText().toString();
     }
 
+    public void setMacAddress(String add){
+        macAddress.setText(add);
+    }
     public void setMacHint(String string) {
         macAddress.setHint(string);
     }

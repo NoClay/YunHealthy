@@ -31,6 +31,10 @@ import java.util.regex.Pattern;
  */
 
 public class UtilClass {
+
+    public void saveBitmapToFile(String path){
+
+    }
     /**
      * 获取常见编码格式
      * @param str

@@ -190,6 +190,7 @@ public class LoginActivityCopy extends
     public void loginSuccess() {
         Intent intent = new Intent(context, MainActivityCopy.class);
         startActivity(intent);
+        finish();
     }
 
     @Override
