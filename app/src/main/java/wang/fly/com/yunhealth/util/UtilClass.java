@@ -17,6 +17,10 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -26,17 +30,45 @@ import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static android.os.Build.VERSION_CODES.M;
+
 /**
  * Created by 82661 on 2016/11/6.
  */
 
 public class UtilClass {
 
-    public void saveBitmapToFile(String path){
-
+    /**
+     * 将Bitmap保存到指定的文件
+     * @param bm
+     */
+    public static void saveBitmapToFile(Bitmap bm, String filePath) {
+        File f;
+        if(filePath == null){
+            f = new File(MyConstants.PATH_ADD + "temp.jpg");
+        }else{
+            f = new File(filePath);
+        }
+        if (f.exists()) {
+            f.delete();
+        }
+        try {
+            FileOutputStream out = new FileOutputStream(f);
+            bm.compress(Bitmap.CompressFormat.PNG, 90, out);
+            out.flush();
+            out.close();
+        } catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
+
     /**
      * 获取常见编码格式
+     *
      * @param str
      * @return
      */
@@ -75,9 +107,11 @@ public class UtilClass {
         }
         return "";        //如果都不是，说明输入的内容不属于常见的编码格式。
     }
+
     /**
      * 字符串编码转换的实现方法
-     * @param str  待转换编码的字符串
+     *
+     * @param str        待转换编码的字符串
      * @param newCharset 目标编码
      * @return
      * @throws UnsupportedEncodingException
@@ -92,9 +126,11 @@ public class UtilClass {
         }
         return null;
     }
+
     /**
      * 字符串编码转换的实现方法
-     * @param str  待转换编码的字符串
+     *
+     * @param str        待转换编码的字符串
      * @param oldCharset 原编码
      * @param newCharset 目标编码
      * @return
@@ -110,8 +146,10 @@ public class UtilClass {
         }
         return null;
     }
+
     /**
      * 获取html超文本语言中的内容
+     *
      * @param html
      * @return
      */
@@ -123,21 +161,20 @@ public class UtilClass {
         Matcher ma = null;
         ma = pa.matcher(html);
         String result = null;
-        while(ma.find()){
+        while (ma.find()) {
             temp = ma.group();
-            if(temp!=null){
-                if(temp.startsWith(">")){
+            if (temp != null) {
+                if (temp.startsWith(">")) {
                     temp = temp.substring(1);
                 }
-                if(temp.endsWith("<")){
-                    temp = temp.substring(0, temp.length()-1);
+                if (temp.endsWith("<")) {
+                    temp = temp.substring(0, temp.length() - 1);
                 }
-                if(!temp.equalsIgnoreCase("")){
-                    if(result==null){
+                if (!temp.equalsIgnoreCase("")) {
+                    if (result == null) {
                         result = temp;
-                    }
-                    else{
-                        result+="____"+temp;
+                    } else {
+                        result += "____" + temp;
                     }
                 }
             }
@@ -147,6 +184,7 @@ public class UtilClass {
 
     /**
      * 获取文本语言中的标签
+     *
      * @param html
      * @return
      */
@@ -158,34 +196,35 @@ public class UtilClass {
         Matcher ma = null;
         ma = pa.matcher(html);
         String result = null;
-        while(ma.find()){
+        while (ma.find()) {
             temp = ma.group();
-            if(temp!=null){
-                if(temp.startsWith(">")){
+            if (temp != null) {
+                if (temp.startsWith(">")) {
                     temp = temp.substring(1);
                 }
-                if(temp.endsWith("<")){
-                    temp = temp.substring(0, temp.length()-1);
+                if (temp.endsWith("<")) {
+                    temp = temp.substring(0, temp.length() - 1);
                 }
-                if(!temp.equalsIgnoreCase("")){
-                    if(result==null){
+                if (!temp.equalsIgnoreCase("")) {
+                    if (result == null) {
                         result = temp;
-                    }
-                    else{
-                        result+="____"+temp;
+                    } else {
+                        result += "____" + temp;
                     }
                 }
             }
         }
         return result;
     }
+
     /**
      * 计算已经过去的某一年的某一个月的天数
+     *
      * @param year
      * @param month
      * @return
      */
-    public static int getDayOfMonthPast(int year, int month){
+    public static int getDayOfMonthPast(int year, int month) {
         if (year <= 0 || month <= 0 || month > 12) {
             return 0;
         }
@@ -194,52 +233,57 @@ public class UtilClass {
         int year1 = calendar.get(Calendar.YEAR);
         int month1 = calendar.get(Calendar.MONTH) + 1;
         int day1 = calendar.get(Calendar.DAY_OF_MONTH);
-        if (year > year1){
+        if (year > year1) {
             return 0;
-        }else if (year == year1 && month > month1){
+        } else if (year == year1 && month > month1) {
             return 0;
         }
         return getDayOfMonth(year, month);
     }
+
     /**
      * 返回某一年某一个月的天数
+     *
      * @param year
      * @param month
      * @return
      */
-    public static int getDayOfMonth(int year, int month){
+    public static int getDayOfMonth(int year, int month) {
         if (year <= 0 || month <= 0 || month > 12) {
             return 0;
         }
-        switch (month){
+        switch (month) {
             case 1:
             case 3:
             case 5:
             case 7:
             case 8:
             case 10:
-            case 12:{
+            case 12: {
                 return 31;
             }
             case 4:
             case 6:
             case 9:
-            case 11:{
+            case 11: {
                 return 30;
             }
-            case 2:{
+            case 2: {
                 if ((year % 400 == 0) || (year % 4 == 0 && year % 100 != 0)) {
                     return 29;
-                }else{
+                } else {
                     return 28;
                 }
             }
-            default:return 0;
+            default:
+                return 0;
         }
     }
+
     /**
      * 检查某一年的某一天存在，避免如2017.2.29
      * 必须已经经过了
+     *
      * @param year
      * @param month
      * @param day
@@ -251,20 +295,21 @@ public class UtilClass {
         int year1 = calendar.get(Calendar.YEAR);
         int month1 = calendar.get(Calendar.MONTH) + 1;
         int day1 = calendar.get(Calendar.DAY_OF_MONTH);
-        if (year > year1){
+        if (year > year1) {
             return false;
-        }else if (year == year1){
-            if (month > month1){
+        } else if (year == year1) {
+            if (month > month1) {
                 return false;
-            }else if (month == month1){
-                if (day > day1){
+            } else if (month == month1) {
+                if (day > day1) {
                     return false;
                 }
             }
         }
         return checkDate(year, month, day);
     }
-    public static boolean checkDate(int year, int month, int day){
+
+    public static boolean checkDate(int year, int month, int day) {
         if (year <= 0 || month <= 0 || day <= 0) {
             return false;
         }
@@ -314,7 +359,7 @@ public class UtilClass {
         Calendar calendar1 = Calendar.getInstance();
         calendar1.setTime(date2);
         calendar.setTime(date1);
-        if (calendar.get(Calendar.YEAR) != calendar1.get(Calendar.YEAR)){
+        if (calendar.get(Calendar.YEAR) != calendar1.get(Calendar.YEAR)) {
             return calendar.get(Calendar.YEAR) - calendar1.get(Calendar.YEAR);
         }
         long day1 = calendar.get(Calendar.DAY_OF_YEAR);
@@ -323,8 +368,9 @@ public class UtilClass {
         Log.d("test", "compareDate: day2  " + day2);
         return (int) (day1 - day2);
     }
-    public static int compareDate(int year, int month, int day, Calendar calendar){
-        if (year != calendar.get(Calendar.YEAR)){
+
+    public static int compareDate(int year, int month, int day, Calendar calendar) {
+        if (year != calendar.get(Calendar.YEAR)) {
             return year - calendar.get(Calendar.YEAR);
         }
         Calendar calendar1 = Calendar.getInstance();
@@ -756,14 +802,14 @@ public class UtilClass {
             return;
         }
         int check = 0;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+        if (android.os.Build.VERSION.SDK_INT >= M) {
             check = activity.checkSelfPermission(permission);
         } else {
             check = activity.checkCallingOrSelfPermission(permission);
         }
         if (check != PackageManager.PERMISSION_GRANTED) {
             //没有获取该权限
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (Build.VERSION.SDK_INT >= M) {
                 activity.requestPermissions(new String[]{
                         permission
                 }, 0);

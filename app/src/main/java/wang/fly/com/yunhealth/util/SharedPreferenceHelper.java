@@ -12,57 +12,65 @@ import static android.content.Context.MODE_PRIVATE;
  */
 
 public class SharedPreferenceHelper {
-    public static void editLoginState(SignUserData user, Boolean isLogin){
+    public static void exitLogin() {
         SharedPreferences.Editor editor =
                 MyApplication.getContext().getSharedPreferences("LoginState", MODE_PRIVATE)
                         .edit();
-        if (isLogin != null){
-            if (isLogin){
+        editor.putBoolean("loginState", false);
+        editor.commit();
+    }
+
+    public static void editLoginState(SignUserData user, Boolean isLogin) {
+        SharedPreferences.Editor editor =
+                MyApplication.getContext().getSharedPreferences("LoginState", MODE_PRIVATE)
+                        .edit();
+        if (isLogin != null) {
+            if (isLogin) {
                 editor.putBoolean("loginState", isLogin);
-            }else{
+            } else {
                 editor.putBoolean("loginState", isLogin);
                 editor.commit();
                 return;
             }
         }
-        if (user.getObjectId() != null){
+        if (user.getObjectId() != null) {
             editor.putString("userId", user.getObjectId());
         }
-        if (user.getUserName() != null){
+        if (user.getUserName() != null) {
             editor.putString("userName", user.getUserName());
         }
-        if (user.getPhoneNumber() != null){
+        if (user.getPhoneNumber() != null) {
             editor.putString("phoneNumber", user.getPhoneNumber());
         }
-        if (user.getMan() != null){
+        if (user.getMan() != null) {
             editor.putBoolean("isMan", user.getMan());
         }
-        if (user.getHeight() != null){
+        if (user.getHeight() != null) {
             editor.putInt("height", user.getHeight());
         }
-        if (user.getWeight() != null){
+        if (user.getWeight() != null) {
             editor.putFloat("weight", user.getWeight());
         }
-        if (user.getIdNumber() != null){
+        if (user.getIdNumber() != null) {
             editor.putString("idNumber", user.getIdNumber());
         }
-        if (user.getBirthday() != null){
+        if (user.getBirthday() != null) {
             editor.putString("birthday", user.getBirthday().getDate());
         }
-        if (user.getUserImage() != null){
+        if (user.getUserImage() != null) {
             editor.putString("userImage", user.getUserImage());
         }
         editor.commit();
     }
 
-    public static SignUserData getLoginUser(){
+    public static SignUserData getLoginUser() {
         SharedPreferences sp = MyApplication.getContext()
                 .getSharedPreferences("LoginState", MODE_PRIVATE);
         boolean isLogin = sp.getBoolean("loginState", false);
-        if (!isLogin){
+        if (!isLogin) {
             //没有登陆
             return null;
-        }else{
+        } else {
             SignUserData user = new SignUserData();
             user.setUserName(sp.getString("userName", null));
             user.setBirthday(new BmobDate(UtilClass.resolveBmobDate(
@@ -78,7 +86,7 @@ public class SharedPreferenceHelper {
         }
     }
 
-    public static boolean isLogin(){
+    public static boolean isLogin() {
         SharedPreferences sp = MyApplication.getContext()
                 .getSharedPreferences("LoginState", MODE_PRIVATE);
         return sp.getBoolean("loginState", false);
