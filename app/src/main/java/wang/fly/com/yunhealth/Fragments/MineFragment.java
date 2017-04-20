@@ -21,6 +21,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import wang.fly.com.yunhealth.Activity.ChangeMyDataActivityCopy;
 import wang.fly.com.yunhealth.R;
 
+import static android.app.Activity.RESULT_OK;
 import static android.content.Context.MODE_PRIVATE;
 
 /**
@@ -111,7 +112,6 @@ public class MineFragment extends Fragment implements View.OnClickListener{
     public void setUser(){
         SharedPreferences sharedPreferences =
                 getContext().getSharedPreferences("LoginState", MODE_PRIVATE);
-        String id = sharedPreferences.getString("userId", "");
         String phone = sharedPreferences.getString("phoneNumber", "");
         String name = sharedPreferences.getString("userName", "");
         String userImagePath = sharedPreferences.getString("userImage", null);
@@ -141,7 +141,9 @@ public class MineFragment extends Fragment implements View.OnClickListener{
         super.onActivityResult(requestCode, resultCode, data);
         switch(requestCode){
             case REQUEST_CHANGE_DATA:{
-                setUser();
+                if (resultCode == RESULT_OK){
+                    setUser();
+                }
                 break;
             }
         }

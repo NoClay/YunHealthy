@@ -1,5 +1,6 @@
 package wang.fly.com.yunhealth.Activity;
 
+import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -16,6 +17,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -24,8 +26,11 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
+import java.io.File;
 import java.util.Calendar;
+import java.util.Date;
 
+import cn.bmob.v3.datatype.BmobDate;
 import de.hdodenhof.circleimageview.CircleImageView;
 import wang.fly.com.yunhealth.DataBasePackage.SignUserData;
 import wang.fly.com.yunhealth.MVP.Bases.MVPBaseActivity;
@@ -33,9 +38,12 @@ import wang.fly.com.yunhealth.MVP.Presenters.ChangeMyDataActivityPresenter;
 import wang.fly.com.yunhealth.MVP.Views.ChangeMyDataActivityInterface;
 import wang.fly.com.yunhealth.MyViewPackage.ChooseImageDialog;
 import wang.fly.com.yunhealth.R;
+import wang.fly.com.yunhealth.util.MyConstants;
+import wang.fly.com.yunhealth.util.SharedPreferenceHelper;
 import wang.fly.com.yunhealth.util.UtilClass;
 
 import static wang.fly.com.yunhealth.MVP.Presenters.ChangeMyDataActivityPresenter.REQUEST_CODE_PICK_IMAGE;
+import static wang.fly.com.yunhealth.util.MyConstants.PATH_ADD;
 
 /**
  * Created by noclay on 2017/4/16.
@@ -105,7 +113,7 @@ public class ChangeMyDataActivityCopy extends
 
     @Override
     public void startSaveData() {
-        if (progress == null){
+        if (progress == null) {
             progress = new ProgressDialog(mContext);
             progress.setTitle("正在保存数据中...");
             progress.show();
@@ -113,13 +121,24 @@ public class ChangeMyDataActivityCopy extends
     }
 
     @Override
-    public void saveSuccess() {
-
+    public void saveSuccess(SignUserData userData) {
+        if (progress != null && progress.isShowing()){
+            progress.dismiss();
+            progress = null;
+        }
+        Toast.makeText(mContext, "保存成功，返回页面", Toast.LENGTH_SHORT).show();
+        SharedPreferenceHelper.editLoginState(userData, true);
+        setResult(RESULT_OK);
+        finish();
     }
 
     @Override
     public void saveFailed() {
-
+        if (progress != null && progress.isShowing()){
+            progress.dismiss();
+            progress = null;
+        }
+        Toast.makeText(mContext, "保存失败", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -136,6 +155,13 @@ public class ChangeMyDataActivityCopy extends
                         if (state.equals(Environment.MEDIA_MOUNTED)) {
                             Intent getImageByCamera = new
                                     Intent("android.media.action.IMAGE_CAPTURE");
+                            // 获取文件
+                            File tempFile = new File(PATH_ADD + "temp.jpg");
+                            if (tempFile.exists() && tempFile.isFile()){
+                                tempFile.delete();
+                            }
+                            getImageByCamera.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(tempFile));
+                            getImageByCamera.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 1);
                             startActivityForResult(getImageByCamera,
                                     ChangeMyDataActivityPresenter.REQUEST_CODE_CAPTURE_CAMERA);
                         } else {
@@ -163,7 +189,19 @@ public class ChangeMyDataActivityCopy extends
 
     @Override
     public void editBirthday() {
-
+        new DatePickerDialog(mContext, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
+                mCalendar.set(Calendar.YEAR, i);
+                mCalendar.set(Calendar.MONTH, i1);
+                mCalendar.set(Calendar.DAY_OF_MONTH, i2);
+                mBirthdayEdit.setText(mCalendar.get(Calendar.YEAR) + "-"
+                        + (mCalendar.get(Calendar.MONTH) + 1) + "-"
+                        + mCalendar.get(Calendar.DAY_OF_MONTH));
+            }
+        }, mCalendar.get(Calendar.YEAR),
+                mCalendar.get(Calendar.MONTH),
+                mCalendar.get(Calendar.DAY_OF_MONTH)).show();
     }
 
     @Override
@@ -184,6 +222,7 @@ public class ChangeMyDataActivityCopy extends
 
     @Override
     public void showImage(String url) {
+        userImageUri = Uri.parse(url);
         AlphaAnimation alphaAnimation = new AlphaAnimation(0.1f, 1.0f);
         alphaAnimation.setDuration(200);
         Glide.with(mContext).load(url).animate(alphaAnimation)
@@ -194,7 +233,17 @@ public class ChangeMyDataActivityCopy extends
 
     @Override
     public SignUserData getUser() {
-        return null;
+        SignUserData result = new SignUserData();
+        result.setUserName(mNameEdit.getText().toString());
+        if (userImageUri != null){
+            result.setUserImage(userImageUri.toString());
+        }
+        result.setIdNumber(mIdCardEdit.getText().toString());
+        result.setMan(mMaleEdit.getText().toString().compareTo("女") == 0 ? false : true);
+        result.setBirthday(new BmobDate(new Date(mCalendar.getTimeInMillis())));
+        result.setHeight(Integer.parseInt(mHeightEdit.getText().toString()));
+        result.setWeight(Float.parseFloat(mWeightEdit.getText().toString()));
+        return result;
     }
 
     /**
@@ -207,6 +256,7 @@ public class ChangeMyDataActivityCopy extends
         if (userData == null) {
             return;
         }
+        userImageUri = Uri.parse(userData.getUserImage());
         showImage(userData.getUserImage());
         mNameEdit.setText(userData.getUserName() + "");
         mIdCardEdit.setText(userData.getIdNumber() + "");
@@ -215,6 +265,18 @@ public class ChangeMyDataActivityCopy extends
         showBirthday(mCalendar);
         mHeightEdit.setText(userData.getHeight() + "");
         mWeightEdit.setText(userData.getWeight() + "");
+    }
+
+    @Override
+    public void toast(String content) {
+        Toast.makeText(mContext, content, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void exitLogin() {
+        finish();
+        Intent intent = new Intent(mContext, LoginActivityCopy.class);
+        startActivity(intent);
     }
 
     private void initView() {
@@ -240,32 +302,45 @@ public class ChangeMyDataActivityCopy extends
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         Uri imageUri;
-        if (resultCode == RESULT_OK){
-            switch (requestCode){
-                case ChangeMyDataActivityPresenter.REQUEST_CODE_CAPTURE_CAMERA:{
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case ChangeMyDataActivityPresenter.REQUEST_CODE_CAPTURE_CAMERA: {
                     //直接拍照获取头像
-                    imageUri = data.getData();
-                    Log.d("test", "onActivityResult: 使用相机返回" + imageUri);
-                    if (imageUri == null){
-                        Bundle bundle = data.getExtras();
-                        if (bundle != null){
-                            Bitmap bitMap = (Bitmap) bundle.get("data"); //get bitmap
-                            imageUri = Uri.parse(MediaStore.Images.Media.
-                                    insertImage(getContentResolver(), bitMap, null, null));
-                            Log.d("test", "onActivityResult: " + imageUri);
+                    if (data == null){
+                        imageUri = Uri.fromFile(new File(PATH_ADD + "temp.jpg"));
+                    }else{
+                        imageUri = data.getData();
+                        Log.d("test", "onActivityResult: 使用相机返回" + imageUri);
+                        if (imageUri == null) {
+                            Bundle bundle = data.getExtras();
+                            if (bundle != null) {
+                                Bitmap bitMap = (Bitmap) bundle.get("data"); //get bitmap
+                                imageUri = Uri.parse(MediaStore.Images.Media.
+                                        insertImage(getContentResolver(), bitMap, null, null));
+                                Log.d("test", "onActivityResult: " + imageUri);
+                            }
                         }
                     }
-                    mPresenter.resizeImage(imageUri, ChangeMyDataActivityCopy.this);
+                    userImageUri = mPresenter.resizeImage(imageUri, ChangeMyDataActivityCopy.this);
                     break;
                 }
-                case ChangeMyDataActivityPresenter.REQUEST_CODE_PICK_IMAGE:{
+                case ChangeMyDataActivityPresenter.REQUEST_CODE_PICK_IMAGE: {
                     //从文件中选择图片
                     imageUri = data.getData();
                     userImageUri = mPresenter.resizeImage(imageUri, this);
                     break;
                 }
-                case ChangeMyDataActivityPresenter.REQUEST_RESIZE_REQUEST_CODE:{
+                case ChangeMyDataActivityPresenter.REQUEST_RESIZE_REQUEST_CODE: {
                     //重新截取后的头像
+                    //剪切图片返回
+                    if (userImageUri == null) {
+                        Toast.makeText(mContext, "error", Toast.LENGTH_SHORT).show();
+                    } else {//截取图片完成
+                        //上传图片
+                        File file = new File(MyConstants.PATH_ADD + "crop.jpg");
+                        file.renameTo(new File(MyConstants.PATH_ADD + "now.jpg"));
+                        mPresenter.uploadFile(new File(MyConstants.PATH_ADD + "now.jpg"));
+                    }
                     break;
                 }
             }
@@ -276,6 +351,7 @@ public class ChangeMyDataActivityCopy extends
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.back:
+                setResult(RESULT_CANCELED);
                 finish();
                 break;
             case R.id.saveData:
@@ -294,5 +370,12 @@ public class ChangeMyDataActivityCopy extends
                 mPresenter.exitLogin();
                 break;
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        setResult(RESULT_CANCELED);
+        finish();
     }
 }

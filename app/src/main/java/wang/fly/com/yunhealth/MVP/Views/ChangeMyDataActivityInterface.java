@@ -13,7 +13,7 @@ import wang.fly.com.yunhealth.DataBasePackage.SignUserData;
 public interface ChangeMyDataActivityInterface {
     void editMale(Context context, boolean male);
     void startSaveData();
-    void saveSuccess();
+    void saveSuccess(SignUserData userData);
     void saveFailed();
     void editImage();
     void editBirthday();
@@ -22,4 +22,6 @@ public interface ChangeMyDataActivityInterface {
     void showImage(String url);
     SignUserData getUser();
     void initView(SignUserData userData);
+    void toast(String content);
+    void exitLogin();
 }
