@@ -170,7 +170,7 @@ public class AutoLoadMoreRecyclerView extends RecyclerView{
             if (viewType == TYPE_FOOTER) {
                 return new FooterViewHolder(
                         LayoutInflater.from(parent.getContext()).inflate(
-                                R.layout.list_foot_loading, parent, false));
+                                R.layout.layout_foot_loading, parent, false));
             } else { // type normal
                 return mInternalAdapter.onCreateViewHolder(parent, viewType);
             }

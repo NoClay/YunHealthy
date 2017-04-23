@@ -1,4 +1,4 @@
-package wang.fly.com.yunhealth.util;
+package wang.fly.com.yunhealth.util.RecyclerUtils;
 
 import android.content.Context;
 import android.content.res.TypedArray;

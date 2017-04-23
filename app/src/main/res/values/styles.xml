@@ -26,9 +26,9 @@
         <item name="android:layout_height">match_parent</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
 
     <style name="TransparentText_large">
         <item name="android:textSize">24sp</item>
@@ -47,7 +47,7 @@
         <!--设置窗口透明-->
         <item name="android:windowIsTranslucent">true</item>
     </style>
-    
+
     <style name="AppTheme.TabLayoutTextStyle"
            parent="TextAppearance.AppCompat">
         <item name="android:textSize">125px</item>

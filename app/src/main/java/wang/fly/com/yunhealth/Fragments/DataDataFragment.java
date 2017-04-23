@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -23,11 +22,8 @@ import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import wang.fly.com.yunhealth.Adapter.RecycleAdapterForData;
-import wang.fly.com.yunhealth.Adapter.RecycleAdapterForMeasureOnly;
 import wang.fly.com.yunhealth.Activity.InfoActivity;
 import wang.fly.com.yunhealth.R;
-
-import static android.icu.lang.UCharacter.GraphemeClusterBreak.L;
 
 /**
  * Created by 兆鹏 on 2016/11/5.
@@ -58,7 +54,7 @@ public class DataDataFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.data_data_fragment,container,false);
+        View v = inflater.inflate(R.layout.fragment_data_data,container,false);
         this.context = getContext();
         initView(v);
         return v;
@@ -103,7 +99,7 @@ public class DataDataFragment extends Fragment {
                     @Override
                     public void onNext(List<Map<String, Object>> maps) {
                         myAdapter = new RecycleAdapterForData(maps,
-                                R.layout.measure_recycle_item_layout, getContext());
+                                R.layout.item_measure, getContext());
                         recyclerView.setAdapter(myAdapter);
                         myAdapter.setOnItemClickListener(new RecycleAdapterForData.OnItemClickListener() {
                             @Override

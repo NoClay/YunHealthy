@@ -28,7 +28,7 @@ import wang.fly.com.yunhealth.Adapter.ResultListViewAdapter;
 import wang.fly.com.yunhealth.MyViewPackage.ResultDialog;
 import wang.fly.com.yunhealth.MyViewPackage.ScanView;
 import wang.fly.com.yunhealth.R;
-import wang.fly.com.yunhealth.util.MyRecyclerViewDivider;
+import wang.fly.com.yunhealth.util.RecyclerUtils.MyRecyclerViewDivider;
 import wang.fly.com.yunhealth.util.ResultMessage;
 
 /*
@@ -50,7 +50,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        homeView = inflater.inflate(R.layout.homefragment_layout,container,false);
+        homeView = inflater.inflate(R.layout.fragment_home,container,false);
         context = getContext();
         findView(homeView);
         scanView.setOnClickListener(this);
@@ -104,7 +104,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                         if(maps != null){
                             datas = maps;
                         }
-                        myAdapter = new MyAdapter(datas,R.layout.home_recycle_item_layout);
+                        myAdapter = new MyAdapter(datas,R.layout.item_home);
                         recyclerView.setAdapter(myAdapter);
                         recyclerView.addItemDecoration(new MyRecyclerViewDivider(context));
                         myAdapter.setOnItemClickListener(new MyAdapter.OnItemClickListener() {
@@ -143,7 +143,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         scanView = (ScanView) v.findViewById(R.id.scanButton);
         resultMessageList = new ArrayList<>();
         resultListViewAdapter = new ResultListViewAdapter(context,
-                R.layout.result_list_item, resultMessageList);
+                R.layout.item_result, resultMessageList);
         for (int i = 0; i < 10; i++) {
             ResultMessage resultMessage = new ResultMessage(i, "测试 " + i, true);
             resultMessageList.add(resultMessage);

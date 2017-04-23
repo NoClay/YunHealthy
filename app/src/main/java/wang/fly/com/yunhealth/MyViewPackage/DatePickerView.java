@@ -52,7 +52,7 @@ public class DatePickerView extends RelativeLayout implements View.OnClickListen
     }
 
     private void init() {
-        mainView = LayoutInflater.from(getContext()).inflate(R.layout.date_picker, this, true);
+        mainView = LayoutInflater.from(getContext()).inflate(R.layout.view_date_picker, this, true);
         back1 = (ImageView) mainView.findViewById(R.id.back1);
         back2 = (ImageView) mainView.findViewById(R.id.back2);
         next1 = (ImageView) mainView.findViewById(R.id.next1);

@@ -49,7 +49,7 @@ public class DataDynamicFragment extends Fragment
     public View onCreateView(LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.data_dynamic_fragment,container,false);
+        View v = inflater.inflate(R.layout.fragment_data_dynamic,container,false);
         initView(v);
         mMyDataBase = new MyDataBase(getApplicationContext(),
                 "LocalStore.db", null, MyConstants.DATABASE_VERSION);
@@ -64,7 +64,7 @@ public class DataDynamicFragment extends Fragment
         downRefresh = (SwipeRefreshLayout) v.findViewById(R.id.refreshLayout);
         downRefresh.setOnRefreshListener(this);
         adapter = new LoadItemAdapterForDynamic(
-                R.layout.dynamic_recycle_item,
+                R.layout.item_dynamic_weight,
                 datas);
         recyclerView.setAdapter(adapter);
         recyclerView.setAutoLoadMoreEnable(true);

@@ -62,7 +62,7 @@ public class InfoActivityForReport extends AppCompatActivity
         manage.setOnClickListener(this);
         adapter = new RecycleAdapterForReportMenu(
                         false,
-                        R.layout.recycle_item_for_info_report,
+                        R.layout.item_report,
                         getApplicationContext(),
                         type + 1);
         adapter.setOnItemClickListener(this);

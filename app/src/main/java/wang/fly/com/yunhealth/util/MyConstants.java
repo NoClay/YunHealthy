@@ -49,4 +49,6 @@ public class MyConstants {
     //上传的Receiver
     public static final int RECEIVER_TYPE_UPLOAD = 0;
     public static String userId = null;
+
+
 }

@@ -18,7 +18,6 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -61,7 +60,6 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
     private TextView connectDevice;
     private RecyclerView recyclerView;
     InputBlueMacDialog dialog;
-    private GridLayoutManager gridLayoutManager;
     private Context context;
     private RecycleAdapterForMeasureOnly myAdapter;
     private ProgressBar load;
@@ -90,7 +88,7 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.measurefragment_layout, container, false);
+        View v = inflater.inflate(R.layout.fragment_measure, container, false);
         context = getContext();
         mView = v;
         findView(v);
@@ -116,7 +114,7 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
         d.setMoveDuration(0);
         d.setSupportsChangeAnimations(false);
         recyclerView.setItemAnimator(d);
-        myAdapter = new RecycleAdapterForMeasureOnly(R.layout.measure_data_show_item,
+        myAdapter = new RecycleAdapterForMeasureOnly(R.layout.item_measure_data_show,
                 context, measureDataList);
         recyclerView.setAdapter(myAdapter);
         //本地缓存所需要的初始化
