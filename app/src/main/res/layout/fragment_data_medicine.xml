@@ -15,6 +15,7 @@
             android:layout_width="3dp"
             android:layout_height="match_parent"/>
         <TextView
+            android:id="@+id/nowMedicine"
             android:textSize="19sp"
             android:layout_marginLeft="30dp"
             android:text="当前用药"
@@ -42,6 +43,7 @@
             android:layout_width="3dp"
             android:layout_height="match_parent"/>
         <TextView
+            android:id="@+id/lastMedicine"
             android:textSize="19sp"
             android:layout_marginLeft="30dp"
             android:text="历史用药"

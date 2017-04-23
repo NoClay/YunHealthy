@@ -36,7 +36,7 @@ public class DataFragment extends Fragment implements View.OnClickListener{
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if(v == null) {
-            v = inflater.inflate(R.layout.datafragmet_layout, container, false);
+            v = inflater.inflate(R.layout.fragment_data, container, false);
             context = getContext();
             colorUnselected = getResources().getColor(R.color.black);
             colorSelected = getResources().getColor(R.color.lightSeaGreen);

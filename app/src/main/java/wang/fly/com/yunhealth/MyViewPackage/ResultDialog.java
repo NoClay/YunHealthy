@@ -33,7 +33,7 @@ public class ResultDialog extends PopupWindow{
         this.listener = listener;
         LayoutInflater layoutInflater = (LayoutInflater) context.
                 getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        mResultView = layoutInflater.inflate(R.layout.result_dialog, null);
+        mResultView = layoutInflater.inflate(R.layout.dialog_result, null);
         this.setContentView(mResultView);
         initView();
         WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);

@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <include layout="@layout/tool_bar" />
+    <include layout="@layout/layout_tool_bar" />
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
@@ -189,7 +189,7 @@
                     android:background="@color/bg3" />
             </LinearLayout>
         </LinearLayout>
-        <include layout="@layout/load_layout_to_use"/>
+        <include layout="@layout/layout_loading"/>
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"

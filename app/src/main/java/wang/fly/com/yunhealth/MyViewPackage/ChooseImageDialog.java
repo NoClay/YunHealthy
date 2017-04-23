@@ -23,7 +23,7 @@ public class ChooseImageDialog extends PopupWindow{
         super(context);
         LayoutInflater layoutInflater = (LayoutInflater) context.
                 getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        chooseWay = layoutInflater.inflate(R.layout.choose_image_layout_dialog_pic, null);
+        chooseWay = layoutInflater.inflate(R.layout.dialog_choose_image, null);
         this.setContentView(chooseWay);
 
         takePhoto = (TextView) chooseWay.findViewById(R.id.takePhotoBtn);

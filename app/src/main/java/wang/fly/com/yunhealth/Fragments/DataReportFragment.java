@@ -22,7 +22,7 @@ public class DataReportFragment extends Fragment implements View.OnClickListener
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.data_report_fragment, container, false);
+        View v = inflater.inflate(R.layout.fragment_data_report, container, false);
         initView(v);
         return v;
     }

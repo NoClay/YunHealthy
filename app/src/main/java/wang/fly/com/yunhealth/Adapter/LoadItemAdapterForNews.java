@@ -50,7 +50,7 @@ public class LoadItemAdapterForNews
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.news_item, parent, false);
+                .inflate(R.layout.item_news, parent, false);
         return new ViewHolder(view);
     }
 

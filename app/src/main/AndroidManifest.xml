@@ -54,6 +54,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".WelcomeActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -65,32 +66,60 @@
             android:name="com.mob.tools.MobUIShell"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:windowSoftInputMode="stateHidden|adjustResize"/>
         <!-- 显示心电图的活动 -->
-        <activity android:name=".Activity.ShowHeartWaves"/>
-        <activity android:name=".Activity.InfoActivity"/>
-        <activity android:name=".Activity.InfoActivityForReport"/>
-        <activity android:name=".Activity.SignActivity"/>
-        <activity android:name=".Activity.ChangePassWord"/>
-        <activity android:name=".Activity.ChangeMyDataActivity"/>
+        <activity
+            android:name=".Activity.ShowHeartWaves"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".Activity.InfoActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".Activity.InfoActivityForReport"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".Activity.SignActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".Activity.ChangePassWord"
+            android:screenOrientation="portrait"/>
 
         <!-- 上传服务 -->
-        <service android:name=".Service.UpLoadService"/>
+        <service
+            android:name=".Service.UpLoadService"
+            android:screenOrientation="portrait"/>
         <!-- 上传服务接收器 -->
-        <receiver android:name=".ReceiverPackage.UpLoadReceiver"/>
+        <receiver
+            android:name=".ReceiverPackage.UpLoadReceiver"
+            android:screenOrientation="portrait"/>
 
-        <activity android:name=".Activity.NewsActivity">
+        <activity
+            android:name=".Activity.NewsActivity"
+            android:screenOrientation="portrait">
         </activity>
         <!-- 利用另一个进程加载WebView -->
         <activity
             android:name=".Activity.NewDetailActivity"
             android:process=":newsDetail"
+            android:screenOrientation="portrait"
             android:theme="@style/ActivityTheme">
         </activity>
-        <activity android:name=".MainActivityCopy"/>
-        <activity android:name=".Activity.LoginActivityCopy"></activity>
-        <activity android:name=".Activity.ChangeMyDataActivityCopy"></activity>
+        <activity
+            android:name=".MainActivityCopy"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".Activity.LoginActivityCopy"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".Activity.ChangeMyDataActivityCopy"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".Activity.MedicineActivity"
+            android:label="@string/title_activity_medicine"
+            android:theme="@style/AppTheme">
+        </activity>
     </application>
 
 </manifest>
