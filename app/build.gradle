@@ -8,6 +8,7 @@ android {
     useLibrary 'org.apache.http.legacy'
 
     defaultConfig {
+        multiDexEnabled true
         applicationId "wang.fly.com.yunhealth"
         minSdkVersion 15
         targetSdkVersion 25
@@ -36,6 +37,7 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile name: 'SMSSDK-2.1.2', ext: 'aar'
     compile name: 'SMSSDKGUI-2.1.2', ext: 'aar'
+//    compile 'cn.bmob.android:bmob-sdk:3.5.5'
     compile files('libs/MobCommons-2016.1012.1447.jar')
     compile files('libs/MobTools-2016.1012.1447.jar')
     //Glide imageloader

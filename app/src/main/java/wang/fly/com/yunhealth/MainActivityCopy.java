@@ -26,7 +26,7 @@ import wang.fly.com.yunhealth.Fragments.DoctorsFragment;
 import wang.fly.com.yunhealth.Fragments.HomeFragment;
 import wang.fly.com.yunhealth.Fragments.MeasureFragment;
 import wang.fly.com.yunhealth.Fragments.MineFragment;
-import wang.fly.com.yunhealth.MyViewPackage.InputWeightDialog;
+import wang.fly.com.yunhealth.MyViewPackage.Dialogs.InputWeightDialog;
 import wang.fly.com.yunhealth.Service.UpLoadService;
 import wang.fly.com.yunhealth.util.MyConstants;
 import wang.fly.com.yunhealth.util.TabLayoutViewPagerAdapter;

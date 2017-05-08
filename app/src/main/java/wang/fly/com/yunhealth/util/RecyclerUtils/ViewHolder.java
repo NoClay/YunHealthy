@@ -1,4 +1,4 @@
-package wang.fly.com.yunhealth.util;
+package wang.fly.com.yunhealth.util.RecyclerUtils;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

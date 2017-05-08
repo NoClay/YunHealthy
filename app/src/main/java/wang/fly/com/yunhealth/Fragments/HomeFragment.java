@@ -22,14 +22,17 @@ import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
+import wang.fly.com.yunhealth.Activity.MedicineActivity;
 import wang.fly.com.yunhealth.Activity.NewsActivity;
 import wang.fly.com.yunhealth.Adapter.MyAdapter;
 import wang.fly.com.yunhealth.Adapter.ResultListViewAdapter;
-import wang.fly.com.yunhealth.MyViewPackage.ResultDialog;
+import wang.fly.com.yunhealth.MyViewPackage.Dialogs.ResultDialog;
 import wang.fly.com.yunhealth.MyViewPackage.ScanView;
 import wang.fly.com.yunhealth.R;
 import wang.fly.com.yunhealth.util.RecyclerUtils.MyRecyclerViewDivider;
 import wang.fly.com.yunhealth.util.ResultMessage;
+
+import static wang.fly.com.yunhealth.Fragments.DataMedicalFragment.NOW_MEDICINE;
 
 /*
  * Created by 兆鹏 on 2016/11/2.
@@ -119,7 +122,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                                         startActivity(intent);
                                         break;
                                     case 2:
-                                        Toast.makeText(context,"点击了"+position,Toast.LENGTH_SHORT).show();
+                                        Intent intent1 = new Intent(getContext(), MedicineActivity.class);
+                                        intent1.putExtra("type", NOW_MEDICINE);
+                                        startActivity(intent1);
                                         break;
                                     case 3:
                                         Toast.makeText(context,"点击了"+position,Toast.LENGTH_SHORT).show();
@@ -133,7 +138,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     }
 
     private void findView(View v) {
-        recyclerView = (RecyclerView) v.findViewById(R.id.home_recycle);
+        recyclerView = (RecyclerView) v.findViewById(R.id.home_recycle_menu);
         //layoutManager用来确定每一个item如何排列摆放，何时展示和隐藏
         gridLayoutManager = new GridLayoutManager(context,2);
         recyclerView.setLayoutManager(gridLayoutManager);

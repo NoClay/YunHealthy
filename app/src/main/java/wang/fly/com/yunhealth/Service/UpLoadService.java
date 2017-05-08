@@ -108,8 +108,8 @@ public class UpLoadService extends Service{
                 .setAutoCancel(true)
                 .setOngoing(false)
                 .setDefaults(Notification.DEFAULT_ALL)
-                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.icon_healthy))
-                .setSmallIcon(R.drawable.test_icon);
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher))
+                .setSmallIcon(R.mipmap.ic_launcher);
         Notification no = mBuilder.build();
         manager.notify(1, no);
     }

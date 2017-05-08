@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/activity_medicine"
     android:fitsSystemWindows="true"
     tools:context="wang.fly.com.yunhealth.Activity.MedicineActivity">
     <android.support.design.widget.AppBarLayout
@@ -15,16 +16,16 @@
         android:layout_height="256dp">
 
         <android.support.design.widget.CollapsingToolbarLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:id="@+id/toolbar_layout"
             android:fitsSystemWindows="true"
-            app:collapsedTitleTextAppearance="@style/TransparentText_large"
             app:contentScrim="?attr/colorPrimary"
-            app:expandedTitleMarginEnd="48dp"
-            app:expandedTitleMarginStart="48dp"
-            app:expandedTitleTextAppearance="@style/TransparentText_large"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            app:expandedTitleMarginStart="48dp"
+            app:expandedTitleMarginEnd="48dp"
+            app:collapsedTitleTextAppearance="@style/TransparentText_small"
+            app:expandedTitleTextAppearance="@style/TransparentText_large">
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -38,8 +39,6 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:title="健康资讯"
-                app:background="@color/color_03a9f4"
                 app:layout_collapseMode="pin"
                 app:popupTheme="@style/AppTheme.PopupOverlay">
 
@@ -50,26 +49,25 @@
 
 
 
-    <android.support.v4.widget.NestedScrollView
+    <wang.fly.com.yunhealth.MyViewPackage.MyNestedScrollView
+        android:background="@color/dialogBackground"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
         <android.support.v7.widget.RecyclerView
-            android:fitsSystemWindows="true"
             android:id="@+id/medicineList"
-            android:scrollbars="none"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
         </android.support.v7.widget.RecyclerView>
-    </android.support.v4.widget.NestedScrollView>
+    </wang.fly.com.yunhealth.MyViewPackage.MyNestedScrollView>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:src="@drawable/question"
+        android:src="@drawable/add"
         app:backgroundTint="@color/skyBlue"
         app:layout_anchor="@+id/appBarLayout"
         app:layout_anchorGravity="bottom|right">
