@@ -1,11 +1,12 @@
 package wang.fly.com.yunhealth.Activity;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -15,8 +16,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import wang.fly.com.yunhealth.Adapter.MedicineListAdapter;
-import wang.fly.com.yunhealth.DataBasePackage.MedicineDetial;
+import wang.fly.com.yunhealth.DataBasePackage.MedicineDetail;
 import wang.fly.com.yunhealth.Fragments.DataMedicalFragment;
+import wang.fly.com.yunhealth.MyViewPackage.FullLinearLayoutManager;
 import wang.fly.com.yunhealth.R;
 
 public class MedicineActivity extends AppCompatActivity implements View.OnClickListener {
@@ -27,7 +29,9 @@ public class MedicineActivity extends AppCompatActivity implements View.OnClickL
     private CollapsingToolbarLayout mToolbarLayout;
     private AppBarLayout mAppBarLayout;
     private RecyclerView mMedicineList;
-    private List<MedicineDetial> medicineList;
+    private List<MedicineDetail> medicineList;
+    private Context mContext = this;
+    public static final int ADD_MEDICINE = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,8 +40,12 @@ public class MedicineActivity extends AppCompatActivity implements View.OnClickL
         initView();
         medicineList = getMedicineList();
         MedicineListAdapter adapter = new MedicineListAdapter(medicineList, this, R.layout.item_medicine);
-        mMedicineList.setLayoutManager(new LinearLayoutManager(this));
+        FullLinearLayoutManager fLayout = new FullLinearLayoutManager(this,
+                RecyclerView.VERTICAL, true);
+        fLayout.setSmoothScrollbarEnabled(true);
+        mMedicineList.setLayoutManager(fLayout);
         mMedicineList.setHasFixedSize(true);
+        mMedicineList.setNestedScrollingEnabled(false);
         mMedicineList.setAdapter(adapter);
     }
 
@@ -79,6 +87,12 @@ public class MedicineActivity extends AppCompatActivity implements View.OnClickL
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.fab:
+                if (type == DataMedicalFragment.NOW_MEDICINE) {
+                    Intent intent = new Intent(mContext, AddMedicineActivity.class);
+                    startActivityForResult(intent, ADD_MEDICINE);
+                } else {
+//                    mToolbarLayout.setTitle("历史用药");
+                }
                 break;
         }
     }
@@ -88,11 +102,11 @@ public class MedicineActivity extends AppCompatActivity implements View.OnClickL
         super.overridePendingTransition(enterAnim, exitAnim);
     }
 
-    public List<MedicineDetial> getMedicineList() {
+    public List<MedicineDetail> getMedicineList() {
 
-        List<MedicineDetial> temp = new ArrayList<>();
+        List<MedicineDetail> temp = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
-            MedicineDetial te = new MedicineDetial();
+            MedicineDetail te = new MedicineDetail();
             temp.add(te);
         }
         return temp;

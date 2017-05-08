@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import wang.fly.com.yunhealth.DataBasePackage.MedicineDetial;
+import wang.fly.com.yunhealth.DataBasePackage.MedicineDetail;
 import wang.fly.com.yunhealth.R;
 
 /**
@@ -20,11 +20,11 @@ import wang.fly.com.yunhealth.R;
 
 public class MedicineListAdapter extends RecyclerView.Adapter<MedicineListAdapter.ViewHolder> {
 
-    List<MedicineDetial> medicineList;
+    List<MedicineDetail> medicineList;
     Context mContext;
     int resourceId;
 
-    public MedicineListAdapter(List<MedicineDetial> medicineList, Context context, int resourceId) {
+    public MedicineListAdapter(List<MedicineDetail> medicineList, Context context, int resourceId) {
         this.medicineList = medicineList;
         mContext = context;
         this.resourceId = resourceId;

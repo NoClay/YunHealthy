@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="添加药物"
+            android:textSize="@dimen/title_text_size"/>
+    </android.support.v7.widget.Toolbar>
+
+    <ScrollView
+        android:id="@+id/mainLayout"
+        android:scrollbars="none"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/mainBackground">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="15dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:paddingLeft="15dp"
+                    android:text="药物名称"
+                    android:textColor="@color/titleTextColor"
+                    android:textSize="@dimen/title_text_size"/>
+
+                <EditText
+                    android:id="@+id/medicineName"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/rectangle_block_dialog"
+                    android:hint="请输入药物名称"
+                    android:lines="1"
+                    android:padding="15dp"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/title_text_size"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:paddingLeft="15dp"
+                    android:text="请对药品拍照"
+                    android:textColor="@color/titleTextColor"
+                    android:textSize="@dimen/title_text_size"/>
+
+                <ImageView
+                    android:id="@+id/medicineImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/rectangle_block_dialog"
+                    android:src="@drawable/add_gray"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="5dp"
+                    android:paddingLeft="15dp"
+                    android:text="服用方式"
+                    android:textColor="@color/titleTextColor"
+                    android:textSize="@dimen/title_text_size"/>
+
+                <Spinner
+                    android:id="@+id/medicineUseType"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:paddingLeft="15dp"
+                    android:text="服药原因"
+                    android:textColor="@color/titleTextColor"
+                    android:textSize="@dimen/title_text_size"/>
+
+                <EditText
+                    android:id="@+id/medicineTag"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/rectangle_block_dialog"
+                    android:lines="1"
+                    android:padding="15dp"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/title_text_size"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:paddingLeft="15dp"
+                    android:text="医嘱"
+                    android:textColor="@color/titleTextColor"
+                    android:textSize="@dimen/title_text_size"/>
+
+                <EditText
+                    android:id="@+id/medicineContent"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/rectangle_block_dialog"
+                    android:gravity="left|top"
+                    android:lines="3"
+                    android:padding="15dp"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/title_text_size"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/inputDay"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:paddingLeft="15dp"
+                    android:text="持续时间3天（点击修改)"
+                    android:textColor="@color/titleTextColor"
+                    android:textSize="@dimen/title_text_size"/>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:paddingLeft="15dp"
+                    android:text="服用时间和剂量"
+                    android:textColor="@color/titleTextColor"
+                    android:textSize="@dimen/title_text_size"/>
+
+                <TextView
+                    android:id="@+id/medicineUseTime"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/rectangle_block_dialog"
+                    android:hint="点击此处添加"
+                    android:padding="15dp"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/title_text_size"/>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/commit_action"
+                android:layout_marginRight="15dp"
+                android:layout_marginLeft="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginBottom="35dp"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/button_circle_background"
+                android:gravity="center"
+                android:text="添加完成"
+                android:textColor="@color/white"
+                android:textSize="@dimen/title_text_size"/>
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

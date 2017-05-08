@@ -16,12 +16,15 @@ public interface ChangeMyDataActivityInterface {
     void saveSuccess(SignUserData userData);
     void saveFailed();
     void editImage();
+    void showImage(String url);
+    void initView(SignUserData userData);
+    void toast(String content);
+    void startLoadImage();
+    void loadSuccess();
+    void loadFailed();
     void editBirthday();
     void showMale(boolean isMan);
     void showBirthday(Calendar calendar);
-    void showImage(String url);
     SignUserData getUser();
-    void initView(SignUserData userData);
-    void toast(String content);
     void exitLogin();
 }

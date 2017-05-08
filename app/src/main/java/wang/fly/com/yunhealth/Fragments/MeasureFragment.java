@@ -44,7 +44,7 @@ import java.util.UUID;
 import wang.fly.com.yunhealth.Adapter.RecycleAdapterForMeasureOnly;
 import wang.fly.com.yunhealth.DataBasePackage.MeasureData.MeasureData;
 import wang.fly.com.yunhealth.DataBasePackage.MyDataBase;
-import wang.fly.com.yunhealth.MyViewPackage.InputBlueMacDialog;
+import wang.fly.com.yunhealth.MyViewPackage.Dialogs.InputBlueMacDialog;
 import wang.fly.com.yunhealth.R;
 import wang.fly.com.yunhealth.util.ClsUtils;
 import wang.fly.com.yunhealth.util.MyConstants;

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+    <TextView
+        android:paddingLeft="15dp"
+        android:gravity="center_vertical"
+        android:text="1天"
+        android:textSize="@dimen/title_text_size"
+        android:id="@+id/time"
+        android:layout_marginRight="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"/>
+    <View
+        android:layout_marginRight="15dp"
+        android:layout_marginLeft="15dp"
+        android:background="@color/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1px"></View>
+</LinearLayout>

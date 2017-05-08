@@ -7,7 +7,7 @@
     <dimen name="rectangle_block_width">35dp</dimen>
     <dimen name="rectangle_block_height">30dp</dimen>
     <dimen name="title_text_size">25sp</dimen>
-    <dimen name="title_test_middle_size">21sp</dimen>
+    <dimen name="title_test_middle_size">19sp</dimen>
     <dimen name="pic_size">100dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="padding_left">25dp</dimen>
@@ -15,4 +15,8 @@
     <dimen name="padding_bottom">10dp</dimen>
     <dimen name="padding_right">25dp</dimen>
     <dimen name="direction_size">1.5px</dimen>
+    <dimen name="cardRadius">10dp</dimen>
+    <dimen name="cardMarginTop">10dp</dimen>
+    <dimen name="cardMarginLeft">10dp</dimen>
+    <dimen name="cardMarginRight">10dp</dimen>
 </resources>

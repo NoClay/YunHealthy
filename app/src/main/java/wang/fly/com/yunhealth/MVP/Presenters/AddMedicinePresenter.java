@@ -8,25 +8,22 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.provider.MediaStore;
+import android.util.Log;
 
 import java.io.File;
 
 import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.UpdateListener;
 import cn.bmob.v3.listener.UploadFileListener;
-import wang.fly.com.yunhealth.DataBasePackage.SignUserData;
 import wang.fly.com.yunhealth.MVP.Bases.BasePresenter;
-import wang.fly.com.yunhealth.MVP.Views.ChangeMyDataActivityInterface;
+import wang.fly.com.yunhealth.MVP.Views.AddMedicineActivityInterface;
 import wang.fly.com.yunhealth.util.MyConstants;
-import wang.fly.com.yunhealth.util.SharedPreferenceHelper;
 
 /**
- * Created by noclay on 2017/4/16.
+ * Created by noclay on 2017/5/7.
  */
 
-public class ChangeMyDataActivityPresenter
-        extends BasePresenter<ChangeMyDataActivityInterface> {
+public class AddMedicinePresenter extends BasePresenter<AddMedicineActivityInterface>{
     public static final int REQUEST_CODE_PICK_IMAGE = 0;
     public static final int REQUEST_CODE_CAPTURE_CAMERA = 1;
     public static final int REQUEST_RESIZE_REQUEST_CODE = 2;
@@ -35,10 +32,8 @@ public class ChangeMyDataActivityPresenter
     public static final int SAVE_START = 2;
     public static final int SAVE_SUCCESS = 3;
     public static final int SAVE_FAILED = 4;
-
     Handler mHandler;
     Context mContext;
-    SignUserData mUserData;
 
     public Context getContext() {
         return mContext;
@@ -81,55 +76,34 @@ public class ChangeMyDataActivityPresenter
                     break;
                 }
                 case SAVE_SUCCESS:{
-                    getView().saveSuccess(mUserData);
                     break;
                 }
             }
         }
     }
 
-    public ChangeMyDataActivityPresenter(Looper mainLooper) {
-        mHandler = new MyHandler(mainLooper);
+    public AddMedicinePresenter(Looper mainLoop) {
+        mHandler = new MyHandler(mainLoop);
     }
 
-    /**
-     * 初始化所有的View
-     */
-    public void init() {
-        mUserData = SharedPreferenceHelper.getLoginUser();
-        getView().initView(mUserData);
-    }
-
-    public void exitLogin() {
-        SharedPreferenceHelper.exitLogin();
-        getView().exitLogin();
-    }
-
-    public void birthdayEdit() {
-        getView().editBirthday();
-    }
 
     public void saveData(){
-        mHandler.sendEmptyMessage(SAVE_START);
-        final SignUserData user = getView().getUser();
-        if (user != null){
-            user.setObjectId(mUserData.getObjectId());
-            user.update(new UpdateListener() {
-                @Override
-                public void done(BmobException e) {
-                    if (e == null){
-                        mUserData = user;
-                        mHandler.sendEmptyMessage(SAVE_SUCCESS);
-                    }else{
-                        mHandler.sendEmptyMessage(SAVE_FAILED);
-                    }
-                }
-            });
-        }
-    }
-
-    public void maleEdit(){
-        getView().editMale(mContext, mUserData.getMan());
+//        mHandler.sendEmptyMessage(SAVE_START);
+//        final SignUserData user = getView().getUser();
+//        if (user != null){
+//            user.setObjectId(mUserData.getObjectId());
+//            user.update(new UpdateListener() {
+//                @Override
+//                public void done(BmobException e) {
+//                    if (e == null){
+//                        mUserData = user;
+//                        mHandler.sendEmptyMessage(SAVE_SUCCESS);
+//                    }else{
+//                        mHandler.sendEmptyMessage(SAVE_FAILED);
+//                    }
+//                }
+//            });
+//        }
     }
 
     public void changeImage(){
@@ -156,11 +130,11 @@ public class ChangeMyDataActivityPresenter
         intent.putExtra("scale", true);
         intent.putExtra("scaleUpIfNeeded", true);// 去黑边
         // aspectX aspectY 是宽高的比例
-        intent.putExtra("aspectX", 1);//输出是X方向的比例
-        intent.putExtra("aspectY", 1);
+//        intent.putExtra("aspectX", 1);//输出是X方向的比例
+//        intent.putExtra("aspectY", 1);
         // outputX outputY 是裁剪图片宽高，切忌不要再改动下列数字，会卡死
-        intent.putExtra("outputX", 500);//输出X方向的像素
-        intent.putExtra("outputY", 500);
+//        intent.putExtra("outputX", 500);//输出X方向的像素
+//        intent.putExtra("outputY", 500);
         intent.putExtra("noFaceDetection", true);
         intent.putExtra("return-data", false);//设置为不返回数据
         /**
@@ -191,5 +165,11 @@ public class ChangeMyDataActivityPresenter
         });
     }
 
+    public void inputDay(){
+        getView().inputDayLength();
+    }
 
+    public void initView(){
+        getView().initView(null);
+    }
 }

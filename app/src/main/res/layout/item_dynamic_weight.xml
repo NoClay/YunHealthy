@@ -5,8 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:layout_marginTop="10dp"
-    app:cardCornerRadius="10dp"
+    android:layout_marginTop="@dimen/cardMarginTop"
+    android:layout_marginLeft="@dimen/cardMarginLeft"
+    android:layout_marginRight="@dimen/cardMarginRight"
+    app:cardCornerRadius="@dimen/cardRadius"
     app:cardElevation="5dp"
     app:cardBackgroundColor="@color/white">
 
@@ -40,7 +42,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="15dp"
+            android:layout_marginRight="35dp"
             android:text="11:34"
             android:textColor="@color/hintTextColor"/>
     </RelativeLayout>

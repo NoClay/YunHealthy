@@ -50,5 +50,26 @@ public class MyConstants {
     public static final int RECEIVER_TYPE_UPLOAD = 0;
     public static String userId = null;
 
-
+    public static final String[] TIME_ITEM = {
+            "1天",
+            "2天",
+            "3天",
+            "4天",
+            "5天",
+            "6天",
+            "1周",
+            "2周",
+            "3周",
+            "1月",
+            "2月",
+            "3月",
+            "6月",
+            "1年",
+            "2年",
+            "3年",
+            "长期"
+    };
+    public static final int[] TIME_VALUE  = new int[]{
+            1, 2, 3, 4, 5, 6, 7, 14, 21, 30, 60, 90, 180, 365, 730, 1095, ((int) Integer.MAX_VALUE)
+    };
 }

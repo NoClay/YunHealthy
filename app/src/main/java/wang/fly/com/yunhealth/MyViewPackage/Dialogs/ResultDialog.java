@@ -1,4 +1,4 @@
-package wang.fly.com.yunhealth.MyViewPackage;
+package wang.fly.com.yunhealth.MyViewPackage.Dialogs;
 
 import android.content.Context;
 import android.graphics.Color;
