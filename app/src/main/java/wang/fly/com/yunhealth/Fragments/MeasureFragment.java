@@ -10,7 +10,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -65,7 +64,6 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
     private ProgressBar load;
     private boolean isTryingConnecting = false;
     private MyDataBase myDataBase;
-    private SQLiteDatabase database;
     private BluetoothAdapter bluetoothAdapter;
     private BluetoothDevice theDestDevice;
     BroadcastReceiver receiver;
@@ -121,7 +119,6 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
         date = new Date();
         myDataBase = new MyDataBase(getActivity().getApplicationContext(),
                 "LocalStore.db", null, MyConstants.DATABASE_VERSION);
-        database = myDataBase.getWritableDatabase();
 
     }
 
@@ -739,13 +736,12 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
     public void checkMinuteAndCache(int type, int minute) {
         String userId = context.getSharedPreferences("LoginState",
                 Context.MODE_PRIVATE).getString("userId", null);
-        if (database.isOpen()
-                && minute % MyConstants.CACHE_TIME_LENGTH == 0
-                && !myDataBase.checkOneMeasureDataCache(database,
+        if (minute % MyConstants.CACHE_TIME_LENGTH == 0
+                && !myDataBase.checkOneMeasureDataCache(
                 type, date, userId)) {
             Log.d("Cache", "checkMinuteAndCache: cache + " +
                     MyConstants.LABEL_STRING[type] + "\tminute" + minute);
-            myDataBase.addOneMeasureData(database,
+            myDataBase.addOneMeasureData(
                     measureDataList.get(type), type, date, userId);
             measureDataList.get(type).reset();
         }

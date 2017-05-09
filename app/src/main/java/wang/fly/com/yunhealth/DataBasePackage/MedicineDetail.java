@@ -28,6 +28,16 @@ public class MedicineDetail extends BmobObject{
     private List<String> doses;
 
     private BmobDate startTime;
+    //服药的单位
+    private String unit;
+
+    public String getUnit() {
+        return unit;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
+    }
 
     public SignUserData getOwner() {
         return owner;

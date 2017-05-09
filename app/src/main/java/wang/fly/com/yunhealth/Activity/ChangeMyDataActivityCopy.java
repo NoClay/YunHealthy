@@ -15,7 +15,6 @@ import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
-import android.view.animation.AlphaAnimation;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -227,9 +226,7 @@ public class ChangeMyDataActivityCopy extends
     @Override
     public void showImage(String url) {
         userImageUri = Uri.parse(url);
-        AlphaAnimation alphaAnimation = new AlphaAnimation(0.1f, 1.0f);
-        alphaAnimation.setDuration(200);
-        Glide.with(mContext).load(url).animate(alphaAnimation)
+        Glide.with(mContext).load(url).crossFade(200)
                 .placeholder(R.drawable.head_image_default)
                 .error(R.drawable.head_image_default)
                 .into(mUserImageShow);
@@ -368,7 +365,7 @@ public class ChangeMyDataActivityCopy extends
                         Toast.makeText(mContext, "error", Toast.LENGTH_SHORT).show();
                     } else {//截取图片完成
                         //上传图片
-                        File file = new File(MyConstants.PATH_ADD + "crop.jpg");
+                        File file = new File(MyConstants.CROP_PATH_USER_IMAGE);
                         file.renameTo(new File(MyConstants.PATH_ADD + "now.jpg"));
                         mPresenter.uploadFile(new File(MyConstants.PATH_ADD + "now.jpg"));
                     }
