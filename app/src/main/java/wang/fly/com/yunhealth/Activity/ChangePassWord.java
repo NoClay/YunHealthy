@@ -1,10 +1,12 @@
 package wang.fly.com.yunhealth.Activity;
 
 import android.content.Intent;
+import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -91,16 +93,18 @@ public class ChangePassWord extends AppCompatActivity implements View.OnClickLis
 
             }
 
+
+            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if (isMobileNum(signedPhoneNumber.getText().toString())) {
                     //发送短信
                     sendMessage.setClickable(true);
-                    sendMessage.setBackgroundDrawable(getResources().getDrawable(R.drawable.circle_button_def));
+                    sendMessage.setBackground(getResources().getDrawable(R.drawable.circle_button_def, getTheme()));
+
                 } else {
                     sendMessage.setClickable(false);
-                    sendMessage.setBackgroundDrawable(getResources().getDrawable(R.drawable.circle_button_2));
-
+                    sendMessage.setBackground(getResources().getDrawable(R.drawable.circle_button_2, getTheme()));
                 }
             }
 
@@ -112,6 +116,7 @@ public class ChangePassWord extends AppCompatActivity implements View.OnClickLis
     }
 
     Handler handler = new Handler() {
+        @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
@@ -119,15 +124,13 @@ public class ChangePassWord extends AppCompatActivity implements View.OnClickLis
                 case MSG_WHAT_FOR_THREAD: {
                     sendMessage.setClickable(false);
                     sendMessage.setText(msg.arg1 + "秒后可获取验证码");
-                    sendMessage.setBackgroundDrawable(getResources()
-                            .getDrawable(R.drawable.circle_button_2));
+                    sendMessage.setBackground(getResources().getDrawable(R.drawable.circle_button_2, getTheme()));
                     break;
                 }
                 case MSG_WHAT_FOR_THREAD_DEATH: {
                     sendMessage.setClickable(true);
                     sendMessage.setText("获取验证码");
-                    sendMessage.setBackgroundDrawable(getResources()
-                            .getDrawable(R.drawable.circle_button_def));
+                    sendMessage.setBackground(getResources().getDrawable(R.drawable.circle_button_def, getTheme()));
                     break;
                 }
                 case MSG_WHAT_FOT_SHORT_MESSAGE: {

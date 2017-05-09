@@ -277,6 +277,7 @@ public class InfoActivity extends AppCompatActivity
         q3.addWhereEqualTo("owner", login);
         and.add(q3);
 //添加复合与查询
+
         query.and(and);
         query.setLimit(100)
                 .order("measureTime")
