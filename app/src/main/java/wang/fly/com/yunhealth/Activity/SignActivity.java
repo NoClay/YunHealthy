@@ -2,9 +2,11 @@ package wang.fly.com.yunhealth.Activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -106,11 +108,13 @@ public class SignActivity extends AppCompatActivity implements View.OnClickListe
 
             }
 
+            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if (isMobileNum(signUserPhoneNumber.getText().toString())) {
                     //发送短信
                     sendMessage.setClickable(true);
+                    sendMessage.setBackground(getResources().getDrawable(R.drawable.circle_button_def, getTheme()));
                     sendMessage.setBackgroundDrawable(getResources().
                             getDrawable(R.drawable.circle_button_def));
                 } else {

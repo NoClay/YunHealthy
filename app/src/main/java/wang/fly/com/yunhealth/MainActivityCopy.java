@@ -1,7 +1,6 @@
 package wang.fly.com.yunhealth;
 
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -91,11 +90,10 @@ public class MainActivityCopy extends AppCompatActivity {
             //窗口获取焦点并且已经登陆
             MyDataBase myDataBase = new MyDataBase(getApplicationContext(),
                     "LocalStore.db", null, MyConstants.DATABASE_VERSION);
-            SQLiteDatabase database = myDataBase.getWritableDatabase();
-            HeightAndWeight body = myDataBase.checkTodayWeight(database, new Date(), userId);
+            HeightAndWeight body = myDataBase.checkTodayWeight(new Date(), userId);
             if (body == null){
                 //当天没有输入了体重
-                body = myDataBase.checkLastWeight(database, userId);
+                body = myDataBase.checkLastWeight(userId);
                 checkWeight(body);
             }
         }
@@ -130,8 +128,7 @@ public class MainActivityCopy extends AppCompatActivity {
                             data.setDate(new Date());
                             MyDataBase myDataBase = new MyDataBase(getApplicationContext(),
                                     "LocalStore.db", null, MyConstants.DATABASE_VERSION);
-                            SQLiteDatabase database = myDataBase.getWritableDatabase();
-                            myDataBase.insertHeightAndWeight(database,
+                            myDataBase.insertHeightAndWeight(
                                     data,
                                     userId,
                                     new Date());

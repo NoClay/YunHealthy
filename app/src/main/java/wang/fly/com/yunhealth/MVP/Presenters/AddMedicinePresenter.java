@@ -8,7 +8,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.provider.MediaStore;
-import android.util.Log;
 
 import java.io.File;
 
@@ -112,7 +111,7 @@ public class AddMedicinePresenter extends BasePresenter<AddMedicineActivityInter
 
     public Uri resizeImage(Uri imageUri, Activity activity){
 //        Log.d(TAG, "尝试剪切的文件输出" + "uri = [" + uri + "]");
-        File outputImage = new File(MyConstants.PATH_ADD + "crop.jpg");
+        File outputImage = new File(MyConstants.CROP_PATH_MEDICINE);
         try {
             if (outputImage.exists()) {
                 outputImage.getAbsoluteFile().delete();

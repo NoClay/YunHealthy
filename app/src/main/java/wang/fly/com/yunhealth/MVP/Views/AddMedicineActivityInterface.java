@@ -19,6 +19,5 @@ public interface AddMedicineActivityInterface {
     void loadSuccess();
     void loadFailed();
     void inputDayLength();
-    void editDayLength();
     MedicineDetail getMedicineDetail();
 }

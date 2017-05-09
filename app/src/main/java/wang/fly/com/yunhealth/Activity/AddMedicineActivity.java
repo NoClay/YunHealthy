@@ -22,6 +22,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 
 import java.io.File;
 
@@ -48,7 +52,7 @@ public class AddMedicineActivity extends
         MVPBaseActivity<AddMedicineActivityInterface, AddMedicinePresenter>
         implements AddMedicineActivityInterface, View.OnClickListener {
     private Spinner mChooseUseType;
-    private Context mContext = this;
+    private Context mContext;
     private InputDayLengthDialog mInputDayLengthDialog;
     /**
      * 添加药物
@@ -85,7 +89,6 @@ public class AddMedicineActivity extends
         setContentView(R.layout.activity_add_medicine);
         initView();
         mPresenter.initView();
-        showImage("http://bmob-cdn-6778.b0.upaiyun.com/2017/05/08/f9672fbdffb24d92ae860cc823319d95.jpg");
     }
 
     @Override
@@ -94,6 +97,7 @@ public class AddMedicineActivity extends
     }
 
     private void initView() {
+        mContext = this;
         mTitle = (TextView) findViewById(R.id.title);
         mMedicineName = (EditText) findViewById(R.id.medicineName);
         mMedicineImage = (ImageView) findViewById(R.id.medicineImage);
@@ -184,16 +188,22 @@ public class AddMedicineActivity extends
     @Override
     public void showImage(String url) {
         Uri image = Uri.parse(url);
+        Log.d("test", "showImage: url = " + url);
         AlphaAnimation alphaAnimation = new AlphaAnimation(0.1f, 1.0f);
         alphaAnimation.setDuration(200);
         Glide.with(mContext)
                 .load(image)
-//                .skipMemoryCache(false)
-//                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                .animate(alphaAnimation)
+                .skipMemoryCache(false)
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                .crossFade(200)
                 .placeholder(R.drawable.add_gray)
                 .error(R.drawable.head_image_default)
-                .into(mMedicineImage);
+                .into(new SimpleTarget<GlideDrawable>() {
+                    @Override
+                    public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
+                        mMedicineImage.setImageDrawable(resource);
+                    }
+                });
     }
 
     @Override
@@ -207,7 +217,7 @@ public class AddMedicineActivity extends
 
     @Override
     public void toast(String content) {
-
+        Toast.makeText(mContext, content, Toast.LENGTH_SHORT).show();
     }
 
 
@@ -218,7 +228,7 @@ public class AddMedicineActivity extends
             loadImage = null;
         }
         loadImage = new ProgressDialog(mContext);
-        loadImage.setTitle("正在上传头像...");
+        loadImage.setTitle("正在上传图片，请稍候...");
         loadImage.show();
     }
 
@@ -226,7 +236,7 @@ public class AddMedicineActivity extends
     public void loadSuccess() {
         if (loadImage != null){
             loadImage.dismiss();
-            Toast.makeText(mContext, "头像上传成功，保存后即可更改", Toast.LENGTH_SHORT).show();
+            Toast.makeText(mContext, "图片上传成功", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -234,7 +244,7 @@ public class AddMedicineActivity extends
     public void loadFailed() {
         if (loadImage != null){
             loadImage.dismiss();
-            Toast.makeText(mContext, "头像上传失败，请检查您的网络配置", Toast.LENGTH_SHORT).show();
+            Toast.makeText(mContext, "图片上传失败，请检查您的网络配置", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -259,10 +269,6 @@ public class AddMedicineActivity extends
         }
     }
 
-    @Override
-    public void editDayLength() {
-
-    }
 
     @Override
     public MedicineDetail getMedicineDetail() {
@@ -324,7 +330,7 @@ public class AddMedicineActivity extends
                         Toast.makeText(mContext, "error", Toast.LENGTH_SHORT).show();
                     } else {//截取图片完成
                         //上传图片
-                        File file = new File(MyConstants.PATH_ADD + "crop.jpg");
+                        File file = new File(MyConstants.CROP_PATH_MEDICINE);
                         file.renameTo(new File(MyConstants.PATH_ADD + "now.jpg"));
                         mPresenter.uploadFile(new File(MyConstants.PATH_ADD + "now.jpg"));
                     }

@@ -138,7 +138,7 @@ public class ChangeMyDataActivityPresenter
 
     public Uri resizeImage(Uri imageUri, Activity activity){
 //        Log.d(TAG, "尝试剪切的文件输出" + "uri = [" + uri + "]");
-        File outputImage = new File(MyConstants.PATH_ADD + "crop.jpg");
+        File outputImage = new File(MyConstants.CROP_PATH_USER_IMAGE);
         try {
             if (outputImage.exists()) {
                 outputImage.getAbsoluteFile().delete();
