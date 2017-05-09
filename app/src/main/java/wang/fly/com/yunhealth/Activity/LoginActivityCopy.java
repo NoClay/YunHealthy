@@ -7,7 +7,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.animation.AlphaAnimation;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -163,11 +162,9 @@ public class LoginActivityCopy extends
 
     @Override
     public void loadImage(String path) {
-        AlphaAnimation alpha = new AlphaAnimation(0.1f, 1.0f);
-        alpha.setDuration(100);
         Glide.with(context)
                 .load(path)
-                .animate(alpha)
+                .crossFade(200)
                 .placeholder(R.drawable.timg)
                 .error(R.drawable.timg)
                 .fitCenter()
