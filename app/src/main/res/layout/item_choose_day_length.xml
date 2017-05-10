@@ -7,7 +7,7 @@
         android:paddingLeft="15dp"
         android:gravity="center_vertical"
         android:text="1天"
-        android:textSize="@dimen/title_text_size"
+        android:textSize="@dimen/text_title_largest"
         android:id="@+id/time"
         android:layout_marginRight="15dp"
         android:layout_marginLeft="15dp"

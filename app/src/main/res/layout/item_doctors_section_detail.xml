@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/itemSectionHeight"
+                android:layout_marginTop="3dp"
+                android:background="@color/white"
+                android:orientation="horizontal">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/head_image"
+        android:layout_width="@dimen/itemSectionHeight"
+        android:layout_height="@dimen/itemSectionHeight"
+        android:layout_alignParentLeft="true"
+        android:paddingBottom="5dp"
+        android:paddingLeft="7dp"
+        android:paddingRight="7dp"
+        android:paddingTop="5dp"
+        android:src="@drawable/test"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="55dp"
+        android:layout_marginRight="25dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/talkTarget"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="中国移动"
+            android:textColor="@color/primary_text"
+            android:textSize="@dimen/text_title_smaller"/>
+
+        <TextView
+            android:id="@+id/lastTalkContent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="中国移动"
+            android:textColor="@color/secondary_text"
+            android:textSize="@dimen/text_title_smallest"/>
+    </LinearLayout>
+</RelativeLayout>

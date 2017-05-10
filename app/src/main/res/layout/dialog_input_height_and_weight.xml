@@ -15,7 +15,7 @@
             android:layout_margin="10dp"
             android:gravity="center"
             android:textColor="@color/titleTextColor"
-            android:textSize="@dimen/text"
+            android:textSize="@dimen/text_content_large"
             android:text="记录自己的体重"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
@@ -40,7 +40,7 @@
                 android:gravity="center"
                 android:text="身高（cm）"
                 android:textColor="@color/titleTextColor"
-                android:textSize="@dimen/text"/>
+                android:textSize="@dimen/text_content_large"/>
 
             <EditText
                 android:id="@+id/input_height"
@@ -73,7 +73,7 @@
                 android:gravity="center"
                 android:text="体重（kg）"
                 android:textColor="@color/titleTextColor"
-                android:textSize="@dimen/text"/>
+                android:textSize="@dimen/text_content_large"/>
 
             <EditText
                 android:id="@+id/input_weight"

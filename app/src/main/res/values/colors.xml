@@ -3,7 +3,8 @@
     <color name="primary_text">#212121</color>
     <color name="secondary_text">#757575</color>
     <color name="icons">#FFFFFF</color>
-    <color name="divider">#BDBDBD</color>
+    <color name="divider">#E7E7E8</color>
+    <color name="dividerBack">#F9F9FB</color>
 
     <color name="colorPrimary">#00BCD4</color>
     <color name="colorPrimaryDark">#0097A7</color>
@@ -41,4 +42,9 @@
     <color name="lightBlue">#8ABEE6</color>
     <color name="lightLightBlue">#EEF5FB</color>
     <color name="mainBackground">#ECEDF1</color>
+    <color name="searchBarBackground">#EEEEEE</color>
+    <color name="searchBarTitle">#B0B0B0</color>
+    <color name="deepBlue">#2B2F3E</color>
+    <color name="darkWhite">#FAFAFA</color>
+    <color name="notedMessageColor">#F74C31</color>
 </resources>
