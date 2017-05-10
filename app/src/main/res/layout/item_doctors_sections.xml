@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:background="@color/white"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/toggleAction"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/itemSectionHeight">
+        <ImageView
+            android:id="@+id/toggleButton"
+            android:src="@drawable/right_arrow"
+            android:paddingLeft="5dp"
+            android:paddingTop="13dp"
+            android:paddingBottom="13dp"
+            android:paddingRight="5dp"
+            android:layout_width="35dp"
+            android:layout_height="@dimen/itemSectionHeight"/>
+        <TextView
+            android:id="@+id/sectionName"
+            android:layout_marginLeft="35dp"
+            android:layout_marginRight="115dp"
+            android:text="中国移动"
+            android:textStyle="normal"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_title_larger"
+            android:layout_centerVertical="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:orientation="vertical">
+        </TextView>
+
+
+        <TextView
+            android:id="@+id/sectionDoctorsCount"
+            android:layout_centerVertical="true"
+            android:textSize="@dimen/text_title_middle"
+            android:textColor="@color/secondary_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="15dp"
+            android:gravity="right"
+            android:text="0/0"/>
+    </RelativeLayout>
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/doctorRecyclerViewInner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </android.support.v7.widget.RecyclerView>
+
+
+</LinearLayout>

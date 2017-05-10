@@ -73,8 +73,7 @@ public class RecycleAdapterForReportMenu extends
         this.context = context;
         //构造List
         dbHelper = new MyDataBase(context,
-                "LocalStore.db", null,
-                MyConstants.DATABASE_VERSION);
+                "LocalStore.db", null, MyConstants.DATABASE_VERSION);
         String userId = context.getSharedPreferences("LoginState",
                 Context.MODE_PRIVATE).getString("userId", null);
         dbHelper.initMenuData(userId);

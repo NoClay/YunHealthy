@@ -32,6 +32,12 @@ public class MyConstants {
             "血氧", "脉搏", "心电", "体温", "粉尘浓度",
             "血糖（待定）", "脑电（待定）", "血压（待定）"
     };
+    public static final String []SECTIONS = {
+            "我的群组", "内科", "外科", "手外科", "妇产科", "五官科",
+            "皮肤性病", "中西医结合", "肝病", "精神心理科", "儿科", "男科",
+            "生殖健康", "肿瘤科", "传染科", "老年科", "体检保健科", "成瘾医学科",
+            "核医学科", "急诊科", "营养科"
+    };
     //功能对应的标志位
     public static final int MEASURE_TYPE_XUEYANG = 0;
     public static final int MEASURE_TYPE_MAIBO = 1;
@@ -43,13 +49,14 @@ public class MyConstants {
 
     public static final int MEASURE_TYPE_XUEYA = 7;
     //数据库版本
-    public static final int DATABASE_VERSION = 3;
+    public static final int DATABASE_VERSION = 1;
     //进行本地数据库缓存的间隔, 每小时的0, 15, 30 , 45
     public static final int CACHE_TIME_LENGTH = 15;
 
     public static final int LOAD_CACHE_MINUTE = 5;
     //上传的Receiver
     public static final int RECEIVER_TYPE_UPLOAD = 0;
+    public static final int ANIMATION_DURATION = 200;
 
     public static String userId = null;
 }

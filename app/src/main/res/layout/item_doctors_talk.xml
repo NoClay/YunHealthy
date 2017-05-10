@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+                android:background="@color/white"
+              android:layout_height="@dimen/itemTalkHeight"
+              android:orientation="horizontal">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:layout_alignParentLeft="true"
+        android:id="@+id/head_image"
+        android:layout_width="@dimen/itemTalkHeight"
+        android:layout_height="@dimen/itemTalkHeight"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:src="@drawable/test"/>
+
+    <LinearLayout
+        android:layout_marginRight="115dp"
+        android:layout_centerVertical="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="75dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/talkTarget"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="中国移动"
+            android:textColor="@color/primary_text"
+            android:textSize="@dimen/text_title_smaller"/>
+
+        <TextView
+            android:id="@+id/lastTalkContent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="中国移动"
+            android:textColor="@color/secondary_text"
+            android:textSize="@dimen/text_title_smallest"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_gravity="center_vertical"
+        android:layout_width="100dp"
+        android:layout_marginRight="15dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/lastTalkTime"
+            android:textSize="@dimen/text_title_smaller"
+            android:textColor="@color/secondary_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:text="17:30"/>
+
+        <TextView
+            android:id="@+id/notedMessageCount"
+            android:textSize="@dimen/text_title_smallest"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="right"
+            android:text="未读：233"
+            android:textColor="@color/notedMessageColor"/>
+    </LinearLayout>
+
+</RelativeLayout>

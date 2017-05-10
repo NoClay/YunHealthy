@@ -19,7 +19,7 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:text="添加药物"
-            android:textSize="@dimen/title_text_size"/>
+            android:textSize="@dimen/text_title_largest"/>
     </android.support.v7.widget.Toolbar>
 
     <ScrollView
@@ -47,7 +47,7 @@
                     android:paddingLeft="15dp"
                     android:text="药物名称"
                     android:textColor="@color/titleTextColor"
-                    android:textSize="@dimen/title_text_size"/>
+                    android:textSize="@dimen/text_title_largest"/>
 
                 <EditText
                     android:id="@+id/medicineName"
@@ -59,7 +59,7 @@
                     android:lines="1"
                     android:padding="15dp"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/title_text_size"/>
+                    android:textSize="@dimen/text_title_largest"/>
             </LinearLayout>
 
             <LinearLayout
@@ -74,7 +74,7 @@
                     android:paddingLeft="15dp"
                     android:text="请对药品拍照"
                     android:textColor="@color/titleTextColor"
-                    android:textSize="@dimen/title_text_size"/>
+                    android:textSize="@dimen/text_title_largest"/>
 
                 <ImageView
                     android:id="@+id/medicineImage"
@@ -98,7 +98,7 @@
                     android:paddingLeft="15dp"
                     android:text="服用方式"
                     android:textColor="@color/titleTextColor"
-                    android:textSize="@dimen/title_text_size"/>
+                    android:textSize="@dimen/text_title_largest"/>
 
                 <Spinner
                     android:id="@+id/medicineUseType"
@@ -118,7 +118,7 @@
                     android:paddingLeft="15dp"
                     android:text="服药原因"
                     android:textColor="@color/titleTextColor"
-                    android:textSize="@dimen/title_text_size"/>
+                    android:textSize="@dimen/text_title_largest"/>
 
                 <EditText
                     android:id="@+id/medicineTag"
@@ -129,7 +129,7 @@
                     android:lines="1"
                     android:padding="15dp"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/title_text_size"/>
+                    android:textSize="@dimen/text_title_largest"/>
             </LinearLayout>
 
             <LinearLayout
@@ -144,7 +144,7 @@
                     android:paddingLeft="15dp"
                     android:text="医嘱"
                     android:textColor="@color/titleTextColor"
-                    android:textSize="@dimen/title_text_size"/>
+                    android:textSize="@dimen/text_title_largest"/>
 
                 <EditText
                     android:id="@+id/medicineContent"
@@ -156,7 +156,7 @@
                     android:lines="3"
                     android:padding="15dp"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/title_text_size"/>
+                    android:textSize="@dimen/text_title_largest"/>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -171,7 +171,7 @@
                     android:paddingLeft="15dp"
                     android:text="持续时间3天（点击修改)"
                     android:textColor="@color/titleTextColor"
-                    android:textSize="@dimen/title_text_size"/>
+                    android:textSize="@dimen/text_title_largest"/>
 
             </LinearLayout>
             <LinearLayout
@@ -186,7 +186,7 @@
                     android:paddingLeft="15dp"
                     android:text="服用时间和剂量"
                     android:textColor="@color/titleTextColor"
-                    android:textSize="@dimen/title_text_size"/>
+                    android:textSize="@dimen/text_title_largest"/>
 
                 <TextView
                     android:id="@+id/medicineUseTime"
@@ -197,7 +197,7 @@
                     android:hint="点击此处添加"
                     android:padding="15dp"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/title_text_size"/>
+                    android:textSize="@dimen/text_title_largest"/>
             </LinearLayout>
 
             <TextView
@@ -212,7 +212,7 @@
                 android:gravity="center"
                 android:text="添加完成"
                 android:textColor="@color/white"
-                android:textSize="@dimen/title_text_size"/>
+                android:textSize="@dimen/text_title_largest"/>
 
         </LinearLayout>
     </ScrollView>

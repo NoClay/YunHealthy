@@ -9,7 +9,7 @@
     </style>
 
     <style name="AppTheme.TitleTextViewStyle" parent="TextAppearance.AppCompat.Widget.TextView.SpinnerItem">
-        <item name="textSize">@dimen/title_text_size</item>
+        <item name="textSize">@dimen/text_title_largest</item>
     </style>
 
     <style name="PopupAnimation" parent="android:Animation">

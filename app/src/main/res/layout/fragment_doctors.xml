@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@color/lightSeaGreen"
-        >
+        android:background="@color/lightSeaGreen">
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
@@ -26,4 +27,68 @@
             />
     </RelativeLayout>
 
+    <include layout="@layout/view_search_bar"/>
+
+    <View
+        android:background="@color/divider"
+        android:layout_width="match_parent"
+        android:layout_height="3px"/>
+
+    <RelativeLayout
+        android:id="@+id/newFriends"
+        android:layout_width="match_parent"
+        android:layout_height="40dp">
+        <TextView
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="15dp"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_title_largest"
+            android:text="新朋友"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"/>
+        <ImageView
+            android:layout_marginRight="15dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/right_arrow"
+            android:layout_width="27dp"
+            android:layout_height="27dp"/>
+    </RelativeLayout>
+    <View
+        android:background="@color/divider"
+        android:layout_width="match_parent"
+        android:layout_height="3px"/>
+    <View
+        android:background="@color/dividerBack"
+        android:layout_width="match_parent"
+        android:layout_height="30px"/>
+    <View
+        android:background="@color/divider"
+        android:layout_width="match_parent"
+        android:layout_height="3px"/>
+
+
+
+    <android.support.design.widget.TabLayout
+        android:id="@+id/chanelTab"
+        android:layout_width="match_parent"
+        app:tabTextAppearance="@android:style/TextAppearance.Holo.Large"
+        app:tabIndicatorColor="@color/hintTextColor"
+        app:tabSelectedTextColor="@color/primary_text"
+        app:tabTextColor="@color/secondary_text"
+        android:layout_height="50dp">
+
+    </android.support.design.widget.TabLayout>
+    <View
+        android:background="@color/divider"
+        android:layout_width="match_parent"
+        android:layout_height="3px"/>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/pageLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </android.support.v4.view.ViewPager>
 </LinearLayout>
