@@ -4,11 +4,10 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ExpandableListView;
 
 import wang.fly.com.yunhealth.Adapter.AdapterSection;
 import wang.fly.com.yunhealth.R;
@@ -19,7 +18,7 @@ import wang.fly.com.yunhealth.R;
 
 public class DoctorsFriendsFragment extends Fragment {
     private View view;
-    private RecyclerView mSectionRecyclerView;
+    private ExpandableListView mSectionRecyclerView;
     private Context mContext;
     private AdapterSection mAdapterSection;
 
@@ -33,10 +32,9 @@ public class DoctorsFriendsFragment extends Fragment {
 
     private void initView(View view) {
         mContext = getContext();
-        mSectionRecyclerView = (RecyclerView) view.findViewById(R.id.sectionRecyclerView);
+        mSectionRecyclerView = (ExpandableListView) view.findViewById(R.id.sectionListView);
         mAdapterSection = new AdapterSection(mContext);
-        mSectionRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
-        mSectionRecyclerView.setHasFixedSize(false);
         mSectionRecyclerView.setAdapter(mAdapterSection);
+        mSectionRecyclerView.setGroupIndicator(null);
     }
 }
