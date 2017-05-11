@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/itemSectionHeight"
+                android:layout_height="51dp"
                 android:layout_marginTop="3dp"
                 android:background="@color/white"
                 android:orientation="horizontal">
@@ -42,4 +42,9 @@
             android:textColor="@color/secondary_text"
             android:textSize="@dimen/text_title_smallest"/>
     </LinearLayout>
+    <View
+        android:layout_alignParentBottom="true"
+        android:background="@color/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
 </RelativeLayout>
