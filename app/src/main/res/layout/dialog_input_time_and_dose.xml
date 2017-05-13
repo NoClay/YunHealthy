@@ -1,33 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<android.support.v7.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <LinearLayout
-        android:layout_alignParentBottom="true"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="15dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginBottom="35dp"
-        android:background="@drawable/rectangle_block_dialog"
-        android:orientation="vertical"
-        android:paddingBottom="20dp">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="5dp"
+    android:orientation="vertical">
 
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_margin="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
         <TextView
+            android:layout_marginTop="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
             android:gravity="center"
-            android:text="持续时间"
+            android:text="服药"
             android:textColor="@color/titleTextColor"
             android:textSize="@dimen/text_title_largest"/>
 
         <View
+            android:background="@color/divider"
             android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:layout_margin="15dp"
-            android:background="@color/divider"></View>
+            android:layout_height="1px"/>
 
         <ListView
             android:divider="@null"
@@ -37,6 +34,4 @@
 
         </ListView>
     </LinearLayout>
-</RelativeLayout>
-
-
+</android.support.v7.widget.CardView>
