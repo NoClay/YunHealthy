@@ -17,6 +17,7 @@ import android.view.animation.AlphaAnimation;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,6 +38,7 @@ import wang.fly.com.yunhealth.MVP.Presenters.ChangeMyDataActivityPresenter;
 import wang.fly.com.yunhealth.MVP.Views.AddMedicineActivityInterface;
 import wang.fly.com.yunhealth.MyViewPackage.Dialogs.ChooseImageDialog;
 import wang.fly.com.yunhealth.MyViewPackage.Dialogs.InputDayLengthDialog;
+import wang.fly.com.yunhealth.MyViewPackage.Dialogs.InputTimeAndDoseDialog;
 import wang.fly.com.yunhealth.R;
 import wang.fly.com.yunhealth.util.MyConstants;
 import wang.fly.com.yunhealth.util.UtilClass;
@@ -78,10 +80,13 @@ public class AddMedicineActivity extends
     /**
      * 持续时间3天（点击修改)
      */
+    private InputTimeAndDoseDialog mInputTimeAndDoseDialog;
     private TextView mInputDay;
     private MedicineDetail medicine;
     private Uri userImageUri;
     private ProgressDialog loadImage;
+    private Spinner mMedicineUnit;
+    private ScrollView mMainLayout;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -109,9 +114,21 @@ public class AddMedicineActivity extends
         mMedicineUseTime.setOnClickListener(this);
         mCommitAction = (TextView) findViewById(R.id.commit_action);
         mCommitAction.setOnClickListener(this);
-        initUseType();
         mInputDay = (TextView) findViewById(R.id.inputDay);
         mInputDay.setOnClickListener(this);
+        mMedicineUnit = (Spinner) findViewById(R.id.medicineUnit);
+        mMainLayout = (ScrollView) findViewById(R.id.mainLayout);
+        initUseType();
+        initUnits();
+    }
+
+    private void initUnits() {
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
+                mContext,
+                R.array.units,
+                R.layout.item_use_type_spinner
+        );
+        mMedicineUnit.setAdapter(adapter);
     }
 
     private void initUseType() {
@@ -208,9 +225,9 @@ public class AddMedicineActivity extends
 
     @Override
     public void initView(MedicineDetail medicineDetail) {
-        if (medicineDetail == null){
+        if (medicineDetail == null) {
             medicine = new MedicineDetail();
-        }else{
+        } else {
             medicine = medicineDetail;
         }
     }
@@ -234,7 +251,7 @@ public class AddMedicineActivity extends
 
     @Override
     public void loadSuccess() {
-        if (loadImage != null){
+        if (loadImage != null) {
             loadImage.dismiss();
             Toast.makeText(mContext, "图片上传成功", Toast.LENGTH_SHORT).show();
         }
@@ -242,7 +259,7 @@ public class AddMedicineActivity extends
 
     @Override
     public void loadFailed() {
-        if (loadImage != null){
+        if (loadImage != null) {
             loadImage.dismiss();
             Toast.makeText(mContext, "图片上传失败，请检查您的网络配置", Toast.LENGTH_SHORT).show();
         }
@@ -251,19 +268,19 @@ public class AddMedicineActivity extends
 
     @Override
     public void inputDayLength() {
-        if (mInputDayLengthDialog == null){
+        if (mInputDayLengthDialog == null) {
             mInputDayLengthDialog = new InputDayLengthDialog(mContext,
                     new InputDayLengthDialog.OnChooseChangedListener() {
-                @Override
-                public void onChooseChanged(int pos) {
-                    mInputDay.setText("持续时间" + MyConstants.TIME_ITEM[pos] + "(点击修改)");
-                    medicine.setDayLength(MyConstants.TIME_VALUE[pos]);
-                    Log.d("test", "onChooseChanged: value = " + MyConstants.TIME_VALUE[pos]);
-                }
-            });
+                        @Override
+                        public void onChooseChanged(int pos) {
+                            mInputDay.setText("持续时间" + MyConstants.TIME_ITEM[pos] + "(点击修改)");
+                            medicine.setDayLength(MyConstants.TIME_VALUE[pos]);
+                            Log.d("test", "onChooseChanged: value = " + MyConstants.TIME_VALUE[pos]);
+                        }
+                    });
             mInputDayLengthDialog.showAtLocation(findViewById(R.id.mainLayout),
                     Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
-        }else{
+        } else {
             mInputDayLengthDialog.dismiss();
             mInputDayLengthDialog = null;
         }
@@ -282,6 +299,20 @@ public class AddMedicineActivity extends
                 mPresenter.changeImage();
                 break;
             case R.id.medicineUseTime:
+                //测是代码
+                if (mInputTimeAndDoseDialog == null){
+                    mInputTimeAndDoseDialog = new InputTimeAndDoseDialog(mContext, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                        }
+                    });
+                    mInputTimeAndDoseDialog.showAtLocation(findViewById(R.id.mainLayout),
+                            Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
+                }else if (mInputTimeAndDoseDialog.isShowing()){
+                    mInputTimeAndDoseDialog.dismiss();
+                    mInputTimeAndDoseDialog = null;
+                }
                 break;
             case R.id.commit_action:
                 break;
