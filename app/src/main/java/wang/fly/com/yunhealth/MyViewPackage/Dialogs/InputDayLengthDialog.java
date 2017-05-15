@@ -75,4 +75,5 @@ public class InputDayLengthDialog extends PopupWindow implements ListView.OnItem
         this.dismiss();
         onChooseChangedListener.onChooseChanged(position);
     }
+
 }

@@ -11,4 +11,15 @@
         <item>其他</item>
     </string-array>
 
+    <string-array name="units">
+        <item>毫升</item>
+        <item>毫克</item>
+        <item>克</item>
+        <item>针</item>
+        <item>粒</item>
+        <item>瓶</item>
+        <item>板</item>
+        <item>贴</item>
+    </string-array>
+
 </resources>

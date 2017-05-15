@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wang.fly.com.yunhealth.MyViewPackage.CheckableChooseDoseView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/list_item"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:orientation="vertical">
+</wang.fly.com.yunhealth.MyViewPackage.CheckableChooseDoseView>
