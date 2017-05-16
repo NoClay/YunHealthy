@@ -38,6 +38,9 @@ import static android.os.Build.VERSION_CODES.M;
 
 public class UtilClass {
 
+    public static boolean isFloatOfString(String data){
+        return data.matches("^([+-]?)\\\\d*\\\\.\\\\d+$");
+    }
     /**
      * 将Bitmap保存到指定的文件
      * @param bm

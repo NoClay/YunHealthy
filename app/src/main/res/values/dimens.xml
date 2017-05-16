@@ -26,5 +26,5 @@
     <dimen name="itemTalkHeight">70dp</dimen>
     <dimen name="itemSectionHeight">50dp</dimen>
     <dimen name="checkedButtonSize">25dp</dimen>
-    <dimen name="checkedButtonMarginHorizontal">25dp</dimen>
+    <dimen name="checkedButtonMarginHorizontal">15dp</dimen>
 </resources>
