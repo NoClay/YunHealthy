@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import wang.fly.com.yunhealth.Adapter.AdapterChooseDose;
-import wang.fly.com.yunhealth.MyViewPackage.CheckableChooseDoseView;
 import wang.fly.com.yunhealth.R;
 import wang.fly.com.yunhealth.util.MyConstants;
 
@@ -48,26 +47,21 @@ public class InputTimeAndDoseDialog extends PopupWindow {
         }
     }
 
+
     private void initView() {
         mHolder.mCancelAction.setOnClickListener(mOnClickListener);
         mHolder.mSubmitAction.setOnClickListener(mOnClickListener);
-        mHolder.mListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-        final AdapterChooseDose doses = new AdapterChooseDose(mContext, datas, R.layout.item_checkable_choose_time);
+        final AdapterChooseDose doses = new AdapterChooseDose(mContext, datas,
+                R.layout.item_checkable_choose_time);
         mHolder.mListView.setAdapter(doses);
         mHolder.mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                boolean checked = mHolder.mListView.isItemChecked(position);
-
-                CheckableChooseDoseView view1 = (CheckableChooseDoseView) parent.getChildAt(position);
-                datas.get(position).setChecked(false);
-                view1.setChecked(checked);
+                Dose data = datas.get(position);
+                data.toggle();
+                Log.d("time", "onItemClick: checked = " + data.getChecked());
                 Log.d("time", "onItemClick: pos = " + position);
-                Log.d("time", "onItemClick: from list " + checked);
-                Log.d("time", "onItemClick: from data " + datas.get(position).getChecked());
-                Log.d("time", "onItemClick: from view " + view1.isChecked());
-                view1.toggle();
-
+                doses.notifyDataSetChanged();
             }
         });
         this.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
@@ -133,6 +127,9 @@ public class InputTimeAndDoseDialog extends PopupWindow {
 
         public void setValue(Float value) {
             mValue = value;
+        }
+        public void toggle(){
+            mChecked = !mChecked;
         }
     }
 }

@@ -17,6 +17,7 @@ import android.view.animation.AlphaAnimation;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -307,6 +308,7 @@ public class AddMedicineActivity extends
 
                         }
                     });
+                    mInputTimeAndDoseDialog.setSoftInputMode(PopupWindow.INPUT_METHOD_NEEDED);
                     mInputTimeAndDoseDialog.showAtLocation(findViewById(R.id.mainLayout),
                             Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
                 }else if (mInputTimeAndDoseDialog.isShowing()){

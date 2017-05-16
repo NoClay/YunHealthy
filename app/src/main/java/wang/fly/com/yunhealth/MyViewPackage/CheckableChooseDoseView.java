@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import wang.fly.com.yunhealth.R;
 
@@ -28,6 +29,7 @@ public class CheckableChooseDoseView extends RelativeLayout implements Checkable
     ImageView mDecButton;
     LinearLayout mChooseDoseLayout;
     private boolean isChecked = false;
+    private static final int[] CHECKED_STATE_SET = { android.R.attr.state_checked };
 
     public CheckableChooseDoseView(Context context) {
         super(context);
@@ -60,7 +62,7 @@ public class CheckableChooseDoseView extends RelativeLayout implements Checkable
     }
 
 
-    private void clearCheck(boolean checked) {
+    public void clearCheck(boolean checked) {
         mCheckbox.setVisibility(GONE);
         mChooseDoseLayout.setVisibility(GONE);
         if (checked) {
@@ -71,22 +73,50 @@ public class CheckableChooseDoseView extends RelativeLayout implements Checkable
 
     @Override
     public void setChecked(boolean checked) {
-        isChecked = checked;
+        if (checked != isChecked){
+            isChecked = checked;
+            refreshDrawableState();
+        }
+        Log.d("time", "setChecked: " + isChecked);
     }
 
     @Override
     public boolean isChecked() {
+        Log.d("time", "isChecked: " + isChecked);
         return isChecked;
     }
 
     @Override
     public void toggle() {
+        Log.d("time", "toggle: ");
+        setChecked(!isChecked);
+    }
+
+    @Override
+    protected int[] onCreateDrawableState(int extraSpace) {
+        // 在原有状态中添加一个空间space用于保存checked状态
+        final int[] drawableState = super.onCreateDrawableState(extraSpace + 1);
+        if (isChecked()) {
+            // 将checked状态合并到原有的状态数组中
+            mergeDrawableStates(drawableState, CHECKED_STATE_SET);
+        }
+        Log.d("time", "onCreateDrawableState: isChecked " + isChecked);
         clearCheck(isChecked);
+        return drawableState;
     }
 
     @Override
     public void onClick(View v) {
-
+        switch (v.getId()){
+            case R.id.incButton:{
+                Toast.makeText(mContext, "点击了增加的按钮", Toast.LENGTH_SHORT).show();
+                break;
+            }
+            case R.id.decButton:{
+                Toast.makeText(mContext, "点击了减少的按钮", Toast.LENGTH_SHORT).show();
+                break;
+            }
+        }
     }
 
     public void setTime(String time) {

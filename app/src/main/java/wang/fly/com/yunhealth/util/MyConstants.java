@@ -65,6 +65,7 @@ public class MyConstants {
     //上传的Receiver
     public static final int RECEIVER_TYPE_UPLOAD = 0;
     public static final int ANIMATION_DURATION = 200;
+    public static final float ADD_LENGTH = 0.25f;
 
     public static String userId = null;
 }
