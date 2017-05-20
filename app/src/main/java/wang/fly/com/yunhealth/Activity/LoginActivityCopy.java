@@ -21,6 +21,7 @@ import wang.fly.com.yunhealth.MVP.Presenters.LoginActivityPresenter;
 import wang.fly.com.yunhealth.MVP.Views.LoginActivityInterface;
 import wang.fly.com.yunhealth.MainActivityCopy;
 import wang.fly.com.yunhealth.R;
+import wang.fly.com.yunhealth.util.ProjectToolClass;
 
 public class LoginActivityCopy extends
         MVPBaseActivity<LoginActivityInterface, LoginActivityPresenter>
@@ -123,7 +124,7 @@ public class LoginActivityCopy extends
 
     public void afterTextChanged(String s, boolean isName){
         if (isName){
-            if (s.length() == 0){
+            if (!ProjectToolClass.isAccentName(s)){
                 mClearName.setVisibility(View.GONE);
             }else{
                 mClearName.setVisibility(View.VISIBLE);
@@ -162,6 +163,9 @@ public class LoginActivityCopy extends
 
     @Override
     public void loadImage(String path) {
+        if (path == null){
+            Toast.makeText(context, "查询账户失败", Toast.LENGTH_SHORT).show();
+        }
         Glide.with(context)
                 .load(path)
                 .crossFade(200)

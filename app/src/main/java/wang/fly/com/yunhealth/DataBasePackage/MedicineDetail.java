@@ -1,5 +1,6 @@
 package wang.fly.com.yunhealth.DataBasePackage;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import cn.bmob.v3.BmobObject;
@@ -25,7 +26,7 @@ public class MedicineDetail extends BmobObject{
     //时间点
     private List<String> times;
     //剂量
-    private List<String> doses;
+    private List<Float> doses;
 
     private BmobDate startTime;
     //服药的单位
@@ -104,6 +105,9 @@ public class MedicineDetail extends BmobObject{
     }
 
     public List<String> getTimes() {
+        if (times == null){
+            return new ArrayList<>();
+        }
         return times;
     }
 
@@ -111,11 +115,14 @@ public class MedicineDetail extends BmobObject{
         this.times = times;
     }
 
-    public List<String> getDoses() {
+    public List<Float> getDoses() {
+        if (doses == null){
+            return new ArrayList<>();
+        }
         return doses;
     }
 
-    public void setDoses(List<String> doses) {
+    public void setDoses(List<Float> doses) {
         this.doses = doses;
     }
 

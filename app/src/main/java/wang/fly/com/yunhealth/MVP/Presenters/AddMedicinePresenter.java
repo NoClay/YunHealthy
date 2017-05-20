@@ -13,7 +13,9 @@ import java.io.File;
 
 import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UploadFileListener;
+import wang.fly.com.yunhealth.DataBasePackage.MedicineDetail;
 import wang.fly.com.yunhealth.MVP.Bases.BasePresenter;
 import wang.fly.com.yunhealth.MVP.Views.AddMedicineActivityInterface;
 import wang.fly.com.yunhealth.util.MyConstants;
@@ -75,6 +77,7 @@ public class AddMedicinePresenter extends BasePresenter<AddMedicineActivityInter
                     break;
                 }
                 case SAVE_SUCCESS:{
+                    getView().saveSuccess();
                     break;
                 }
             }
@@ -87,23 +90,27 @@ public class AddMedicinePresenter extends BasePresenter<AddMedicineActivityInter
 
 
     public void saveData(){
-//        mHandler.sendEmptyMessage(SAVE_START);
-//        final SignUserData user = getView().getUser();
-//        if (user != null){
-//            user.setObjectId(mUserData.getObjectId());
-//            user.update(new UpdateListener() {
-//                @Override
-//                public void done(BmobException e) {
-//                    if (e == null){
-//                        mUserData = user;
-//                        mHandler.sendEmptyMessage(SAVE_SUCCESS);
-//                    }else{
-//                        mHandler.sendEmptyMessage(SAVE_FAILED);
-//                    }
-//                }
-//            });
-//        }
+        mHandler.sendEmptyMessage(SAVE_START);
+        final MedicineDetail medicineDetail = getView().getMedicineDetail();
+        if (medicineDetail != null){
+            getView().startSaveData();
+            medicineDetail.save(new SaveListener<String>() {
+                @Override
+                public void done(String s, BmobException e) {
+                    if (e == null){
+                        mHandler.sendEmptyMessage(SAVE_SUCCESS);
+                    }else{
+                        mHandler.sendEmptyMessage(SAVE_FAILED);
+                    }
+                }
+            });
+        }
     }
+
+    public void editTime(){
+        getView().inputTimeAndDose();
+    }
+
 
     public void changeImage(){
         getView().editImage();

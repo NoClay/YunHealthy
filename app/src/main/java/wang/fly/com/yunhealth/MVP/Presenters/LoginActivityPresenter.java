@@ -1,6 +1,7 @@
 package wang.fly.com.yunhealth.MVP.Presenters;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.util.List;
 
@@ -21,6 +22,7 @@ import wang.fly.com.yunhealth.util.UtilClass;
 public class LoginActivityPresenter extends BasePresenter<LoginActivityInterface> {
     private SignUserData user;
     private Context context;
+    private static final String TAG = "LoginActivityPresenter";
 
     public LoginActivityPresenter(Context context) {
         this.context = context;
@@ -36,6 +38,8 @@ public class LoginActivityPresenter extends BasePresenter<LoginActivityInterface
         userQuery.findObjects(new FindListener<SignUserData>() {
             @Override
             public void done(List<SignUserData> list, BmobException e) {
+                Log.e(TAG, "done: ", e);
+                Log.d(TAG, "done: " + (list == null));
                 if (e == null){
                     if (list == null){
                         getView().loadImage(null);

@@ -1,5 +1,6 @@
 package wang.fly.com.yunhealth.Activity;
 
+import android.Manifest;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -24,6 +25,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 
 import java.io.File;
 import java.util.Calendar;
@@ -42,7 +46,7 @@ import wang.fly.com.yunhealth.util.SharedPreferenceHelper;
 import wang.fly.com.yunhealth.util.UtilClass;
 
 import static wang.fly.com.yunhealth.MVP.Presenters.ChangeMyDataActivityPresenter.REQUEST_CODE_PICK_IMAGE;
-import static wang.fly.com.yunhealth.util.MyConstants.PATH_ADD;
+import static wang.fly.com.yunhealth.util.MyConstants.SRC_PATH_USER_IMAGE;
 
 /**
  * Created by noclay on 2017/4/16.
@@ -68,6 +72,7 @@ public class ChangeMyDataActivityCopy extends
     Calendar mCalendar;
     Uri userImageUri;
     Context mContext = this;
+    private static final String TAG = "ChangeMyDataActivityCop";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -77,6 +82,10 @@ public class ChangeMyDataActivityCopy extends
         mCalendar = Calendar.getInstance();
         mPresenter.setContext(mContext);
         mPresenter.init();
+        UtilClass.requestPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE);
+        UtilClass.requestPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+//        UtilClass.requestPermission(this, Manifest.permission_group.STORAGE);
+//        mPresenter.uploadFile(new File(CROP_PATH_USER_IMAGE));
     }
 
     @Override
@@ -159,7 +168,7 @@ public class ChangeMyDataActivityCopy extends
                             Intent getImageByCamera = new
                                     Intent("android.media.action.IMAGE_CAPTURE");
                             // 获取文件
-                            File tempFile = new File(PATH_ADD + "temp.jpg");
+                            File tempFile = new File(MyConstants.SRC_PATH_USER_IMAGE);
                             if (tempFile.exists() && tempFile.isFile()) {
                                 tempFile.delete();
                             }
@@ -229,7 +238,12 @@ public class ChangeMyDataActivityCopy extends
         Glide.with(mContext).load(url).crossFade(200)
                 .placeholder(R.drawable.head_image_default)
                 .error(R.drawable.head_image_default)
-                .into(mUserImageShow);
+                .into(new SimpleTarget<GlideDrawable>() {
+                    @Override
+                    public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
+                        mUserImageShow.setImageDrawable(resource);
+                    }
+                });
     }
 
     @Override
@@ -284,6 +298,7 @@ public class ChangeMyDataActivityCopy extends
     public void startLoadImage() {
         if (loadImage != null) {
             loadImage.dismiss();
+            loadImage.cancel();
             loadImage = null;
         }
         loadImage = new ProgressDialog(mContext);
@@ -293,16 +308,20 @@ public class ChangeMyDataActivityCopy extends
 
     @Override
     public void loadSuccess() {
-        if (loadImage != null){
+        if (loadImage != null) {
             loadImage.dismiss();
+            loadImage.cancel();
+            loadImage = null;
             Toast.makeText(mContext, "头像上传成功，保存后即可更改", Toast.LENGTH_SHORT).show();
         }
     }
 
     @Override
     public void loadFailed() {
-        if (loadImage != null){
+        if (loadImage != null) {
             loadImage.dismiss();
+            loadImage.cancel();
+            loadImage = null;
             Toast.makeText(mContext, "头像上传失败，请检查您的网络配置", Toast.LENGTH_SHORT).show();
         }
     }
@@ -335,7 +354,7 @@ public class ChangeMyDataActivityCopy extends
                 case ChangeMyDataActivityPresenter.REQUEST_CODE_CAPTURE_CAMERA: {
                     //直接拍照获取头像
                     if (data == null) {
-                        imageUri = Uri.fromFile(new File(PATH_ADD + "temp.jpg"));
+                        imageUri = Uri.fromFile(new File(SRC_PATH_USER_IMAGE));
                     } else {
                         imageUri = data.getData();
                         Log.d("test", "onActivityResult: 使用相机返回" + imageUri);
@@ -366,8 +385,8 @@ public class ChangeMyDataActivityCopy extends
                     } else {//截取图片完成
                         //上传图片
                         File file = new File(MyConstants.CROP_PATH_USER_IMAGE);
-                        file.renameTo(new File(MyConstants.PATH_ADD + "now.jpg"));
-                        mPresenter.uploadFile(new File(MyConstants.PATH_ADD + "now.jpg"));
+                        Log.d(TAG, "onActivityResult: " + file.getAbsolutePath());
+                        mPresenter.uploadFile(file);
                     }
                     break;
                 }
@@ -405,5 +424,17 @@ public class ChangeMyDataActivityCopy extends
         super.onBackPressed();
         setResult(RESULT_CANCELED);
         finish();
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (progress != null) {
+            progress.dismiss();
+            progress = null;
+        } else if (loadImage != null) {
+            loadImage.dismiss();
+            loadImage = null;
+        }
+        super.onDestroy();
     }
 }
