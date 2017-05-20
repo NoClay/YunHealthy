@@ -46,7 +46,7 @@
             <Button
                 android:id="@+id/submitAction"
                 android:background="@drawable/rectangle_block_dialog"
-                android:text="连接"
+                android:text="确定"
                 android:textColor="@color/titleTextColor"
                 android:layout_weight="4.7"
                 android:layout_width="0dp"

@@ -29,22 +29,65 @@ public class InputTimeAndDoseDialog extends PopupWindow {
     View.OnClickListener mOnClickListener;
     List<Dose> datas = new ArrayList<>();
 
-    public InputTimeAndDoseDialog(Context context, View.OnClickListener listener) {
+    public InputTimeAndDoseDialog(Context context,
+                                  List<String> times,
+                                  List<Float> doses,
+                                  View.OnClickListener listener) {
         super(context);
         mContext = context;
         mOnClickListener = listener;
         mView = LayoutInflater.from(mContext).inflate(R.layout.dialog_input_time_and_dose, null);
         setContentView(mView);
         mHolder = new ViewHolder(mView);
-        initData();
+        initData(times, doses);
         initView();
     }
 
-    private void initData() {
-        for (int i = 0; i < MyConstants.TIMES.length; i++) {
-            Dose data = new Dose(MyConstants.TIMES[i]);
-            datas.add(data);
+    public String getTimeByString(){
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < datas.size(); i++) {
+            Dose temp = datas.get(i);
+            if (temp.getChecked()){
+                builder.append(temp.getTime() + "（" + + temp.getValue() +  "）,");
+            }
         }
+        return builder.toString();
+    }
+
+    private void initData(List<String> times,
+                          List<Float> doses) {
+        int j = 0;
+        for (int i = 0; i < MyConstants.TIMES.length; i++) {
+            if (j < times.size() && MyConstants.TIMES[i].equals(times.get(j))){
+                Dose data = new Dose(MyConstants.TIMES[i]);
+                data.setValue(doses.get(j));
+                datas.add(data);
+                j ++;
+            }else{
+                Dose data = new Dose(MyConstants.TIMES[i]);
+                datas.add(data);
+            }
+        }
+    }
+
+    public List<String> getTime(){
+        List<String> times = new ArrayList<>();
+        for (int i = 0; i < datas.size(); i++) {
+            if (datas.get(i).getChecked()){
+                times.add(new String(datas.get(i).getTime()));
+            }
+        }
+        return times;
+    }
+
+    public List<Float> getDose(){
+        List<Float> doses = new ArrayList<>();
+        for (int i = 0; i < doses.size(); i++) {
+            if (datas.get(i).getChecked()){
+                doses.add(new Float(datas.get(i).getValue()));
+            }
+        }
+        return doses;
     }
 
 
@@ -96,7 +139,7 @@ public class InputTimeAndDoseDialog extends PopupWindow {
         }
 
         public Dose(String time) {
-            this(time, false, 0.0f);
+            this(time, false, 0.25f);
         }
 
         public Dose(String time, Boolean checked, Float value) {

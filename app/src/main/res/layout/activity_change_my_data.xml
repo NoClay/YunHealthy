@@ -80,6 +80,8 @@
                     android:layout_height="wrap_content" />
             </RelativeLayout>
             <RelativeLayout
+                android:focusable="true"
+                android:focusableInTouchMode="true"
                 android:layout_marginTop="1px"
                 android:background="@color/white"
                 android:layout_width="match_parent"

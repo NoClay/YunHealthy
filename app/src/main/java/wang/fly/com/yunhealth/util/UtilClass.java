@@ -48,7 +48,7 @@ public class UtilClass {
     public static void saveBitmapToFile(Bitmap bm, String filePath) {
         File f;
         if(filePath == null){
-            f = new File(MyConstants.PATH_ADD + "temp.jpg");
+            f = new File(MyConstants.ROOT_PATH + "temp.jpg");
         }else{
             f = new File(filePath);
         }
