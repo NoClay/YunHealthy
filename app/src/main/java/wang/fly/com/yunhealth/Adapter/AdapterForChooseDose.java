@@ -1,13 +1,13 @@
 package wang.fly.com.yunhealth.Adapter;
 
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -24,45 +24,44 @@ import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
 /**
- * Created by noclay on 2017/5/15.
+ * Created by noclay on 2017/5/20.
  */
 
-public class AdapterChooseDose extends ArrayAdapter{
+public class AdapterForChooseDose extends RecyclerView.Adapter<AdapterForChooseDose.ViewHolder> {
 
     Context mContext;
     int mResource;
     List<InputTimeAndDoseDialog.Dose> mDatas;
     private static final String TAG = "AdapterChooseDose";
 
-    public AdapterChooseDose(Context context,
+
+
+    public AdapterForChooseDose(Context context,
                              List<InputTimeAndDoseDialog.Dose> datas,
                              int resource) {
-        super(context, resource);
         mContext = context;
         mResource = resource;
         mDatas = datas;
     }
 
     @Override
-    public int getCount() {
-        return MyConstants.TIMES.length;
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(mContext).inflate(mResource, parent, false);
+        return new ViewHolder(view);
     }
 
+    public void clearCheck(ViewHolder holder, boolean checked) {
+        holder.mCheckbox.setVisibility(GONE);
+        holder.mChooseDoseLayout.setVisibility(GONE);
+        if (checked) {
+            holder.mChooseDoseLayout.setVisibility(VISIBLE);
+            holder.mCheckbox.setVisibility(VISIBLE);
+        }
+    }
 
     @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
-        View view;
-        final ViewHolder holder;
-        if (convertView == null) {
-            view = LayoutInflater.from(mContext).inflate(mResource, parent, false);
-            holder = new ViewHolder(view);
-            view.setTag(holder);
-        }else{
-            view = convertView;
-            holder = (ViewHolder) view.getTag();
-        }
+    public void onBindViewHolder(final ViewHolder holder, int position) {
         final InputTimeAndDoseDialog.Dose data = mDatas.get(position);
-        //将数据与输入窗体进行绑定
         holder.mTime.setText(MyConstants.TIMES[position]);
         holder.mDose.setText(data.getValue().toString());
         clearCheck(holder, data.getChecked());
@@ -88,12 +87,6 @@ public class AdapterChooseDose extends ArrayAdapter{
                         data.setValue(temp);
                         break;
                     }
-                    case R.id.dose:{
-                        holder.mDose.requestFocus();
-                        Log.d(TAG, "onClick: requestFocus");
-                        Log.d(TAG, "onClick: " + holder.mDose.isFocused());
-                        break;
-                    }
                 }
             }
         };
@@ -110,33 +103,35 @@ public class AdapterChooseDose extends ArrayAdapter{
 
             @Override
             public void afterTextChanged(Editable s) {
-                Log.d(TAG, "afterTextChanged: " + holder.mDose.getText().toString());
-                String input = holder.mDose.getText().toString();
+                Log.d(TAG, "afterTextChanged: " + s.toString());
+                String input = s.toString();
                 if (UtilClass.isFloatOfString(input)){
-                    float temp = Float.valueOf(holder.mDose.getText().toString());
+                    float temp = Float.valueOf(input);
                     data.setValue(temp);
                 }else{
-                    data.setValue(0.0f);
+//                    data.setValue(0.0f);
                 }
             }
         });
         holder.mDose.setOnClickListener(listener);
         holder.mIncButton.setOnClickListener(listener);
         holder.mDecButton.setOnClickListener(listener);
-        Log.d("time", "getView: " + position);
-        return view;
-    }
-    public void clearCheck(ViewHolder holder, boolean checked) {
-        holder.mCheckbox.setVisibility(GONE);
-        holder.mChooseDoseLayout.setVisibility(GONE);
-        if (checked) {
-            holder.mChooseDoseLayout.setVisibility(VISIBLE);
-            holder.mCheckbox.setVisibility(VISIBLE);
-        }
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                data.toggle();
+                clearCheck(holder, data.getChecked());
+            }
+        });
     }
 
 
-    static class ViewHolder {
+    @Override
+    public int getItemCount() {
+        return mDatas.size();
+    }
+
+    static class ViewHolder extends RecyclerView.ViewHolder{
         View view;
         ImageView mCheckbox;
         TextView mTime;
@@ -146,6 +141,7 @@ public class AdapterChooseDose extends ArrayAdapter{
         LinearLayout mChooseDoseLayout;
 
         ViewHolder(View view) {
+            super(view);
             this.view = view;
             this.mCheckbox = (ImageView) view.findViewById(R.id.checkbox);
             this.mTime = (TextView) view.findViewById(R.id.time);
