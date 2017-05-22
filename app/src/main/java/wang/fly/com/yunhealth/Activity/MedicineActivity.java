@@ -17,9 +17,12 @@ import java.util.List;
 
 import wang.fly.com.yunhealth.Adapter.MedicineListAdapter;
 import wang.fly.com.yunhealth.DataBasePackage.MedicineDetail;
+import wang.fly.com.yunhealth.DataBasePackage.MyDataBase;
 import wang.fly.com.yunhealth.Fragments.DataMedicalFragment;
 import wang.fly.com.yunhealth.MyViewPackage.FullLinearLayoutManager;
 import wang.fly.com.yunhealth.R;
+import wang.fly.com.yunhealth.util.MyConstants;
+import wang.fly.com.yunhealth.util.SharedPreferenceHelper;
 
 public class MedicineActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -29,7 +32,7 @@ public class MedicineActivity extends AppCompatActivity implements View.OnClickL
     private CollapsingToolbarLayout mToolbarLayout;
     private AppBarLayout mAppBarLayout;
     private RecyclerView mMedicineList;
-    private List<MedicineDetail> medicineList;
+    private List<MedicineDetail> medicines;
     private Context mContext = this;
     public static final int ADD_MEDICINE = 0;
 
@@ -38,8 +41,8 @@ public class MedicineActivity extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_medicine);
         initView();
-        medicineList = getMedicineList();
-        MedicineListAdapter adapter = new MedicineListAdapter(medicineList, this, R.layout.item_medicine);
+        medicines = getMedicines();
+        MedicineListAdapter adapter = new MedicineListAdapter(medicines, this, R.layout.item_medicine);
         FullLinearLayoutManager fLayout = new FullLinearLayoutManager(this,
                 RecyclerView.VERTICAL, true);
         fLayout.setSmoothScrollbarEnabled(true);
@@ -102,12 +105,14 @@ public class MedicineActivity extends AppCompatActivity implements View.OnClickL
         super.overridePendingTransition(enterAnim, exitAnim);
     }
 
-    public List<MedicineDetail> getMedicineList() {
+    public List<MedicineDetail> getMedicines() {
 
-        List<MedicineDetail> temp = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            MedicineDetail te = new MedicineDetail();
-            temp.add(te);
+        MyDataBase dbHelper = new MyDataBase(mContext,
+                "LocalStore.db", null, MyConstants.DATABASE_VERSION);
+        List<MedicineDetail> temp = dbHelper.getMedicineDetail(
+                SharedPreferenceHelper.getLoginUser().getObjectId());
+        if (temp == null){
+            return new ArrayList<>();
         }
         return temp;
     }

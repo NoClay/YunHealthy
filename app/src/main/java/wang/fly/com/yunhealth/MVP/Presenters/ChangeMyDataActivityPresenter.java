@@ -1,5 +1,6 @@
 package wang.fly.com.yunhealth.MVP.Presenters;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -8,6 +9,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.provider.MediaStore;
+import android.util.Log;
 
 import java.io.File;
 
@@ -20,6 +22,7 @@ import wang.fly.com.yunhealth.MVP.Bases.BasePresenter;
 import wang.fly.com.yunhealth.MVP.Views.ChangeMyDataActivityInterface;
 import wang.fly.com.yunhealth.util.MyConstants;
 import wang.fly.com.yunhealth.util.SharedPreferenceHelper;
+import wang.fly.com.yunhealth.util.UtilClass;
 
 /**
  * Created by noclay on 2017/4/16.
@@ -39,6 +42,7 @@ public class ChangeMyDataActivityPresenter
     Handler mHandler;
     Context mContext;
     SignUserData mUserData;
+    private static final String TAG = "ChangeMyDataActivityPre";
 
     public Context getContext() {
         return mContext;
@@ -176,16 +180,25 @@ public class ChangeMyDataActivityPresenter
     }
 
 
-    public void uploadFile(File temp){
+    public void uploadFile(File src){
+        Log.d(TAG, "uploadFile: size = " + src.length());
+        File temp = new File(MyConstants.TEMP_USER_IMAGE);
+        Log.d(TAG, "uploadFile: rename = " + src.renameTo(temp) );
+//        UtilClass.requestPermission(activity, android.Manifest.permission.READ_EXTERNAL_STORAGE);
         getView().startLoadImage();
         final BmobFile image = new BmobFile(temp);
-        image.upload(new UploadFileListener() {
+        Log.d(TAG, "uploadFile: " + (temp.exists()));
+        image.uploadblock(new UploadFileListener() {
             @Override
             public void done(BmobException e) {
                 Message message = Message.obtain();
                 message.what = UPLOAD_END;
                 message.arg1 = (e == null ? 0 : 1);
-                message.obj = image.getFileUrl();
+                if (e == null){
+                    message.obj = image.getUrl();
+                }
+                Log.d(TAG, "uploadFile: " + (image == null));
+                Log.e(TAG, "done: ", e);
                 mHandler.sendMessage(message);
             }
         });

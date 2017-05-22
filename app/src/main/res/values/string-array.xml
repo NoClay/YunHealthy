@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="useType">
+        <item>饭前口服</item>
+        <item>饭后口服</item>
+        <item>注射</item>
+        <item>外敷</item>
+        <item>皮下</item>
+        <item>舌苔</item>
+        <item>舌下</item>
+        <item>其他</item>
+    </string-array>
+
+    <string-array name="units">
+        <item>毫升</item>
+        <item>毫克</item>
+        <item>克</item>
+        <item>针</item>
+        <item>粒</item>
+        <item>瓶</item>
+        <item>板</item>
+        <item>贴</item>
+    </string-array>
+
+</resources>

@@ -73,8 +73,10 @@ public class SharedPreferenceHelper {
         } else {
             SignUserData user = new SignUserData();
             user.setUserName(sp.getString("userName", null));
-            user.setBirthday(new BmobDate(UtilClass.resolveBmobDate(
-                    sp.getString("birthday", null), null)));
+            if (sp.getString("birthday", null) != null){
+                user.setBirthday(new BmobDate(UtilClass.resolveBmobDate(
+                        sp.getString("birthday", null), null)));
+            }
             user.setHeight(sp.getInt("height", 0));
             user.setWeight(sp.getFloat("weight", 0.0f));
             user.setMan(sp.getBoolean("isMan", true));

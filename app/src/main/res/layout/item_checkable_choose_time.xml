@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="50dp">
+
+    <!--android:descendantFocusability="beforeDescendants"-->
+
+    <ImageView
+        android:id="@+id/checkbox"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/checkedButtonMarginHorizontal"
+        android:layout_marginRight="@dimen/checkedButtonMarginHorizontal"
+        android:layout_gravity="center_vertical"
+        android:src="@drawable/checked_blue"
+        android:layout_width="@dimen/checkedButtonSize"
+        android:layout_height="@dimen/checkedButtonSize"/>
+
+    <TextView
+        android:id="@+id/time"
+        android:layout_marginLeft="65dp"
+        android:gravity="center_vertical|left"
+        android:textSize="@dimen/text_title_larger"
+        android:text="24：34"
+        android:layout_width="100dp"
+        android:layout_height="match_parent"/>
+
+    <LinearLayout
+        android:id="@+id/chooseDoseLayout"
+        android:orientation="horizontal"
+        android:layout_marginRight="@dimen/checkedButtonMarginHorizontal"
+        android:layout_alignParentRight="true"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent">
+        <ImageView
+            android:paddingLeft="2.5dp"
+            android:paddingRight="2.5dp"
+            android:paddingTop="12.5dp"
+            android:paddingBottom="12.5dp"
+            android:id="@+id/incButton"
+            android:src="@drawable/add_blue"
+            android:layout_gravity="center_vertical"
+            android:layout_width="30dp"
+            android:layout_height="50dp"/>
+        <EditText
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:id="@+id/dose"
+            android:inputType="numberDecimal"
+            android:gravity="center_vertical|center"
+            android:textSize="@dimen/text_title_larger"
+            android:text="15"
+            android:layout_width="80dp"
+            android:layout_height="match_parent"/>
+        <ImageView
+            android:paddingLeft="2.5dp"
+            android:paddingRight="2.5dp"
+            android:paddingTop="12.5dp"
+            android:paddingBottom="12.5dp"
+            android:id="@+id/decButton"
+            android:src="@drawable/less_blue"
+            android:layout_marginLeft="3dp"
+            android:layout_gravity="center_vertical"
+            android:layout_width="30dp"
+            android:layout_height="50dp"/>
+    </LinearLayout>
+</RelativeLayout>

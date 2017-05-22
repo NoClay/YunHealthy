@@ -14,10 +14,10 @@
     <dimen name="text_content_small">13sp</dimen>
     <dimen name="pic_size">100dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
-    <dimen name="padding_left">25dp</dimen>
+    <dimen name="padding_left">15dp</dimen>
     <dimen name="padding_top">10dp</dimen>
     <dimen name="padding_bottom">10dp</dimen>
-    <dimen name="padding_right">25dp</dimen>
+    <dimen name="padding_right">15dp</dimen>
     <dimen name="direction_size">1.5px</dimen>
     <dimen name="cardRadius">10dp</dimen>
     <dimen name="cardMarginTop">10dp</dimen>
@@ -25,4 +25,6 @@
     <dimen name="cardMarginRight">10dp</dimen>
     <dimen name="itemTalkHeight">70dp</dimen>
     <dimen name="itemSectionHeight">50dp</dimen>
+    <dimen name="checkedButtonSize">25dp</dimen>
+    <dimen name="checkedButtonMarginHorizontal">15dp</dimen>
 </resources>

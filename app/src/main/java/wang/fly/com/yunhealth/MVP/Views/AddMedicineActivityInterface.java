@@ -1,7 +1,6 @@
 package wang.fly.com.yunhealth.MVP.Views;
 
 import wang.fly.com.yunhealth.DataBasePackage.MedicineDetail;
-import wang.fly.com.yunhealth.DataBasePackage.SignUserData;
 
 /**
  * Created by noclay on 2017/5/7.
@@ -9,7 +8,7 @@ import wang.fly.com.yunhealth.DataBasePackage.SignUserData;
 
 public interface AddMedicineActivityInterface {
     void startSaveData();
-    void saveSuccess(SignUserData userData);
+    void saveSuccess();
     void saveFailed();
     void editImage();
     void showImage(String url);
@@ -19,5 +18,6 @@ public interface AddMedicineActivityInterface {
     void loadSuccess();
     void loadFailed();
     void inputDayLength();
+    void inputTimeAndDose();
     MedicineDetail getMedicineDetail();
 }

@@ -13,10 +13,14 @@ import java.io.File;
 
 import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UploadFileListener;
+import wang.fly.com.yunhealth.DataBasePackage.MedicineDetail;
+import wang.fly.com.yunhealth.DataBasePackage.MyDataBase;
 import wang.fly.com.yunhealth.MVP.Bases.BasePresenter;
 import wang.fly.com.yunhealth.MVP.Views.AddMedicineActivityInterface;
 import wang.fly.com.yunhealth.util.MyConstants;
+import wang.fly.com.yunhealth.util.SharedPreferenceHelper;
 
 /**
  * Created by noclay on 2017/5/7.
@@ -75,6 +79,8 @@ public class AddMedicinePresenter extends BasePresenter<AddMedicineActivityInter
                     break;
                 }
                 case SAVE_SUCCESS:{
+                    //此处进行本地的缓存
+                    getView().saveSuccess();
                     break;
                 }
             }
@@ -87,23 +93,31 @@ public class AddMedicinePresenter extends BasePresenter<AddMedicineActivityInter
 
 
     public void saveData(){
-//        mHandler.sendEmptyMessage(SAVE_START);
-//        final SignUserData user = getView().getUser();
-//        if (user != null){
-//            user.setObjectId(mUserData.getObjectId());
-//            user.update(new UpdateListener() {
-//                @Override
-//                public void done(BmobException e) {
-//                    if (e == null){
-//                        mUserData = user;
-//                        mHandler.sendEmptyMessage(SAVE_SUCCESS);
-//                    }else{
-//                        mHandler.sendEmptyMessage(SAVE_FAILED);
-//                    }
-//                }
-//            });
-//        }
+        final MedicineDetail medicineDetail = getView().getMedicineDetail();
+        medicineDetail.setIsOpen(MyDataBase.CLOCK_OPEN);
+        if (medicineDetail != null){
+            mHandler.sendEmptyMessage(SAVE_START);
+            medicineDetail.save(new SaveListener<String>() {
+                @Override
+                public void done(String s, BmobException e) {
+                    if (e == null){
+                        mHandler.sendEmptyMessage(SAVE_SUCCESS);
+                        MyDataBase myDataBase = new MyDataBase(mContext,
+                                "LocalStore.db", null, MyConstants.DATABASE_VERSION);
+                        myDataBase.insertMedicineDetail(SharedPreferenceHelper.getLoginUser().getObjectId(),
+                                medicineDetail);
+                    }else{
+                        mHandler.sendEmptyMessage(SAVE_FAILED);
+                    }
+                }
+            });
+        }
     }
+
+    public void editTime(){
+        getView().inputTimeAndDose();
+    }
+
 
     public void changeImage(){
         getView().editImage();
@@ -129,8 +143,8 @@ public class AddMedicinePresenter extends BasePresenter<AddMedicineActivityInter
         intent.putExtra("scale", true);
         intent.putExtra("scaleUpIfNeeded", true);// 去黑边
         // aspectX aspectY 是宽高的比例
-//        intent.putExtra("aspectX", 1);//输出是X方向的比例
-//        intent.putExtra("aspectY", 1);
+        intent.putExtra("aspectX", 3);//输出是X方向的比例
+        intent.putExtra("aspectY", 2);
         // outputX outputY 是裁剪图片宽高，切忌不要再改动下列数字，会卡死
 //        intent.putExtra("outputX", 500);//输出X方向的像素
 //        intent.putExtra("outputY", 500);
