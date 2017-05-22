@@ -40,6 +40,8 @@ public class MyDataBase extends SQLiteOpenHelper {
     public static final int ERROR_LOAD = -1;
     public static final int UPLOAD_NO_DATABASE = -1;
     public static final int UPLOAD_SUCCESS = 0;
+    public static final int CLOCK_OPEN = 0;
+    public static final int CLOCK_CLOSE = 1;
     public static final String CREATE_REPORT_MENU = "" +
             "create table report_menu (" +
             "id integer primary key autoincrement," +
@@ -82,9 +84,10 @@ public class MyDataBase extends SQLiteOpenHelper {
             "dayLength integer," +
             "dayCount integer," +
             "times text, " +
-            "doses text," +
+            "doses text, " +
             "startTime text, " +
-            "unit text )";
+            "unit text, " +
+            "isOpen integer )";
     private Context context;
 
     public MyDataBase(Context context,
@@ -119,12 +122,38 @@ public class MyDataBase extends SQLiteOpenHelper {
         }
     }
 
-    public void insertMedicineDetail(SQLiteDatabase db,
-                                     String userId,
+    public List<MedicineDetail> getMedicineDetail(String userId){
+        List<MedicineDetail> medicineDetails = new ArrayList<>();
+        Cursor cursor = getReadableDatabase().rawQuery("select * from MedicineDetail" +
+                " where userId = '" + userId + "'", null);
+        if (cursor.moveToFirst()){
+            do {
+                MedicineDetail temp = new MedicineDetail();
+                temp.setObjectId(cursor.getString(cursor.getColumnIndex("userId")));
+                temp.setMedicineName(cursor.getString(cursor.getColumnIndex("medicineName")));
+                temp.setMedicinePicture(cursor.getString(cursor.getColumnIndex("medicinePicture")));
+                temp.setUseType(cursor.getString(cursor.getColumnIndex("useType")));
+                temp.setTag(cursor.getString(cursor.getColumnIndex("tag")));
+                temp.setDoctor(cursor.getString(cursor.getColumnIndex("doctor")));
+                temp.setDayLength(cursor.getInt(cursor.getColumnIndex("dayLength")));
+                temp.setDayCount(cursor.getInt(cursor.getColumnIndex("dayCount")));
+                temp.setTimes(UtilClass.asStringList(cursor.getString(cursor.getColumnIndex("times"))));
+                temp.setDoses(UtilClass.asFloatList(cursor.getString(cursor.getColumnIndex("doses"))));
+                temp.setStartTime(BmobDate.createBmobDate("yyyy-MM-dd HH:mm:ss", cursor.getString(
+                        cursor.getColumnIndex("startTime"))));
+                temp.setUnit(cursor.getString(cursor.getColumnIndex("unit")));
+                medicineDetails.add(temp);
+            }while (cursor.moveToNext());
+
+        }
+        return medicineDetails;
+    }
+    public void insertMedicineDetail(String userId,
                                      MedicineDetail medicine){
         if (medicine == null || userId == null) {
             return;
         }
+        SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
         values.clear();
         values.put("id", medicine.getObjectId());
@@ -140,10 +169,15 @@ public class MyDataBase extends SQLiteOpenHelper {
         values.put("doses", Arrays.toString(medicine.getDoses().toArray()));
         values.put("startTime", medicine.getStartTime().getDate());
         values.put("unit", medicine.getUnit());
+        values.put("isOpen", medicine.getIsOpen());
         db.insert("MedicineDetail", null, values);
+        db.close();
     }
-    public void deleteMedicineDetail(SQLiteDatabase db, MedicineDetail medicine){
-
+    public void deleteMedicineDetail(MedicineDetail medicine){
+        SQLiteDatabase db = getWritableDatabase();
+        db.execSQL("delete from MedicineDetail " +
+                "where id = '" + medicine.getObjectId() + "'");
+        db.close();
     }
 
     /**

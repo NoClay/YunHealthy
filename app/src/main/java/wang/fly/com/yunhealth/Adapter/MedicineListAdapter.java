@@ -2,6 +2,7 @@ package wang.fly.com.yunhealth.Adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,9 +10,15 @@ import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
+
 import java.util.List;
 
 import wang.fly.com.yunhealth.DataBasePackage.MedicineDetail;
+import wang.fly.com.yunhealth.DataBasePackage.MyDataBase;
 import wang.fly.com.yunhealth.R;
 
 /**
@@ -23,6 +30,7 @@ public class MedicineListAdapter extends RecyclerView.Adapter<MedicineListAdapte
     List<MedicineDetail> medicineList;
     Context mContext;
     int resourceId;
+    private static final String TAG = "MedicineListAdapter";
 
     public MedicineListAdapter(List<MedicineDetail> medicineList, Context context, int resourceId) {
         this.medicineList = medicineList;
@@ -37,8 +45,35 @@ public class MedicineListAdapter extends RecyclerView.Adapter<MedicineListAdapte
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-
+    public void onBindViewHolder(final ViewHolder holder, int position) {
+        MedicineDetail temp = medicineList.get(position);
+        Integer nextTimePos = temp.getNextTime();
+        Log.d(TAG, "onBindViewHolder: size = " + medicineList.size());
+        if (nextTimePos != null) {
+            Log.d(TAG, "onBindViewHolder: time = " + temp.getTimes().get(nextTimePos));
+            holder.mNextTime.setText(temp.getTimes().get(nextTimePos) + "");
+            holder.mShowMedicineUseType.setText(temp.getUseType() +
+                    temp.getDoses().get(nextTimePos)
+                    + temp.getUnit());
+        }
+        holder.mShowTag.setText(temp.getTag() + "");
+        Integer isOpen = temp.getIsOpen();
+        if (isOpen == null || isOpen == MyDataBase.CLOCK_OPEN) {
+            holder.mOpenOrClose.setChecked(true);
+        } else {
+            holder.mOpenOrClose.setChecked(false);
+        }
+        Glide.with(mContext).load(temp.getMedicinePicture())
+                .placeholder(R.drawable.medicine)
+                .error(R.drawable.medicine)
+                .crossFade().into(new SimpleTarget<GlideDrawable>() {
+            @Override
+            public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
+                holder.mShowMedicineIcon.setImageDrawable(resource);
+            }
+        });
+        holder.mShowMedicineName.setText(temp.getMedicineName() + "");
+        holder.mShowMedicineLength.setText("还需要服用" + temp.getDayLength() + "天");
     }
 
     @Override
@@ -46,7 +81,7 @@ public class MedicineListAdapter extends RecyclerView.Adapter<MedicineListAdapte
         return medicineList.size();
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder{
+    static class ViewHolder extends RecyclerView.ViewHolder {
         View view;
         TextView mNextTime;
         TextView mShowTag;

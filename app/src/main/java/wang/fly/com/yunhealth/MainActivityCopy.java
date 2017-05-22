@@ -26,7 +26,7 @@ import wang.fly.com.yunhealth.Fragments.HomeFragment;
 import wang.fly.com.yunhealth.Fragments.MeasureFragment;
 import wang.fly.com.yunhealth.Fragments.MineFragment;
 import wang.fly.com.yunhealth.MyViewPackage.Dialogs.InputWeightDialog;
-import wang.fly.com.yunhealth.Service.UpLoadService;
+import wang.fly.com.yunhealth.Service.SynchronizeDataService;
 import wang.fly.com.yunhealth.util.MyConstants;
 import wang.fly.com.yunhealth.util.TabLayoutViewPagerAdapter;
 
@@ -103,7 +103,7 @@ public class MainActivityCopy extends AppCompatActivity {
      * 初始化定时上传的线程
      */
     private void initUpLoadThread() {
-        Intent in = new Intent(this, UpLoadService.class);
+        Intent in = new Intent(this, SynchronizeDataService.class);
         in.putExtra("type", MyConstants.RECEIVER_TYPE_UPLOAD);
         in.putExtra("isFirst", true);
         this.startService(in);

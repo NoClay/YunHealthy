@@ -13,19 +13,32 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import java.util.Calendar;
+import java.util.List;
 
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
+import wang.fly.com.yunhealth.DataBasePackage.MedicineDetail;
 import wang.fly.com.yunhealth.DataBasePackage.MyDataBase;
+import wang.fly.com.yunhealth.DataBasePackage.SignUserData;
 import wang.fly.com.yunhealth.R;
 import wang.fly.com.yunhealth.ReceiverPackage.UpLoadReceiver;
 import wang.fly.com.yunhealth.util.MyConstants;
+import wang.fly.com.yunhealth.util.SharedPreferenceHelper;
 import wang.fly.com.yunhealth.util.UtilClass;
 
 /**
  * Created by 82661 on 2016/12/3.
  */
 
-public class UpLoadService extends Service{
+public class SynchronizeDataService extends Service{
     private static final String TAG = "tongzhi";
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+    }
 
     @Nullable
     @Override
@@ -57,16 +70,35 @@ public class UpLoadService extends Service{
                 if (id.isEmpty() || id.length() != 10){
                     makeANotification("您还没有登录");
                 }
-                MyDataBase myDataBase = new MyDataBase(getApplicationContext(),
+                final MyDataBase myDataBase = new MyDataBase(getApplicationContext(),
                         "LocalStore.db", null, MyConstants.DATABASE_VERSION);
                 int count = myDataBase.upLoadMeasureData(id);
                 if (count == MyDataBase.ERROR_LOAD){
-                    makeANotification("测量信息上传失败");
-                }else if (count == 0){
-                    makeANotification("本地无缓存");
+                    makeANotification("数据同步失败");
                 }else{
-                    makeANotification("测量信息上传" + count + "条成功！");
+                    makeANotification("数据同步完成");
                 }
+                final SignUserData userData = SharedPreferenceHelper.getLoginUser();
+                if (userData != null){
+                    BmobQuery<MedicineDetail> query = new BmobQuery<MedicineDetail>();
+                    query.addWhereEqualTo("owner", userData);
+                    query.findObjects(new FindListener<MedicineDetail>() {
+                        @Override
+                        public void done(List<MedicineDetail> list, BmobException e) {
+                            Log.d(TAG, "done: list = " + list);
+                            Log.e(TAG, "done: ", e);
+                            if (e == null && list != null){
+                                Log.d(TAG, "done: size = " + list.size());
+                                for (int i = 0; i < list.size(); i++) {
+                                    Log.d(TAG, "done: id = " + list.get(i).getObjectId());
+                                    myDataBase.insertMedicineDetail(userData.getObjectId()
+                                            , list.get(i));
+                                }
+                            }
+                        }
+                    });
+                }
+
 
             }
         }).start();

@@ -2,21 +2,23 @@ package wang.fly.com.yunhealth.MyViewPackage.Dialogs;
 
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.PopupWindow;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-import wang.fly.com.yunhealth.Adapter.AdapterChooseDose;
+import wang.fly.com.yunhealth.Adapter.AdapterForChooseDose;
 import wang.fly.com.yunhealth.R;
 import wang.fly.com.yunhealth.util.MyConstants;
+import wang.fly.com.yunhealth.util.RecyclerUtils.MyRecyclerViewDivider;
 
 /**
  * Created by noclay on 2017/5/13.
@@ -28,6 +30,8 @@ public class InputTimeAndDoseDialog extends PopupWindow {
     ViewHolder mHolder;
     View.OnClickListener mOnClickListener;
     List<Dose> datas = new ArrayList<>();
+    List<Dose> temp = new ArrayList<>();
+    private static final String TAG = "InputTimeAndDoseDialog";
 
     public InputTimeAndDoseDialog(Context context,
                                   List<String> times,
@@ -43,12 +47,12 @@ public class InputTimeAndDoseDialog extends PopupWindow {
         initView();
     }
 
-    public String getTimeByString(){
+    public String getTimeByString() {
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < datas.size(); i++) {
             Dose temp = datas.get(i);
-            if (temp.getChecked()){
-                builder.append(temp.getTime() + "（" + + temp.getValue() +  "）,");
+            if (temp.getChecked()) {
+                builder.append(temp.getTime() + "（" + +temp.getValue() + "）,");
             }
         }
         return builder.toString();
@@ -57,33 +61,38 @@ public class InputTimeAndDoseDialog extends PopupWindow {
     private void initData(List<String> times,
                           List<Float> doses) {
         int j = 0;
+        Log.d(TAG, "initData: times = " + Arrays.toString(times.toArray()));
+        Log.d(TAG, "initData: doses = " + Arrays.toString(doses.toArray()));
         for (int i = 0; i < MyConstants.TIMES.length; i++) {
-            if (j < times.size() && MyConstants.TIMES[i].equals(times.get(j))){
+            if (j < times.size() && MyConstants.TIMES[i].equals(times.get(j))) {
                 Dose data = new Dose(MyConstants.TIMES[i]);
                 data.setValue(doses.get(j));
                 datas.add(data);
-                j ++;
-            }else{
+                data.setChecked(true);
+                j++;
+            } else {
                 Dose data = new Dose(MyConstants.TIMES[i]);
                 datas.add(data);
             }
         }
+        Log.d(TAG, "initData: datas = " + Arrays.toString(datas.toArray()));
     }
 
-    public List<String> getTime(){
+
+    public List<String> getTime() {
         List<String> times = new ArrayList<>();
         for (int i = 0; i < datas.size(); i++) {
-            if (datas.get(i).getChecked()){
+            if (datas.get(i).getChecked()) {
                 times.add(new String(datas.get(i).getTime()));
             }
         }
         return times;
     }
 
-    public List<Float> getDose(){
+    public List<Float> getDose() {
         List<Float> doses = new ArrayList<>();
-        for (int i = 0; i < doses.size(); i++) {
-            if (datas.get(i).getChecked()){
+        for (int i = 0; i < datas.size(); i++) {
+            if (datas.get(i).getChecked()) {
                 doses.add(new Float(datas.get(i).getValue()));
             }
         }
@@ -94,42 +103,49 @@ public class InputTimeAndDoseDialog extends PopupWindow {
     private void initView() {
         mHolder.mCancelAction.setOnClickListener(mOnClickListener);
         mHolder.mSubmitAction.setOnClickListener(mOnClickListener);
-        final AdapterChooseDose doses = new AdapterChooseDose(mContext, datas,
+        AdapterForChooseDose doses = new AdapterForChooseDose(mContext, datas,
                 R.layout.item_checkable_choose_time);
-        mHolder.mListView.setAdapter(doses);
-        mHolder.mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Dose data = datas.get(position);
-                data.toggle();
-                Log.d("time", "onItemClick: checked = " + data.getChecked());
-                Log.d("time", "onItemClick: pos = " + position);
-                doses.notifyDataSetChanged();
-            }
-        });
+        mHolder.mRecyclerView.addItemDecoration(new MyRecyclerViewDivider(mContext));
+        mHolder.mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
+        mHolder.mRecyclerView.setAdapter(doses);
+//        final AdapterChooseDose doses = new AdapterChooseDose(mContext, datas,
+//                R.layout.item_checkable_choose_time);
+//        mHolder.mListView.setAdapter(doses);
+//        mHolder.mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                Dose data = datas.get(position);
+//                data.toggle();
+//                Log.d("time", "onItemClick: checked = " + data.getChecked());
+//                Log.d("time", "onItemClick: pos = " + position);
+//                doses.notifyDataSetInvalidated();
+//            }
+//        });
         this.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
-        this.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
+        this.setHeight(ViewGroup.LayoutParams.MATCH_PARENT);
         this.setFocusable(true);
         ColorDrawable dw = new ColorDrawable(0x88000000);
         this.setBackgroundDrawable(dw);
         this.setAnimationStyle(R.style.PopupAnimation);
     }
 
-    static class ViewHolder {
-        View view;
-        ListView mListView;
-        Button mSubmitAction;
-        Button mCancelAction;
+//    static
+//
+//    static class ViewHolder {
+//        View view;
+//        ListView mListView;
+//        Button mSubmitAction;
+//        Button mCancelAction;
+//
+//        ViewHolder(View view) {
+//            this.view = view;
+//            this.mListView = (ListView) view.findViewById(R.id.listView);
+//            this.mSubmitAction = (Button) view.findViewById(R.id.submitAction);
+//            this.mCancelAction = (Button) view.findViewById(R.id.cancelAction);
+//        }
+//    }
 
-        ViewHolder(View view) {
-            this.view = view;
-            this.mListView = (ListView) view.findViewById(R.id.listView);
-            this.mSubmitAction = (Button) view.findViewById(R.id.submitAction);
-            this.mCancelAction = (Button) view.findViewById(R.id.cancelAction);
-        }
-    }
-
-    public static class Dose{
+    public static class Dose {
         private String mTime;
         private Boolean mChecked;
         private Float mValue;
@@ -171,8 +187,28 @@ public class InputTimeAndDoseDialog extends PopupWindow {
         public void setValue(Float value) {
             mValue = value;
         }
-        public void toggle(){
+
+        public void toggle() {
             mChecked = !mChecked;
+        }
+
+        @Override
+        public String toString() {
+            return mTime + "(" + mValue + ")";
+        }
+    }
+
+    class ViewHolder {
+        View view;
+        RecyclerView mRecyclerView;
+        Button mSubmitAction;
+        Button mCancelAction;
+
+        ViewHolder(View view) {
+            this.view = view;
+            this.mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
+            this.mSubmitAction = (Button) view.findViewById(R.id.submitAction);
+            this.mCancelAction = (Button) view.findViewById(R.id.cancelAction);
         }
     }
 }

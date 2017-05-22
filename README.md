@@ -20,11 +20,23 @@ public static void editLoginState(SignUserData user, Boolean isLogin)
 **/
 public static void exitLogin()
 ```
+使用的SQLite：LocalStore.db
+
 # 2017/5/11 修改布局说明：
+
 修改了好友页面的布局，实现类似好友列表的布局思路如下：
 1. 使用RecyclerView嵌套RecyclerView，在父RecyclerView的onBindView中计算出子RecyclerView的高度，这个可以采用如下设定：
-	```java
-		   childRecyclerView.getLayoutManager().setAutoMeasuredEnable(boolean flag)
-	```
+  ```java
+  	   childRecyclerView.getLayoutManager().setAutoMeasuredEnable(boolean flag)
+  ```
+
 2. 利用ExpandableListView控件
 
+
+# 2017/5/20 修复bug说明：
+
+修复了修改个人信息的bug
+
+bug原因：未获取读取文件的权限
+
+bug修复：使用Android动态权限申请

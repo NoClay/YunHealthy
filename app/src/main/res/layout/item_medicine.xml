@@ -2,9 +2,10 @@
 <android.support.v7.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_marginTop="@dimen/cardMarginTop"
+    android:layout_marginTop="5dp"
     android:layout_marginLeft="@dimen/cardMarginLeft"
     android:layout_marginRight="@dimen/cardMarginRight"
+    android:layout_marginBottom="5dp"
     app:cardCornerRadius="@dimen/cardRadius"
     android:elevation="1px"
     android:layout_width="match_parent"
@@ -56,11 +57,14 @@
                 android:textSize="@dimen/text_title_middle"/>
 
             <Switch
+                android:layout_marginRight="25dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
                 android:id="@+id/openOrClose"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
-                android:layout_margin="10dp"/>
+                />
         </LinearLayout>
 
         <View
@@ -86,10 +90,10 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:paddingLeft="@dimen/padding_left"
-                android:paddingRight="@dimen/padding_right"
                 android:paddingTop="@dimen/padding_top">
 
                 <TextView
+
                     android:id="@+id/showMedicineName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -100,16 +104,18 @@
                     android:textStyle="bold"/>
 
                 <TextView
+
                     android:id="@+id/showMedicineUseType"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:gravity="center_horizontal"
-                    android:text="服用方式:口服"
+                    android:text="口服3.5粒"
                     android:textColor="@color/black"
                     android:textSize="@dimen/text_title_middle"/>
 
                 <TextView
+
                     android:id="@+id/showMedicineLength"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

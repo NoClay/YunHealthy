@@ -3,7 +3,6 @@ package wang.fly.com.yunhealth.MyViewPackage;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -13,21 +12,14 @@ import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
-import android.widget.ImageView;
-
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 
 import wang.fly.com.yunhealth.R;
-
-import static android.R.attr.bitmap;
-import static android.graphics.Bitmap.createScaledBitmap;
 
 /**
  * Created by 82661 on 2016/11/9.
  */
 
-public class CircleImageView extends ImageView {
+public class CircleImageView extends android.support.v7.widget.AppCompatImageView {
 
     private Paint paint;
     private int backgroundColor = Color.WHITE;

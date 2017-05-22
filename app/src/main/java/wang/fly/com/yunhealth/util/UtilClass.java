@@ -25,8 +25,10 @@ import java.io.UnsupportedEncodingException;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -38,6 +40,45 @@ import static android.os.Build.VERSION_CODES.M;
 
 public class UtilClass {
 
+
+    /**
+     * 将[1.23, 1.34, 2.3]转换为对应的FloatList
+     * @param data
+     * @return
+     */
+    public static List<Float> asFloatList(String data){
+        if (data.startsWith("[") && data.endsWith("]")){
+            int length = data.length();
+            data = data.substring(1, length - 1);
+            System.out.println(data);
+            String[] datas = data.split(", ");
+            List<Float> result = new ArrayList<>();
+            for (int i = 0; i < datas.length; i++) {
+                result.add(new Float(datas[i]));
+            }
+            return result;
+        }
+        return null;
+    }
+    /**
+     * 将形如[1, 2, 3, 4]的字符串转换为字符List
+     * @param data
+     * @return
+     */
+    public static List<String> asStringList(String data){
+        if (data.startsWith("[") && data.endsWith("]")){
+            int length = data.length();
+            data = data.substring(1, length - 1);
+            System.out.println(data);
+            String[] datas = data.split(", ");
+            List<String> result = new ArrayList<>();
+            for (int i = 0; i < datas.length; i++) {
+                result.add(datas[i]);
+            }
+            return result;
+        }
+        return null;
+    }
     public static boolean isFloatOfString(String data){
         return data.matches("^([+-]?)\\\\d*\\\\.\\\\d+$");
     }

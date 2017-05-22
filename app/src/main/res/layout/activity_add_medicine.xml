@@ -7,19 +7,12 @@
     android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/colorPrimary"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:text="添加药物"
-            android:textSize="@dimen/text_title_largest"/>
     </android.support.v7.widget.Toolbar>
 
     <ScrollView
@@ -79,7 +72,7 @@
                 <ImageView
                     android:id="@+id/medicineImage"
                     android:layout_width="match_parent"
-                    android:layout_height="100dp"
+                    android:layout_height="200dp"
                     android:layout_margin="5dp"
                     android:background="@drawable/rectangle_block_dialog"
                     android:src="@drawable/add_gray"/>

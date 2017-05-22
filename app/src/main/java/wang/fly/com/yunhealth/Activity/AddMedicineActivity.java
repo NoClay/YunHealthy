@@ -10,8 +10,11 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.v7.app.ActionBar;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.widget.ArrayAdapter;
@@ -47,7 +50,6 @@ import wang.fly.com.yunhealth.util.SharedPreferenceHelper;
 import wang.fly.com.yunhealth.util.UtilClass;
 
 import static wang.fly.com.yunhealth.MVP.Presenters.ChangeMyDataActivityPresenter.REQUEST_CODE_PICK_IMAGE;
-import static wang.fly.com.yunhealth.util.MyConstants.ROOT_PATH;
 
 /**
  * Created by noclay on 2017/4/29.
@@ -59,10 +61,6 @@ public class AddMedicineActivity extends
     private Spinner mChooseUseType;
     private Context mContext;
     private InputDayLengthDialog mInputDayLengthDialog;
-    /**
-     * 添加药物
-     */
-    private TextView mTitle;
     /**
      * 请输入药物名称
      */
@@ -91,6 +89,7 @@ public class AddMedicineActivity extends
     private ProgressDialog saveData;
     private Spinner mMedicineUnit;
     private ScrollView mMainLayout;
+    private Toolbar mToolbar;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -98,6 +97,8 @@ public class AddMedicineActivity extends
         setContentView(R.layout.activity_add_medicine);
         initView();
         mPresenter.initView();
+        UtilClass.requestPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE);
+        UtilClass.requestPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
     }
 
     @Override
@@ -107,7 +108,6 @@ public class AddMedicineActivity extends
 
     private void initView() {
         mContext = this;
-        mTitle = (TextView) findViewById(R.id.title);
         mMedicineName = (EditText) findViewById(R.id.medicineName);
         mMedicineImage = (ImageView) findViewById(R.id.medicineImage);
         mMedicineImage.setOnClickListener(this);
@@ -122,8 +122,25 @@ public class AddMedicineActivity extends
         mInputDay.setOnClickListener(this);
         mMedicineUnit = (Spinner) findViewById(R.id.medicineUnit);
         mMainLayout = (ScrollView) findViewById(R.id.mainLayout);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null){
+            actionBar.setTitle("添加药物");
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
         initUseType();
         initUnits();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:{
+                finish();
+            }
+        }
+        return true;
     }
 
     private void initUnits() {
@@ -160,6 +177,7 @@ public class AddMedicineActivity extends
     public void saveSuccess() {
         if (saveData != null) {
             saveData.dismiss();
+            finish();
             Toast.makeText(mContext, "数据保存成功", Toast.LENGTH_SHORT).show();
             saveData = null;
         }
@@ -190,7 +208,7 @@ public class AddMedicineActivity extends
                             Intent getImageByCamera = new
                                     Intent("android.media.action.IMAGE_CAPTURE");
                             // 获取文件
-                            File tempFile = new File(ROOT_PATH + "temp.jpg");
+                            File tempFile = new File(MyConstants.SRC_PATH_MEDICINE);
                             if (tempFile.exists() && tempFile.isFile()) {
                                 tempFile.delete();
                             }
@@ -248,6 +266,8 @@ public class AddMedicineActivity extends
         if (medicineDetail == null) {
             medicine = new MedicineDetail();
             medicine.setStartTime(new BmobDate(new Date()));
+            medicine.setDayLength(3);
+            medicine.setDayCount(0);
         } else {
             medicine = medicineDetail;
         }
@@ -315,7 +335,9 @@ public class AddMedicineActivity extends
             mInputTimeAndDoseDialog = null;
         }
 
-        mInputTimeAndDoseDialog = new InputTimeAndDoseDialog(mContext, medicine.getTimes(), medicine.getDoses(), new View.OnClickListener() {
+        mInputTimeAndDoseDialog = new InputTimeAndDoseDialog(mContext,
+                medicine.getTimes(),
+                medicine.getDoses(), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 switch (v.getId()) {
@@ -377,6 +399,8 @@ public class AddMedicineActivity extends
             case R.id.inputDay:
                 mPresenter.inputDay();
                 break;
+            case R.id.toolbar:
+                break;
         }
     }
 
@@ -397,7 +421,7 @@ public class AddMedicineActivity extends
                 case ChangeMyDataActivityPresenter.REQUEST_CODE_CAPTURE_CAMERA: {
                     //直接拍照获取头像
                     if (data == null) {
-                        imageUri = Uri.fromFile(new File(ROOT_PATH + "temp.jpg"));
+                        imageUri = Uri.fromFile(new File(MyConstants.SRC_PATH_MEDICINE));
                     } else {
                         imageUri = data.getData();
                         Log.d("test", "onActivityResult: 使用相机返回" + imageUri);
@@ -428,8 +452,8 @@ public class AddMedicineActivity extends
                     } else {//截取图片完成
                         //上传图片
                         File file = new File(MyConstants.CROP_PATH_MEDICINE);
-                        file.renameTo(new File(MyConstants.ROOT_PATH + "now.jpg"));
-                        mPresenter.uploadFile(new File(MyConstants.ROOT_PATH + "now.jpg"));
+                        file.renameTo(new File(MyConstants.TEMP_MEDICINE));
+                        mPresenter.uploadFile(new File(MyConstants.TEMP_MEDICINE));
                     }
                     break;
                 }

@@ -1,6 +1,7 @@
 package wang.fly.com.yunhealth.DataBasePackage;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import cn.bmob.v3.BmobObject;
@@ -31,6 +32,15 @@ public class MedicineDetail extends BmobObject{
     private BmobDate startTime;
     //服药的单位
     private String unit;
+    private Integer isOpen;
+
+    public Integer getIsOpen() {
+        return isOpen;
+    }
+
+    public void setIsOpen(Integer isOpen) {
+        this.isOpen = isOpen;
+    }
 
     public String getUnit() {
         return unit;
@@ -109,6 +119,21 @@ public class MedicineDetail extends BmobObject{
             return new ArrayList<>();
         }
         return times;
+    }
+
+    public Integer getNextTime(){
+        if (times == null || times.size() == 0){
+            return null;
+        }
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        String nowTime = calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE);
+        for (int i = 0; i < times.size(); i++) {
+            if (times.get(i).compareTo(nowTime) >= 0){
+                return i;
+            }
+        }
+        return 0;
     }
 
     public void setTimes(List<String> times) {
