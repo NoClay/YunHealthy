@@ -116,4 +116,15 @@ public class MedicineActivity extends AppCompatActivity implements View.OnClickL
         }
         return temp;
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode){
+            case ADD_MEDICINE:{
+                medicines.clear();
+                medicines.addAll(getMedicines());
+                break;
+            }
+        }
+    }
 }

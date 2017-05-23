@@ -86,6 +86,7 @@ public class RecycleAdapterForReportMenu extends
         menuInfoList.clear();
         userId = context.getSharedPreferences("LoginState",
                 Context.MODE_PRIVATE).getString("userId", null);
+        db = dbHelper.getWritableDatabase();
         Cursor cursor = db.rawQuery("select * from report_menu " +
                 "where type = " + type + " and userId = '" + userId + "'", null);
         if (cursor.moveToFirst()){

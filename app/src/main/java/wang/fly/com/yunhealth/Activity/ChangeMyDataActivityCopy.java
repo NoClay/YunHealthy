@@ -234,7 +234,11 @@ public class ChangeMyDataActivityCopy extends
 
     @Override
     public void showImage(String url) {
-        userImageUri = Uri.parse(url);
+        if (url == null){
+            userImageUri = null;
+        }else{
+            userImageUri = Uri.parse(url);
+        }
         Glide.with(mContext).load(url).crossFade(200)
                 .placeholder(R.drawable.head_image_default)
                 .error(R.drawable.head_image_default)
@@ -271,12 +275,20 @@ public class ChangeMyDataActivityCopy extends
         if (userData == null) {
             return;
         }
-        userImageUri = Uri.parse(userData.getUserImage());
+        if(userData.getUserImage() == null){
+            userImageUri = null;
+        }else{
+            userImageUri = Uri.parse(userData.getUserImage());
+        }
         showImage(userData.getUserImage());
         mNameEdit.setText(userData.getUserName() + "");
         mIdCardEdit.setText(userData.getIdNumber() + "");
         showMale(userData.getMan());
-        mCalendar.setTime(UtilClass.resolveBmobDate(userData.getBirthday().getDate(), null));
+        if (userData.getBirthday() == null){
+            mCalendar.setTimeInMillis(System.currentTimeMillis());
+        }else{
+            mCalendar.setTime(UtilClass.resolveBmobDate(userData.getBirthday().getDate(), null));
+        }
         showBirthday(mCalendar);
         mHeightEdit.setText(userData.getHeight() + "");
         mWeightEdit.setText(userData.getWeight() + "");
