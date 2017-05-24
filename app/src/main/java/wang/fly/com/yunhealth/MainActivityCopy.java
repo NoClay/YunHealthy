@@ -1,5 +1,8 @@
 package wang.fly.com.yunhealth;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -7,6 +10,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
@@ -14,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -26,6 +31,7 @@ import wang.fly.com.yunhealth.Fragments.HomeFragment;
 import wang.fly.com.yunhealth.Fragments.MeasureFragment;
 import wang.fly.com.yunhealth.Fragments.MineFragment;
 import wang.fly.com.yunhealth.MyViewPackage.Dialogs.InputWeightDialog;
+import wang.fly.com.yunhealth.ReceiverPackage.MedicineAlarmReceiver;
 import wang.fly.com.yunhealth.Service.SynchronizeDataService;
 import wang.fly.com.yunhealth.util.MyConstants;
 import wang.fly.com.yunhealth.util.TabLayoutViewPagerAdapter;
@@ -50,7 +56,10 @@ public class MainActivityCopy extends AppCompatActivity {
         setContentView(R.layout.activity_main_copy);
         initView();
         initUpLoadThread();
+        startAlarm();
     }
+
+
 
     private void initView() {
         mMainVPager = (ViewPager) findViewById(R.id.main_vPager);
@@ -107,6 +116,29 @@ public class MainActivityCopy extends AppCompatActivity {
         in.putExtra("type", MyConstants.RECEIVER_TYPE_UPLOAD);
         in.putExtra("isFirst", true);
         this.startService(in);
+
+    }
+
+    private void startAlarm() {
+        Calendar c=Calendar.getInstance();//获取日期对象
+        c.setTimeInMillis(System.currentTimeMillis());        //设置Calendar对象
+        if (c.get(Calendar.MINUTE) < 30){
+            c.set(Calendar.MINUTE, 30);            //设置闹钟的分钟数
+        }else{
+            c.set(Calendar.HOUR_OF_DAY, c.get(Calendar.HOUR_OF_DAY) + 1);
+            c.set(Calendar.MINUTE, 00);
+        }
+        c.set(Calendar.SECOND, 0);                //设置闹钟的秒数
+        c.set(Calendar.MILLISECOND, 0);            //设置闹钟的毫秒数
+        Intent intent = new Intent(MainActivityCopy.this, MedicineAlarmReceiver.class);    //创建Intent对象
+        intent.putExtra("time", c.get(Calendar.HOUR_OF_DAY) + ":" + c.get(Calendar.MINUTE));
+        PendingIntent pi = PendingIntent.getBroadcast(MainActivityCopy.this, 0, intent, 0);    //创建PendingIntent
+        //alarmManager.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pi);        //设置闹钟
+        AlarmManager alarm = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Log.d("clock", "startAlarm: " + c.get(Calendar.HOUR_OF_DAY) + ":" + c.get(Calendar.MINUTE));
+        alarm.setRepeating(AlarmManager.RTC_WAKEUP,
+                c.getTimeInMillis(),
+                AlarmManager.INTERVAL_HALF_HOUR, pi);        //设置闹钟，当前时间就唤醒
     }
     /**
      * 每次启动后检查体重时候输入

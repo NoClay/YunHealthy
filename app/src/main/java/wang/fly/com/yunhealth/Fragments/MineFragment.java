@@ -3,9 +3,11 @@ package wang.fly.com.yunhealth.Fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -105,10 +107,43 @@ public class MineFragment extends Fragment implements View.OnClickListener{
             }
             case R.id.sixthLayout:{
                 //关于云健康
+                showAboutDialog(getContext());
                 break;
             }
         }
     }
+
+    private void showAboutDialog(Context mActivity) {
+        View aboutDialogView = LayoutInflater.from(mActivity).inflate(R.layout.dialog_about, null);
+        TextView tvOrganization = (TextView) aboutDialogView.findViewById(R.id.tv_organization);
+        tvOrganization.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setAction("android.intent.action.VIEW");
+                Uri content_url = Uri.parse("http://www.xiyoumobile.com/");
+                intent.setData(content_url);
+                startActivity(intent);
+            }
+        });
+        TextView tvBlog = (TextView) aboutDialogView.findViewById(R.id.tv_blog);
+        tvBlog.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setAction("android.intent.action.VIEW");
+                Uri content_url = Uri.parse("https://github.com/NoClay/YunHealthy");
+                intent.setData(content_url);
+                startActivity(intent);
+            }
+        });
+        AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
+        builder.setView(aboutDialogView);
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+
     public void setUser(){
         SharedPreferences sharedPreferences =
                 getContext().getSharedPreferences("LoginState", MODE_PRIVATE);

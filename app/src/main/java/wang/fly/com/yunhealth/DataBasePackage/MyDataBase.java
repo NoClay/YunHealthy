@@ -27,6 +27,7 @@ import wang.fly.com.yunhealth.DataBasePackage.MeasureData.MeasureXinDian;
 import wang.fly.com.yunhealth.DataBasePackage.MeasureData.MeasureXueTang;
 import wang.fly.com.yunhealth.DataBasePackage.MeasureData.MeasureXueYa;
 import wang.fly.com.yunhealth.DataBasePackage.MeasureData.MeasureXueYang;
+import wang.fly.com.yunhealth.Fragments.DataMedicalFragment;
 import wang.fly.com.yunhealth.R;
 import wang.fly.com.yunhealth.util.MyConstants;
 import wang.fly.com.yunhealth.util.UtilClass;
@@ -122,10 +123,35 @@ public class MyDataBase extends SQLiteOpenHelper {
         }
     }
 
-    public List<MedicineDetail> getMedicineDetail(String userId){
-        List<MedicineDetail> medicineDetails = new ArrayList<>();
+    public boolean isNeedEatMedicine(String time, String userId){
         Cursor cursor = getReadableDatabase().rawQuery("select * from MedicineDetail" +
-                " where userId = '" + userId + "'", null);
+                " where userId = '" + userId + "' " +
+                " and time = '" + time + "' " +
+                " and isOpen = " + CLOCK_OPEN +
+                " and dayLength - dayCount > 0"  , null);
+        return cursor.moveToFirst();
+    }
+
+
+
+    public List<MedicineDetail> getMedicineDetail(int type, String time, String userId){
+        List<MedicineDetail> medicineDetails = new ArrayList<>();
+        Cursor cursor;
+        if (type == DataMedicalFragment.NOW_MEDICINE) {
+            cursor = getReadableDatabase().rawQuery("select * from MedicineDetail" +
+                    " where userId = '" + userId + "' " +
+                    " and dayLength - dayCount > 0"  , null);
+        } else if (type == DataMedicalFragment.LAST_MEDICINE){
+            cursor = getReadableDatabase().rawQuery("select * from MedicineDetail" +
+                    " where userId = '" + userId + "' " +
+                    " and dayLength - dayCount <= 0"  , null);
+        } else{
+            cursor = getReadableDatabase().rawQuery("select * from MedicineDetail" +
+                    " where userId = '" + userId + "' " +
+                    " and time = '" + time + "' " +
+                    " and isOpen = " + CLOCK_OPEN +
+                    " and dayLength - dayCount > 0"  , null);
+        }
         if (cursor.moveToFirst()){
             do {
                 MedicineDetail temp = new MedicineDetail();
@@ -142,11 +168,18 @@ public class MyDataBase extends SQLiteOpenHelper {
                 temp.setStartTime(BmobDate.createBmobDate("yyyy-MM-dd HH:mm:ss", cursor.getString(
                         cursor.getColumnIndex("startTime"))));
                 temp.setUnit(cursor.getString(cursor.getColumnIndex("unit")));
+                temp.setIsOpen(cursor.getInt(cursor.getColumnIndex("isOpen")));
                 medicineDetails.add(temp);
             }while (cursor.moveToNext());
 
         }
         return medicineDetails;
+    }
+
+    public void updateMedicineDetail(String userId, MedicineDetail medicineDetail){
+        SQLiteDatabase db = getWritableDatabase();
+        deleteMedicineDetail(medicineDetail);
+        insertMedicineDetail(userId, medicineDetail);
     }
     public void insertMedicineDetail(String userId,
                                      MedicineDetail medicine){

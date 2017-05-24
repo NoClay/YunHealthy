@@ -136,6 +136,10 @@ public class MedicineDetail extends BmobObject{
         return 0;
     }
 
+    public void incDayCount(){
+        dayCount = dayLength + 1;
+    }
+
     public void setTimes(List<String> times) {
         this.times = times;
     }

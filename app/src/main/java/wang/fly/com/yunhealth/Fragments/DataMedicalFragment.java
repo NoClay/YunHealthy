@@ -27,6 +27,7 @@ public class DataMedicalFragment extends Fragment implements View.OnClickListene
     private TextView mLastMedicine;
     public static final int NOW_MEDICINE = 0;
     public static final int LAST_MEDICINE = 1;
+    public static final int CLOCK_MEDICINE = 2;
 
     @Nullable
     @Override
