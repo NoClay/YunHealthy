@@ -1,8 +1,10 @@
 package wang.fly.com.yunhealth.Fragments;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -32,14 +34,15 @@ public class DataFragment extends Fragment implements View.OnClickListener{
     private int colorUnselected,colorSelected;
     private Context context;
     private View v;
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if(v == null) {
             v = inflater.inflate(R.layout.fragment_data, container, false);
             context = getContext();
-            colorUnselected = getResources().getColor(R.color.black);
-            colorSelected = getResources().getColor(R.color.lightSeaGreen);
+            colorUnselected = getResources().getColor(R.color.black, null);
+            colorSelected = getResources().getColor(R.color.lightSeaGreen, null);
             tabLine = v.findViewById(R.id.data_line);
             initTabView();
             findView(v);
@@ -84,7 +87,7 @@ public class DataFragment extends Fragment implements View.OnClickListener{
         };
 
         viewPager.setAdapter(mAdapter);
-        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 LinearLayout.LayoutParams lp = (android.widget.LinearLayout.LayoutParams) tabLine

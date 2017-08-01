@@ -7,7 +7,20 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.LinearGradient;
+import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.graphics.PixelFormat;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.RectF;
+import android.graphics.Shader;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
+import android.net.Network;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
@@ -17,11 +30,14 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.URL;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -29,6 +45,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -40,7 +57,122 @@ import static android.os.Build.VERSION_CODES.M;
 
 public class UtilClass {
 
+    /**
+     * 获取带倒影的bitmap
+     * @param bitmap
+     * @return
+     */
+    public static Bitmap getBitmapWithReflectionImage(Bitmap bitmap) {
+        final int reflectionGap = 4;
+        int w = bitmap.getWidth();
+        int h = bitmap.getHeight();
+        Matrix matrix = new Matrix();
+        matrix.preScale(1, -1);
+        Bitmap reflectionImage = Bitmap.createBitmap(bitmap, 0, h / 2, w,
+                h / 2, matrix, false);
 
+        Bitmap bitmapWithReflection = Bitmap.createBitmap(w, (h + h / 2),
+                Bitmap.Config.ARGB_8888);
+
+        Canvas canvas = new Canvas(bitmapWithReflection);
+        canvas.drawBitmap(bitmap, 0, 0, null);
+        Paint deafalutPaint = new Paint();
+        canvas.drawRect(0, h, w, h + reflectionGap, deafalutPaint);
+
+        canvas.drawBitmap(reflectionImage, 0, h + reflectionGap, null);
+
+        Paint paint = new Paint();
+        LinearGradient shader = new LinearGradient(0, bitmap.getHeight(), 0,
+                bitmapWithReflection.getHeight() + reflectionGap, 0x70ffffff,
+                0x00ffffff, Shader.TileMode.CLAMP);
+        paint.setShader(shader);
+        // Set the Transfer mode to be porter duff and destination in
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
+        // Draw a rectangle using the paint with our linear gradient
+        canvas.drawRect(0, h, w, bitmapWithReflection.getHeight()
+                + reflectionGap, paint);
+
+        return bitmapWithReflection;
+    }
+    /**
+     * 获取圆角bitmap
+     * @param bitmap
+     * @param roundPx
+     * @return
+     */
+    public static Bitmap getRoundedCornerBitmap(Bitmap bitmap, float roundPx) {
+        int w = bitmap.getWidth();
+        int h = bitmap.getHeight();
+        Bitmap output = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(output);
+        final int color = 0xff424242;
+        final Paint paint = new Paint();
+        final Rect rect = new Rect(0, 0, w, h);
+        final RectF rectF = new RectF(rect);
+        paint.setAntiAlias(true);
+        canvas.drawARGB(0, 0, 0, 0);
+        paint.setColor(color);
+        canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        canvas.drawBitmap(bitmap, rect, rect, paint);
+        return output;
+    }
+    public static Bitmap getBitmapFromDrawable(Drawable drawable) {
+        // 取 drawable 的长宽
+        int w = drawable.getIntrinsicWidth();
+        int h = drawable.getIntrinsicHeight();
+        // 取 drawable 的颜色格式
+        Bitmap.Config config = drawable.getOpacity() != PixelFormat.OPAQUE ? Bitmap.Config.ARGB_8888
+                : Bitmap.Config.RGB_565;
+        // 建立对应 bitmap
+        Bitmap bitmap = Bitmap.createBitmap(w, h, config);
+        // 建立对应 bitmap 的画布
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, w, h);
+        // 把 drawable 内容画到画布中
+        drawable.draw(canvas);
+        return bitmap;
+    }
+    /**
+     * 缩放一个bitmap
+     * @param bitmap
+     * @param width
+     * @param height
+     * @return
+     */
+    public static Bitmap getScaledBitmap(Bitmap bitmap, int width, int height){
+        int targetWidth = bitmap.getWidth();
+        int targetHeight = bitmap.getHeight();
+        Matrix matrix = new Matrix();
+        float scaleWidth = ((float) width / targetWidth);
+        float scaleHeight = ((float) height / targetHeight);
+        matrix.postScale(scaleWidth, scaleHeight);
+        return Bitmap.createBitmap(bitmap, 0, 0, targetWidth, targetHeight, matrix, true);
+    }
+
+    public static Bitmap getBitmapFromGlide(Context context,
+                                            String targetUrl,
+                                            int x,
+                                            int y){
+        try {
+            return Glide.with(context)
+                    .load(targetUrl)
+                    .asBitmap() //必须
+                    .centerCrop()
+                    .into(x, y)
+                    .get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static Bitmap getBitmapFromGlide(Context context,
+                                            String targetUrl){
+        return getBitmapFromGlide(context, targetUrl, 500, 500);
+    }
     /**
      * 将[1.23, 1.34, 2.3]转换为对应的FloatList
      * @param data
@@ -459,22 +591,11 @@ public class UtilClass {
      * @param context
      */
     public static boolean checkNetwork(Context context) {
-        ConnectivityManager conMan = (ConnectivityManager) context.
-                getSystemService(Context.CONNECTIVITY_SERVICE);
-
-//mobile 3G Data Network
-        NetworkInfo.State mobile = conMan.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState();
-//wifi
-        NetworkInfo.State wifi = conMan.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState();
-
-//如果3G网络和wifi网络都未连接，且不是处于正在连接状态 则进入Network Setting界面 由用户配置网络连接
-        if (mobile == NetworkInfo.State.CONNECTED || mobile == NetworkInfo.State.CONNECTING)
-            return true;
-        if (wifi == NetworkInfo.State.CONNECTED || wifi == NetworkInfo.State.CONNECTING)
-            return true;
-//        context.startActivity(new Intent(Settings.ACTION_WIRELESS_SETTINGS));
-        //进入无线网络配置界面
-//startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS)); //进入手机中的wifi网络设置界面
+        ConnectivityManager cm = (ConnectivityManager) context
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo info = cm.getActiveNetworkInfo();
+        if (info != null)
+            return info.isConnected();
         return false;
     }
 

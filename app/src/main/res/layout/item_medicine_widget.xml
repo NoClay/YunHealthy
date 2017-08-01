@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="5dp"
+    android:orientation="vertical"
+    android:layout_marginLeft="@dimen/cardMarginLeft"
+    android:layout_marginRight="@dimen/cardMarginRight"
+    android:layout_marginTop="5dp"
+    android:elevation="1px">
+
+    <LinearLayout
+        android:paddingLeft="@dimen/padding_left"
+        android:paddingRight="@dimen/padding_right"
+        android:paddingTop="@dimen/padding_top"
+        android:paddingBottom="@dimen/padding_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:weightSum="10">
+
+        <TextView
+            android:id="@+id/nextTime"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="4"
+            android:gravity="center"
+            android:text="12:23"
+            android:textColor="@color/secondary_text"
+            android:textSize="@dimen/text_title_largest" />
+
+        <ImageView
+            android:layout_width="@dimen/direction_size"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:background="@color/divider" />
+
+        <TextView
+            android:id="@+id/showTag"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="7"
+            android:gravity="center_vertical|left"
+            android:lines="1"
+            android:paddingLeft="5dp"
+            android:text="治疗感冒"
+            android:textColor="@color/secondary_text"
+            android:textSize="@dimen/text_title_middle" />
+
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/direction_size"
+        android:background="@color/divider" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/showMedicineIcon"
+            android:layout_width="150dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/medicine" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/padding_left"
+            android:paddingTop="@dimen/padding_top">
+
+            <TextView
+                android:id="@+id/showMedicineName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="维他命"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_title_largest"
+                android:textStyle="bold" />
+
+            <TextView
+
+                android:id="@+id/showMedicineUseType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:gravity="center_horizontal"
+                android:text="口服3.5粒"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_title_middle" />
+
+            <TextView
+                android:id="@+id/showMedicineLength"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:gravity="center_horizontal"
+                android:text="还需服用3天"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_title_middle" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

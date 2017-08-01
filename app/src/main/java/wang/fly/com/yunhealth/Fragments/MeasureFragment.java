@@ -14,6 +14,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -70,8 +71,8 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
     private ClientThread clientThread;
     private ConnectedThread connectThread;
     private List<MeasureData> measureDataList;
-    private Date date;
     private long last;
+    private Calendar calendar;
     //请求
     static final int REQUEST_OPEN_BLUETOOTH = 0;
     static final int MSG_WAIT_CONNECT = 0;
@@ -116,7 +117,8 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
                 context, measureDataList);
         recyclerView.setAdapter(myAdapter);
         //本地缓存所需要的初始化
-        date = new Date();
+        calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(SystemClock.currentThreadTimeMillis());
         myDataBase = new MyDataBase(getActivity().getApplicationContext(),
                 "LocalStore.db", null, MyConstants.DATABASE_VERSION);
 
@@ -599,8 +601,8 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
                 }
                 case MSG_READ_STRING: {
                     //进行数据的分类设定
-                    date.setTime(System.currentTimeMillis());
-                    int minute = date.getMinutes();
+                    calendar.setTimeInMillis(System.currentTimeMillis());
+                    int minute = calendar.get(Calendar.MINUTE);
                     String data = (String) msg.obj;
                     MeasureData temp;
                     switch (msg.arg1) {
@@ -738,11 +740,11 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
                 Context.MODE_PRIVATE).getString("userId", null);
         if (minute % MyConstants.CACHE_TIME_LENGTH == 0
                 && !myDataBase.checkOneMeasureDataCache(
-                type, date, userId)) {
+                type, calendar.getTime(), userId)) {
             Log.d("Cache", "checkMinuteAndCache: cache + " +
                     MyConstants.LABEL_STRING[type] + "\tminute" + minute);
             myDataBase.addOneMeasureData(
-                    measureDataList.get(type), type, date, userId);
+                    measureDataList.get(type), type, calendar.getTime(), userId);
             measureDataList.get(type).reset();
         }
     }

@@ -7,6 +7,7 @@ import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v7.widget.RecyclerView;
 import android.text.util.Linkify;
 import android.util.SparseArray;
@@ -133,10 +134,11 @@ public class ViewHolder extends RecyclerView.ViewHolder
         return this;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     public ViewHolder setTextColorRes(int viewId, int textColorRes)
     {
         TextView view = getView(viewId);
-        view.setTextColor(mContext.getResources().getColor(textColorRes));
+        view.setTextColor(mContext.getResources().getColor(textColorRes, null));
         return this;
     }
 

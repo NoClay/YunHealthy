@@ -18,7 +18,7 @@
     <dimen name="padding_top">10dp</dimen>
     <dimen name="padding_bottom">10dp</dimen>
     <dimen name="padding_right">15dp</dimen>
-    <dimen name="direction_size">1.5px</dimen>
+    <dimen name="direction_size">1.5dp</dimen>
     <dimen name="cardRadius">10dp</dimen>
     <dimen name="cardMarginTop">10dp</dimen>
     <dimen name="cardMarginLeft">10dp</dimen>
@@ -27,4 +27,10 @@
     <dimen name="itemSectionHeight">50dp</dimen>
     <dimen name="checkedButtonSize">25dp</dimen>
     <dimen name="checkedButtonMarginHorizontal">15dp</dimen>
+
+    <!--
+Refer to App Widget Documentation for margin information
+http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
+    -->
+    <dimen name="widget_margin">8dp</dimen>
 </resources>

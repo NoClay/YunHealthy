@@ -192,7 +192,7 @@ public class AutoLoadMoreRecyclerView extends RecyclerView{
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
             int type = getItemViewType(position);
-            if (type != TYPE_FOOTER && type != TYPE_HEADER) {
+            if (type != TYPE_FOOTER && type != TYPE_HEADER && holder instanceof ViewHolder) {
                 mInternalAdapter.onBindViewHolder(holder, position);
             }
         }

@@ -1,9 +1,11 @@
 package wang.fly.com.yunhealth.Activity;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
@@ -104,6 +106,7 @@ public class NewDetailActivity extends AppCompatActivity {
     }
 
     Handler handler = new Handler() {
+        @RequiresApi(api = Build.VERSION_CODES.N)
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
@@ -124,7 +127,7 @@ public class NewDetailActivity extends AppCompatActivity {
                     mTimeText.setText(time);
                     String html = document.select("#Page > div.con_left > " +
                             "div.art_con.cc > div > div.article_con > div.art_intro > p").text();
-                    mGuideText.setText(Html.fromHtml(html));
+                    mGuideText.setText(Html.fromHtml(html, Html.FROM_HTML_MODE_COMPACT));
                     html = document.select("#Page > div.con_left > div.art_con.cc > " +
                             "div > div.article_con > div.detail_con").html();
                     Log.d("content", "handleMessage: content = " + html);

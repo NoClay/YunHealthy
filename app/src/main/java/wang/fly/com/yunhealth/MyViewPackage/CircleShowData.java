@@ -8,6 +8,8 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.SweepGradient;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -66,6 +68,7 @@ public class CircleShowData extends View {
         textPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
@@ -77,19 +80,19 @@ public class CircleShowData extends View {
         backPaint.setStrokeWidth(10f);
         backPaint.setStyle(Paint.Style.STROKE);
         backPaint.setStrokeCap(Paint.Cap.ROUND);
-        backPaint.setColor(context.getResources().getColor(colorId[level]));
+        backPaint.setColor(context.getResources().getColor(colorId[level], null));
 
         RectF rectF = new RectF(width / 10, height / 10, width * 9 / 10, height * 9 / 10);
         SweepGradient s = new SweepGradient(width/ 2, height/ 2,
-                context.getResources().getColor(startColor[level]),
-                context.getResources().getColor(colorId[level]));
+                context.getResources().getColor(startColor[level], null),
+                context.getResources().getColor(colorId[level], null));
         backPaint.setShader(s);
         canvas.drawArc(rectF, -90, 360, false, backPaint);
         backPaint.setAlpha(100);
         int d = 10;
         rectF.set(width / 10 + d, height / 10 + d, width * 9 / 10 - d, height * 9 / 10 - d);
         canvas.drawArc(rectF, -90, 360, false, backPaint);
-        textPaint.setColor(context.getResources().getColor(colorId[level]));
+        textPaint.setColor(context.getResources().getColor(colorId[level], null));
         textPaint.setTextSize(width / 5);
         textPaint.setTextAlign(Paint.Align.CENTER);
         Rect textBound = new Rect();

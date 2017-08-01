@@ -83,7 +83,11 @@ public class DatePickerView extends RelativeLayout implements View.OnClickListen
     }
 
     public Date getPickDate(){
-        return new Date(year, month, day);
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.YEAR, year);
+        calendar.set(Calendar.MONTH, month);
+        calendar.set(Calendar.DAY_OF_MONTH, day);
+        return calendar.getTime();
     }
 
 

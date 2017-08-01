@@ -2,6 +2,8 @@ package wang.fly.com.yunhealth.Adapter;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,15 +51,16 @@ public class RecycleAdapterForData extends RecyclerView.Adapter<RecycleAdapterFo
         return vh;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mTextView.setText(datas.get(position).get("text").toString());
         holder.mImageView.setImageResource((Integer) datas.get(position).get("id"));
         holder.mImageView.setBackgroundColor(context.getResources().
-                getColor((int)datas.get(position).get("color")));
+                getColor((int)datas.get(position).get("color"), null));
         boolean flag = (boolean) datas.get(position).get("isDanger");
         if (flag){
-            holder.mTextView.setTextColor(context.getResources().getColor(COLOR_DANGER));
+            holder.mTextView.setTextColor(context.getResources().getColor(COLOR_DANGER, null));
         }else{
             holder.mTextView.setTextColor(COLOR_NORMAL);
         }

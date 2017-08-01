@@ -1,7 +1,9 @@
 package wang.fly.com.yunhealth.Adapter;
 
 import android.content.Context;
+import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +27,7 @@ public class ResultListViewAdapter extends ArrayAdapter<ResultMessage> {
         this.resource = resource;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @NonNull
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -43,11 +46,11 @@ public class ResultListViewAdapter extends ArrayAdapter<ResultMessage> {
         }
         if(resultMessage.isDanger()){
             //代表不健康状态
-            viewHolder.labelTitle.setTextColor(getContext().getResources().getColor(R.color.red));
+            viewHolder.labelTitle.setTextColor(getContext().getResources().getColor(R.color.red, null));
             viewHolder.labelTitle.setText(resultMessage.getMessage() + "  " + resultMessage.getScore());
 
         }else{
-            viewHolder.labelTitle.setTextColor(getContext().getResources().getColor(R.color.dimGray));
+            viewHolder.labelTitle.setTextColor(getContext().getResources().getColor(R.color.dimGray, null));
             viewHolder.labelTitle.setText(resultMessage.getMessage());
         }
         return view;

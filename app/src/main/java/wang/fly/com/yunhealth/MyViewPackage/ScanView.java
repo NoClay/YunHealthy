@@ -6,6 +6,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -56,8 +58,9 @@ public class ScanView extends View{
         init(attrs);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     public void init(AttributeSet attrs){
-        defaultColor = getResources().getColor(R.color.lightSeaGreen);
+        defaultColor = getResources().getColor(R.color.lightSeaGreen, null);
         Arrays.fill(colorArray, defaultColor);
         textColor = Color.WHITE;
         textSize = 20;

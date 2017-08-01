@@ -3,6 +3,8 @@ package wang.fly.com.yunhealth.Adapter;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -117,6 +119,7 @@ public class RecycleAdapterForReportMenu extends
         return viewHolder;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         Log.d(TAG, "onBindViewHolder: position" + position);
@@ -145,7 +148,7 @@ public class RecycleAdapterForReportMenu extends
         }
         holder.labelText.setText(menuInfoList.get(position).getTitle());
         holder.labelImage.setImageDrawable(context.getResources()
-                .getDrawable(menuInfoList.get(position).getImage()));
+                .getDrawable(menuInfoList.get(position).getImage(), null));
         //设置子项点击
         if (onItemClickListener != null && !isManage){
             //如果子项点击事件不为空，且处于管理状态

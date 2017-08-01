@@ -2,6 +2,7 @@ package wang.fly.com.yunhealth.MyViewPackage.Dialogs;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,7 +38,9 @@ public class ResultDialog extends PopupWindow{
         this.setContentView(mResultView);
         initView();
         WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-        int screenHeight = windowManager.getDefaultDisplay().getHeight();
+        Point outSize = new Point();
+        windowManager.getDefaultDisplay().getSize(outSize);
+        int screenHeight = outSize.y;
         this.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
         this.setHeight(screenHeight / 2 + UtilClass.Dp2Px(context, 15));
         ColorDrawable dw = new ColorDrawable(Color.WHITE);
