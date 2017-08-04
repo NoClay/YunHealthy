@@ -71,59 +71,59 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/direction_size"
             android:background="@color/divider"/>
-
         <LinearLayout
             android:layout_width="match_parent"
+            android:gravity="center_vertical|left"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:orientation="horizontal">
 
             <ImageView
+                android:contentDescription="@string/medicineIconHint"
                 android:id="@+id/showMedicineIcon"
                 android:layout_width="150dp"
                 android:layout_height="100dp"
+                android:scaleType="fitXY"
                 android:layout_gravity="center_vertical"
-                android:src="@drawable/medicine"/>
+                android:src="@drawable/medicine" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:paddingLeft="@dimen/padding_left"
+                android:paddingStart="@dimen/padding_left"
                 android:paddingTop="@dimen/padding_top">
 
                 <TextView
-
                     android:id="@+id/showMedicineName"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
+                    android:layout_height="match_parent"
+                    android:gravity="left"
                     android:text="维他命"
+                    style="@style/AppTheme.MarqueeText"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/text_title_largest"
-                    android:textStyle="bold"/>
+                    android:textSize="@dimen/text_content_largest"
+                    android:textStyle="bold" />
 
                 <TextView
-
+                    style="@style/AppTheme.MarqueeText"
                     android:id="@+id/showMedicineUseType"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_marginTop="5dp"
-                    android:gravity="center_horizontal"
                     android:text="口服3.5粒"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/text_title_middle"/>
+                    android:textSize="@dimen/text_content_larger" />
 
                 <TextView
-
+                    style="@style/AppTheme.MarqueeText"
                     android:id="@+id/showMedicineLength"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_marginTop="5dp"
-                    android:gravity="center_horizontal"
                     android:text="还需服用3天"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/text_title_middle"/>
+                    android:textSize="@dimen/text_content_larger" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

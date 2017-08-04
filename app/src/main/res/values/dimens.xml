@@ -9,6 +9,8 @@
     <dimen name="text_title_middle">19sp</dimen>
     <dimen name="text_title_smaller">17sp</dimen>
     <dimen name="text_title_smallest">15sp</dimen>
+    <dimen name="text_content_largest">21sp</dimen>
+    <dimen name="text_content_larger">19sp</dimen>
     <dimen name="text_content_large">17sp</dimen>
     <dimen name="text_content_middle">15sp</dimen>
     <dimen name="text_content_small">13sp</dimen>
@@ -33,4 +35,5 @@ Refer to App Widget Documentation for margin information
 http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
     -->
     <dimen name="widget_margin">8dp</dimen>
+    <dimen name="widget_content_height">108dp</dimen>
 </resources>

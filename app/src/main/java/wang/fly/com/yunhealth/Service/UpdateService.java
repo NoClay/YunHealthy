@@ -100,9 +100,9 @@ public class UpdateService extends RemoteViewsService {
             remoteViews.setTextViewText(R.id.nextTime, medicineDetail.getTimes().get(nextTimePos));
             remoteViews.setTextViewText(R.id.showTag, medicineDetail.getTag());
             remoteViews.setTextViewText(R.id.showMedicineName, medicineDetail.getMedicineName());
-            remoteViews.setTextViewText(R.id.showMedicineLength, "还需要服用\n" + medicineDetail.getDayLength() + "天");
+            remoteViews.setTextViewText(R.id.showMedicineLength, "还需要服用" + medicineDetail.getDayLength() + "天");
             remoteViews.setTextViewText(R.id.showMedicineUseType, medicineDetail.getUseType()
-                    + "\n"
+                    + ""
                     + medicineDetail.getDoses().get(nextTimePos)
                     + medicineDetail.getUnit());
             Bitmap image = UtilClass.getBitmapFromGlide(mContext, medicineDetail.getMedicinePicture());

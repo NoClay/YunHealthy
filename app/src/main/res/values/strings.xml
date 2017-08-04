@@ -59,4 +59,5 @@
     <string name="title_activity_medicine">MedicineActivity</string>
     <string name="appwidget_text">用药提醒</string>
     <string name="add_widget">Add widget</string>
+    <string name="medicineIconHint">药品图片</string>
 </resources>

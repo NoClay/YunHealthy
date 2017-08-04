@@ -44,6 +44,7 @@
         android:layout_height="1.5dp" />
 
     <ListView
+        android:focusable="true"
         android:id="@+id/medicineList"
         android:divider="@color/divider"
         android:dividerHeight="1.5dp"
