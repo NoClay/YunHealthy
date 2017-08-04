@@ -1,24 +1,29 @@
 # YunHealthy
-一个物联网应用，利用传感器随时随地进行身体的体检，采集用户身体状况，用于进行进一步拓展功能的实现。
+云健康是一个配合硬件设备使用的软件，即项目分为多端软件和智能硬件，安卓端可以利用App将智能硬件收集到的数据加以处理，并及时保存数据到云端，还包括一些云端就医咨询的功能，用户可以利用客户端方便的添加自己的用药数据，利用手机闹钟提醒自己按时用药，为老年人专门添加了药物照片描述，一张照片即可添加用药。
+
 # 贡献者
+
 NoClay,flyings-sky
 # 说明
 在本地过去登录状态的时候，请使用以下代码
 ```java
-/**
-* 没有登录返回null
-* 登录则返回SignUserData
-**/
-public static SignUserData getLoginUser() 
-/**
-* 修改登录状态、信息
-* isLogin = true 则登录
-**/
-public static void editLoginState(SignUserData user, Boolean isLogin) 
-/**
-* 直接退出登录
-**/
-public static void exitLogin()
+
+public class SharedPreferenceHelper {
+	/**
+	* 没有登录返回null
+	* 登录则返回SignUserData
+	**/
+	public static SignUserData getLoginUser() 
+	/**
+	* 修改登录状态、信息
+	* isLogin = true 则登录
+	**/
+	public static void editLoginState(SignUserData user, Boolean isLogin) 
+	/**
+	* 直接退出登录
+	**/
+	public static void exitLogin()
+}
 ```
 使用的SQLite：LocalStore.db
 
@@ -40,3 +45,8 @@ public static void exitLogin()
 bug原因：未获取读取文件的权限
 
 bug修复：使用Android动态权限申请
+
+# 2017/8/4 修改桌面小部件布局
+
+![桌面小部件.jpg](http://storage1.imgchr.com/Acbef.png)
+

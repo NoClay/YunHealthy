@@ -127,7 +127,7 @@ public class NewDetailActivity extends AppCompatActivity {
                     mTimeText.setText(time);
                     String html = document.select("#Page > div.con_left > " +
                             "div.art_con.cc > div > div.article_con > div.art_intro > p").text();
-                    mGuideText.setText(Html.fromHtml(html, Html.FROM_HTML_MODE_COMPACT));
+                    mGuideText.setText(Html.fromHtml(html));
                     html = document.select("#Page > div.con_left > div.art_con.cc > " +
                             "div > div.article_con > div.detail_con").html();
                     Log.d("content", "handleMessage: content = " + html);
