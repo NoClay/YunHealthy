@@ -43,6 +43,11 @@ public class MainActivityCopy extends AppCompatActivity {
     private List<String> mTitles;
     private List<Fragment> mPages;
     InputWeightDialog mInputWeightDialog;
+    public static final int PAGE_MEASURE = 0;
+    public static final int PAGE_DATA = 1;
+    public static final int PAGE_HOME = 2;
+    public static final int PAGE_DOCTOR = 3;
+    public static final int PAGE_MINE = 4;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -58,6 +63,14 @@ public class MainActivityCopy extends AppCompatActivity {
         mMainActivity = (LinearLayout) findViewById(R.id.main_activity);
         initTab();
         mMainVPager.setCurrentItem(2);
+    }
+
+    public void setCurrentPage(int page){
+        if (page >= mPages.size() || page < 0){
+            return;
+        }else{
+            mMainVPager.setCurrentItem(page);
+        }
     }
 
     private void initTab() {

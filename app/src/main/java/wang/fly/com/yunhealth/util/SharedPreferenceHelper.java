@@ -2,6 +2,8 @@ package wang.fly.com.yunhealth.util;
 
 import android.content.SharedPreferences;
 
+import com.google.zxing.decoding.Intents;
+
 import cn.bmob.v3.datatype.BmobDate;
 import wang.fly.com.yunhealth.DataBasePackage.SignUserData;
 
@@ -12,12 +14,31 @@ import static android.content.Context.MODE_PRIVATE;
  */
 
 public class SharedPreferenceHelper {
+
+    public static final String LOGIN_STATE_PREF = "LoginState";
+
+    public static SharedPreferences.Editor getEditor(String prefName){
+        return MyApplication.getContext().getSharedPreferences(prefName, MODE_PRIVATE)
+                .edit();
+    }
     public static void exitLogin() {
         SharedPreferences.Editor editor =
-                MyApplication.getContext().getSharedPreferences("LoginState", MODE_PRIVATE)
+                MyApplication.getContext().getSharedPreferences(LOGIN_STATE_PREF, MODE_PRIVATE)
                         .edit();
         editor.putBoolean("loginState", false);
-        editor.commit();
+        editor.apply();
+    }
+
+
+    public static String getDevice(){
+        SharedPreferences sp = MyApplication.getContext().getSharedPreferences(LOGIN_STATE_PREF, MODE_PRIVATE);
+        return sp.getString("device", "暂无设备");
+    }
+
+    public static void undateDevice(String deviceMac){
+        SharedPreferences.Editor editor = getEditor(LOGIN_STATE_PREF);
+        editor.putString("device", deviceMac);
+        editor.apply();
     }
 
     public static void editLoginState(SignUserData user, Boolean isLogin) {

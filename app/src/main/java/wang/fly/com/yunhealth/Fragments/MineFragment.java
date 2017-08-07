@@ -1,5 +1,6 @@
 package wang.fly.com.yunhealth.Fragments;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -16,10 +17,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.zxing.activity.CaptureActivity;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import wang.fly.com.yunhealth.Activity.ChangeMyDataActivityCopy;
 import wang.fly.com.yunhealth.R;
+import wang.fly.com.yunhealth.util.SharedPreferenceHelper;
+import wang.fly.com.yunhealth.util.UtilClass;
 
 import static android.app.Activity.RESULT_OK;
 import static android.content.Context.MODE_PRIVATE;
@@ -35,10 +39,12 @@ public class MineFragment extends Fragment implements View.OnClickListener{
     private TextView userName;
     private TextView userPhoneNumber;
     private RelativeLayout[] layouts;
+    private TextView myDevice;
     private Context context;
     private static final String TAG = "MineFragment";
 
     static final int REQUEST_CHANGE_DATA = 0;
+    static final int REQUEST_OPEN_ACTIVITY = 1;
 
     @Nullable
     @Override
@@ -59,7 +65,7 @@ public class MineFragment extends Fragment implements View.OnClickListener{
     }
 
     private void preInitView(View v) {
-        layouts = new RelativeLayout[6];
+        layouts = new RelativeLayout[7];
         context = getContext();
     }
 
@@ -72,9 +78,11 @@ public class MineFragment extends Fragment implements View.OnClickListener{
         layouts[3] = (RelativeLayout) v.findViewById(R.id.fourthLayout);
         layouts[4] = (RelativeLayout) v.findViewById(R.id.fifthLayout);
         layouts[5] = (RelativeLayout) v.findViewById(R.id.sixthLayout);
+        layouts[6] = (RelativeLayout) v.findViewById(R.id.seventhLayout);
         userImage = (CircleImageView) v.findViewById(R.id.userImageShow);
         userName = (TextView) v.findViewById(R.id.userNameShow);
         userPhoneNumber = (TextView) v.findViewById(R.id.userPhoneNumberShow);
+        myDevice = (TextView) v.findViewById(R.id.myDevice);
     }
 
     @Override
@@ -107,6 +115,16 @@ public class MineFragment extends Fragment implements View.OnClickListener{
                 //关于云健康
                 break;
             }
+            case R.id.seventhLayout:{
+                UtilClass.requestPermission(getActivity(), Manifest.permission.CAMERA);
+                if (UtilClass.hasPermission(getActivity(), Manifest.permission.CAMERA)) {
+                    Intent intent = new Intent(context, CaptureActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivityForResult(intent, REQUEST_OPEN_ACTIVITY);
+                }
+                //我的设备
+                break;
+            }
         }
     }
     public void setUser(){
@@ -115,6 +133,8 @@ public class MineFragment extends Fragment implements View.OnClickListener{
         String phone = sharedPreferences.getString("phoneNumber", "");
         String name = sharedPreferences.getString("userName", "");
         String userImagePath = sharedPreferences.getString("userImage", null);
+        String deviceMac = sharedPreferences.getString("device", "暂无设备");
+        myDevice.setText(deviceMac);
         AlphaAnimation alpha = new AlphaAnimation(0.1f, 1.0f);
         alpha.setDuration(100);
         Glide.with(context)
@@ -145,6 +165,17 @@ public class MineFragment extends Fragment implements View.OnClickListener{
                     setUser();
                 }
                 break;
+            }
+            case REQUEST_OPEN_ACTIVITY: {
+                if (resultCode == RESULT_OK) {
+                    Bundle bundle = data.getExtras();
+                    String macAddress = bundle.getString("result");
+                    if (UtilClass.isMacAddress(macAddress)) {
+                        SharedPreferenceHelper.undateDevice(macAddress);
+                    } else {
+                        UtilClass.toToast(getContext(), "设备地址不合法");
+                    }
+                }
             }
         }
     }

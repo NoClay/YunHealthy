@@ -1,6 +1,7 @@
 package wang.fly.com.yunhealth.Fragments;
 
 import android.Manifest;
+import android.app.backup.SharedPreferencesBackupHelper;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
@@ -16,6 +17,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -27,12 +29,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.zxing.activity.CaptureActivity;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.security.Permission;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -44,10 +50,12 @@ import java.util.UUID;
 import wang.fly.com.yunhealth.Adapter.RecycleAdapterForMeasureOnly;
 import wang.fly.com.yunhealth.DataBasePackage.MeasureData.MeasureData;
 import wang.fly.com.yunhealth.DataBasePackage.MyDataBase;
+import wang.fly.com.yunhealth.MainActivityCopy;
 import wang.fly.com.yunhealth.MyViewPackage.Dialogs.InputBlueMacDialog;
 import wang.fly.com.yunhealth.R;
 import wang.fly.com.yunhealth.util.ClsUtils;
 import wang.fly.com.yunhealth.util.MyConstants;
+import wang.fly.com.yunhealth.util.SharedPreferenceHelper;
 import wang.fly.com.yunhealth.util.UtilClass;
 
 import static android.app.Activity.RESULT_OK;
@@ -221,9 +229,10 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
 
     /**
      * 用于连接
+     *
      * @param macAddress
      */
-    public void connectProc(String macAddress){
+    public void connectProc(String macAddress) {
         deviceAddress = macAddress;
         connectDevice.setVisibility(View.INVISIBLE);
         connectDevice.setClickable(false);
@@ -232,79 +241,28 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
         openBluetooth();
     }
 
-    /**
-     * String 形如 "98:D3:32:70:5A:44"
-     * @param string
-     * @return
-     */
-    public boolean isMacAddress(String string){
-        if (string == null || string.length() <= 0){
-            return false;
-        }
-        if (string.length() > 17){
-            return false;
-        }
-        for (int i = 0; i < 5; i++) {
-            if (string.charAt(3 * i + 2) != ':'){
-                return false;
-            }
-        }
-        return true;
-    }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.connect_device: {
-//                此处首先获取蓝牙智能设备的mac地址
-                //获取默认的蓝牙mac地址
-                SharedPreferences sp = context.getSharedPreferences(
-                        "LoginState", MODE_PRIVATE);
-                final SharedPreferences.Editor editor = sp.edit();
-                String mac = sp.getString("macAddress", "");
-                dialog = new InputBlueMacDialog(context,
-                        new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                dialog.dismiss();
-                                switch (view.getId()){
-                                    case R.id.connect_mac_device:{
-                                        String macAddress = dialog.getMacAddress();
-                                        if (isMacAddress(macAddress)){
-                                            toToast("正在连接设备");
-                                            editor.putString("macAddress", macAddress);
-                                            editor.commit();
-                                            connectProc(macAddress);
-                                        }else{
-                                            toToast("设备地址不合法");
-                                        }
-                                        break;
-                                    }
-                                    case R.id.cancel_action:{
-                                        break;
+                String address = SharedPreferenceHelper.getDevice();
+                if (UtilClass.isMacAddress(address)){
+                    toToast("正在连接设备");
+                    connectProc(address);
+                }else{
+                    Snackbar.make(getView(), "暂无设备，请点击我的设备添加设备", Snackbar.LENGTH_SHORT)
+                            .setAction("好的", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    if (getActivity() instanceof MainActivityCopy){
+                                        MainActivityCopy instance = (MainActivityCopy) getActivity();
+                                        instance.setCurrentPage(MainActivityCopy.PAGE_MINE);
                                     }
                                 }
-                            }
-                        });
-                dialog.setMacAddress(deviceAddress);
-                dialog.showAtLocation(mView.findViewById(R.id.main_layout),
-                        Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
-                dialog.setMacHint(mac);
-
-//                /**
-//                 * 尝试上传数据
-//                 */
-//                String id = context.getSharedPreferences("LoginState",
-//                        Context.MODE_PRIVATE).getString("userId", null);
-//                if (id == null){
-//                    UtilClass.toToast(context, "上传失败,用户未登录");
-//                }
-//                if (myDataBase.upLoadMeasureData(database, id)){
-//                    UtilClass.toToast(context, "上传成功");
-//                }else{
-//                    UtilClass.toToast(context, "上传失败");
-//                }
-//                break;
+                            }).show();
+                }
+                break;
             }
         }
     }
@@ -343,6 +301,7 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
                 }
                 break;
             }
+
         }
     }
 

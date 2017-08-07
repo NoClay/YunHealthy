@@ -982,6 +982,51 @@ public class UtilClass {
         }
     }
 
+
+    /**
+     * 检查是否有权限
+     * @param activity
+     * @param permission
+     * @return
+     */
+    public static boolean hasPermission(Activity activity, String permission){
+        if (activity == null) {
+            return false;
+        }
+        int check = 0;
+        if (android.os.Build.VERSION.SDK_INT >= M) {
+            check = activity.checkSelfPermission(permission);
+        } else {
+            check = activity.checkCallingOrSelfPermission(permission);
+        }
+        if (check != PackageManager.PERMISSION_GRANTED) {
+            //没有获取该权限
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * String 形如 "98:D3:32:70:5A:44"
+     *
+     * @param string
+     * @return
+     */
+    public static boolean isMacAddress(String string) {
+        if (string == null || string.length() <= 0) {
+            return false;
+        }
+        if (string.length() > 17) {
+            return false;
+        }
+        for (int i = 0; i < 5; i++) {
+            if (string.charAt(3 * i + 2) != ':') {
+                return false;
+            }
+        }
+        return true;
+    }
+
     /**
      * Toast
      */

@@ -60,4 +60,8 @@
     <string name="appwidget_text">用药提醒</string>
     <string name="add_widget">Add widget</string>
     <string name="medicineIconHint">药品图片</string>
+
+
+    <string name="encode_qrcode">生成二维码</string>
+    <string name="dencode_qrcode">扫描二维码</string>
 </resources>
