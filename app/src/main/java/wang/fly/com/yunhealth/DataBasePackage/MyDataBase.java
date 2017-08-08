@@ -126,7 +126,7 @@ public class MyDataBase extends SQLiteOpenHelper {
     public boolean isNeedEatMedicine(String time, String userId){
         Cursor cursor = getReadableDatabase().rawQuery("select * from MedicineDetail" +
                 " where userId = '" + userId + "' " +
-                " and time = '" + time + "' " +
+                " and times like '%" + time + "%' " +
                 " and isOpen = " + CLOCK_OPEN +
                 " and dayLength - dayCount > 0"  , null);
         return cursor.moveToFirst();
@@ -148,7 +148,7 @@ public class MyDataBase extends SQLiteOpenHelper {
         } else{
             cursor = getReadableDatabase().rawQuery("select * from MedicineDetail" +
                     " where userId = '" + userId + "' " +
-                    " and time = '" + time + "' " +
+                    " and times like '%" + time + "%' " +
                     " and isOpen = " + CLOCK_OPEN +
                     " and dayLength - dayCount > 0"  , null);
         }

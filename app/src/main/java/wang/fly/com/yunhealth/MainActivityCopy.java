@@ -136,9 +136,8 @@ public class MainActivityCopy extends AppCompatActivity {
         //alarmManager.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pi);        //设置闹钟
         AlarmManager alarm = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         Log.d("clock", "startAlarm: " + c.get(Calendar.HOUR_OF_DAY) + ":" + c.get(Calendar.MINUTE));
-        alarm.setRepeating(AlarmManager.RTC_WAKEUP,
-                c.getTimeInMillis(),
-                AlarmManager.INTERVAL_HALF_HOUR, pi);        //设置闹钟，当前时间就唤醒
+        alarm.set(AlarmManager.RTC_WAKEUP,
+                c.getTimeInMillis(), pi);        //设置闹钟，当前时间就唤醒
     }
     /**
      * 每次启动后检查体重时候输入
