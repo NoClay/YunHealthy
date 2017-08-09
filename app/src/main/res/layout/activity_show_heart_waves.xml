@@ -27,7 +27,7 @@
     </RelativeLayout>
 
 
-    <pers.noclay.ecgwaveview.HeartWavesView
+    <pers.noclay.ecgwaveview.ECGWaveView
         app:wavesLineColor="#71A423"
         android:background="#fff"
         android:id="@+id/heartWaves"

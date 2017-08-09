@@ -1,1 +1,1 @@
-include ':app', ':ecgwaveview'
+include ':app', ':ecgwaveview-release'

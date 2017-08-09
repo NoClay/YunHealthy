@@ -17,7 +17,7 @@ import java.util.List;
 import indi.noclay.cloudhealth.R;
 import indi.noclay.cloudhealth.database.measuredata.MeasureData;
 import indi.noclay.cloudhealth.util.UtilClass;
-import pers.noclay.ecgwaveview.HeartWavesView;
+import pers.noclay.ecgwaveview.ECGWaveView;
 
 
 /**
@@ -33,7 +33,7 @@ public class RecycleAdapterForMeasureOnly extends RecyclerView.Adapter<RecycleAd
     private static final int COLOR_DANGER = Color.RED;
     boolean[] isOpen = new boolean[8];
     private List<MeasureData> measureDataList;
-    public HeartWavesView heartWavesView;
+    public ECGWaveView heartWavesView;
 
     public RecycleAdapterForMeasureOnly(int layout, Context context, List<MeasureData> measureDataList) {
         this.layout = layout;
@@ -126,7 +126,7 @@ public class RecycleAdapterForMeasureOnly extends RecyclerView.Adapter<RecycleAd
         public LinearLayout contentLayout;
         public ImageView toggleButton;
         public TextView title;
-        public HeartWavesView heartWavesView;
+        public ECGWaveView heartWavesView;
         public TextView averageData;
         public TextView maxData;
         public TextView minData;
@@ -137,7 +137,7 @@ public class RecycleAdapterForMeasureOnly extends RecyclerView.Adapter<RecycleAd
             contentLayout = (LinearLayout) itemView.findViewById(R.id.contentLayout);
             toggleButton = (ImageView) itemView.findViewById(R.id.toggleButton);
             title = (TextView) itemView.findViewById(R.id.title);
-            heartWavesView = (HeartWavesView) itemView.findViewById(R.id.heartWaves);
+            heartWavesView = (ECGWaveView) itemView.findViewById(R.id.heartWaves);
             averageData = (TextView) itemView.findViewById(R.id.averageData);
             maxData = (TextView) itemView.findViewById(R.id.maxData);
             minData = (TextView) itemView.findViewById(R.id.minData);

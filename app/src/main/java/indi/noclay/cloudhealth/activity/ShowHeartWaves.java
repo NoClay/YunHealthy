@@ -13,7 +13,7 @@ import android.widget.TextView;
 import java.util.Random;
 
 import indi.noclay.cloudhealth.R;
-import pers.noclay.ecgwaveview.HeartWavesView;
+import pers.noclay.ecgwaveview.ECGWaveView;
 
 
 /**
@@ -21,9 +21,9 @@ import pers.noclay.ecgwaveview.HeartWavesView;
  */
 
 public class ShowHeartWaves extends AppCompatActivity
-        implements HeartWavesView.OnDataChangedListener, View.OnClickListener {
+        implements ECGWaveView.OnDataChangedListener, View.OnClickListener {
 
-    private HeartWavesView heartWaves;
+    private ECGWaveView heartWaves;
     private TextView showAverage;
     private TextView showMax;
     private ImageView back;
@@ -67,7 +67,7 @@ public class ShowHeartWaves extends AppCompatActivity
     }
 
     private void initView() {
-        heartWaves = (HeartWavesView) findViewById(R.id.heartWaves);
+        heartWaves = (ECGWaveView) findViewById(R.id.heartWaves);
         showAverage = (TextView) findViewById(R.id.averageHeart);
         showMax = (TextView) findViewById(R.id.maxHeart);
         heartWaves.setOnDataChangedListener(this);
