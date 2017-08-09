@@ -27,7 +27,7 @@
     </RelativeLayout>
 
 
-    <indi.noclay.cloudhealth.myview.HeartWavesView
+    <pers.noclay.ecgwaveview.HeartWavesView
         app:wavesLineColor="#71A423"
         android:background="#fff"
         android:id="@+id/heartWaves"

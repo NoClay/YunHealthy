@@ -4,6 +4,11 @@
 # 贡献者
 
 NoClay,flyings-sky
+
+# 目标SDK
+
+Android6.0 正在向下兼容
+
 # 说明
 在本地过去登录状态的时候，请使用以下代码
 ```java
@@ -50,7 +55,14 @@ bug修复：使用Android动态权限申请
 
 修复了部分页面的崩溃bug，原因是对null数据的处理未进行特殊处理！
 
-# 2017/8/4 修改桌面小部件布局
+# 2017/8/4 修改桌面小部件布局：
 
 ![桌面小部件.jpg](http://storage1.imgchr.com/Acbef.png)
 
+# 2017/8/9 修改说明：
+
+修改了HeartWavesView的来源：
+
+引用自己的Library项目，方便快捷的导入使用。
+
+项目地址：https://github.com/NoClay/UtilsDemo

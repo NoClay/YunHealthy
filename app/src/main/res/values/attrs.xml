@@ -13,18 +13,6 @@
         <attr name="level5Color" format="color"></attr>
     </declare-styleable>
 
-    <declare-styleable name="HeartWavesView">
-        <attr name="tableLineColor" format="color"/>
-        <attr name="xyTextColor" format="color"/>
-        <attr name="wavesLineColor" format="color"/>
-        <attr name="xyTextSize" format="integer"/>
-        <attr name="minY" format="integer"/>
-        <attr name="maxY" format="integer"/>
-        <attr name="refreshHZ" format="integer"/>
-        <attr name="dataHZ" format="integer"/>
-        <attr name="xGridNum" format="integer"/>
-        <attr name="mTimeCount"  format="float"/>
-    </declare-styleable>
 
     <declare-styleable name="FoldLineView">
         <attr name="maxColor" format="color"/>

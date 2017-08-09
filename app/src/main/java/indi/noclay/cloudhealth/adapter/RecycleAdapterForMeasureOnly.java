@@ -16,8 +16,8 @@ import java.util.List;
 
 import indi.noclay.cloudhealth.R;
 import indi.noclay.cloudhealth.database.measuredata.MeasureData;
-import indi.noclay.cloudhealth.myview.HeartWavesView;
 import indi.noclay.cloudhealth.util.UtilClass;
+import pers.noclay.ecgwaveview.HeartWavesView;
 
 
 /**

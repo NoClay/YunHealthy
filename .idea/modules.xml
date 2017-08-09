@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/YunHealthy.iml" filepath="$PROJECT_DIR$/YunHealthy.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ecgwaveview/ecgwaveview.iml" filepath="$PROJECT_DIR$/ecgwaveview/ecgwaveview.iml" />
     </modules>
   </component>
 </project>

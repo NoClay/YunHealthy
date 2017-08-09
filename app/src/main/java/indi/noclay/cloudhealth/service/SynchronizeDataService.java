@@ -54,8 +54,8 @@ public class SynchronizeDataService extends Service{
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        int type = intent.getIntExtra("type", MyConstants.RECEIVER_TYPE_UPLOAD);
-        boolean isFirstStart = intent.getBooleanExtra("isFirst", false);
+        int type = intent == null ? MyConstants.RECEIVER_TYPE_UPLOAD : intent.getIntExtra("type", MyConstants.RECEIVER_TYPE_UPLOAD);
+        boolean isFirstStart = intent != null && intent.getBooleanExtra("isFirst", false);
         Log.d(TAG, "onStartCommand: isFirstStart" + isFirstStart);
         new Thread(new Runnable() {
             @Override

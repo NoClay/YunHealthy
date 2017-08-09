@@ -13,14 +13,15 @@ import android.widget.TextView;
 import java.util.Random;
 
 import indi.noclay.cloudhealth.R;
-import indi.noclay.cloudhealth.myview.HeartWavesView;
+import pers.noclay.ecgwaveview.HeartWavesView;
 
 
 /**
  * Created by 82661 on 2016/11/9.
  */
 
-public class ShowHeartWaves extends AppCompatActivity implements HeartWavesView.OnDataChangedListener, View.OnClickListener {
+public class ShowHeartWaves extends AppCompatActivity
+        implements HeartWavesView.OnDataChangedListener, View.OnClickListener {
 
     private HeartWavesView heartWaves;
     private TextView showAverage;
