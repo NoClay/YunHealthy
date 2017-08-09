@@ -7,7 +7,7 @@
     android:fitsSystemWindows="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="wang.fly.com.yunhealth.Activity.NewsActivity">
+    tools:context=".activity.NewsActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -53,27 +53,17 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <wang.fly.com.yunhealth.MyViewPackage.MyNestedScrollView
+    <indi.noclay.cloudhealth.myview.MyNestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-        <!--<RelativeLayout-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent"-->
-            <!--app:background="@color/skyBlue">-->
-
-
-            <!---->
-
-        <!--</RelativeLayout>-->
         <android.support.v7.widget.RecyclerView
             android:id="@+id/news_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
         </android.support.v7.widget.RecyclerView>
-    </wang.fly.com.yunhealth.MyViewPackage.MyNestedScrollView>
+    </indi.noclay.cloudhealth.myview.MyNestedScrollView>
 
     <android.support.design.widget.FloatingActionButton
         android:layout_width="wrap_content"

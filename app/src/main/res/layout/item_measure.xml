@@ -5,29 +5,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_margin="8dp"
     android:background="@color/white">
-    <!--<wang.fly.com.yunhealth.MyViewPackage.CircleImageView-->
-        <!--android:layout_width="40dp"-->
-        <!--android:layout_height="40dp"-->
-        <!--android:layout_marginTop="20dp"-->
-        <!--android:id="@+id/label_image"-->
-        <!--android:layout_centerHorizontal="true"-->
-        <!--android:layout_marginLeft="20dp"-->
-        <!--/>-->
-    <!--<TextView-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:gravity="center_horizontal"-->
-        <!--android:textSize="25sp"-->
-        <!--android:layout_centerHorizontal="true"-->
-        <!--android:id="@+id/title_and_data"-->
-        <!--android:layout_below="@+id/label_image"-->
-        <!--android:layout_marginTop="15dp"-->
-        <!--android:textColor="@color/black"-->
-        <!--android:text="111111"-->
-        <!--/>-->
 
 
-    <wang.fly.com.yunhealth.MyViewPackage.CircleImageView
+    <indi.noclay.cloudhealth.myview.CircleImageView
         android:id="@+id/label_image"
         android:layout_margin="10dp"
         android:src="@drawable/head_image_default"

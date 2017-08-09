@@ -59,7 +59,7 @@
         android:layout_height="150dp"
         android:orientation="horizontal">
 
-        <wang.fly.com.yunhealth.MyViewPackage.CircleShowData
+        <indi.noclay.cloudhealth.myview.CircleShowData
             android:id="@+id/stateShow"
             android:layout_width="100dp"
             android:layout_height="100dp"

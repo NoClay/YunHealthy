@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="wang.fly.com.yunhealth">
+    package="indi.noclay.cloudhealth">
 
     <!-- 蓝牙相关权限 -->
     <uses-permission android:name="android.permission.BLUETOOTH" />
@@ -35,11 +35,11 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.GET_TASKS" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.VIBRATE" /> <!-- 震动权限 -->
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-feature android:name="android.hardware.camera" /> <!-- 使用照相机权限 -->
     <uses-feature android:name="android.hardware.camera.autofocus" /> <!-- 自动聚焦权限 -->
-
     <application
         android:name=".util.MyApplication"
         android:allowBackup="true"
@@ -67,36 +67,27 @@
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <!-- 显示心电图的活动 -->
         <activity
-            android:name=".Activity.ShowHeartWaves"
+            android:name=".activity.ShowHeartWaves"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Activity.InfoActivity"
+            android:name=".activity.InfoActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Activity.InfoActivityForReport"
+            android:name=".activity.InfoActivityForReport"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Activity.SignActivity"
+            android:name=".activity.SignActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Activity.ChangePassWord"
-            android:screenOrientation="portrait" />
-
-        <!-- 上传服务 -->
-        <service
-            android:name=".Service.SynchronizeDataService"
-            android:screenOrientation="portrait" />
-        <!-- 上传服务接收器 -->
-        <receiver
-            android:name=".ReceiverPackage.UpLoadReceiver"
+            android:name=".activity.ChangePassWord"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".Activity.NewsActivity"
+            android:name=".activity.NewsActivity"
             android:screenOrientation="portrait" />
         <!-- 利用另一个进程加载WebView -->
         <activity
-            android:name=".Activity.NewDetailActivity"
+            android:name=".activity.NewDetailActivity"
             android:process=":newsDetail"
             android:screenOrientation="portrait"
             android:theme="@style/ActivityTheme" />
@@ -104,37 +95,46 @@
             android:name=".MainActivityCopy"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Activity.LoginActivityCopy"
+            android:name=".activity.LoginActivityCopy"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Activity.ChangeMyDataActivityCopy"
+            android:name=".activity.ChangeMyDataActivityCopy"
             android:screenOrientation="portrait" />
         <activity
-            android:launchMode="singleInstance"
-            android:name=".Activity.MedicineActivity"
+            android:name=".activity.MedicineActivity"
             android:label="@string/title_activity_medicine"
+            android:launchMode="singleInstance"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustPan" />
-        <activity
-            android:name=".Activity.AddMedicineActivity"
-            android:screenOrientation="portrait">
 
-            <!-- 添加药物 -->
-        </activity>
+        <intent-filter>
+            <action android:name="cloudHealth.intent.MedicineClock"></action>
+            <category android:name="android.intent.category.DEFAULT"></category>
+        </intent-filter>
+        <activity android:name="com.google.zxing.activity.CaptureActivity" />
+        <!-- 添加药物 -->
+
+        <activity
+            android:name=".activity.AddMedicineActivity"
+            android:screenOrientation="portrait" />
 
         <!-- 自定义GlideModule存取 -->
         <meta-data
-            android:name="wang.fly.com.yunhealth.util.DiskCacheModule"
+            android:name="indi.noclay.cloudhealth.util.DiskCacheModule"
             android:value="GlideModule" />
 
+        <!-- 上传服务 -->
         <!-- 声明桌面小部件 -->
         <service
-            android:name=".Service.UpdateService"
+            android:name=".service.SynchronizeDataService"
+            android:screenOrientation="portrait" />
+        <service
+            android:name=".service.UpdateService"
             android:exported="false"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
 
-        <receiver android:name=".MyViewPackage.AppWidgetMedicineList">
+        <receiver android:name=".myview.AppWidgetMedicineList">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -143,11 +143,13 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/app_widget_medicine_list_info" />
         </receiver>
-        
+
+        <!-- 上传服务接收器 -->
+        <receiver
+            android:name=".receiver.UpLoadReceiver"
+            android:screenOrientation="portrait" />
+        <receiver android:name=".receiver.MedicineAlarmReceiver" />
         <!--zxing二维码注册-->
-        <activity android:name="com.google.zxing.activity.CaptureActivity">
-            
-        </activity>
     </application>
 
 </manifest>

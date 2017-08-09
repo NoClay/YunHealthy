@@ -46,6 +46,10 @@ bug原因：未获取读取文件的权限
 
 bug修复：使用Android动态权限申请
 
+# 2017/5/23 修复bug说明：
+
+修复了部分页面的崩溃bug，原因是对null数据的处理未进行特殊处理！
+
 # 2017/8/4 修改桌面小部件布局
 
 ![桌面小部件.jpg](http://storage1.imgchr.com/Acbef.png)

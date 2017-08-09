@@ -50,7 +50,7 @@
             android:background="@color/hintTextColor" />
 
         <!--心电图模块-->
-        <wang.fly.com.yunhealth.MyViewPackage.HeartWavesView
+        <indi.noclay.cloudhealth.myview.HeartWavesView
             app:wavesLineColor="#71A423"
             android:background="#fff"
             app:tableLineColor="@color/hintTextColor"
@@ -63,7 +63,7 @@
             android:orientation="horizontal"
             android:weightSum="10">
 
-            <wang.fly.com.yunhealth.MyViewPackage.CircleImageView
+            <indi.noclay.cloudhealth.myview.CircleImageView
                 android:layout_marginRight="20dp"
                 android:layout_marginLeft="20dp"
                 android:layout_gravity="center_vertical"
@@ -91,7 +91,7 @@
             android:orientation="horizontal"
             android:weightSum="10">
 
-            <wang.fly.com.yunhealth.MyViewPackage.CircleImageView
+            <indi.noclay.cloudhealth.myview.CircleImageView
                 android:layout_marginRight="20dp"
                 android:layout_marginLeft="20dp"
                 android:layout_gravity="center_vertical"
@@ -119,7 +119,7 @@
             android:orientation="horizontal"
             android:weightSum="10">
 
-            <wang.fly.com.yunhealth.MyViewPackage.CircleImageView
+            <indi.noclay.cloudhealth.myview.CircleImageView
                 android:layout_marginRight="20dp"
                 android:layout_marginLeft="20dp"
                 android:layout_gravity="center_vertical"

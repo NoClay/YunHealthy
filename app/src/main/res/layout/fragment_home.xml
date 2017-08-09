@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <wang.fly.com.yunhealth.MyViewPackage.ScanView
+    <indi.noclay.cloudhealth.myview.ScanView
         android:id="@+id/scanButton"
         android:layout_weight="5"
         android:layout_width="match_parent"
@@ -19,7 +19,7 @@
         app:level4Color="#F34235"
         app:level5Color="#F34235">
 
-    </wang.fly.com.yunhealth.MyViewPackage.ScanView>
+    </indi.noclay.cloudhealth.myview.ScanView>
 
     <LinearLayout
         android:id="@+id/hint_page"

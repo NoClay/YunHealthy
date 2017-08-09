@@ -34,7 +34,7 @@ import com.google.zxing.common.HybridBinarizer;
 
 import java.util.Hashtable;
 
-import wang.fly.com.yunhealth.R;
+import indi.noclay.cloudhealth.R;
 
 
 final class DecodeHandler extends Handler {

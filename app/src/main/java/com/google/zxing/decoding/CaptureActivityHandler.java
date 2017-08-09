@@ -33,7 +33,7 @@ import com.google.zxing.view.ViewfinderResultPointCallback;
 
 import java.util.Vector;
 
-import wang.fly.com.yunhealth.R;
+import indi.noclay.cloudhealth.R;
 
 
 /**

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="wang.fly.com.yunhealth.Activity.InfoActivityForReport">
+    tools:context=".activity.InfoActivityForReport">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"

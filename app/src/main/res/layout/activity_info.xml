@@ -10,11 +10,11 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="40dp">
-        <wang.fly.com.yunhealth.MyViewPackage.DatePickerView
+        <indi.noclay.cloudhealth.myview.DatePickerView
             android:id="@+id/date_picker"
             android:layout_width="match_parent"
             android:layout_height="40dp">
-        </wang.fly.com.yunhealth.MyViewPackage.DatePickerView>
+        </indi.noclay.cloudhealth.myview.DatePickerView>
     </LinearLayout>
 
     <RelativeLayout
@@ -132,7 +132,7 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <wang.fly.com.yunhealth.MyViewPackage.FoldLineView
+            <indi.noclay.cloudhealth.myview.FoldLineView
                 android:id="@+id/surfaceView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

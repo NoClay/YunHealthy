@@ -43,7 +43,7 @@ import java.io.IOException;
 import java.util.Hashtable;
 import java.util.Vector;
 
-import wang.fly.com.yunhealth.R;
+import indi.noclay.cloudhealth.R;
 
 
 /**

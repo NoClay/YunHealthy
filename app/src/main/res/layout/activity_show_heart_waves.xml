@@ -27,7 +27,7 @@
     </RelativeLayout>
 
 
-    <wang.fly.com.yunhealth.MyViewPackage.HeartWavesView
+    <indi.noclay.cloudhealth.myview.HeartWavesView
         app:wavesLineColor="#71A423"
         android:background="#fff"
         android:id="@+id/heartWaves"
@@ -43,7 +43,7 @@
             android:layout_weight="2"
             android:layout_width="0dp"
             android:layout_height="match_parent">
-            <wang.fly.com.yunhealth.MyViewPackage.CircleImageView
+            <indi.noclay.cloudhealth.myview.CircleImageView
                 android:layout_centerInParent="true"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
@@ -72,7 +72,7 @@
             android:layout_weight="2"
             android:layout_width="0dp"
             android:layout_height="match_parent">
-            <wang.fly.com.yunhealth.MyViewPackage.CircleImageView
+            <indi.noclay.cloudhealth.myview.CircleImageView
                 android:layout_centerInParent="true"
                 android:layout_width="30dp"
                 android:layout_height="30dp"

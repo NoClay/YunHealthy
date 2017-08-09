@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:id="@+id/activity_medicine"
     android:fitsSystemWindows="true"
-    tools:context="wang.fly.com.yunhealth.Activity.MedicineActivity">
+    tools:context=".activity.MedicineActivity">
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appBarLayout"
         android:fitsSystemWindows="true"
@@ -49,7 +49,7 @@
 
 
 
-    <wang.fly.com.yunhealth.MyViewPackage.MyNestedScrollView
+    <indi.noclay.cloudhealth.myview.MyNestedScrollView
         android:background="@color/dialogBackground"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -61,7 +61,7 @@
             android:layout_height="match_parent">
 
         </android.support.v7.widget.RecyclerView>
-    </wang.fly.com.yunhealth.MyViewPackage.MyNestedScrollView>
+    </indi.noclay.cloudhealth.myview.MyNestedScrollView>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"

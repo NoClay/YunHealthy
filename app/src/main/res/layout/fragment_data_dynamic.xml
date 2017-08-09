@@ -7,12 +7,12 @@
         android:id="@+id/refreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <wang.fly.com.yunhealth.MyViewPackage.AutoLoadMoreRecyclerView
+        <indi.noclay.cloudhealth.myview.AutoLoadMoreRecyclerView
             android:id="@+id/dynamicDataShow"
             android:scrollbars="none"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-        </wang.fly.com.yunhealth.MyViewPackage.AutoLoadMoreRecyclerView>
+        </indi.noclay.cloudhealth.myview.AutoLoadMoreRecyclerView>
     </android.support.v4.widget.SwipeRefreshLayout>
 </LinearLayout>

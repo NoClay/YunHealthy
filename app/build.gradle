@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         multiDexEnabled true
-        applicationId "wang.fly.com.yunhealth"
+        applicationId "indi.noclay.cloudhealth"
         minSdkVersion 15
         targetSdkVersion 25
         versionCode 1

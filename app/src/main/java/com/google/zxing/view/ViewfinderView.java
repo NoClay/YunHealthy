@@ -38,7 +38,7 @@ import com.google.zxing.camera.CameraManager;
 import java.util.Collection;
 import java.util.HashSet;
 
-import wang.fly.com.yunhealth.R;
+import indi.noclay.cloudhealth.R;
 
 
 /**
