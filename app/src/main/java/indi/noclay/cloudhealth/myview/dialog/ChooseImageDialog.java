@@ -44,4 +44,6 @@ public class ChooseImageDialog extends PopupWindow{
         this.setAnimationStyle(R.style.PopupAnimation);
 
     }
+
+
 }
