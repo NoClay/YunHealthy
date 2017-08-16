@@ -1,15 +1,19 @@
 package indi.noclay.cloudhealth.database.measuredata;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 import cn.bmob.v3.BmobObject;
 import cn.bmob.v3.datatype.BmobDate;
 import indi.noclay.cloudhealth.database.SignUserData;
+import pers.noclay.foldlineview.FoldLineInterface;
 
 /**
  * Created by 82661 on 2016/11/23.
  */
 
-public class MeasureData extends BmobObject{
+public class MeasureData extends BmobObject implements FoldLineInterface{
     private String name;
     private Float averageData;
     private Float maxData;
@@ -153,5 +157,19 @@ public class MeasureData extends BmobObject{
 
     public String getDate(){
         return measureTime.getDate().substring(10, 16);
+    }
+
+    @Override
+    public List<Float> getLinesAsList() {
+        List<Float> result = new ArrayList<>();
+        result.add(averageData);
+        result.add(maxData);
+        result.add(minData);
+        return result;
+    }
+
+    @Override
+    public String getLabel() {
+        return getDate();
     }
 }

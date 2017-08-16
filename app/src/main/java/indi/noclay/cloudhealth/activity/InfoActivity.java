@@ -34,9 +34,10 @@ import indi.noclay.cloudhealth.R;
 import indi.noclay.cloudhealth.database.SignUserData;
 import indi.noclay.cloudhealth.database.measuredata.MeasureData;
 import indi.noclay.cloudhealth.myview.DatePickerView;
-import indi.noclay.cloudhealth.myview.FoldLineView;
 import indi.noclay.cloudhealth.util.MyConstants;
 import indi.noclay.cloudhealth.util.UtilClass;
+import pers.noclay.foldlineview.FoldLineAdapter;
+import pers.noclay.foldlineview.FoldLineView;
 
 
 /**
@@ -45,7 +46,7 @@ import indi.noclay.cloudhealth.util.UtilClass;
 
 public class InfoActivity extends AppCompatActivity
         implements View.OnClickListener,
-        FoldLineView.onScrollChartListener,
+        FoldLineView.OnScrollChartListener,
         DatePickerView.OnDateChangedListener {
     private TextView infoText;
     private ImageView back;
@@ -61,6 +62,7 @@ public class InfoActivity extends AppCompatActivity
     private LinearLayout loadLayout;
     private LinearLayout contentLayout;
     private LinearLayout nullDataLayout;
+    private FoldLineAdapter<MeasureData> mAdapter;
     private float average, max, min;
     private int start;
     private int end;
@@ -178,33 +180,6 @@ public class InfoActivity extends AppCompatActivity
     }
 
 
-
-    @Override
-    public void onScroll(float average, float max, float min, int start, int end) {
-        Message message = Message.obtain();
-        boolean flag = false;
-        if (this.average != average) {
-            this.average = average;
-            flag = true;
-        }
-        if (this.max != max) {
-            this.max = max;
-            flag = true;
-        }
-        if (this.min != min) {
-            this.min = min;
-            flag = true;
-        }
-        if (this.start != start || this.end != end) {
-            this.start = start;
-            this.end = end;
-            flag = true;
-        }
-        if (flag){
-            handler.sendMessage(message);
-        }
-    }
-
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -225,10 +200,12 @@ public class InfoActivity extends AppCompatActivity
                         showNullData();
                     }else{
                         mDatas = temp;
-                        foldLineView.setLines(mDatas);
-                        if (foldLineView.startDrawing()){
+                        if (mDatas != null && mDatas.size() != 0){
+                            mAdapter = new FoldLineAdapter<>(mDatas);
+                            foldLineView.setAdapter(mAdapter);
+                            foldLineView.startDrawing();
                             showContent();
-                        }else {
+                        } else {
                             showError();
                         }
                     }
@@ -326,5 +303,36 @@ public class InfoActivity extends AppCompatActivity
         Log.d(TAG, "onDateChanged: time = " + year + "-" + month + "-" + day);
         showLoading();
         getDatas(year, month, day);
+    }
+
+    @Override
+    public void onScroll(int i, int i1) {
+        if (start != i || end != i1){
+            start = i;
+            end = i1;
+            Message message = Message.obtain();
+            float[] temp = computeData(i,i1);
+            max = temp[0];
+            min = temp[1];
+            average = temp[2];
+            handler.sendMessage(message);
+        }
+    }
+
+    private float[] computeData(int i, int i1) {
+        float[] result = new float[3];
+        if (i1 > i){
+            result[0] = mDatas.get(i).getAverageData();
+            result[1] = mDatas.get(i).getAverageData();
+            result[2] = 0;
+            for (int j = i + 1; j < i1; j++) {
+                float temp = mDatas.get(i).getAverageData();
+                result[0] = result[0] < temp ? temp : result[0];
+                result[1] = result[1] > temp ? temp : result[1];
+                result[2] += temp;
+            }
+            result[2] /= (i1 - i);
+        }
+        return result;
     }
 }

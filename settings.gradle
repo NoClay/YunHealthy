@@ -1,1 +1,1 @@
-include ':app', ':ecgwaveview-release'
+include ':app', ':ecgwaveview-release', ':foldlineview-release'
