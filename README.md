@@ -57,11 +57,19 @@ bug修复：使用Android动态权限申请
 
 # 2017/8/4 修改桌面小部件布局：
 
-![桌面小部件.jpg](http://storage1.imgchr.com/Acbef.png)
+![桌面小部件.jpg](http://storage1.imgchr.com/VuXRA.png)
 
 # 2017/8/9 修改说明：
 
 修改了HeartWavesView的来源：
+
+引用自己的Library项目，方便快捷的导入使用。
+
+项目地址：https://github.com/NoClay/UtilsDemo
+
+# 2017/8/11修改说明：
+
+修改了FoldLineView的来源：
 
 引用自己的Library项目，方便快捷的导入使用。
 
