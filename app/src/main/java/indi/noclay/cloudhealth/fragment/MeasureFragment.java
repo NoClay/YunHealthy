@@ -136,22 +136,21 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
                                           /* 从intent中取得搜索结果数据 */
                         BluetoothDevice device = intent
                                 .getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                        Log.d("blue", "onReceive: name" + device.getName());
-                        Log.d("blue", "onReceive: address" + device.getAddress());
-                        Log.d("blue", "onReceive: state" + device.getBondState());
-
-                        if (TextUtils.equals(device.getAddress(), deviceAddress)) {
+                        if (device.getAddress().equalsIgnoreCase(deviceAddress)) {
                             theDestDevice = device;
+                            Log.d(TAG, "onReceive: 查看链接状态");
                             if (theDestDevice.getBondState() == BluetoothDevice.BOND_NONE) {
                                 //没有进行过配对
+                                if (bluetoothAdapter.isDiscovering()){
+                                    bluetoothAdapter.cancelDiscovery();
+                                }
                                 try {
-                                    ClsUtils.createBond(theDestDevice.getClass(), theDestDevice);
+                                    Log.d(TAG, "onReceive: 开始配对"
+                                            + ClsUtils.createBond(theDestDevice.getClass(), theDestDevice));
+
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
-                            } else if (theDestDevice.getBondState() == BluetoothDevice.BOND_BONDED) {
-                                //已经配对过，进行连接
-
                             }
                         }
                         Log.d(TAG, "设备：" + device.getName() + " address: " + device.getAddress());
@@ -160,11 +159,13 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
                     case BluetoothDevice.ACTION_PAIRING_REQUEST: {
                         Log.d(TAG, "onReceive: 进行配对");
                         try {
+
                             boolean ret = ClsUtils.setPin(theDestDevice.getClass(), theDestDevice, "1234");
                             //1.确认配对
                             ClsUtils.setPairingConfirmation(theDestDevice.getClass(), theDestDevice, true);
                             //2.终止有序广播
-                            abortBroadcast();//如果没有将广播终止，则会出现一个一闪而过的配对框。
+                            abortBroadcast();
+                            //如果没有将广播终止，则会出现一个一闪而过的配对框。
                             //3.调用setPin方法进行配对...
 
                         } catch (Exception e) {
@@ -172,7 +173,6 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
                             e.printStackTrace();
                         }
                         //终止广播
-                        abortBroadcast();
                         break;
                     }
                     case BluetoothDevice.ACTION_BOND_STATE_CHANGED: {
@@ -221,17 +221,31 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    private void mayRequestBluetooth(){
+        int check = PackageManager.PERMISSION_DENIED;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            check = getContext().checkSelfPermission(Manifest.permission.BLUETOOTH_PRIVILEGED);
+            if (check != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{
+                        Manifest.permission.BLUETOOTH_PRIVILEGED
+                }, 0);
+            }
+        }
+    }
+
     /**
      * 用于连接
      *
      * @param macAddress
      */
     public void connectProc(String macAddress) {
+        Log.d(TAG, "connectProc: address = " + macAddress);
         deviceAddress = macAddress;
         connectDevice.setVisibility(View.INVISIBLE);
         connectDevice.setClickable(false);
         load.setVisibility(View.VISIBLE);
         mayRequestLocation();
+        mayRequestBluetooth();
         openBluetooth();
     }
 
@@ -310,7 +324,7 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
             BluetoothDevice blue = it.next();
             Log.d(TAG, "onActivityResult: name: " + blue.getName());
             Log.d(TAG, "onActivityResult: address: " + blue.getAddress());
-            if (blue.getAddress().equals(deviceAddress)) {
+            if (blue.getAddress().equalsIgnoreCase(deviceAddress)) {
                 flag = true;
                 break;
             }

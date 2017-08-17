@@ -206,7 +206,7 @@ public class MineFragment extends Fragment implements View.OnClickListener{
                     Bundle bundle = data.getExtras();
                     String macAddress = bundle.getString("result");
                     if (UtilClass.isMacAddress(macAddress)) {
-                        SharedPreferenceHelper.undateDevice(macAddress);
+                        SharedPreferenceHelper.undateDevice(macAddress.toUpperCase());
                     } else {
                         UtilClass.toToast(getContext(), "设备地址不合法");
                     }
