@@ -52,29 +52,27 @@ import indi.noclay.cloudhealth.util.ClsUtils;
 import indi.noclay.cloudhealth.util.MyConstants;
 import indi.noclay.cloudhealth.util.SharedPreferenceHelper;
 import indi.noclay.cloudhealth.util.UtilClass;
+import pers.noclay.bluetooth.Bluetooth;
+import pers.noclay.bluetooth.BluetoothConfig;
+import pers.noclay.bluetooth.BluetoothUtils;
+import pers.noclay.bluetooth.OnConnectListener;
 
 import static android.app.Activity.RESULT_OK;
 
 /*
  * Created by 兆鹏 on 2016/11/2.
  */
-public class MeasureFragment extends Fragment implements View.OnClickListener {
+public class MeasureFragment extends Fragment implements View.OnClickListener, OnConnectListener {
     private TextView connectDevice;
     private RecyclerView recyclerView;
-    InputBlueMacDialog dialog;
     private Context context;
     private RecycleAdapterForMeasureOnly myAdapter;
     private ProgressBar load;
-    private boolean isTryingConnecting = false;
     private MyDataBase myDataBase;
-    private BluetoothAdapter bluetoothAdapter;
-    private BluetoothDevice theDestDevice;
-    BroadcastReceiver receiver;
-    private ClientThread clientThread;
-    private ConnectedThread connectThread;
     private List<MeasureData> measureDataList;
     private long last;
     private Calendar calendar;
+    private String data;
     //请求
     static final int REQUEST_OPEN_BLUETOOTH = 0;
     static final int MSG_WAIT_CONNECT = 0;
@@ -82,7 +80,6 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
     static final int MSG_START_CONNECT = 2;
     static final int MSG_READ_STRING = 3;
     static final int MSG_CONNECT_FAILED = 4;
-    private String deviceAddress = "98:D3:32:70:5A:44";
     private static final String TAG = "MeasureFragment";
     View mView;
 
@@ -93,8 +90,17 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
         context = getContext();
         mView = v;
         findView(v);
-        registerBroadReceiver();
+        initBluetoothSDK();
         return v;
+    }
+
+    private void initBluetoothSDK() {
+        BluetoothConfig config = new BluetoothConfig.Builder(getContext())
+                .setAutoPairAble(true)
+                .setUUID("00001101-0000-1000-8000-00805F9B34FB")
+                .build();
+        Bluetooth.initialize(config);
+        Bluetooth.setOnConnectListener(this);
     }
 
     private void findView(View v) {
@@ -126,128 +132,6 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
 
     }
 
-    private void registerBroadReceiver() {
-        receiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                String action = intent.getAction();
-                switch (action) {
-                    case BluetoothDevice.ACTION_FOUND: {
-                                          /* 从intent中取得搜索结果数据 */
-                        BluetoothDevice device = intent
-                                .getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                        if (device.getAddress().equalsIgnoreCase(deviceAddress)) {
-                            theDestDevice = device;
-                            Log.d(TAG, "onReceive: 查看链接状态");
-                            if (theDestDevice.getBondState() == BluetoothDevice.BOND_NONE) {
-                                //没有进行过配对
-                                if (bluetoothAdapter.isDiscovering()){
-                                    bluetoothAdapter.cancelDiscovery();
-                                }
-                                try {
-                                    Log.d(TAG, "onReceive: 开始配对"
-                                            + ClsUtils.createBond(theDestDevice.getClass(), theDestDevice));
-
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        }
-                        Log.d(TAG, "设备：" + device.getName() + " address: " + device.getAddress());
-                        break;
-                    }
-                    case BluetoothDevice.ACTION_PAIRING_REQUEST: {
-                        Log.d(TAG, "onReceive: 进行配对");
-                        try {
-
-                            boolean ret = ClsUtils.setPin(theDestDevice.getClass(), theDestDevice, "1234");
-                            //1.确认配对
-                            ClsUtils.setPairingConfirmation(theDestDevice.getClass(), theDestDevice, true);
-                            //2.终止有序广播
-                            abortBroadcast();
-                            //如果没有将广播终止，则会出现一个一闪而过的配对框。
-                            //3.调用setPin方法进行配对...
-
-                        } catch (Exception e) {
-                            // TODO Auto-generated catch block
-                            e.printStackTrace();
-                        }
-                        //终止广播
-                        break;
-                    }
-                    case BluetoothDevice.ACTION_BOND_STATE_CHANGED: {
-                        theDestDevice = bluetoothAdapter.getRemoteDevice(theDestDevice.getAddress());
-                        if (theDestDevice.getBondState() == BluetoothDevice.BOND_BONDED) {
-                            Log.d(TAG, "onReceive: 配对成功");
-                            clientThread = new ClientThread();
-                            isTryingConnecting = true;
-                            clientThread.start();
-                        } else if (theDestDevice.getBondState() == BluetoothDevice.BOND_NONE) {
-                            Log.d(TAG, "onReceive: 没有配对");
-                        } else if (theDestDevice.getBondState() == BluetoothDevice.BOND_BONDING) {
-                            Log.d(TAG, "onReceive: 正在配对");
-                        }
-                        break;
-                    }
-                    case BluetoothDevice.ACTION_ACL_CONNECTED: {
-
-                        break;
-                    }
-                }
-            }
-        };
-        IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
-        getContext().registerReceiver(receiver, filter);
-        filter = new IntentFilter(BluetoothDevice.ACTION_PAIRING_REQUEST);
-        getContext().registerReceiver(receiver, filter);
-        filter = new IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED);
-        getContext().registerReceiver(receiver, filter);
-        filter = new IntentFilter(BluetoothDevice.ACTION_ACL_CONNECTED);
-        getContext().registerReceiver(receiver, filter);
-    }
-
-    /**
-     * 请求获取用户粗略定位的权限
-     * android 6.0及其以上使用
-     */
-    private void mayRequestLocation() {
-        if (Build.VERSION.SDK_INT >= 23) {
-            int check = getContext().checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION);
-            if (check != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(new String[]{
-                        Manifest.permission.ACCESS_COARSE_LOCATION
-                }, 0);
-            }
-        }
-    }
-
-    private void mayRequestBluetooth(){
-        int check = PackageManager.PERMISSION_DENIED;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-            check = getContext().checkSelfPermission(Manifest.permission.BLUETOOTH_PRIVILEGED);
-            if (check != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(new String[]{
-                        Manifest.permission.BLUETOOTH_PRIVILEGED
-                }, 0);
-            }
-        }
-    }
-
-    /**
-     * 用于连接
-     *
-     * @param macAddress
-     */
-    public void connectProc(String macAddress) {
-        Log.d(TAG, "connectProc: address = " + macAddress);
-        deviceAddress = macAddress;
-        connectDevice.setVisibility(View.INVISIBLE);
-        connectDevice.setClickable(false);
-        load.setVisibility(View.VISIBLE);
-        mayRequestLocation();
-        mayRequestBluetooth();
-        openBluetooth();
-    }
 
 
     @Override
@@ -257,7 +141,8 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
                 String address = SharedPreferenceHelper.getDevice();
                 if (UtilClass.isMacAddress(address)){
                     toToast("正在连接设备");
-                    connectProc(address);
+                    Bluetooth.setTargetAddress(address);
+                    Bluetooth.startConnect();
                 }else{
                     Snackbar.make(getView(), "暂无设备，请点击我的设备添加设备", Snackbar.LENGTH_SHORT)
                             .setAction("好的", new View.OnClickListener() {
@@ -279,267 +164,100 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
         Toast.makeText(getContext(), content, Toast.LENGTH_SHORT).show();
     }
 
-    /**
-     * 打开蓝牙
-     */
-    private void openBluetooth() {
-        //判断蓝牙的打开状态
-        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        if (bluetoothAdapter == null) {
-            toToast("本机不支持蓝牙设备");
-            System.exit(0);
-        } else if (!bluetoothAdapter.isEnabled()) {
-            Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(intent, REQUEST_OPEN_BLUETOOTH);
-        } else {
-            searchBluetoothDevice();
-        }
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode) {
-            case REQUEST_OPEN_BLUETOOTH: {
-                if (resultCode == RESULT_OK) {
-                    //搜索蓝牙设备
-                    searchBluetoothDevice();
-                } else {
-                    toToast("未打开蓝牙，故无法测量实时数据");
-                }
-                break;
-            }
+        Bluetooth.onResult(requestCode, resultCode, data);
+    }
 
+    @Override
+    public void onConnectFail(int i) {
+        handler.sendEmptyMessage(MSG_CONNECT_FAILED);
+    }
+
+    @Override
+    public void onConnectSuccess() {
+        handler.sendEmptyMessage(MSG_CONNECT_SUCCESS);
+    }
+
+    @Override
+    public void onConnectStart() {
+        handler.sendEmptyMessage(MSG_START_CONNECT);
+    }
+
+    @Override
+    public void onReceiveMessage(byte[] bytes) {
+        data = resolveData(UtilClass.valueOfBytes(bytes) + data);
+
+    }
+
+
+    private String resolveData(String data) {
+        int start = 0;
+        int end = 0;
+        while (start != -1 && end != -1) {
+            start = data.indexOf("dcba");
+            if (start != -1 && data.length() > 4) {
+                end = data.indexOf("dcba", start + 1);
+            }
+            if (start != -1 && end != -1 && start != end) {
+                analysisData(data.substring(start, end));
+                data = data.substring(end);
+            }
         }
+        return data;
     }
 
     /**
-     * 搜索蓝牙设备，添加到显示页面
+     * 处理的字符串应该符合如下规则
+     * dcba + e[0~9] + [0~9][0~9] + [0~9][0~9] + ~ + sum
+     *
+     * @param substring
      */
-    private void searchBluetoothDevice() {
-        Set<BluetoothDevice> bondedDevice = bluetoothAdapter.getBondedDevices();
-        Iterator<BluetoothDevice> it = bondedDevice.iterator();
-        boolean flag = false;
-        while (it.hasNext()) {
-            BluetoothDevice blue = it.next();
-            Log.d(TAG, "onActivityResult: name: " + blue.getName());
-            Log.d(TAG, "onActivityResult: address: " + blue.getAddress());
-            if (blue.getAddress().equalsIgnoreCase(deviceAddress)) {
-                flag = true;
-                break;
-            }
+    private boolean analysisData(String substring) {
+        //字符串的长度
+        if (substring == null) {
+            return false;
         }
-        if (flag) {
-            //已经配对设备，直接进行链接
-            Log.d(TAG, "onActivityResult: 已经配对，直接进行连接");
-            clientThread = new ClientThread();
-            isTryingConnecting = true;
-            clientThread.start();
-        } else {
-            //搜索蓝牙进行配对
-            if (bluetoothAdapter.isDiscovering()) {//正在查找
-                Log.d(TAG, "onClick: 正在查找设备");
-            } else {
-                bluetoothAdapter.startDiscovery();
-            }
+        int len = substring.length();
+        if (len < 12) {
+            return false;
         }
-
+        if (!UtilClass.checkHexString(substring)) {
+            return false;
+        }
+        if (!substring.startsWith("dcbae")) {
+            return false;
+        }
+        int type = Integer.valueOf(substring.substring(5, 6), 16);
+        int highLength = Integer.valueOf(substring.substring(6, 8), 16);
+        int lowLength = Integer.valueOf(substring.substring(8, 10), 16);
+        if (len != (12 + (highLength + lowLength) * 2)) {
+            //长度不符合
+            return false;
+        }
+        int sum = 0;
+        for (int i = 2; i < len; ) {
+            sum += Integer.valueOf(substring.substring(i - 2, i), 16);
+            i += 2;
+        }
+        String sumString = Integer.toHexString(sum);
+        if (!sumString.substring(sumString.length() - 2, sumString.length())
+                .equals(substring.substring(substring.length() - 2, substring.length()))) {
+            return false;
+        }
+        String dataString = substring.substring(10, 10 + (highLength + lowLength) * 2);
+        if (dataString.length() <= 0) {
+            return false;
+        }
+        Message message = Message.obtain();
+        message.what = MSG_READ_STRING;
+        message.arg1 = type;
+        message.obj = dataString;
+        handler.sendMessage(message);
+        return true;
     }
 
-    private class ClientThread extends Thread {
-        private BluetoothSocket bluetoothSocket;
-
-        public ClientThread() {
-            theDestDevice = bluetoothAdapter.getRemoteDevice(deviceAddress);
-            try {
-                bluetoothSocket = theDestDevice.createRfcommSocketToServiceRecord(
-                        UUID.fromString("00001101-0000-1000-8000-00805F9B34FB"));
-                Log.d(TAG, "ClientThread: 构造socket");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        @Override
-        public void run() {
-            bluetoothAdapter.cancelDiscovery();
-
-            Message message = Message.obtain();
-            if (bluetoothSocket != null) {
-                try {
-                    bluetoothSocket.connect();
-                    Log.d(TAG, "run: connected" + bluetoothSocket.isConnected());
-                } catch (IOException e) {
-                    Log.e(TAG, "run: ", e);
-                    e.printStackTrace();
-                    initConnect();
-                }
-                message.what = bluetoothSocket.isConnected() ? MSG_CONNECT_SUCCESS : MSG_CONNECT_FAILED;
-                handler.sendMessage(message);
-            }
-        }
-
-        public void cancel() {
-            try {
-                bluetoothSocket.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        public BluetoothSocket getBluetoothSocket() {
-            return bluetoothSocket;
-        }
-
-        public void setBluetoothSocket(BluetoothSocket bluetoothSocket) {
-            this.bluetoothSocket = bluetoothSocket;
-        }
-    }
-
-    public void initConnect() {
-        if (clientThread != null) {
-            clientThread.cancel();
-            clientThread = null;
-        }
-        if (connectThread != null) {
-            connectThread.cancel();
-            connectThread = null;
-        }
-    }
-
-    private class ConnectedThread extends Thread {
-        private BluetoothSocket bluetoothSocket;
-        private OutputStream outputStream;
-        private InputStream inputStream;
-        byte[] bytes = new byte[512];
-        private boolean flag = false;
-
-        public boolean isFlag() {
-            return flag;
-        }
-
-        public void setFlag(boolean flag) {
-            this.flag = flag;
-        }
-
-        public ConnectedThread(BluetoothSocket bluetoothSocket) {
-            this.bluetoothSocket = bluetoothSocket;
-            try {
-                outputStream = this.bluetoothSocket.getOutputStream();
-                inputStream = this.bluetoothSocket.getInputStream();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-
-        @Override
-        public void run() {
-            String data = "";
-            while (flag) {
-                if (inputStream == null)
-                    return;
-                try {
-                    inputStream.read(bytes);
-                    data = resolveData(UtilClass.valueOfBytes(bytes) + data);
-                    Log.d(TAG, "run: receive" + data);
-                    Log.d(TAG, "run: connet" + bluetoothSocket.isConnected());
-                } catch (IOException e) {
-                    cancel();
-                    Message message = Message.obtain();
-                    message.what = MSG_CONNECT_FAILED;
-                    handler.sendMessage(message);
-                    e.printStackTrace();
-                }
-            }
-
-        }
-
-        private String resolveData(String data) {
-            int start = 0;
-            int end = 0;
-            while (start != -1 && end != -1) {
-                start = data.indexOf("dcba");
-                if (start != -1 && data.length() > 4) {
-                    end = data.indexOf("dcba", start + 1);
-                }
-                if (start != -1 && end != -1 && start != end) {
-                    analysisData(data.substring(start, end));
-                    data = data.substring(end);
-                }
-            }
-            return data;
-        }
-
-        /**
-         * 处理的字符串应该符合如下规则
-         * dcba + e[0~9] + [0~9][0~9] + [0~9][0~9] + ~ + sum
-         *
-         * @param substring
-         */
-        private boolean analysisData(String substring) {
-            //字符串的长度
-            if (substring == null) {
-                return false;
-            }
-            int len = substring.length();
-            if (len < 12) {
-                return false;
-            }
-            if (!UtilClass.checkHexString(substring)) {
-                return false;
-            }
-            if (!substring.startsWith("dcbae")) {
-                return false;
-            }
-            int type = Integer.valueOf(substring.substring(5, 6), 16);
-            int highLength = Integer.valueOf(substring.substring(6, 8), 16);
-            int lowLength = Integer.valueOf(substring.substring(8, 10), 16);
-            if (len != (12 + (highLength + lowLength) * 2)) {
-                //长度不符合
-                return false;
-            }
-            int sum = 0;
-            for (int i = 2; i < len; ) {
-                sum += Integer.valueOf(substring.substring(i - 2, i), 16);
-                i += 2;
-            }
-            String sumString = Integer.toHexString(sum);
-            if (!sumString.substring(sumString.length() - 2, sumString.length())
-                    .equals(substring.substring(substring.length() - 2, substring.length()))) {
-                return false;
-            }
-            String dataString = substring.substring(10, 10 + (highLength + lowLength) * 2);
-            if (dataString.length() <= 0) {
-                return false;
-            }
-            Message message = Message.obtain();
-            message.what = MSG_READ_STRING;
-            message.arg1 = type;
-            message.obj = dataString;
-            handler.sendMessage(message);
-            return true;
-        }
-
-        public void write(String string) {
-            byte[] bytes;
-            bytes = string.getBytes();
-            try {
-                outputStream.write(bytes);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        public void cancel() {
-            this.flag = false;
-            try {
-                bluetoothSocket.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
 
     Handler handler = new Handler() {
         @Override
@@ -559,11 +277,6 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
                     connectDevice.setText("已连接");
                     connectDevice.setVisibility(View.VISIBLE);
                     load.setVisibility(View.INVISIBLE);
-                    connectDevice.setClickable(false);
-                    connectThread = new ConnectedThread(clientThread.getBluetoothSocket());
-                    connectThread.setFlag(true);
-                    connectThread.setDaemon(true);
-                    connectThread.start();
                     break;
                 }
                 case MSG_READ_STRING: {
@@ -732,9 +445,7 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onDestroyView() {
-        getContext().unregisterReceiver(receiver);
-        isTryingConnecting = false;
-        initConnect();
+        Bluetooth.onDestroy();
         super.onDestroyView();
     }
 }
