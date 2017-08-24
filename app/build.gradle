@@ -58,4 +58,5 @@ dependencies {
     compile 'com.google.zxing:android-core:3.3.0'
     compile project(':ecgwaveview-release')
     compile project(':foldlineview-release')
+    compile project(':bluetooth-release')
 }
