@@ -1,15 +1,7 @@
 package indi.noclay.cloudhealth.fragment;
 
-import android.Manifest;
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothSocket;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -20,7 +12,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,35 +20,21 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
-import java.util.UUID;
-
 
 import indi.noclay.cloudhealth.MainActivityCopy;
 import indi.noclay.cloudhealth.R;
 import indi.noclay.cloudhealth.adapter.RecycleAdapterForMeasureOnly;
 import indi.noclay.cloudhealth.database.MyDataBase;
 import indi.noclay.cloudhealth.database.measuredata.MeasureData;
-import indi.noclay.cloudhealth.myview.dialog.InputBlueMacDialog;
-import indi.noclay.cloudhealth.util.ClsUtils;
 import indi.noclay.cloudhealth.util.MyConstants;
 import indi.noclay.cloudhealth.util.SharedPreferenceHelper;
 import indi.noclay.cloudhealth.util.UtilClass;
 import pers.noclay.bluetooth.Bluetooth;
 import pers.noclay.bluetooth.BluetoothConfig;
-import pers.noclay.bluetooth.BluetoothUtils;
 import pers.noclay.bluetooth.OnConnectListener;
-
-import static android.app.Activity.RESULT_OK;
 
 /*
  * Created by 兆鹏 on 2016/11/2.
@@ -73,6 +50,8 @@ public class MeasureFragment extends Fragment implements View.OnClickListener, O
     private long last;
     private Calendar calendar;
     private String data;
+    long time;
+    long count = 0;
     //请求
     static final int REQUEST_OPEN_BLUETOOTH = 0;
     static final int MSG_WAIT_CONNECT = 0;
@@ -101,6 +80,22 @@ public class MeasureFragment extends Fragment implements View.OnClickListener, O
                 .build();
         Bluetooth.initialize(config);
         Bluetooth.setOnConnectListener(this);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (myAdapter != null) {
+            myAdapter.startRefreshing();
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (myAdapter != null){
+            myAdapter.stopRefreshing();
+        }
     }
 
     private void findView(View v) {
@@ -133,22 +128,21 @@ public class MeasureFragment extends Fragment implements View.OnClickListener, O
     }
 
 
-
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.connect_device: {
                 String address = SharedPreferenceHelper.getDevice();
-                if (UtilClass.isMacAddress(address)){
+                if (UtilClass.isMacAddress(address)) {
                     toToast("正在连接设备");
                     Bluetooth.setTargetAddress(address);
                     Bluetooth.startConnect();
-                }else{
+                } else {
                     Snackbar.make(getView(), "暂无设备，请点击我的设备添加设备", Snackbar.LENGTH_SHORT)
                             .setAction("好的", new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    if (getActivity() instanceof MainActivityCopy){
+                                    if (getActivity() instanceof MainActivityCopy) {
                                         MainActivityCopy instance = (MainActivityCopy) getActivity();
                                         instance.setCurrentPage(MainActivityCopy.PAGE_MINE);
                                     }
@@ -263,6 +257,7 @@ public class MeasureFragment extends Fragment implements View.OnClickListener, O
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
+
             switch (msg.what) {
                 case MSG_CONNECT_FAILED: {
                     Log.d(TAG, "handleMessage: 连接失败");
@@ -315,17 +310,15 @@ public class MeasureFragment extends Fragment implements View.OnClickListener, O
                         case 2: {
                             //心电
                             if (data.length() == 4) {
-                                Log.d("workItem", "handleMessage: 心电");
-                                long now = Calendar.getInstance().getTimeInMillis();
-                                if (now - last >= 200) {
-                                    checkMinuteAndCache(MyConstants.MEASURE_TYPE_XINDIAN, minute);
-                                    int result = UtilClass.valueOfHexString(data);
-                                    temp = measureDataList.get(MyConstants.MEASURE_TYPE_XINDIAN);
-                                    myAdapter.heartWavesView.drawNextPoint(result);
-                                    if (compareData(temp, (float) (result))) {
-                                        myAdapter.notifyItemChanged(MyConstants.MEASURE_TYPE_XINDIAN);
-                                    }
-                                    last = now;
+                                time = System.currentTimeMillis();
+                                count++;
+                                Log.d("displayHeart", "handleMessage: time = " + time / 1000 + " count = " + count);
+                                checkMinuteAndCache(MyConstants.MEASURE_TYPE_XINDIAN, minute);
+                                int result = UtilClass.valueOfHexString(data);
+                                temp = measureDataList.get(MyConstants.MEASURE_TYPE_XINDIAN);
+//                                myAdapter.drawHeartWavesPoint(result);
+                                if (compareData(temp, (float) (result))) {
+                                    myAdapter.notifyItemChanged(MyConstants.MEASURE_TYPE_XINDIAN);
                                 }
                             }
                             break;

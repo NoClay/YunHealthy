@@ -57,6 +57,7 @@
             android:layout_width="match_parent"
             android:layout_height="300dp"
             android:background="#fff"
+            app:dataHZ="100"
             app:tableLineColor="@color/hintTextColor"
             app:wavesLineColor="#71A423" />
 

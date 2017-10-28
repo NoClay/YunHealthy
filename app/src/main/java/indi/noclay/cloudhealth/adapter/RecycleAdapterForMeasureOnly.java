@@ -50,6 +50,23 @@ public class RecycleAdapterForMeasureOnly extends RecyclerView.Adapter<RecycleAd
         return vh;
     }
 
+    public void drawHeartWavesPoint(float y){
+        if (heartWavesView != null){
+            heartWavesView.drawNextPoint(y);
+        }
+    }
+    public void startRefreshing(){
+        if (heartWavesView != null){
+            heartWavesView.startRefresh();
+        }
+    }
+
+    public void stopRefreshing(){
+        if (heartWavesView != null){
+            heartWavesView.stopRefresh();
+        }
+    }
+
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         MeasureData temp = measureDataList.get(position);

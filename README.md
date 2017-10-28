@@ -9,71 +9,7 @@ NoClay,flyings-sky
 
 Android6.0 正在向下兼容
 
-# 说明
-在本地过去登录状态的时候，请使用以下代码
-```java
 
-public class SharedPreferenceHelper {
-	/**
-	* 没有登录返回null
-	* 登录则返回SignUserData
-	**/
-	public static SignUserData getLoginUser() 
-	/**
-	* 修改登录状态、信息
-	* isLogin = true 则登录
-	**/
-	public static void editLoginState(SignUserData user, Boolean isLogin) 
-	/**
-	* 直接退出登录
-	**/
-	public static void exitLogin()
-}
-```
-使用的SQLite：LocalStore.db
-
-# 2017/5/11 修改布局说明：
-
-修改了好友页面的布局，实现类似好友列表的布局思路如下：
-1. 使用RecyclerView嵌套RecyclerView，在父RecyclerView的onBindView中计算出子RecyclerView的高度，这个可以采用如下设定：
-  ```java
-  	   childRecyclerView.getLayoutManager().setAutoMeasuredEnable(boolean flag)
-  ```
-
-2. 利用ExpandableListView控件
-
-
-# 2017/5/20 修复bug说明：
-
-修复了修改个人信息的bug
-
-bug原因：未获取读取文件的权限
-
-bug修复：使用Android动态权限申请
-
-# 2017/5/23 修复bug说明：
-
-修复了部分页面的崩溃bug，原因是对null数据的处理未进行特殊处理！
-
-# 2017/8/4 修改桌面小部件布局：
-
-![桌面小部件.jpg](http://storage1.imgchr.com/VuXRA.png)
-
-# 2017/8/9 修改说明：
-
-修改了HeartWavesView的来源：
-
-引用自己的Library项目，方便快捷的导入使用。
-
-项目地址：https://github.com/NoClay/UtilsDemo
-
-# 2017/8/11修改说明：
-
-修改了FoldLineView的来源：
-
-引用自己的Library项目，方便快捷的导入使用。
-
-项目地址：https://github.com/NoClay/UtilsDemo
 
 
 
