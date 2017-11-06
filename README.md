@@ -9,7 +9,10 @@ NoClay,flyings-sky
 
 Android6.0 正在向下兼容
 
+# 分支说明
 
+* master 为默认的分支，保留的是作为毕设部分的云健康的逻辑！
+* newMaster 为比赛分支，归属于原来的云健康项目组，暂时停止完善！
 
 
 
