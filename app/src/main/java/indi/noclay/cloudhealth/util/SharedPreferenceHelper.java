@@ -17,12 +17,12 @@ public class SharedPreferenceHelper {
     public static final String LOGIN_STATE_PREF = "LoginState";
 
     public static SharedPreferences.Editor getEditor(String prefName){
-        return MyApplication.getContext().getSharedPreferences(prefName, MODE_PRIVATE)
+        return HealthApplication.getContext().getSharedPreferences(prefName, MODE_PRIVATE)
                 .edit();
     }
     public static void exitLogin() {
         SharedPreferences.Editor editor =
-                MyApplication.getContext().getSharedPreferences(LOGIN_STATE_PREF, MODE_PRIVATE)
+                HealthApplication.getContext().getSharedPreferences(LOGIN_STATE_PREF, MODE_PRIVATE)
                         .edit();
         editor.putBoolean("loginState", false);
         editor.apply();
@@ -30,11 +30,11 @@ public class SharedPreferenceHelper {
 
 
     public static String getDevice(){
-        SharedPreferences sp = MyApplication.getContext().getSharedPreferences(LOGIN_STATE_PREF, MODE_PRIVATE);
+        SharedPreferences sp = HealthApplication.getContext().getSharedPreferences(LOGIN_STATE_PREF, MODE_PRIVATE);
         return sp.getString("device", "暂无设备");
     }
 
-    public static void undateDevice(String deviceMac){
+    public static void updateDevice(String deviceMac){
         SharedPreferences.Editor editor = getEditor(LOGIN_STATE_PREF);
         editor.putString("device", deviceMac);
         editor.apply();
@@ -42,14 +42,14 @@ public class SharedPreferenceHelper {
 
     public static void editLoginState(SignUserData user, Boolean isLogin) {
         SharedPreferences.Editor editor =
-                MyApplication.getContext().getSharedPreferences("LoginState", MODE_PRIVATE)
+                HealthApplication.getContext().getSharedPreferences("LoginState", MODE_PRIVATE)
                         .edit();
         if (isLogin != null) {
             if (isLogin) {
                 editor.putBoolean("loginState", isLogin);
             } else {
                 editor.putBoolean("loginState", isLogin);
-                editor.commit();
+                editor.apply();
                 return;
             }
         }
@@ -83,8 +83,20 @@ public class SharedPreferenceHelper {
         editor.commit();
     }
 
+    public static String getLoginUserId(){
+        SharedPreferences sp = HealthApplication.getContext()
+                .getSharedPreferences("LoginState", MODE_PRIVATE);
+        boolean isLogin = sp.getBoolean("loginState", false);
+        if (!isLogin) {
+            //没有登陆
+            return null;
+        }else{
+            return sp.getString("userId", null);
+        }
+    }
+
     public static SignUserData getLoginUser() {
-        SharedPreferences sp = MyApplication.getContext()
+        SharedPreferences sp = HealthApplication.getContext()
                 .getSharedPreferences("LoginState", MODE_PRIVATE);
         boolean isLogin = sp.getBoolean("loginState", false);
         if (!isLogin) {
@@ -109,7 +121,7 @@ public class SharedPreferenceHelper {
     }
 
     public static boolean isLogin() {
-        SharedPreferences sp = MyApplication.getContext()
+        SharedPreferences sp = HealthApplication.getContext()
                 .getSharedPreferences("LoginState", MODE_PRIVATE);
         return sp.getBoolean("loginState", false);
     }

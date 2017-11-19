@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import indi.noclay.cloudhealth.service.SynchronizeDataService;
-import indi.noclay.cloudhealth.util.MyConstants;
+import indi.noclay.cloudhealth.util.ConstantsConfig;
 
 
 /**
@@ -15,10 +15,10 @@ import indi.noclay.cloudhealth.util.MyConstants;
 public class UpLoadReceiver extends BroadcastReceiver{
     @Override
     public void onReceive(Context context, Intent intent) {
-        int type = intent.getIntExtra("type", MyConstants.RECEIVER_TYPE_UPLOAD);
-        if (type == MyConstants.RECEIVER_TYPE_UPLOAD){
+        int type = intent.getIntExtra("type", ConstantsConfig.RECEIVER_TYPE_UPLOAD);
+        if (type == ConstantsConfig.RECEIVER_TYPE_UPLOAD){
             Intent i = new Intent(context, SynchronizeDataService.class);
-            i.putExtra("type", MyConstants.RECEIVER_TYPE_UPLOAD);
+            i.putExtra("type", ConstantsConfig.RECEIVER_TYPE_UPLOAD);
             context.startService(i);
         }
     }

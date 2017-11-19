@@ -1,5 +1,6 @@
 package indi.noclay.cloudhealth;
 
+import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -25,7 +26,7 @@ import java.util.Date;
 import java.util.List;
 
 import indi.noclay.cloudhealth.database.HeightAndWeight;
-import indi.noclay.cloudhealth.database.MyDataBase;
+import indi.noclay.cloudhealth.database.LocalDataBase;
 import indi.noclay.cloudhealth.database.SignUserData;
 import indi.noclay.cloudhealth.fragment.DataFragment;
 import indi.noclay.cloudhealth.fragment.DoctorsFragment;
@@ -35,7 +36,7 @@ import indi.noclay.cloudhealth.fragment.MineFragment;
 import indi.noclay.cloudhealth.myview.dialog.InputWeightDialog;
 import indi.noclay.cloudhealth.receiver.MedicineAlarmReceiver;
 import indi.noclay.cloudhealth.service.SynchronizeDataService;
-import indi.noclay.cloudhealth.util.MyConstants;
+import indi.noclay.cloudhealth.util.ConstantsConfig;
 import indi.noclay.cloudhealth.util.TabLayoutViewPagerAdapter;
 
 
@@ -88,7 +89,7 @@ public class MainActivityCopy extends AppCompatActivity {
         mPages = new ArrayList<>();
         mTabLayout.setTabMode(TabLayout.MODE_FIXED);
         for (String e :
-                MyConstants.TAB_MENU) {
+                ConstantsConfig.TAB_MENU) {
             mTitles.add(e);
             mTabLayout.addTab(mTabLayout.newTab().setText(e));
         }
@@ -107,16 +108,15 @@ public class MainActivityCopy extends AppCompatActivity {
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        MyConstants.userId = getSharedPreferences(
+        ConstantsConfig.userId = getSharedPreferences(
                 "LoginState", MODE_PRIVATE).getString("userId", null);
         if (hasFocus){
             //窗口获取焦点并且已经登陆
-            MyDataBase myDataBase = new MyDataBase(getApplicationContext(),
-                    "LocalStore.db", null, MyConstants.DATABASE_VERSION);
-            HeightAndWeight body = myDataBase.checkTodayWeight(new Date(), MyConstants.userId);
+
+            HeightAndWeight body = LocalDataBase.checkTodayWeight(new Date());
             if (body == null){
                 //当天没有输入了体重
-                body = myDataBase.checkLastWeight(MyConstants.userId);
+                body = LocalDataBase.checkLastWeight();
                 checkWeight(body);
             }
         }
@@ -127,7 +127,7 @@ public class MainActivityCopy extends AppCompatActivity {
      */
     private void initUpLoadThread() {
         Intent in = new Intent(this, SynchronizeDataService.class);
-        in.putExtra("type", MyConstants.RECEIVER_TYPE_UPLOAD);
+        in.putExtra("type", ConstantsConfig.RECEIVER_TYPE_UPLOAD);
         in.putExtra("isFirst", true);
         this.startService(in);
 
@@ -157,6 +157,7 @@ public class MainActivityCopy extends AppCompatActivity {
      * 每次启动后检查体重时候输入
      * @param body
      */
+    @SuppressLint("WrongConstant")
     private void checkWeight(final HeightAndWeight body) {
         mInputWeightDialog = new InputWeightDialog(this, new View.OnClickListener() {
             @Override
@@ -165,18 +166,13 @@ public class MainActivityCopy extends AppCompatActivity {
                     case R.id.commit_action:{
                         if (mInputWeightDialog.checkData()){
                             SignUserData login = new SignUserData();
-                            login.setObjectId(MyConstants.userId);
+                            login.setObjectId(ConstantsConfig.userId);
                             HeightAndWeight data = new HeightAndWeight(
                                     mInputWeightDialog.getInputHeight(),
                                     mInputWeightDialog.getInputWeight(),
                                     login);
                             data.setDate(new Date());
-                            MyDataBase myDataBase = new MyDataBase(getApplicationContext(),
-                                    "LocalStore.db", null, MyConstants.DATABASE_VERSION);
-                            myDataBase.insertHeightAndWeight(
-                                    data,
-                                    MyConstants.userId,
-                                    new Date());
+                            LocalDataBase.insertHeightAndWeight(data, new Date());
                             mInputWeightDialog.dismiss();
                         }
                         break;

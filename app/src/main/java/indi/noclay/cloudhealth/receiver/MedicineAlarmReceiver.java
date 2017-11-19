@@ -9,11 +9,8 @@ import android.util.Log;
 
 import java.util.Calendar;
 
-import indi.noclay.cloudhealth.database.MyDataBase;
-import indi.noclay.cloudhealth.database.SignUserData;
+import indi.noclay.cloudhealth.database.LocalDataBase;
 import indi.noclay.cloudhealth.fragment.DataMedicalFragment;
-import indi.noclay.cloudhealth.util.MyConstants;
-import indi.noclay.cloudhealth.util.SharedPreferenceHelper;
 
 
 /**
@@ -25,11 +22,7 @@ public class MedicineAlarmReceiver extends BroadcastReceiver{
     @Override
     public void onReceive(Context context, Intent intent) {
         String time = intent.getStringExtra("time");
-        Log.d(TAG, "onReceive: time = " + time);
-        MyDataBase dbHelper = new MyDataBase(context, "LocalStore.db", null, MyConstants.DATABASE_VERSION);
-        SignUserData user = SharedPreferenceHelper.getLoginUser();
-        if (user != null && dbHelper.isNeedEatMedicine(time, user.getObjectId())){
-//需要吃药
+        if (LocalDataBase.isNeedEatMedicine(time)){//需要吃药
             Log.d(TAG, "onReceive: need");
             Intent intent1 = new Intent();
             intent1.setAction("cloudHealth.intent.MedicineClock");

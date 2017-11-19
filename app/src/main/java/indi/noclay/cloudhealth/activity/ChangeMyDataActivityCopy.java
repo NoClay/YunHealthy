@@ -42,12 +42,12 @@ import indi.noclay.cloudhealth.mvp.base.MVPBaseActivity;
 import indi.noclay.cloudhealth.mvp.presenter.ChangeMyDataActivityPresenter;
 import indi.noclay.cloudhealth.mvp.view.ChangeMyDataActivityInterface;
 import indi.noclay.cloudhealth.myview.dialog.ChooseImageDialog;
-import indi.noclay.cloudhealth.util.MyConstants;
+import indi.noclay.cloudhealth.util.ConstantsConfig;
 import indi.noclay.cloudhealth.util.SharedPreferenceHelper;
 import indi.noclay.cloudhealth.util.UtilClass;
 
 import static indi.noclay.cloudhealth.mvp.presenter.ChangeMyDataActivityPresenter.REQUEST_CODE_PICK_IMAGE;
-import static indi.noclay.cloudhealth.util.MyConstants.SRC_PATH_USER_IMAGE;
+import static indi.noclay.cloudhealth.util.ConstantsConfig.SRC_PATH_USER_IMAGE;
 
 
 /**
@@ -170,7 +170,7 @@ public class ChangeMyDataActivityCopy extends
                             Intent getImageByCamera = new
                                     Intent("android.media.action.IMAGE_CAPTURE");
                             // 获取文件
-                            File tempFile = new File(MyConstants.SRC_PATH_USER_IMAGE);
+                            File tempFile = new File(ConstantsConfig.SRC_PATH_USER_IMAGE);
                             if (tempFile.exists() && tempFile.isFile()) {
                                 tempFile.delete();
                             }
@@ -398,7 +398,7 @@ public class ChangeMyDataActivityCopy extends
                         Toast.makeText(mContext, "error", Toast.LENGTH_SHORT).show();
                     } else {//截取图片完成
                         //上传图片
-                        File file = new File(MyConstants.CROP_PATH_USER_IMAGE);
+                        File file = new File(ConstantsConfig.CROP_PATH_USER_IMAGE);
                         Log.d(TAG, "onActivityResult: " + file.getAbsolutePath());
                         mPresenter.uploadFile(file);
                     }

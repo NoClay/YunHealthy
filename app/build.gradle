@@ -3,7 +3,7 @@ apply plugin: 'com.jakewharton.butterknife'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion '25.0.0'
+    buildToolsVersion '26.0.2'
 //    **兼容Android6.0系统所需，如果这句话报错，可在dependencies标签下使用compile 'cn.bmob.android:http-legacy:1.0'**
     useLibrary 'org.apache.http.legacy'
 
@@ -32,9 +32,11 @@ repositories {
     flatDir {
         dir 'libs'
     }
+    google()
 }
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile 'com.android.support:multidex:1.0.1'
     compile name: 'SMSSDK-2.1.2', ext: 'aar'
     compile name: 'SMSSDKGUI-2.1.2', ext: 'aar'
     compile 'cn.bmob.android:bmob-sdk:3.5.5'
@@ -58,5 +60,6 @@ dependencies {
     compile 'com.google.zxing:android-core:3.3.0'
     compile project(':ecgwaveview-release')
     compile project(':foldlineview-release')
-    compile project(':bluetooth-release')
+    implementation project(':bluetooth-debug')
+    implementation project(':utiltool-release')
 }

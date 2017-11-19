@@ -20,7 +20,7 @@ import java.util.List;
 
 import indi.noclay.cloudhealth.R;
 import indi.noclay.cloudhealth.myview.dialog.InputTimeAndDoseDialog;
-import indi.noclay.cloudhealth.util.MyConstants;
+import indi.noclay.cloudhealth.util.ConstantsConfig;
 import indi.noclay.cloudhealth.util.UtilClass;
 
 import static android.view.View.GONE;
@@ -65,7 +65,7 @@ public class AdapterForChooseDose extends RecyclerView.Adapter<AdapterForChooseD
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         final InputTimeAndDoseDialog.Dose data = mDatas.get(position);
-        holder.mTime.setText(MyConstants.TIMES[position]);
+        holder.mTime.setText(ConstantsConfig.TIMES[position]);
         holder.mDose.setText(data.getValue().toString());
         clearCheck(holder, data.getChecked());
         View.OnClickListener listener = new View.OnClickListener() {
@@ -74,17 +74,17 @@ public class AdapterForChooseDose extends RecyclerView.Adapter<AdapterForChooseD
                 switch (v.getId()){
                     case R.id.incButton:{
                         float temp = Float.valueOf(holder.mDose.getText().toString());
-                        temp += MyConstants.ADD_LENGTH;
+                        temp += ConstantsConfig.ADD_LENGTH;
                         holder.mDose.setText(temp + "");
                         data.setValue(temp);
                         break;
                     }
                     case R.id.decButton:{
                         float temp = Float.valueOf(holder.mDose.getText().toString());
-                        if (temp - MyConstants.ADD_LENGTH < 0){
+                        if (temp - ConstantsConfig.ADD_LENGTH < 0){
                             temp = 0f;
                         }else{
-                            temp -= MyConstants.ADD_LENGTH;
+                            temp -= ConstantsConfig.ADD_LENGTH;
                         }
                         holder.mDose.setText(temp + "");
                         data.setValue(temp);

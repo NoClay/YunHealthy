@@ -25,7 +25,6 @@ import android.os.Build;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
-import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -219,7 +218,7 @@ public class UtilClass {
     public static void saveBitmapToFile(Bitmap bm, String filePath) {
         File f;
         if(filePath == null){
-            f = new File(MyConstants.ROOT_PATH + "temp.jpg");
+            f = new File(ConstantsConfig.ROOT_PATH + "temp.jpg");
         }else{
             f = new File(filePath);
         }

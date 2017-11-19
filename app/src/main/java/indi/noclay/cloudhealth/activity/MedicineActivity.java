@@ -12,19 +12,15 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 
-
-
-import java.util.ArrayList;
 import java.util.List;
 
 import indi.noclay.cloudhealth.R;
 import indi.noclay.cloudhealth.adapter.MedicineListAdapter;
+import indi.noclay.cloudhealth.database.LocalDataBase;
 import indi.noclay.cloudhealth.database.MedicineDetail;
-import indi.noclay.cloudhealth.database.MyDataBase;
 import indi.noclay.cloudhealth.fragment.DataMedicalFragment;
 import indi.noclay.cloudhealth.myview.FullLinearLayoutManager;
-import indi.noclay.cloudhealth.util.MyConstants;
-import indi.noclay.cloudhealth.util.SharedPreferenceHelper;
+import indi.noclay.cloudhealth.util.ConstantsConfig;
 
 
 public class MedicineActivity extends AppCompatActivity implements View.OnClickListener {
@@ -38,7 +34,7 @@ public class MedicineActivity extends AppCompatActivity implements View.OnClickL
     private List<MedicineDetail> medicines;
     private String time = null;
     private Context mContext = this;
-    private MyDataBase dbHelper;
+    private LocalDataBase dbHelper;
     public static final int ADD_MEDICINE = 0;
 
     @Override
@@ -47,7 +43,6 @@ public class MedicineActivity extends AppCompatActivity implements View.OnClickL
         setContentView(R.layout.activity_medicine);
         initView();
         medicines = getMedicines();
-        upDateMedicine(medicines);
         MedicineListAdapter adapter = new MedicineListAdapter(medicines, this, R.layout.item_medicine);
         FullLinearLayoutManager fLayout = new FullLinearLayoutManager(this,
                 RecyclerView.VERTICAL, true);
@@ -58,13 +53,6 @@ public class MedicineActivity extends AppCompatActivity implements View.OnClickL
         mMedicineList.setAdapter(adapter);
     }
 
-    private void upDateMedicine(List<MedicineDetail> medicines) {
-        String userId = SharedPreferenceHelper.getLoginUser().getObjectId();
-        for (int i = 0; i < medicines.size(); i++) {
-            medicines.get(i).incDayCount();
-            dbHelper.updateMedicineDetail(userId, medicines.get(i));
-        }
-    }
 
     private void initView() {
         mFab = (FloatingActionButton) findViewById(R.id.fab);
@@ -74,8 +62,8 @@ public class MedicineActivity extends AppCompatActivity implements View.OnClickL
         mAppBarLayout = (AppBarLayout) findViewById(R.id.appBarLayout);
         initActionBar();
         mMedicineList = (RecyclerView) findViewById(R.id.medicineList);
-        dbHelper = new MyDataBase(mContext,
-                "LocalStore.db", null, MyConstants.DATABASE_VERSION);
+        dbHelper = new LocalDataBase(mContext,
+                "LocalStore.db", null, ConstantsConfig.DATABASE_VERSION);
     }
 
     private void initActionBar() {
@@ -125,14 +113,7 @@ public class MedicineActivity extends AppCompatActivity implements View.OnClickL
     }
 
     public List<MedicineDetail> getMedicines() {
-        MyDataBase dbHelper = new MyDataBase(mContext,
-                "LocalStore.db", null, MyConstants.DATABASE_VERSION);
-        List<MedicineDetail> temp = dbHelper.getMedicineDetail(type, time,
-                SharedPreferenceHelper.getLoginUser().getObjectId());
-        if (temp == null){
-            return new ArrayList<>();
-        }
-        return temp;
+        return LocalDataBase.getMedicineDetail(type, time);
     }
 
     @Override

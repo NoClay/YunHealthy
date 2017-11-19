@@ -22,10 +22,10 @@ import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 import indi.noclay.cloudhealth.R;
 import indi.noclay.cloudhealth.database.MedicineDetail;
-import indi.noclay.cloudhealth.database.MyDataBase;
+import indi.noclay.cloudhealth.database.LocalDataBase;
 import indi.noclay.cloudhealth.database.SignUserData;
 import indi.noclay.cloudhealth.receiver.UpLoadReceiver;
-import indi.noclay.cloudhealth.util.MyConstants;
+import indi.noclay.cloudhealth.util.ConstantsConfig;
 import indi.noclay.cloudhealth.util.SharedPreferenceHelper;
 import indi.noclay.cloudhealth.util.UtilClass;
 
@@ -54,7 +54,7 @@ public class SynchronizeDataService extends Service{
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        int type = intent == null ? MyConstants.RECEIVER_TYPE_UPLOAD : intent.getIntExtra("type", MyConstants.RECEIVER_TYPE_UPLOAD);
+        int type = intent == null ? ConstantsConfig.RECEIVER_TYPE_UPLOAD : intent.getIntExtra("type", ConstantsConfig.RECEIVER_TYPE_UPLOAD);
         boolean isFirstStart = intent != null && intent.getBooleanExtra("isFirst", false);
         Log.d(TAG, "onStartCommand: isFirstStart" + isFirstStart);
         new Thread(new Runnable() {
@@ -71,10 +71,10 @@ public class SynchronizeDataService extends Service{
                 if (id.isEmpty() || id.length() != 10){
                     makeANotification("您还没有登录");
                 }
-                final MyDataBase myDataBase = new MyDataBase(getApplicationContext(),
-                        "LocalStore.db", null, MyConstants.DATABASE_VERSION);
+                final LocalDataBase myDataBase = new LocalDataBase(getApplicationContext(),
+                        "LocalStore.db", null, ConstantsConfig.DATABASE_VERSION);
                 int count = myDataBase.upLoadMeasureData(id);
-                if (count == MyDataBase.ERROR_LOAD){
+                if (count == LocalDataBase.ERROR_LOAD){
                     makeANotification("数据同步失败");
                 }else{
                     makeANotification("数据同步完成");
@@ -92,8 +92,7 @@ public class SynchronizeDataService extends Service{
                                 Log.d(TAG, "done: size = " + list.size());
                                 for (int i = 0; i < list.size(); i++) {
                                     Log.d(TAG, "done: id = " + list.get(i).getObjectId());
-                                    myDataBase.insertMedicineDetail(userData.getObjectId()
-                                            , list.get(i));
+                                    LocalDataBase.insertMedicineDetail(list.get(i));
                                 }
                             }
                         }
@@ -107,13 +106,13 @@ public class SynchronizeDataService extends Service{
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
         Log.d(TAG, "onStartCommand: nowTime " + UtilClass.valueOfCalendar(calendar));
-        if (calendar.get(Calendar.MINUTE) < MyConstants.LOAD_CACHE_MINUTE){
-            calendar.set(Calendar.MINUTE, MyConstants.LOAD_CACHE_MINUTE);
+        if (calendar.get(Calendar.MINUTE) < ConstantsConfig.LOAD_CACHE_MINUTE){
+            calendar.set(Calendar.MINUTE, ConstantsConfig.LOAD_CACHE_MINUTE);
             calendar.set(Calendar.SECOND, 0);
             calendar.set(Calendar.MILLISECOND, 0);
         }else{
             calendar.set(Calendar.HOUR_OF_DAY, calendar.get(Calendar.HOUR_OF_DAY) + 1);
-            calendar.set(Calendar.MINUTE, MyConstants.LOAD_CACHE_MINUTE);
+            calendar.set(Calendar.MINUTE, ConstantsConfig.LOAD_CACHE_MINUTE);
             calendar.set(Calendar.SECOND, 0);
             calendar.set(Calendar.MILLISECOND, 0);
         }

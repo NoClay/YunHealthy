@@ -16,7 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
+import java.lang.ref.SoftReference;
 import java.util.List;
 
 import cn.bmob.v3.BmobQuery;
@@ -34,18 +34,18 @@ import static indi.noclay.cloudhealth.util.UtilClass.isMobileNum;
 
 public class ChangePassWord extends AppCompatActivity implements View.OnClickListener {
 
-    private EditText signedPhoneNumber;
-    private Button sendMessage;
-    private EditText checkNumber;
-    private EditText newPassWord;
-    private ImageView cancelButton;
-    private Button completeChangePassWord;
-    private boolean isFromLogin;
-    private int i = 30;
-    private static final int MSG_WHAT_FOR_THREAD = 0;
-    private static final int MSG_WHAT_FOR_THREAD_DEATH = 2;
-    private static final int MSG_WHAT_FOT_SHORT_MESSAGE = 1;
-    private String objectId;
+    EditText signedPhoneNumber;
+    Button sendMessage;
+    EditText checkNumber;
+    EditText newPassWord;
+    ImageView cancelButton;
+    Button completeChangePassWord;
+    boolean isFromLogin;
+    int i = 30;
+    public static final int MSG_WHAT_FOR_THREAD = 0;
+    public static final int MSG_WHAT_FOR_THREAD_DEATH = 2;
+    public static final int MSG_WHAT_FOT_SHORT_MESSAGE = 1;
+    String objectId;
     private static final String TAG = "ChangePassWord";
 
     @Override
@@ -116,23 +116,34 @@ public class ChangePassWord extends AppCompatActivity implements View.OnClickLis
             }
         });
     }
+    private static class PasswordHandler extends Handler{
+        SoftReference<ChangePassWord> outer;
+        PasswordHandler mPasswordHandler;
 
-    Handler handler = new Handler() {
+        public PasswordHandler(ChangePassWord outer) {
+            this.outer = new SoftReference<ChangePassWord>(outer);
+            mPasswordHandler = this;
+        }
+
         @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             switch (msg.what) {
                 case MSG_WHAT_FOR_THREAD: {
-                    sendMessage.setClickable(false);
-                    sendMessage.setText(msg.arg1 + "秒后可获取验证码");
-                    sendMessage.setBackground(getResources().getDrawable(R.drawable.circle_button_2, getTheme()));
+                    outer.get().sendMessage.setClickable(false);
+                    outer.get().sendMessage.setText(msg.arg1 + "秒后可获取验证码");
+                    outer.get().sendMessage.setBackground(outer.get().getBaseContext()
+                            .getResources().getDrawable(R.drawable.circle_button_2,
+                                    outer.get().getTheme()));
                     break;
                 }
                 case MSG_WHAT_FOR_THREAD_DEATH: {
-                    sendMessage.setClickable(true);
-                    sendMessage.setText("获取验证码");
-                    sendMessage.setBackground(getResources().getDrawable(R.drawable.circle_button_def, getTheme()));
+                    outer.get().sendMessage.setClickable(true);
+                    outer.get().sendMessage.setText("获取验证码");
+                    outer.get().sendMessage.setBackground(outer.get().getBaseContext()
+                            .getResources().getDrawable(R.drawable.circle_button_def,
+                                    outer.get().getTheme()));
                     break;
                 }
                 case MSG_WHAT_FOT_SHORT_MESSAGE: {
@@ -141,61 +152,60 @@ public class ChangePassWord extends AppCompatActivity implements View.OnClickLis
                     switch (event) {
                         case SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE: {
                             if (result == SMSSDK.RESULT_COMPLETE) {
-
                                 //验证成功，在这里进行修改密码
                                 SignUserData newUser = new SignUserData();
-                                newUser.setPassWord(newPassWord.getText().toString());
-                                newUser.update(objectId, new UpdateListener() {
+                                newUser.setPassWord(outer.get().newPassWord.getText().toString());
+                                newUser.update(outer.get().objectId, new UpdateListener() {
                                     @Override
                                     public void done(BmobException e) {
                                         if (e == null) {
-                                            Toast.makeText(ChangePassWord.this,
+                                            Toast.makeText(outer.get(),
                                                     "修改成功,即将跳转到登录界面",
                                                     Toast.LENGTH_SHORT).show();
-                                            setResultBack(true);
+                                            outer.get().setResultBack(true);
                                         } else {
-                                            Toast.makeText(ChangePassWord.this,
+                                            Toast.makeText(outer.get(),
                                                     "修改失败",
                                                     Toast.LENGTH_SHORT).show();
-                                            setResultBack(false);
+                                            outer.get().setResultBack(false);
                                         }
                                     }
                                 });
                             } else {
-                                Toast.makeText(ChangePassWord.this, "验证码错误",
+                                Toast.makeText(outer.get(), "验证码错误",
                                         Toast.LENGTH_SHORT).show();
                             }
                             break;
                         }
                         case SMSSDK.EVENT_GET_VERIFICATION_CODE: {
                             if (result == SMSSDK.RESULT_COMPLETE) {
-                                Toast.makeText(ChangePassWord.this, "验证码发送成功，请等待",
+                                Toast.makeText(outer.get(), "验证码发送成功，请等待",
                                         Toast.LENGTH_SHORT).show();
-                                i = 30;
+                                outer.get().i = 30;
                                 new Thread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        while (i > 0) {
-                                            i--;
+                                        while (outer.get().i > 0) {
+                                            outer.get().i--;
                                             try {
                                                 Thread.sleep(1000);
                                             } catch (InterruptedException e) {
                                                 e.printStackTrace();
                                             }
                                             Message message = new Message();
-                                            if (i == 0) {
+                                            if (outer.get().i == 0) {
                                                 message.what = ChangePassWord.MSG_WHAT_FOR_THREAD_DEATH;
                                             } else {
                                                 message.what = ChangePassWord.MSG_WHAT_FOR_THREAD;
                                             }
-                                            message.arg1 = i;
-                                            handler.sendMessage(message);
+                                            message.arg1 = outer.get().i;
+                                            mPasswordHandler.sendMessage(message);
                                         }
                                     }
                                 }).start();
                                 //验证码已发送
                             } else {
-                                Toast.makeText(ChangePassWord.this,
+                                Toast.makeText(outer.get(),
                                         "验证码发送失败", Toast.LENGTH_SHORT).show();
                                 //获取验证码失败
                             }
@@ -205,7 +215,8 @@ public class ChangePassWord extends AppCompatActivity implements View.OnClickLis
                 }
             }
         }
-    };
+    }
+    Handler handler = new PasswordHandler(ChangePassWord.this);
 
     private void setResultBack(boolean isSuccess) {
         if (isFromLogin) {

@@ -8,16 +8,12 @@ import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
-
-import java.util.ArrayList;
 import java.util.List;
 
 import indi.noclay.cloudhealth.R;
+import indi.noclay.cloudhealth.database.LocalDataBase;
 import indi.noclay.cloudhealth.database.MedicineDetail;
-import indi.noclay.cloudhealth.database.MyDataBase;
 import indi.noclay.cloudhealth.fragment.DataMedicalFragment;
-import indi.noclay.cloudhealth.util.MyConstants;
-import indi.noclay.cloudhealth.util.SharedPreferenceHelper;
 import indi.noclay.cloudhealth.util.UtilClass;
 
 
@@ -28,15 +24,9 @@ import indi.noclay.cloudhealth.util.UtilClass;
 public class UpdateService extends RemoteViewsService {
     private static final String TAG = "UpdateService";
 
-    public List<MedicineDetail> getMedicines(Context mContext) {
-        MyDataBase dbHelper = new MyDataBase(mContext,
-                "LocalStore.db", null, MyConstants.DATABASE_VERSION);
-        List<MedicineDetail> temp = dbHelper.getMedicineDetail(
-                DataMedicalFragment.NOW_MEDICINE, null,
-                SharedPreferenceHelper.getLoginUser().getObjectId());
-        if (temp == null) {
-            return new ArrayList<>();
-        }
+    public List<MedicineDetail> getMedicines() {
+        List<MedicineDetail> temp = LocalDataBase.getMedicineDetail(
+                DataMedicalFragment.NOW_MEDICINE, null);
         return temp;
     }
 
@@ -59,7 +49,7 @@ public class UpdateService extends RemoteViewsService {
             if (Looper.myLooper() == null) {
                 Looper.prepare();
             }
-            if ((medicineDetails = getMedicines(mContext)) != null) {
+            if ((medicineDetails = getMedicines()) != null) {
                 Log.d(TAG, "ListRemoteViewsFactory: 加载数据");
             }
         }

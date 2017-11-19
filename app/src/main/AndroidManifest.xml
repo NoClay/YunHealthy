@@ -41,7 +41,7 @@
     <uses-feature android:name="android.hardware.camera" /> <!-- 使用照相机权限 -->
     <uses-feature android:name="android.hardware.camera.autofocus" /> <!-- 自动聚焦权限 -->
     <application
-        android:name=".util.MyApplication"
+        android:name=".util.HealthApplication"
         android:allowBackup="true"
         android:configChanges="screenSize|orientation|keyboardHidden|navigation"
         android:icon="@mipmap/ic_launcher"
@@ -106,12 +106,14 @@
             android:launchMode="singleInstance"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustPan" >
+            <intent-filter>
+                <action android:name="cloudHealth.intent.MedicineClock"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
 
-        <intent-filter>
-            <action android:name="cloudHealth.intent.MedicineClock"></action>
-            <category android:name="android.intent.category.DEFAULT"></category>
-        </intent-filter>
+
         <activity android:name="com.google.zxing.activity.CaptureActivity" />
         <!-- 添加药物 -->
 
@@ -133,6 +135,8 @@
             android:name=".service.UpdateService"
             android:exported="false"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
+        <service android:name=".service.BluetoothConnectService"
+            android:process=":bluetooth"/>
 
         <receiver android:name=".myview.AppWidgetMedicineList">
             <intent-filter>

@@ -34,7 +34,7 @@ import indi.noclay.cloudhealth.R;
 import indi.noclay.cloudhealth.database.SignUserData;
 import indi.noclay.cloudhealth.database.measuredata.MeasureData;
 import indi.noclay.cloudhealth.myview.DatePickerView;
-import indi.noclay.cloudhealth.util.MyConstants;
+import indi.noclay.cloudhealth.util.ConstantsConfig;
 import indi.noclay.cloudhealth.util.UtilClass;
 import pers.noclay.foldlineview.FoldLineAdapter;
 import pers.noclay.foldlineview.FoldLineView;
@@ -253,7 +253,7 @@ public class InfoActivity extends AppCompatActivity
         and.add(q2);
         BmobQuery q3 = new BmobQuery(tableName[type]);
         SignUserData login = new SignUserData();
-        login.setObjectId(MyConstants.userId);
+        login.setObjectId(ConstantsConfig.userId);
         q3.addWhereEqualTo("owner", login);
         and.add(q3);
 //添加复合与查询

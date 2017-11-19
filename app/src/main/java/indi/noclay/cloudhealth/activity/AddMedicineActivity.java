@@ -45,7 +45,7 @@ import indi.noclay.cloudhealth.mvp.view.AddMedicineActivityInterface;
 import indi.noclay.cloudhealth.myview.dialog.ChooseImageDialog;
 import indi.noclay.cloudhealth.myview.dialog.InputDayLengthDialog;
 import indi.noclay.cloudhealth.myview.dialog.InputTimeAndDoseDialog;
-import indi.noclay.cloudhealth.util.MyConstants;
+import indi.noclay.cloudhealth.util.ConstantsConfig;
 import indi.noclay.cloudhealth.util.SharedPreferenceHelper;
 import indi.noclay.cloudhealth.util.UtilClass;
 
@@ -209,7 +209,7 @@ public class AddMedicineActivity extends
                             Intent getImageByCamera = new
                                     Intent("android.media.action.IMAGE_CAPTURE");
                             // 获取文件
-                            File tempFile = new File(MyConstants.SRC_PATH_MEDICINE);
+                            File tempFile = new File(ConstantsConfig.SRC_PATH_MEDICINE);
                             if (tempFile.exists() && tempFile.isFile()) {
                                 tempFile.delete();
                             }
@@ -315,9 +315,9 @@ public class AddMedicineActivity extends
                     new InputDayLengthDialog.OnChooseChangedListener() {
                         @Override
                         public void onChooseChanged(int pos) {
-                            mInputDay.setText("持续时间" + MyConstants.TIME_ITEM[pos] + "(点击修改)");
-                            medicine.setDayLength(MyConstants.TIME_VALUE[pos]);
-                            Log.d("test", "onChooseChanged: value = " + MyConstants.TIME_VALUE[pos]);
+                            mInputDay.setText("持续时间" + ConstantsConfig.TIME_ITEM[pos] + "(点击修改)");
+                            medicine.setDayLength(ConstantsConfig.TIME_VALUE[pos]);
+                            Log.d("test", "onChooseChanged: value = " + ConstantsConfig.TIME_VALUE[pos]);
                         }
                     });
             mInputDayLengthDialog.showAtLocation(findViewById(R.id.mainLayout),
@@ -422,7 +422,7 @@ public class AddMedicineActivity extends
                 case ChangeMyDataActivityPresenter.REQUEST_CODE_CAPTURE_CAMERA: {
                     //直接拍照获取头像
                     if (data == null) {
-                        imageUri = Uri.fromFile(new File(MyConstants.SRC_PATH_MEDICINE));
+                        imageUri = Uri.fromFile(new File(ConstantsConfig.SRC_PATH_MEDICINE));
                     } else {
                         imageUri = data.getData();
                         Log.d("test", "onActivityResult: 使用相机返回" + imageUri);
@@ -452,9 +452,9 @@ public class AddMedicineActivity extends
                         Toast.makeText(mContext, "error", Toast.LENGTH_SHORT).show();
                     } else {//截取图片完成
                         //上传图片
-                        File file = new File(MyConstants.CROP_PATH_MEDICINE);
-                        file.renameTo(new File(MyConstants.TEMP_MEDICINE));
-                        mPresenter.uploadFile(new File(MyConstants.TEMP_MEDICINE));
+                        File file = new File(ConstantsConfig.CROP_PATH_MEDICINE);
+                        file.renameTo(new File(ConstantsConfig.TEMP_MEDICINE));
+                        mPresenter.uploadFile(new File(ConstantsConfig.TEMP_MEDICINE));
                     }
                     break;
                 }

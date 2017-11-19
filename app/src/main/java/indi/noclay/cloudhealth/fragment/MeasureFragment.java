@@ -3,7 +3,6 @@ package indi.noclay.cloudhealth.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
@@ -27,31 +26,38 @@ import java.util.List;
 import indi.noclay.cloudhealth.MainActivityCopy;
 import indi.noclay.cloudhealth.R;
 import indi.noclay.cloudhealth.adapter.RecycleAdapterForMeasureOnly;
-import indi.noclay.cloudhealth.database.MyDataBase;
+import indi.noclay.cloudhealth.database.LocalDataBase;
 import indi.noclay.cloudhealth.database.measuredata.MeasureData;
-import indi.noclay.cloudhealth.util.MyConstants;
+import indi.noclay.cloudhealth.util.ABSMeasureDataResolver;
+import indi.noclay.cloudhealth.util.ConstantsConfig;
+import indi.noclay.cloudhealth.util.CustomMeasureDataResolver;
 import indi.noclay.cloudhealth.util.SharedPreferenceHelper;
 import indi.noclay.cloudhealth.util.UtilClass;
 import pers.noclay.bluetooth.Bluetooth;
 import pers.noclay.bluetooth.BluetoothConfig;
 import pers.noclay.bluetooth.OnConnectListener;
+import pers.noclay.utiltool.BaseHandler;
 
 /*
  * Created by 兆鹏 on 2016/11/2.
  */
-public class MeasureFragment extends Fragment implements View.OnClickListener, OnConnectListener {
+public class MeasureFragment extends Fragment implements
+        View.OnClickListener,
+        OnConnectListener,
+        ABSMeasureDataResolver.OnResolveListener {
     private TextView connectDevice;
     private RecyclerView recyclerView;
     private Context context;
     private RecycleAdapterForMeasureOnly myAdapter;
     private ProgressBar load;
-    private MyDataBase myDataBase;
+    private LocalDataBase myDataBase;
     private List<MeasureData> measureDataList;
     private long last;
     private Calendar calendar;
     private String data;
     long time;
     long count = 0;
+    public static boolean sIsBluetoothWorkable;
     //请求
     static final int REQUEST_OPEN_BLUETOOTH = 0;
     static final int MSG_WAIT_CONNECT = 0;
@@ -59,6 +65,7 @@ public class MeasureFragment extends Fragment implements View.OnClickListener, O
     static final int MSG_START_CONNECT = 2;
     static final int MSG_READ_STRING = 3;
     static final int MSG_CONNECT_FAILED = 4;
+    static CustomMeasureDataResolver sDataResolver;
     private static final String TAG = "MeasureFragment";
     View mView;
 
@@ -70,6 +77,8 @@ public class MeasureFragment extends Fragment implements View.OnClickListener, O
         mView = v;
         findView(v);
         initBluetoothSDK();
+        sDataResolver = new CustomMeasureDataResolver();
+        sDataResolver.setOnResolveListener(this);
         return v;
     }
 
@@ -88,6 +97,13 @@ public class MeasureFragment extends Fragment implements View.OnClickListener, O
         if (myAdapter != null) {
             myAdapter.startRefreshing();
         }
+        sIsBluetoothWorkable = true;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        sIsBluetoothWorkable = false;
     }
 
     @Override
@@ -103,9 +119,9 @@ public class MeasureFragment extends Fragment implements View.OnClickListener, O
         connectDevice = (TextView) v.findViewById(R.id.connect_device);
         load = (ProgressBar) v.findViewById(R.id.load);
         measureDataList = new ArrayList<>();
-        for (int i = 0; i < MyConstants.LABEL_STRING.length; i++) {
+        for (int i = 0; i < ConstantsConfig.LABEL_STRING.length; i++) {
             MeasureData measure = new MeasureData();
-            measure.setName(MyConstants.LABEL_STRING[i]);
+            measure.setName(ConstantsConfig.LABEL_STRING[i]);
             measureDataList.add(measure);
         }
         load.setVisibility(View.INVISIBLE);
@@ -122,8 +138,8 @@ public class MeasureFragment extends Fragment implements View.OnClickListener, O
         //本地缓存所需要的初始化
         calendar = Calendar.getInstance();
         calendar.setTimeInMillis(SystemClock.currentThreadTimeMillis());
-        myDataBase = new MyDataBase(getActivity().getApplicationContext(),
-                "LocalStore.db", null, MyConstants.DATABASE_VERSION);
+        myDataBase = new LocalDataBase(getActivity().getApplicationContext(),
+                "LocalStore.db", null, ConstantsConfig.DATABASE_VERSION);
 
     }
 
@@ -166,241 +182,23 @@ public class MeasureFragment extends Fragment implements View.OnClickListener, O
 
     @Override
     public void onConnectFail(int i) {
-        handler.sendEmptyMessage(MSG_CONNECT_FAILED);
+        mHandler.sendEmptyMessage(MSG_CONNECT_FAILED);
     }
 
     @Override
     public void onConnectSuccess() {
-        handler.sendEmptyMessage(MSG_CONNECT_SUCCESS);
+        mHandler.sendEmptyMessage(MSG_CONNECT_SUCCESS);
     }
 
     @Override
     public void onConnectStart() {
-        handler.sendEmptyMessage(MSG_START_CONNECT);
+        mHandler.sendEmptyMessage(MSG_START_CONNECT);
     }
 
     @Override
     public void onReceiveMessage(byte[] bytes) {
-        data = resolveData(UtilClass.valueOfBytes(bytes) + data);
-
+        sDataResolver.resolveData(bytes);
     }
-
-
-    private String resolveData(String data) {
-        int start = 0;
-        int end = 0;
-        while (start != -1 && end != -1) {
-            start = data.indexOf("dcba");
-            if (start != -1 && data.length() > 4) {
-                end = data.indexOf("dcba", start + 1);
-            }
-            if (start != -1 && end != -1 && start != end) {
-                analysisData(data.substring(start, end));
-                data = data.substring(end);
-            }
-        }
-        return data;
-    }
-
-    /**
-     * 处理的字符串应该符合如下规则
-     * dcba + e[0~9] + [0~9][0~9] + [0~9][0~9] + ~ + sum
-     *
-     * @param substring
-     */
-    private boolean analysisData(String substring) {
-        //字符串的长度
-        if (substring == null) {
-            return false;
-        }
-        int len = substring.length();
-        if (len < 12) {
-            return false;
-        }
-        if (!UtilClass.checkHexString(substring)) {
-            return false;
-        }
-        if (!substring.startsWith("dcbae")) {
-            return false;
-        }
-        int type = Integer.valueOf(substring.substring(5, 6), 16);
-        int highLength = Integer.valueOf(substring.substring(6, 8), 16);
-        int lowLength = Integer.valueOf(substring.substring(8, 10), 16);
-        if (len != (12 + (highLength + lowLength) * 2)) {
-            //长度不符合
-            return false;
-        }
-        int sum = 0;
-        for (int i = 2; i < len; ) {
-            sum += Integer.valueOf(substring.substring(i - 2, i), 16);
-            i += 2;
-        }
-        String sumString = Integer.toHexString(sum);
-        if (!sumString.substring(sumString.length() - 2, sumString.length())
-                .equals(substring.substring(substring.length() - 2, substring.length()))) {
-            return false;
-        }
-        String dataString = substring.substring(10, 10 + (highLength + lowLength) * 2);
-        if (dataString.length() <= 0) {
-            return false;
-        }
-        Message message = Message.obtain();
-        message.what = MSG_READ_STRING;
-        message.arg1 = type;
-        message.obj = dataString;
-        handler.sendMessage(message);
-        return true;
-    }
-
-
-    Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-
-            switch (msg.what) {
-                case MSG_CONNECT_FAILED: {
-                    Log.d(TAG, "handleMessage: 连接失败");
-                    connectDevice.setClickable(true);
-                    connectDevice.setText("连接失败");
-                    connectDevice.setVisibility(View.VISIBLE);
-                    load.setVisibility(View.INVISIBLE);
-                    break;
-                }
-                case MSG_CONNECT_SUCCESS: {
-                    Log.d(TAG, "handleMessage: 连接成功");
-                    connectDevice.setText("已连接");
-                    connectDevice.setVisibility(View.VISIBLE);
-                    load.setVisibility(View.INVISIBLE);
-                    break;
-                }
-                case MSG_READ_STRING: {
-                    //进行数据的分类设定
-                    calendar.setTimeInMillis(System.currentTimeMillis());
-                    int minute = calendar.get(Calendar.MINUTE);
-                    String data = (String) msg.obj;
-                    MeasureData temp;
-                    switch (msg.arg1) {
-                        //每次都要求获取数据的字符串
-                        case 0: {//保留
-                            break;
-                        }
-                        case 1: {
-                            //血氧
-                            if (data.length() == 8) {
-                                Log.d("workItem", "handleMessage: 血氧");
-                                Log.d("workItem", "handleMessage: 脉搏");
-                                checkMinuteAndCache(MyConstants.MEASURE_TYPE_XUEYANG, minute);
-                                checkMinuteAndCache(MyConstants.MEASURE_TYPE_MAIBO, minute);
-                                //进行血氧的结果解析
-                                float result = UtilClass.valueOfHexString(data.substring(0, 2));
-                                temp = measureDataList.get(MyConstants.MEASURE_TYPE_XUEYANG);
-                                if (result > 0 && result < 100 && compareData(temp, result)) {
-                                    myAdapter.notifyItemChanged(MyConstants.MEASURE_TYPE_XUEYANG);
-                                }
-                                //进行脉搏的结果解析
-                                result = UtilClass.valueOfHexString(data.substring(2, 4));
-                                temp = measureDataList.get(MyConstants.MEASURE_TYPE_MAIBO);
-                                if (result > 0 && result < 255 && compareData(temp, result)) {
-                                    myAdapter.notifyItemChanged(MyConstants.MEASURE_TYPE_MAIBO);
-                                }
-                            }
-                            break;
-                        }
-                        case 2: {
-                            //心电
-                            if (data.length() == 4) {
-                                time = System.currentTimeMillis();
-                                count++;
-                                Log.d("displayHeart", "handleMessage: time = " + time / 1000 + " count = " + count);
-                                checkMinuteAndCache(MyConstants.MEASURE_TYPE_XINDIAN, minute);
-                                int result = UtilClass.valueOfHexString(data);
-                                temp = measureDataList.get(MyConstants.MEASURE_TYPE_XINDIAN);
-//                                myAdapter.drawHeartWavesPoint(result);
-                                if (compareData(temp, (float) (result))) {
-                                    myAdapter.notifyItemChanged(MyConstants.MEASURE_TYPE_XINDIAN);
-                                }
-                            }
-                            break;
-                        }
-                        case 3: {
-                            //血糖
-                            if (data.length() == 12) {
-                                Log.d("workItem", "handleMessage: 血糖");
-                                checkMinuteAndCache(MyConstants.MEASURE_TYPE_XUETANG, minute);
-                                float result = UtilClass.valueOfHexString(
-                                        data.substring(10, 12)) / 10.0f;
-                                temp = measureDataList.get(MyConstants.MEASURE_TYPE_XUETANG);
-                                if (result > 0 && result < 300 && compareData(temp, result)) {
-                                    myAdapter.notifyItemChanged(MyConstants.MEASURE_TYPE_XUETANG);
-                                }
-                            }
-                            break;
-                        }
-                        case 4: {
-                            //体温
-                            if (data.length() == 4) {
-                                Log.d("workItem", "handleMessage: 体温");
-                                checkMinuteAndCache(MyConstants.MEASURE_TYPE_TIWEN, minute);
-                                float result = UtilClass.valueOfHexString(data) / 100.0f;
-                                temp = measureDataList.get(MyConstants.MEASURE_TYPE_TIWEN);
-                                if (compareData(temp, result)) {
-                                    //修改各项
-                                    myAdapter.notifyItemChanged(MyConstants.MEASURE_TYPE_TIWEN);
-                                }
-                            }
-                            break;
-                        }
-                        case 5: {
-                            //粉尘
-                            if (data.length() == 8) {
-                                Log.d("workItem", "handleMessage: 粉尘");
-                                checkMinuteAndCache(MyConstants.MEASURE_TYPE_FENCHEN, minute);
-                                float result = UtilClass.valueOfHexString(data) / 100.0f;
-                                temp = measureDataList.get(MyConstants.MEASURE_TYPE_FENCHEN);
-                                if (result > 0 && result < 800 && compareData(temp, result)) {
-                                    myAdapter.notifyItemChanged(MyConstants.MEASURE_TYPE_FENCHEN);
-                                }
-                            }
-                            break;
-                        }
-                        case 6: {
-                            //脑电（待定）
-                            break;
-                        }
-                        case 7: {
-                            //血压（待定）
-                            break;
-                        }
-                        case 8: {
-                            break;
-                        }
-                        case 9: {
-                            break;
-                        }
-                        case 10: {
-                            break;
-                        }
-                        case 11: {
-                            break;
-                        }
-                        case 12: {
-                            break;
-                        }
-                        case 13: {
-                            break;
-                        }
-                        case 14: {
-                            break;
-                        }
-                        case 15: {
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-    };
 
     /**
      * 检查本时段缓存处理
@@ -409,15 +207,12 @@ public class MeasureFragment extends Fragment implements View.OnClickListener, O
      * @param minute
      */
     public void checkMinuteAndCache(int type, int minute) {
-        String userId = context.getSharedPreferences("LoginState",
-                Context.MODE_PRIVATE).getString("userId", null);
-        if (minute % MyConstants.CACHE_TIME_LENGTH == 0
-                && !myDataBase.checkOneMeasureDataCache(
-                type, calendar.getTime(), userId)) {
+        if (minute % ConstantsConfig.CACHE_TIME_LENGTH == 0
+                && ! LocalDataBase.checkOneMeasureDataCache(
+                type, calendar.getTime())) {
             Log.d("Cache", "checkMinuteAndCache: cache + " +
-                    MyConstants.LABEL_STRING[type] + "\tminute" + minute);
-            myDataBase.addOneMeasureData(
-                    measureDataList.get(type), type, calendar.getTime(), userId);
+                    ConstantsConfig.LABEL_STRING[type] + "\tminute" + minute);
+            LocalDataBase.addOneMeasureData(measureDataList.get(type), type, calendar.getTime());
             measureDataList.get(type).reset();
         }
     }
@@ -440,5 +235,138 @@ public class MeasureFragment extends Fragment implements View.OnClickListener, O
     public void onDestroyView() {
         Bluetooth.onDestroy();
         super.onDestroyView();
+    }
+
+    @Override
+    public void onResolve(String result, int type) {
+        Message message = Message.obtain();
+        message.what = MSG_READ_STRING;
+        message.arg1 = type;
+        message.obj = result;
+        mHandler.sendMessage(message);
+    }
+
+
+    BaseHandler mHandler = new BaseHandler<BaseHandler.BaseHandlerCallBack>(new BaseHandler.BaseHandlerCallBack() {
+        @Override
+        public void callBack(Message message) {
+            switch (message.what) {
+                case MSG_CONNECT_FAILED: {
+                    Log.d(TAG, "handleMessage: 连接失败");
+                    connectDevice.setClickable(true);
+                    connectDevice.setText("连接失败");
+                    connectDevice.setVisibility(View.VISIBLE);
+                    load.setVisibility(View.INVISIBLE);
+                    break;
+                }
+                case MSG_CONNECT_SUCCESS: {
+                    Log.d(TAG, "handleMessage: 连接成功");
+                    connectDevice.setText("已连接");
+                    connectDevice.setVisibility(View.VISIBLE);
+                    load.setVisibility(View.INVISIBLE);
+                    break;
+                }
+                case MSG_READ_STRING:{
+                    //进行数据的分类设定
+                    calendar.setTimeInMillis(System.currentTimeMillis());
+                    int minute=calendar.get(Calendar.MINUTE);
+                    String data=(String)message.obj;
+                    MeasureData temp;
+                    switch(message.arg1){
+                        //每次都要求获取数据的字符串
+                        case 0:{//保留
+                            break;
+                        }
+                        case 1:{
+                            //血氧
+                            if(data.length()==8){
+                                Log.d("workItem","handleMessage: 血氧");
+                                Log.d("workItem","handleMessage: 脉搏");
+                                checkMinuteAndCache(ConstantsConfig.MEASURE_TYPE_XUEYANG,minute);
+                                checkMinuteAndCache(ConstantsConfig.MEASURE_TYPE_MAIBO,minute);
+                                //进行血氧的结果解析
+                                float result=UtilClass.valueOfHexString(data.substring(0,2));
+                                temp=measureDataList.get(ConstantsConfig.MEASURE_TYPE_XUEYANG);
+                                if(result>0&&result< 100&&compareData(temp,result)){
+                                    myAdapter.notifyItemChanged(ConstantsConfig.MEASURE_TYPE_XUEYANG);
+                                }
+                                //进行脉搏的结果解析
+                                result=UtilClass.valueOfHexString(data.substring(2,4));
+                                temp=measureDataList.get(ConstantsConfig.MEASURE_TYPE_MAIBO);
+                                if(result>0&&result< 255&&compareData(temp,result)){
+                                    myAdapter.notifyItemChanged(ConstantsConfig.MEASURE_TYPE_MAIBO);
+                                }
+                            }
+                            break;
+                        }
+                        case 2:{
+                            //心电
+                            if(data.length()==4){
+                                time=System.currentTimeMillis();
+                                count++;
+                                Log.d("displayHeart","handleMessage: time = "+time/1000+" count = "+count);
+                                checkMinuteAndCache(ConstantsConfig.MEASURE_TYPE_XINDIAN,minute);
+                                int result=UtilClass.valueOfHexString(data);
+                                temp=measureDataList.get(ConstantsConfig.MEASURE_TYPE_XINDIAN);
+//                                myAdapter.drawHeartWavesPoint(result);
+                                if(compareData(temp,(float)(result))){
+                                    myAdapter.notifyItemChanged(ConstantsConfig.MEASURE_TYPE_XINDIAN);
+                                }
+                            }
+                            break;
+                        }
+                        case 3:{
+                            //血糖
+                            if(data.length()==12){
+                                Log.d("workItem","handleMessage: 血糖");
+                                checkMinuteAndCache(ConstantsConfig.MEASURE_TYPE_XUETANG,minute);
+                                float result=UtilClass.valueOfHexString(
+                                        data.substring(10,12))/10.0f;
+                                temp=measureDataList.get(ConstantsConfig.MEASURE_TYPE_XUETANG);
+                                if(result>0&&result< 300&&compareData(temp,result)){
+                                    myAdapter.notifyItemChanged(ConstantsConfig.MEASURE_TYPE_XUETANG);
+                                }
+                            }
+                            break;
+                        }
+                        case 4:{
+                            //体温
+                            if(data.length()==4){
+                                Log.d("workItem","handleMessage: 体温");
+                                checkMinuteAndCache(ConstantsConfig.MEASURE_TYPE_TIWEN,minute);
+                                float result=UtilClass.valueOfHexString(data)/100.0f;
+                                temp=measureDataList.get(ConstantsConfig.MEASURE_TYPE_TIWEN);
+                                if(compareData(temp,result)){
+                                    //修改各项
+                                    myAdapter.notifyItemChanged(ConstantsConfig.MEASURE_TYPE_TIWEN);
+                                }
+                            }
+                            break;
+                        }
+                        case 5:{
+                            //粉尘
+                            if(data.length()==8){
+                                Log.d("workItem","handleMessage: 粉尘");
+                                checkMinuteAndCache(ConstantsConfig.MEASURE_TYPE_FENCHEN,minute);
+                                float result=UtilClass.valueOfHexString(data)/100.0f;
+                                temp=measureDataList.get(ConstantsConfig.MEASURE_TYPE_FENCHEN);
+                                if(result>0&&result< 800&&compareData(temp,result)){
+                                    myAdapter.notifyItemChanged(ConstantsConfig.MEASURE_TYPE_FENCHEN);
+                                }
+                            }
+                            break;
+                        }
+                        default:break;
+                    }
+                }
+            }
+        }
+    });
+
+
+    @Override
+    public void onDestroy() {
+        mHandler.onDestory();
+        super.onDestroy();
     }
 }

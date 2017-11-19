@@ -21,7 +21,7 @@ import cn.bmob.v3.listener.UploadFileListener;
 import indi.noclay.cloudhealth.database.SignUserData;
 import indi.noclay.cloudhealth.mvp.base.BasePresenter;
 import indi.noclay.cloudhealth.mvp.view.ChangeMyDataActivityInterface;
-import indi.noclay.cloudhealth.util.MyConstants;
+import indi.noclay.cloudhealth.util.ConstantsConfig;
 import indi.noclay.cloudhealth.util.SharedPreferenceHelper;
 
 
@@ -143,7 +143,7 @@ public class ChangeMyDataActivityPresenter
 
     public Uri resizeImage(Uri imageUri, Activity activity){
 //        Log.d(TAG, "尝试剪切的文件输出" + "uri = [" + uri + "]");
-        File outputImage = new File(MyConstants.CROP_PATH_USER_IMAGE);
+        File outputImage = new File(ConstantsConfig.CROP_PATH_USER_IMAGE);
         try {
             if (outputImage.exists()) {
                 outputImage.getAbsoluteFile().delete();
@@ -183,7 +183,7 @@ public class ChangeMyDataActivityPresenter
 
     public void uploadFile(File src){
         Log.d(TAG, "uploadFile: size = " + src.length());
-        File temp = new File(MyConstants.TEMP_USER_IMAGE);
+        File temp = new File(ConstantsConfig.TEMP_USER_IMAGE);
         Log.d(TAG, "uploadFile: rename = " + src.renameTo(temp) );
 //        UtilClass.requestPermission(activity, android.Manifest.permission.READ_EXTERNAL_STORAGE);
         getView().startLoadImage();

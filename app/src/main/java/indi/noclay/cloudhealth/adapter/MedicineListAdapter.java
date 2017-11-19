@@ -19,7 +19,7 @@ import java.util.List;
 
 import indi.noclay.cloudhealth.R;
 import indi.noclay.cloudhealth.database.MedicineDetail;
-import indi.noclay.cloudhealth.database.MyDataBase;
+import indi.noclay.cloudhealth.database.LocalDataBase;
 
 
 /**
@@ -59,7 +59,7 @@ public class MedicineListAdapter extends RecyclerView.Adapter<MedicineListAdapte
         }
         holder.mShowTag.setText(temp.getTag() + "");
         Integer isOpen = temp.getIsOpen();
-        if (isOpen == null || isOpen == MyDataBase.CLOCK_OPEN) {
+        if (isOpen == null || isOpen == LocalDataBase.CLOCK_OPEN) {
             holder.mOpenOrClose.setChecked(true);
         } else {
             holder.mOpenOrClose.setChecked(false);

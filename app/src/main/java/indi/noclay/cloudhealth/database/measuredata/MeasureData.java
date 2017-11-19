@@ -7,6 +7,7 @@ import java.util.List;
 import cn.bmob.v3.BmobObject;
 import cn.bmob.v3.datatype.BmobDate;
 import indi.noclay.cloudhealth.database.SignUserData;
+import indi.noclay.cloudhealth.util.ConstantsConfig;
 import pers.noclay.foldlineview.FoldLineInterface;
 
 /**
@@ -171,5 +172,59 @@ public class MeasureData extends BmobObject implements FoldLineInterface{
     @Override
     public String getLabel() {
         return getDate();
+    }
+
+    public static BmobObject getBmobObject(int type, MeasureData measureData, SignUserData owner){
+        switch (type) {
+            case ConstantsConfig.MEASURE_TYPE_XUEYANG: {
+                MeasureXueYang measureXueYang = new MeasureXueYang();
+                measureData.copyTo(measureXueYang);
+                measureXueYang.setOwner(owner);
+                return measureXueYang;
+            }
+            case ConstantsConfig.MEASURE_TYPE_MAIBO: {
+                MeasureMaiBo measureMaiBo = new MeasureMaiBo();
+                measureData.copyTo(measureMaiBo);
+                measureMaiBo.setOwner(owner);
+                return measureMaiBo;
+            }
+            case ConstantsConfig.MEASURE_TYPE_XINDIAN: {
+                MeasureXinDian measureXinDian = new MeasureXinDian();
+                measureData.copyTo(measureXinDian);
+                measureXinDian.setOwner(owner);
+                return measureXinDian;
+            }
+            case ConstantsConfig.MEASURE_TYPE_TIWEN: {
+                MeasureTiWen measureTiWen = new MeasureTiWen();
+                measureData.copyTo(measureTiWen);
+                measureTiWen.setOwner(owner);
+                return measureTiWen;
+            }
+            case ConstantsConfig.MEASURE_TYPE_FENCHEN: {
+                MeasureFenChen measureFenChen = new MeasureFenChen();
+                measureData.copyTo(measureFenChen);
+                measureFenChen.setOwner(owner);
+                return measureFenChen;
+            }
+            case ConstantsConfig.MEASURE_TYPE_NAODIAN: {
+                MeasureNaoDian measureNaoDian = new MeasureNaoDian();
+                measureData.copyTo(measureNaoDian);
+                measureNaoDian.setOwner(owner);
+                return measureNaoDian;
+            }
+            case ConstantsConfig.MEASURE_TYPE_XUEYA: {
+                MeasureXueYa measureXueYa = new MeasureXueYa();
+                measureData.copyTo(measureXueYa);
+                measureXueYa.setOwner(owner);
+                return measureXueYa;
+            }
+            case ConstantsConfig.MEASURE_TYPE_XUETANG: {
+                MeasureXueTang measureXueTang = new MeasureXueTang();
+                measureData.copyTo(measureXueTang);
+                measureXueTang.setOwner(owner);
+                return measureXueTang;
+            }
+        }
+        return null;
     }
 }

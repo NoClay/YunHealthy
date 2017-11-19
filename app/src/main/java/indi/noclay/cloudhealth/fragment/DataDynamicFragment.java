@@ -19,10 +19,10 @@ import java.util.List;
 import indi.noclay.cloudhealth.R;
 import indi.noclay.cloudhealth.adapter.LoadItemAdapterForDynamic;
 import indi.noclay.cloudhealth.database.HeightAndWeight;
-import indi.noclay.cloudhealth.database.MyDataBase;
+import indi.noclay.cloudhealth.database.LocalDataBase;
 import indi.noclay.cloudhealth.database.SignUserData;
 import indi.noclay.cloudhealth.myview.AutoLoadMoreRecyclerView;
-import indi.noclay.cloudhealth.util.MyConstants;
+import indi.noclay.cloudhealth.util.ConstantsConfig;
 import indi.noclay.cloudhealth.util.UtilClass;
 
 import static cn.bmob.v3.Bmob.getApplicationContext;
@@ -38,7 +38,7 @@ public class DataDynamicFragment extends Fragment
     private AutoLoadMoreRecyclerView recyclerView;
     private LoadItemAdapterForDynamic adapter;
     private SwipeRefreshLayout downRefresh;
-    MyDataBase mMyDataBase;
+    LocalDataBase mMyDataBase;
     SQLiteDatabase mSQLiteDatabase;
     private int pageNum = 0;
     private int skip = 0;
@@ -52,8 +52,8 @@ public class DataDynamicFragment extends Fragment
                              @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_data_dynamic,container,false);
         initView(v);
-        mMyDataBase = new MyDataBase(getApplicationContext(),
-                "LocalStore.db", null, MyConstants.DATABASE_VERSION);
+        mMyDataBase = new LocalDataBase(getApplicationContext(),
+                "LocalStore.db", null, ConstantsConfig.DATABASE_VERSION);
         mSQLiteDatabase = mMyDataBase.getReadableDatabase();
         onRefresh();
         return v;
@@ -138,14 +138,14 @@ public class DataDynamicFragment extends Fragment
         }
         List<HeightAndWeight> result = new ArrayList<>();
         String sql= "select * from " + tableName +
-                " where userId = '" + MyConstants.userId + "' " +
+                " where userId = '" + ConstantsConfig.userId + "' " +
                 " order by createTime desc " +
                 " Limit "+String.valueOf(PAGE_SIZE)+ " Offset " +String.valueOf(skip * PAGE_SIZE);
         Cursor rec = mSQLiteDatabase.rawQuery(sql, null);
         if (rec.moveToFirst()){
             do {
                 SignUserData login = new SignUserData();
-                login.setObjectId(MyConstants.userId);
+                login.setObjectId(ConstantsConfig.userId);
                 HeightAndWeight data = new HeightAndWeight(
                         rec.getFloat(rec.getColumnIndex("height")),
                         rec.getFloat(rec.getColumnIndex("weight")),

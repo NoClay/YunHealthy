@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 import indi.noclay.cloudhealth.R;
-import indi.noclay.cloudhealth.util.MyConstants;
+import indi.noclay.cloudhealth.util.ConstantsConfig;
 
 /**
  * Created by noclay on 2017/5/7.
@@ -60,9 +60,9 @@ public class InputDayLengthDialog extends PopupWindow implements ListView.OnItem
 
     public List<Map<String, String>> getData() {
         List<Map<String, String>> mData = new ArrayList<>();
-        for (int i = 0; i < MyConstants.TIME_ITEM.length; i++) {
+        for (int i = 0; i < ConstantsConfig.TIME_ITEM.length; i++) {
             Map<String, String> temp = new HashMap<>();
-            temp.put("time", MyConstants.TIME_ITEM[i]);
+            temp.put("time", ConstantsConfig.TIME_ITEM[i]);
             mData.add(temp);
         }
         return mData;

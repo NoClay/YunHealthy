@@ -17,7 +17,7 @@ import java.util.List;
 
 import indi.noclay.cloudhealth.R;
 import indi.noclay.cloudhealth.adapter.AdapterForChooseDose;
-import indi.noclay.cloudhealth.util.MyConstants;
+import indi.noclay.cloudhealth.util.ConstantsConfig;
 import indi.noclay.cloudhealth.util.recycler.MyRecyclerViewDivider;
 
 
@@ -64,15 +64,15 @@ public class InputTimeAndDoseDialog extends PopupWindow {
         int j = 0;
         Log.d(TAG, "initData: times = " + Arrays.toString(times.toArray()));
         Log.d(TAG, "initData: doses = " + Arrays.toString(doses.toArray()));
-        for (int i = 0; i < MyConstants.TIMES.length; i++) {
-            if (j < times.size() && MyConstants.TIMES[i].equals(times.get(j))) {
-                Dose data = new Dose(MyConstants.TIMES[i]);
+        for (int i = 0; i < ConstantsConfig.TIMES.length; i++) {
+            if (j < times.size() && ConstantsConfig.TIMES[i].equals(times.get(j))) {
+                Dose data = new Dose(ConstantsConfig.TIMES[i]);
                 data.setValue(doses.get(j));
                 datas.add(data);
                 data.setChecked(true);
                 j++;
             } else {
-                Dose data = new Dose(MyConstants.TIMES[i]);
+                Dose data = new Dose(ConstantsConfig.TIMES[i]);
                 datas.add(data);
             }
         }

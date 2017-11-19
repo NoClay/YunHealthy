@@ -19,8 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import indi.noclay.cloudhealth.R;
-import indi.noclay.cloudhealth.database.MyDataBase;
-import indi.noclay.cloudhealth.util.MyConstants;
+import indi.noclay.cloudhealth.database.LocalDataBase;
+import indi.noclay.cloudhealth.util.ConstantsConfig;
 
 
 /**
@@ -36,7 +36,7 @@ public class RecycleAdapterForReportMenu extends
     private List<MenuInfo> menuInfoList;
     private Context context;
     private int type;
-    private MyDataBase dbHelper;
+    private LocalDataBase dbHelper;
     private SQLiteDatabase db;
     private static final String TAG = "RecycleAdapterForReport";
     String userId;
@@ -76,11 +76,11 @@ public class RecycleAdapterForReportMenu extends
         this.type = type;
         this.context = context;
         //构造List
-        dbHelper = new MyDataBase(context,
-                "LocalStore.db", null, MyConstants.DATABASE_VERSION);
+        dbHelper = new LocalDataBase(context,
+                "LocalStore.db", null, ConstantsConfig.DATABASE_VERSION);
         String userId = context.getSharedPreferences("LoginState",
                 Context.MODE_PRIVATE).getString("userId", null);
-        dbHelper.initMenuData(userId);
+        LocalDataBase.initMenuData();
         menuInfoList = new ArrayList<>();
         notifyList();
     }

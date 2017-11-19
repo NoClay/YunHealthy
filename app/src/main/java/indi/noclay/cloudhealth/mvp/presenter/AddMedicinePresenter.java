@@ -9,20 +9,17 @@ import android.os.Looper;
 import android.os.Message;
 import android.provider.MediaStore;
 
-
-
 import java.io.File;
 
 import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UploadFileListener;
+import indi.noclay.cloudhealth.database.LocalDataBase;
 import indi.noclay.cloudhealth.database.MedicineDetail;
-import indi.noclay.cloudhealth.database.MyDataBase;
 import indi.noclay.cloudhealth.mvp.base.BasePresenter;
 import indi.noclay.cloudhealth.mvp.view.AddMedicineActivityInterface;
-import indi.noclay.cloudhealth.util.MyConstants;
-import indi.noclay.cloudhealth.util.SharedPreferenceHelper;
+import indi.noclay.cloudhealth.util.ConstantsConfig;
 
 
 /**
@@ -97,24 +94,19 @@ public class AddMedicinePresenter extends BasePresenter<AddMedicineActivityInter
 
     public void saveData(){
         final MedicineDetail medicineDetail = getView().getMedicineDetail();
-        medicineDetail.setIsOpen(MyDataBase.CLOCK_OPEN);
-        if (medicineDetail != null){
-            mHandler.sendEmptyMessage(SAVE_START);
-            medicineDetail.save(new SaveListener<String>() {
-                @Override
-                public void done(String s, BmobException e) {
-                    if (e == null){
-                        mHandler.sendEmptyMessage(SAVE_SUCCESS);
-                        MyDataBase myDataBase = new MyDataBase(mContext,
-                                "LocalStore.db", null, MyConstants.DATABASE_VERSION);
-                        myDataBase.insertMedicineDetail(SharedPreferenceHelper.getLoginUser().getObjectId(),
-                                medicineDetail);
-                    }else{
-                        mHandler.sendEmptyMessage(SAVE_FAILED);
-                    }
+        medicineDetail.setIsOpen(LocalDataBase.CLOCK_OPEN);
+        mHandler.sendEmptyMessage(SAVE_START);
+        medicineDetail.save(new SaveListener<String>() {
+            @Override
+            public void done(String s, BmobException e) {
+                if (e == null){
+                    mHandler.sendEmptyMessage(SAVE_SUCCESS);
+                    LocalDataBase.insertMedicineDetail(medicineDetail);
+                }else{
+                    mHandler.sendEmptyMessage(SAVE_FAILED);
                 }
-            });
-        }
+            }
+        });
     }
 
     public void editTime(){
@@ -128,7 +120,7 @@ public class AddMedicinePresenter extends BasePresenter<AddMedicineActivityInter
 
     public Uri resizeImage(Uri imageUri, Activity activity){
 //        Log.d(TAG, "尝试剪切的文件输出" + "uri = [" + uri + "]");
-        File outputImage = new File(MyConstants.CROP_PATH_MEDICINE);
+        File outputImage = new File(ConstantsConfig.CROP_PATH_MEDICINE);
         try {
             if (outputImage.exists()) {
                 outputImage.getAbsoluteFile().delete();

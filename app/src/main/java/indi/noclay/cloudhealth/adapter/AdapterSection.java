@@ -15,7 +15,7 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import indi.noclay.cloudhealth.R;
-import indi.noclay.cloudhealth.util.MyConstants;
+import indi.noclay.cloudhealth.util.ConstantsConfig;
 import indi.noclay.cloudhealth.util.UtilClass;
 
 
@@ -27,7 +27,7 @@ public class AdapterSection extends BaseExpandableListAdapter {
 
     private Context mContext;
     private int mResource;
-    private boolean[] isOpen = new boolean[MyConstants.SECTIONS.length];
+    private boolean[] isOpen = new boolean[ConstantsConfig.SECTIONS.length];
     private List<AdapterDoctors> mAdapterDoctors;
     public static int sItem_Height;
 
@@ -50,7 +50,7 @@ public class AdapterSection extends BaseExpandableListAdapter {
 
     @Override
     public int getGroupCount() {
-        return MyConstants.SECTIONS.length;
+        return ConstantsConfig.SECTIONS.length;
     }
 
     //    }
@@ -121,7 +121,7 @@ public class AdapterSection extends BaseExpandableListAdapter {
                     "rotation",
                     0, 90
             );
-            animator.setDuration(MyConstants.ANIMATION_DURATION);
+            animator.setDuration(ConstantsConfig.ANIMATION_DURATION);
             animator.start();
         } else {
             ObjectAnimator animator = ObjectAnimator.ofFloat(
@@ -129,7 +129,7 @@ public class AdapterSection extends BaseExpandableListAdapter {
                     "rotation",
                     90, 0
             );
-            animator.setDuration(MyConstants.ANIMATION_DURATION);
+            animator.setDuration(ConstantsConfig.ANIMATION_DURATION);
             animator.start();
         }
     }
@@ -174,7 +174,7 @@ public class AdapterSection extends BaseExpandableListAdapter {
         }else{
             groupViewHolder = (GroupViewHolder) convertView.getTag();
         }
-        groupViewHolder.mSectionName.setText(MyConstants.SECTIONS[groupPosition]);
+        groupViewHolder.mSectionName.setText(ConstantsConfig.SECTIONS[groupPosition]);
 
         if (isExpanded){
             toggleButtonAnimation(groupViewHolder, true);

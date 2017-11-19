@@ -11,7 +11,7 @@ import cn.bmob.v3.listener.FindListener;
 import indi.noclay.cloudhealth.database.SignUserData;
 import indi.noclay.cloudhealth.mvp.base.BasePresenter;
 import indi.noclay.cloudhealth.mvp.view.LoginActivityInterface;
-import indi.noclay.cloudhealth.util.MyApplication;
+import indi.noclay.cloudhealth.util.HealthApplication;
 import indi.noclay.cloudhealth.util.SharedPreferenceHelper;
 import indi.noclay.cloudhealth.util.UtilClass;
 
@@ -30,7 +30,7 @@ public class LoginActivityPresenter extends BasePresenter<LoginActivityInterface
     }
 
     public void loadImage(final String userName){
-        if (!UtilClass.checkNetwork(MyApplication.getContext())){
+        if (!UtilClass.checkNetwork(HealthApplication.getContext())){
             getView().badNet();
         }
         BmobQuery<SignUserData> userQuery = new BmobQuery<>();
