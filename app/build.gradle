@@ -58,8 +58,8 @@ dependencies {
     compile 'de.hdodenhof:circleimageview:2.1.0'
     compile 'com.google.zxing:core:3.3.0'
     compile 'com.google.zxing:android-core:3.3.0'
-    compile project(':ecgwaveview-release')
-    compile project(':foldlineview-release')
-    implementation project(':bluetooth-debug')
+    implementation project(':ecgwaveview-release')
+    implementation project(':foldlineview-release')
     implementation project(':utiltool-release')
+    implementation project(':bluetooth')
 }

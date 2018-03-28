@@ -10,14 +10,16 @@ import indi.noclay.cloudhealth.R;
 
 public class ConstantsConfig {
     //缓存头像使用的目录
-    public static final String ROOT_PATH = Environment.getExternalStorageDirectory() +
-            "/CloudHealthy/userImage/";
-    public static final String SRC_PATH_USER_IMAGE = ROOT_PATH + "src_user.jpg";
-    public static final String SRC_PATH_MEDICINE = ROOT_PATH + "src_medicine.jpg";
-    public static final String CROP_PATH_USER_IMAGE = ROOT_PATH + "crop_user.jpg";
-    public static final String CROP_PATH_MEDICINE = ROOT_PATH + "crop_medicine.jpg";
-    public static final String TEMP_USER_IMAGE = ROOT_PATH + "temp_user.jpg";
-    public static final String TEMP_MEDICINE = ROOT_PATH + "temp_medicine.jpg";
+    public static final String APPLICATION_DIR = Environment.getExternalStorageDirectory() + "/CloudHealthy/";
+    public static final String ROOT_PATH_IMAGE_DIR = APPLICATION_DIR + "userImage/";
+    public static final String CACHE_DATA_DIR = APPLICATION_DIR + "userCache/";
+
+    public static final String SRC_PATH_USER_IMAGE = ROOT_PATH_IMAGE_DIR + "src_user.jpg";
+    public static final String SRC_PATH_MEDICINE = ROOT_PATH_IMAGE_DIR + "src_medicine.jpg";
+    public static final String CROP_PATH_USER_IMAGE = ROOT_PATH_IMAGE_DIR + "crop_user.jpg";
+    public static final String CROP_PATH_MEDICINE = ROOT_PATH_IMAGE_DIR + "crop_medicine.jpg";
+    public static final String TEMP_USER_IMAGE = ROOT_PATH_IMAGE_DIR + "temp_user.jpg";
+    public static final String TEMP_MEDICINE = ROOT_PATH_IMAGE_DIR + "temp_medicine.jpg";
 
     public static final String[] TIME_ITEM = {
             "1天", "2天", "3天", "4天", "5天", "6天", "1周",

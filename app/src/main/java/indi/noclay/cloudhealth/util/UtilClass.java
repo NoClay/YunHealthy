@@ -218,7 +218,7 @@ public class UtilClass {
     public static void saveBitmapToFile(Bitmap bm, String filePath) {
         File f;
         if(filePath == null){
-            f = new File(ConstantsConfig.ROOT_PATH + "temp.jpg");
+            f = new File(ConstantsConfig.ROOT_PATH_IMAGE_DIR + "temp.jpg");
         }else{
             f = new File(filePath);
         }
@@ -958,12 +958,11 @@ public class UtilClass {
     }
 
 
-    public static void requestPermission(final Activity activity,
-                                         String permission) {
+    public static void requestPermission(final Activity activity, String permission) {
         if (activity == null) {
             return;
         }
-        int check = 0;
+        int check = PackageManager.PERMISSION_DENIED;
         if (android.os.Build.VERSION.SDK_INT >= M) {
             check = activity.checkSelfPermission(permission);
         } else {
@@ -972,12 +971,11 @@ public class UtilClass {
         if (check != PackageManager.PERMISSION_GRANTED) {
             //没有获取该权限
             if (Build.VERSION.SDK_INT >= M) {
-                activity.requestPermissions(new String[]{
-                        permission
-                }, 0);
+                activity.requestPermissions(new String[]{permission}, 0);
             }
         }
     }
+
 
 
     /**

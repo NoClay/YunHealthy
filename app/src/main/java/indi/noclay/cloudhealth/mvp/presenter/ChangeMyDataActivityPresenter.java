@@ -23,6 +23,7 @@ import indi.noclay.cloudhealth.mvp.base.BasePresenter;
 import indi.noclay.cloudhealth.mvp.view.ChangeMyDataActivityInterface;
 import indi.noclay.cloudhealth.util.ConstantsConfig;
 import indi.noclay.cloudhealth.util.SharedPreferenceHelper;
+import indi.noclay.cloudhealth.util.UtilClass;
 
 
 /**
@@ -185,7 +186,7 @@ public class ChangeMyDataActivityPresenter
         Log.d(TAG, "uploadFile: size = " + src.length());
         File temp = new File(ConstantsConfig.TEMP_USER_IMAGE);
         Log.d(TAG, "uploadFile: rename = " + src.renameTo(temp) );
-//        UtilClass.requestPermission(activity, android.Manifest.permission.READ_EXTERNAL_STORAGE);
+//        UtilClass.requestPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE);
         getView().startLoadImage();
         final BmobFile image = new BmobFile(temp);
         Log.d(TAG, "uploadFile: " + (temp.exists()));

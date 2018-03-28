@@ -23,7 +23,7 @@ public class DiskCacheModule implements GlideModule {
                 new DiskLruCacheFactory.CacheDirectoryGetter() {
                     @Override
                     public File getCacheDirectory() {
-                        return new File(ConstantsConfig.ROOT_PATH);
+                        return new File(ConstantsConfig.ROOT_PATH_IMAGE_DIR);
                     }
                 }, 100 * 1024 * 1024))
                 .setDecodeFormat(DecodeFormat.PREFER_ARGB_8888);

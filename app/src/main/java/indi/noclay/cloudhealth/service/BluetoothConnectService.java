@@ -28,7 +28,7 @@ public class BluetoothConnectService extends BluetoothConnectionService implemen
     protected void beginBroadcastWrapper(int method, byte[] bytes, int type) {
         if (MeasureFragment.sIsBluetoothWorkable){
             //该页面正在展示中
-            beginBroadcast(method, bytes, type);
+            super.beginBroadcastWrapper(method, bytes, type);
         }
         //本地进行缓存等
         if (method == BluetoothConstant.METHOD_ON_RECEIVE_MESSAGE){

@@ -1,5 +1,6 @@
 package indi.noclay.cloudhealth;
 
+import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +14,7 @@ import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobConfig;
 import cn.bmob.v3.BmobWrapper;
 import indi.noclay.cloudhealth.activity.LoginActivityCopy;
+import indi.noclay.cloudhealth.util.UtilClass;
 
 
 public class WelcomeActivity extends AppCompatActivity implements Animation.AnimationListener{
@@ -31,6 +33,8 @@ public class WelcomeActivity extends AppCompatActivity implements Animation.Anim
         initView();
         startAnimation();
     }
+
+
 
     private void initView() {
         mImage = (ImageView) findViewById(R.id.image);

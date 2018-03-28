@@ -1,8 +1,8 @@
 package indi.noclay.cloudhealth.util;
 
+import android.Manifest;
 import android.app.Application;
 import android.content.Context;
-import android.os.Environment;
 
 import java.io.File;
 
@@ -22,16 +22,34 @@ public class HealthApplication extends Application {
         super.onCreate();
         //初始化一些资源
         sContext = getApplicationContext();
-        initDir();
+        initDirs();
         initDependencies();
     }
 
-    private void initDir() {
-        File file = new File(Environment.getExternalStorageDirectory() + "/CloudHealthy/userImage");
-        if (!file.exists()) {
+
+    /**
+     * 初始化文件夹
+     */
+    private void initDirs() {
+        File file = new File(ConstantsConfig.APPLICATION_DIR);
+        if (!file.exists() || file.isFile()) {
+            file.delete();
+            file.mkdirs();
+        }
+        file = new File(ConstantsConfig.ROOT_PATH_IMAGE_DIR);
+        if (!file.exists() || file.isFile()){
+            file.delete();
+            file.mkdirs();
+        }
+        file = new File(ConstantsConfig.CACHE_DATA_DIR);
+        if (!file.exists() || file.isFile()){
+            file.delete();
             file.mkdirs();
         }
     }
+
+
+
 
     public static Context getContext() {
         return sContext;
