@@ -23,6 +23,7 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -53,7 +54,7 @@ public class NewsActivity extends AppCompatActivity
     @BindView(R.id.nestedScrollView)
     NestedScrollView mNestedScrollView;
     LoadItemAdapterForNews loadItemAdapterForNews;
-    List<NewsData> newsList;
+    LinkedList<NewsData> newsList;
     List<NewsData> temp;
     boolean mIsFirstIn = true;
     String nextPage;
@@ -76,11 +77,11 @@ public class NewsActivity extends AppCompatActivity
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-        newsList = new ArrayList<>();
+        newsList = new LinkedList<>();
         loadItemAdapterForNews = new LoadItemAdapterForNews(newsList);
         loadItemAdapterForNews.setNewsDatas(newsList);
-        FullLinearLayoutManager fLayout = new FullLinearLayoutManager(NewsActivity.this,
-                AutoLoadMoreRecyclerView.VERTICAL, true);
+        LinearLayoutManager fLayout = new LinearLayoutManager(NewsActivity.this,
+                AutoLoadMoreRecyclerView.VERTICAL, false);
         fLayout.setSmoothScrollbarEnabled(true);
         fLayout.setAutoMeasureEnabled(true);
         mNewsList.setLayoutManager(fLayout);
@@ -164,7 +165,8 @@ public class NewsActivity extends AppCompatActivity
         }).start();
     }
 
-    Handler handler = new Handler() {
+
+    public class NewsHandler extends Handler{
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
@@ -176,9 +178,8 @@ public class NewsActivity extends AppCompatActivity
                         mNewsList.postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                for (int i = temp.size(); i > 0; i--) {
-                                    newsList.add(temp.get(i - 1));
-                                    Log.d(TAG, "run: date = " + temp.get(i - 1).getDate());
+                                for (int i = 0; i < temp.size(); i++) {
+                                    newsList.addLast(temp.get(i));
                                 }
 //                                newsList.addAll(temp);
                                 if (!mIsFirstIn) {
@@ -187,14 +188,20 @@ public class NewsActivity extends AppCompatActivity
                                     loadItemAdapterForNews.notifyDataSetChanged();
                                 }
                             }
-                        }, 1000);
+                        }, 100);
 
+                        StringBuilder builder = new StringBuilder();
+                        for (int i = 0; i < newsList.size(); i++) {
+                            builder.append(newsList.get(i).getDate());
+                        }
+                        Log.d(TAG, "handleMessage: " + builder.toString());
                     }
                     break;
                 }
             }
         }
-    };
+    }
+    Handler handler = new NewsHandler();
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

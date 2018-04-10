@@ -45,7 +45,7 @@ public class MedicineActivity extends AppCompatActivity implements View.OnClickL
         medicines = getMedicines();
         MedicineListAdapter adapter = new MedicineListAdapter(medicines, this, R.layout.item_medicine);
         FullLinearLayoutManager fLayout = new FullLinearLayoutManager(this,
-                RecyclerView.VERTICAL, true);
+                RecyclerView.VERTICAL, false);
         fLayout.setSmoothScrollbarEnabled(true);
         mMedicineList.setLayoutManager(fLayout);
         mMedicineList.setHasFixedSize(true);

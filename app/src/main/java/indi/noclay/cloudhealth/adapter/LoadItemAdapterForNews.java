@@ -1,6 +1,7 @@
 package indi.noclay.cloudhealth.adapter;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +24,7 @@ public class LoadItemAdapterForNews
 
     private List<NewsData> mNewsDatas;
     OnItemClickListener mOnItemClickListener;
-    private int mNowBindingPos = 0;
+    private static final String TAG = "LoadItemAdapterForNews";
 
     public LoadItemAdapterForNews(List<NewsData> newsDatas) {
         mNewsDatas = newsDatas;
@@ -58,7 +59,7 @@ public class LoadItemAdapterForNews
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        mNowBindingPos = position;
+        Log.d(TAG, "onBindViewHolder: position = " + position + "..." + mNewsDatas.get(position).getDate());
         NewsData newsData = mNewsDatas.get(position);
         holder.mDateShow.setText(newsData.getDate());
         holder.mTitleShow.setText(newsData.getTitle());
@@ -69,14 +70,6 @@ public class LoadItemAdapterForNews
                 mOnItemClickListener.onItemClick(v, holder.getLayoutPosition());
             }
         });
-    }
-
-    public int getmNowBindingPos() {
-        return mNowBindingPos;
-    }
-
-    public boolean isLastItemBinding(){
-        return mNowBindingPos == getItemCount() - 1;
     }
 
     @Override
