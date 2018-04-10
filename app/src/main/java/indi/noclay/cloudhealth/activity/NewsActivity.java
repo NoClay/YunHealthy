@@ -6,7 +6,9 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -33,7 +35,7 @@ import indi.noclay.cloudhealth.myview.FullLinearLayoutManager;
 
 
 public class NewsActivity extends AppCompatActivity
-        implements LoadItemAdapterForNews.OnItemClickListener{
+        implements LoadItemAdapterForNews.OnItemClickListener, View.OnClickListener {
 
 
     Document document;
@@ -46,9 +48,14 @@ public class NewsActivity extends AppCompatActivity
     FloatingActionButton mFab;
     @BindView(R.id.news_list)
     RecyclerView mNewsList;
+    //    @BindView(R.id.nextPageBt)
+//    View mNextPageLoadBt;
+    @BindView(R.id.nestedScrollView)
+    NestedScrollView mNestedScrollView;
     LoadItemAdapterForNews loadItemAdapterForNews;
     List<NewsData> newsList;
     List<NewsData> temp;
+    boolean mIsFirstIn = true;
     String nextPage;
     public static final int LOAD_SUCCESS = 0;
     public static final int LOAD_EMPITY = 1;
@@ -75,12 +82,47 @@ public class NewsActivity extends AppCompatActivity
         FullLinearLayoutManager fLayout = new FullLinearLayoutManager(NewsActivity.this,
                 AutoLoadMoreRecyclerView.VERTICAL, true);
         fLayout.setSmoothScrollbarEnabled(true);
-        mNewsList.setAdapter(loadItemAdapterForNews);
+        fLayout.setAutoMeasureEnabled(true);
         mNewsList.setLayoutManager(fLayout);
+        mNewsList.setAdapter(loadItemAdapterForNews);
 //        mNewsList.setAutoLoadMoreEnable(true);
         mNewsList.setHasFixedSize(true);
         mNewsList.setNestedScrollingEnabled(false);
         loadItemAdapterForNews.setOnItemClickListener(this);
+//        mNewsList.addOnScrollListener(new RecyclerView.OnScrollListener() {
+//            @Override
+//            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+//                super.onScrollStateChanged(recyclerView, newState);
+//                Log.d(TAG, "onScrollStateChanged: ");
+//            }
+//
+//            @Override
+//            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+//                super.onScrolled(recyclerView, dx, dy);
+//            }
+//        });
+        mNestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                if (scrollY > oldScrollY) {
+                    // 向下滑动
+                }
+
+                if (scrollY < oldScrollY) {
+                    // 向上滑动
+                }
+
+                if (scrollY == 0) {
+                    // 顶部
+                }
+
+                if (scrollY == (v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight())) {
+                    // 底部
+                    getData();
+                }
+            }
+        });
+//        mNextPageLoadBt.setOnClickListener(this);
     }
 
 
@@ -90,17 +132,15 @@ public class NewsActivity extends AppCompatActivity
             public void run() {
                 try {
                     temp = new ArrayList<NewsData>();
-                    document = Jsoup.connect("http://news.99.com.cn/jiankang/").get();
+                    document = Jsoup.connect("http://news.99.com.cn/jiankang/" + (nextPage == null ? "" : nextPage)).get();
                     Elements elements = document.select("div.DlistWfc");
                     for (Element e :
                             elements) {
                         NewsData newsData = new NewsData();
                         Elements date = e.select("div.fenghk");
                         StringBuilder stringBuilder = new StringBuilder();
-                        for (Element i :
-                                date) {
-                            stringBuilder.append(i.text());
-                            stringBuilder.append("\n");
+                        for (Element i : date) {
+                            stringBuilder.append(i.text().substring(0, i.text().indexOf("201")));
                         }
                         newsData.setDate(stringBuilder.toString());
                         newsData.setContent(e.select("p.fengP2").text());
@@ -108,6 +148,7 @@ public class NewsActivity extends AppCompatActivity
                         newsData.setUrl(e.select("h2 > a").attr("href"));
                         temp.add(newsData);
                     }
+                    nextPage = document.select("#page > div.list_con.blue.cc > div.list_left > div.list_left_con > div.list_page > span:nth-child(9) > a").attr("href");
                     Message message = new Message();
                     message.what = 0;
                     message.arg1 = LOAD_SUCCESS;
@@ -130,17 +171,21 @@ public class NewsActivity extends AppCompatActivity
             switch (msg.what) {
                 case 0: {
                     //成功加载了数据
-                    if (temp.size() != 0){
+                    if (temp.size() != 0) {
                         Log.d(TAG, "handleMessage: size " + temp.size());
                         mNewsList.postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                for (int i = temp.size(); i > 0; i --) {
+                                for (int i = temp.size(); i > 0; i--) {
                                     newsList.add(temp.get(i - 1));
+                                    Log.d(TAG, "run: date = " + temp.get(i - 1).getDate());
                                 }
 //                                newsList.addAll(temp);
-                                loadItemAdapterForNews.setNewsDatas(newsList);
-                                loadItemAdapterForNews.notifyDataSetChanged();
+                                if (!mIsFirstIn) {
+                                    loadItemAdapterForNews.notifyItemRangeInserted(newsList.size() - temp.size() + 1, temp.size());
+                                } else {
+                                    loadItemAdapterForNews.notifyDataSetChanged();
+                                }
                             }
                         }, 1000);
 
@@ -170,5 +215,15 @@ public class NewsActivity extends AppCompatActivity
         data.putString("url", newsList.get(position).getUrl());
         intent.putExtra("data", data);
         startActivity(intent);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+//            case R.id.nextPageBt:{
+//                getData();
+//                break;
+//            }
+        }
     }
 }

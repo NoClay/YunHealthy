@@ -23,6 +23,7 @@ public class LoadItemAdapterForNews
 
     private List<NewsData> mNewsDatas;
     OnItemClickListener mOnItemClickListener;
+    private int mNowBindingPos = 0;
 
     public LoadItemAdapterForNews(List<NewsData> newsDatas) {
         mNewsDatas = newsDatas;
@@ -57,6 +58,7 @@ public class LoadItemAdapterForNews
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
+        mNowBindingPos = position;
         NewsData newsData = mNewsDatas.get(position);
         holder.mDateShow.setText(newsData.getDate());
         holder.mTitleShow.setText(newsData.getTitle());
@@ -69,6 +71,13 @@ public class LoadItemAdapterForNews
         });
     }
 
+    public int getmNowBindingPos() {
+        return mNowBindingPos;
+    }
+
+    public boolean isLastItemBinding(){
+        return mNowBindingPos == getItemCount() - 1;
+    }
 
     @Override
     public int getItemCount() {

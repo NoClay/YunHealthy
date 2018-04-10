@@ -53,17 +53,50 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <indi.noclay.cloudhealth.myview.MyNestedScrollView
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:scrollbars="none"
+        android:fillViewport="true"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/news_list"
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/news_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-        </android.support.v7.widget.RecyclerView>
-    </indi.noclay.cloudhealth.myview.MyNestedScrollView>
+            </android.support.v7.widget.RecyclerView>
+            <!--<LinearLayout-->
+                <!--android:id="@+id/nextPageBt"-->
+                <!--android:layout_margin="15dp"-->
+                <!--android:orientation="horizontal"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:gravity="center"-->
+                <!--android:background="@drawable/nextpage_bt_bg"-->
+                <!--android:layout_height="40dp">-->
+                <!--<TextView-->
+                    <!--android:layout_gravity="center"-->
+                    <!--android:gravity="center"-->
+                    <!--android:text="下一页"-->
+                    <!--android:textSize="17sp"-->
+                    <!--android:layout_marginRight="25dp"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="?attr/actionBarSize" />-->
+                <!--<ImageView-->
+                    <!--android:tint="@color/black"-->
+                    <!--android:src="@drawable/icon_load_gray"-->
+                    <!--android:layout_gravity="center"-->
+                    <!--android:layout_width="25dp"-->
+                    <!--android:layout_height="25dp" />-->
+            <!--</LinearLayout>-->
+
+        </LinearLayout>
+
+    </android.support.v4.widget.NestedScrollView>
 
     <android.support.design.widget.FloatingActionButton
         android:layout_width="wrap_content"
