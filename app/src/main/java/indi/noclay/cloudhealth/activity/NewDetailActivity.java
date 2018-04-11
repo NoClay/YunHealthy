@@ -105,8 +105,7 @@ public class NewDetailActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    Handler handler = new Handler() {
-        @RequiresApi(api = Build.VERSION_CODES.N)
+    public class NewsDetailHandler extends Handler{
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
@@ -116,20 +115,14 @@ public class NewDetailActivity extends AppCompatActivity {
                 case 1: {
                     content = new WebView(NewDetailActivity.this);
                     mContentLayout.addView(content);
-
-                    Elements element = document.select("#Page > div.con_left > " +
-                            "div.art_con.cc > div > div.title > h1");
+                    Elements element = document.select("body > div.wrapper > div.title_box > h1");
                     Log.d("test", "handleMessage: title = " + element.text());
                     mToolbarLayout.setTitle(element.text());
-                    String time = "99健康网 " + document.select("#Page > div.con_left " +
-                            "> div.art_con.cc > div > div.title > div.time_share > " +
-                            "div.l_time > span:nth-child(1)").text();
+                    String time = "99健康网 " + document.select("body > div.wrapper > div.title_box > div > div.title_txt > span:nth-child(2)").text();
                     mTimeText.setText(time);
-                    String html = document.select("#Page > div.con_left > " +
-                            "div.art_con.cc > div > div.article_con > div.art_intro > p").text();
+                    String html = document.select("body > div.wrapper > div.left_box > div.profile_box > p").text();
                     mGuideText.setText(Html.fromHtml(html));
-                    html = document.select("#Page > div.con_left > div.art_con.cc > " +
-                            "div > div.article_con > div.detail_con").html();
+                    html = document.select("body > div.wrapper > div.left_box > div.new_cont.detail_con").html();
                     Log.d("content", "handleMessage: content = " + html);
                     content.loadDataWithBaseURL(null, html,
                             "text/html", "utf-8", null);
@@ -137,7 +130,8 @@ public class NewDetailActivity extends AppCompatActivity {
                 }
             }
         }
-    };
+    }
+    Handler handler = new NewsDetailHandler();
 
     @Override
     public void onBackPressed() {

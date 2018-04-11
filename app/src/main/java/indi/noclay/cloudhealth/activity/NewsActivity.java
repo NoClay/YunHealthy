@@ -135,8 +135,7 @@ public class NewsActivity extends AppCompatActivity
                     temp = new ArrayList<NewsData>();
                     document = Jsoup.connect("http://news.99.com.cn/jiankang/" + (nextPage == null ? "" : nextPage)).get();
                     Elements elements = document.select("div.DlistWfc");
-                    for (Element e :
-                            elements) {
+                    for (Element e : elements) {
                         NewsData newsData = new NewsData();
                         Elements date = e.select("div.fenghk");
                         StringBuilder stringBuilder = new StringBuilder();
