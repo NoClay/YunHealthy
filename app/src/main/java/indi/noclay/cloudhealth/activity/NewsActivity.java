@@ -142,7 +142,7 @@ public class NewsActivity extends AppCompatActivity
                         for (Element i : date) {
                             stringBuilder.append(i.text().substring(0, i.text().indexOf("201")));
                         }
-                        newsData.setDate(stringBuilder.toString());
+                        newsData.setDate(stringBuilder.toString().replace(" ", "\n"));
                         newsData.setContent(e.select("p.fengP2").text());
                         newsData.setTitle(e.select("h2 > a").text());
                         newsData.setUrl(e.select("h2 > a").attr("href"));

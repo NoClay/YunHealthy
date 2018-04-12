@@ -122,7 +122,17 @@ public class NewDetailActivity extends AppCompatActivity {
                     mTimeText.setText(time);
                     String html = document.select("body > div.wrapper > div.left_box > div.profile_box > p").text();
                     mGuideText.setText(Html.fromHtml(html));
+                    content.setHorizontalScrollBarEnabled(false);
                     html = document.select("body > div.wrapper > div.left_box > div.new_cont.detail_con").html();
+                    int pos = html.indexOf("<p align=\"right\">（");
+                    if (pos != -1){
+                        html = html.substring(0, pos);
+                    }
+                    html.replace("<img ", "<img style=\"width:100%\" ");
+                    StringBuilder builder = new StringBuilder();
+                    builder.append("<div class=\"wrap\" style=\"width:100%\">")
+                            .append(html)
+                            .append("</div>");
                     Log.d("content", "handleMessage: content = " + html);
                     content.loadDataWithBaseURL(null, html,
                             "text/html", "utf-8", null);
