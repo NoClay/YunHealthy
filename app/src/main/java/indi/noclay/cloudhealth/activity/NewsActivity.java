@@ -12,8 +12,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 
 
 import org.jsoup.Jsoup;
@@ -33,6 +35,7 @@ import indi.noclay.cloudhealth.adapter.LoadItemAdapterForNews;
 import indi.noclay.cloudhealth.database.NewsData;
 import indi.noclay.cloudhealth.myview.AutoLoadMoreRecyclerView;
 import indi.noclay.cloudhealth.myview.FullLinearLayoutManager;
+import indi.noclay.cloudhealth.util.YunHealthyLoading;
 
 
 public class NewsActivity extends AppCompatActivity
@@ -69,6 +72,7 @@ public class NewsActivity extends AppCompatActivity
         ButterKnife.bind(this);
         initView();
         getData();
+        YunHealthyLoading.show(this);
     }
 
     private void initView() {
@@ -186,6 +190,7 @@ public class NewsActivity extends AppCompatActivity
                                 } else {
                                     loadItemAdapterForNews.notifyDataSetChanged();
                                 }
+                                YunHealthyLoading.dismiss();
                             }
                         }, 100);
 
@@ -197,6 +202,8 @@ public class NewsActivity extends AppCompatActivity
                     }
                     break;
                 }
+                default:YunHealthyLoading.dismiss();break;
+
             }
         }
     }

@@ -2,6 +2,7 @@
 
 buildscript {
     repositories {
+        maven{ url 'http://maven.aliyun.com/nexus/content/groups/public'}
         jcenter()
         google()
     }
@@ -18,6 +19,7 @@ allprojects {
     repositories {
         jcenter()
         //Bmob的maven仓库地址--必填
+        maven{ url 'http://maven.aliyun.com/nexus/content/groups/public'}
         maven { url "https://raw.github.com/bmob/bmob-android-sdk/master" }
         gradle.projectsEvaluated {
             tasks.withType(JavaCompile){

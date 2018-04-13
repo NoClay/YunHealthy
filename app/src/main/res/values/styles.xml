@@ -85,7 +85,15 @@
         <item name="android:focusable">true</item>
         <item name="android:focusableInTouchMode">true</item>
     </style>
+    <style name="AppTheme.DialogNoFullScreen">
+        <item name="android:windowFullscreen">false</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
 
+    <style name="AppTheme.DialogFullScreen">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
 
 
     <!--&lt;!&ndash; Base application theme. &ndash;&gt;-->

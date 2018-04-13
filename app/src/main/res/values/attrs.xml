@@ -48,4 +48,14 @@
         <attr name="label_text" format="string"/>
         <attr name="label_text_size" format="float"/>
     </declare-styleable>
+
+
+    <declare-styleable name="YunHealthyErrorView">
+        <attr name="errorAnimWidth" format="dimension"/>
+        <attr name="errorAnimHeight" format="dimension"/>
+        <attr name="errorAnimFile" format="string"/>
+        <attr name="errorTip" format="string"/>
+        <attr name="errorTipSize" format="dimension"/>
+        <attr name="errorTipColor" format="dimension"/>
+    </declare-styleable>
 </resources>

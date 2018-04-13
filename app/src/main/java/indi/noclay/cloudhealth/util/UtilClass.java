@@ -54,6 +54,10 @@ import static android.os.Build.VERSION_CODES.M;
 
 public class UtilClass {
 
+
+    public static boolean isActivityContextVaild(Activity activity){
+        return activity != null && !activity.isFinishing() && !activity.isRestricted() && activity.getWindow() != null;
+    }
     /**
      * 获取带倒影的bitmap
      * @param bitmap
@@ -988,7 +992,7 @@ public class UtilClass {
         if (activity == null) {
             return false;
         }
-        int check = 0;
+        int check = PackageManager.PERMISSION_DENIED;
         if (android.os.Build.VERSION.SDK_INT >= M) {
             check = activity.checkSelfPermission(permission);
         } else {

@@ -36,4 +36,5 @@ http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
     -->
     <dimen name="widget_margin">8dp</dimen>
     <dimen name="widget_content_height">108dp</dimen>
+    <dimen name="normal_padding">10dp</dimen>
 </resources>

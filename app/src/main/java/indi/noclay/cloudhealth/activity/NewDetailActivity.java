@@ -28,6 +28,7 @@ import java.io.IOException;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import indi.noclay.cloudhealth.R;
+import indi.noclay.cloudhealth.util.YunHealthyLoading;
 
 /**
  * Created by no_clay on 2017/2/7.
@@ -63,6 +64,7 @@ public class NewDetailActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         initView();
         getData();
+        YunHealthyLoading.show(this);
     }
 
     private void getData() {
@@ -111,6 +113,7 @@ public class NewDetailActivity extends AppCompatActivity {
             super.handleMessage(msg);
             switch (msg.what) {
                 case 0:
+                    YunHealthyLoading.dismiss();
                     break;
                 case 1: {
                     content = new WebView(NewDetailActivity.this);
@@ -136,8 +139,10 @@ public class NewDetailActivity extends AppCompatActivity {
                     Log.d("content", "handleMessage: content = " + html);
                     content.loadDataWithBaseURL(null, html,
                             "text/html", "utf-8", null);
+                    YunHealthyLoading.dismiss();
                     break;
                 }
+                default:
             }
         }
     }
