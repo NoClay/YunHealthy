@@ -56,6 +56,6 @@
         <attr name="errorAnimFile" format="string"/>
         <attr name="errorTip" format="string"/>
         <attr name="errorTipSize" format="dimension"/>
-        <attr name="errorTipColor" format="dimension"/>
+        <attr name="errorTipColor" format="color"/>
     </declare-styleable>
 </resources>
