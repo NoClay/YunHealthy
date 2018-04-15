@@ -16,6 +16,7 @@ import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 
 import org.jsoup.Jsoup;
@@ -35,11 +36,12 @@ import indi.noclay.cloudhealth.adapter.LoadItemAdapterForNews;
 import indi.noclay.cloudhealth.database.NewsData;
 import indi.noclay.cloudhealth.myview.AutoLoadMoreRecyclerView;
 import indi.noclay.cloudhealth.myview.FullLinearLayoutManager;
+import indi.noclay.cloudhealth.myview.YunHealthyErrorView;
 import indi.noclay.cloudhealth.util.YunHealthyLoading;
 
 
 public class NewsActivity extends AppCompatActivity
-        implements LoadItemAdapterForNews.OnItemClickListener, View.OnClickListener {
+        implements LoadItemAdapterForNews.OnItemClickListener, View.OnClickListener{
 
 
     Document document;
@@ -90,22 +92,10 @@ public class NewsActivity extends AppCompatActivity
         fLayout.setAutoMeasureEnabled(true);
         mNewsList.setLayoutManager(fLayout);
         mNewsList.setAdapter(loadItemAdapterForNews);
-//        mNewsList.setAutoLoadMoreEnable(true);
         mNewsList.setHasFixedSize(true);
         mNewsList.setNestedScrollingEnabled(false);
         loadItemAdapterForNews.setOnItemClickListener(this);
-//        mNewsList.addOnScrollListener(new RecyclerView.OnScrollListener() {
-//            @Override
-//            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-//                super.onScrollStateChanged(recyclerView, newState);
-//                Log.d(TAG, "onScrollStateChanged: ");
-//            }
-//
-//            @Override
-//            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-//                super.onScrolled(recyclerView, dx, dy);
-//            }
-//        });
+//        errorView.setVisibility(View.GONE);
         mNestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
             @Override
             public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
@@ -127,7 +117,6 @@ public class NewsActivity extends AppCompatActivity
                 }
             }
         });
-//        mNextPageLoadBt.setOnClickListener(this);
     }
 
 
@@ -153,14 +142,12 @@ public class NewsActivity extends AppCompatActivity
                         temp.add(newsData);
                     }
                     nextPage = document.select("#page > div.list_con.blue.cc > div.list_left > div.list_left_con > div.list_page > span:nth-child(9) > a").attr("href");
-                    Message message = new Message();
-                    message.what = 0;
-                    message.arg1 = LOAD_SUCCESS;
+                    Message message = Message.obtain();
+                    message.what = LOAD_SUCCESS;
                     handler.sendMessage(message);
                 } catch (IOException e) {
-                    Message message = new Message();
-                    message.what = 0;
-                    message.arg1 = LOAD_ERROR;
+                    Message message = Message.obtain();
+                    message.what = LOAD_ERROR;
                     handler.sendMessage(message);
                     e.printStackTrace();
                 }
@@ -169,12 +156,13 @@ public class NewsActivity extends AppCompatActivity
     }
 
 
+
     public class NewsHandler extends Handler{
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             switch (msg.what) {
-                case 0: {
+                case LOAD_SUCCESS: {
                     //成功加载了数据
                     if (temp.size() != 0) {
                         Log.d(TAG, "handleMessage: size " + temp.size());
@@ -200,6 +188,9 @@ public class NewsActivity extends AppCompatActivity
                         }
                         Log.d(TAG, "handleMessage: " + builder.toString());
                     }
+                    break;
+                }
+                case LOAD_ERROR:{
                     break;
                 }
                 default:YunHealthyLoading.dismiss();break;
