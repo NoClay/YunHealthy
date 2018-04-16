@@ -15,6 +15,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.webkit.WebView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -28,7 +29,12 @@ import java.io.IOException;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import indi.noclay.cloudhealth.R;
+import indi.noclay.cloudhealth.myview.YunHealthyErrorView;
+import indi.noclay.cloudhealth.util.ViewUtils;
 import indi.noclay.cloudhealth.util.YunHealthyLoading;
+
+import static indi.noclay.cloudhealth.util.ViewUtils.hideView;
+import static indi.noclay.cloudhealth.util.ViewUtils.showView;
 
 /**
  * Created by no_clay on 2017/2/7.
@@ -51,6 +57,8 @@ public class NewDetailActivity extends AppCompatActivity {
     CoordinatorLayout mActivityNews;
     @BindView(R.id.contentLayout)
     LinearLayout mContentLayout;
+    @BindView(R.id.errorView)
+    YunHealthyErrorView errorView;
     WebView content;
 
 
@@ -68,6 +76,7 @@ public class NewDetailActivity extends AppCompatActivity {
     }
 
     private void getData() {
+        hideView(errorView);
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -93,6 +102,7 @@ public class NewDetailActivity extends AppCompatActivity {
         }
         Bundle data = getIntent().getBundleExtra("data");
         url = data.getString("url");
+        hideView(errorView);
     }
 
     @Override
@@ -114,6 +124,7 @@ public class NewDetailActivity extends AppCompatActivity {
             switch (msg.what) {
                 case 0:
                     YunHealthyLoading.dismiss();
+                    showView(errorView);
                     break;
                 case 1: {
                     content = new WebView(NewDetailActivity.this);
