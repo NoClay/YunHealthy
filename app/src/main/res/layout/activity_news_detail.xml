@@ -55,41 +55,61 @@
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fillViewport="true"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
-        <LinearLayout
-            android:padding="10dp"
-            android:orientation="vertical"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <TextView
-                android:id="@+id/timeText"
-                android:textColor="@color/hintTextColor"
-                android:textSize="13sp"
-                android:text="99健康网 2017"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-            <TextView
-                android:id="@+id/guideText"
-                android:layout_marginBottom="5dp"
-                android:layout_marginTop="5dp"
-                android:padding="5dp"
-                android:background="#E2EEFD"
-                android:textColor="@color/hintTextColor"
-                android:textSize="13sp"
-                android:text="99健康网 2017"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+            <!--具体的内容页面-->
             <LinearLayout
+                android:padding="10dp"
                 android:orientation="vertical"
-                android:id="@+id/contentLayout"
-                android:layout_marginBottom="5dp"
-                android:layout_marginTop="5dp"
-                android:padding="5dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent">
+                <TextView
+                    android:id="@+id/timeText"
+                    android:textColor="@color/hintTextColor"
+                    android:textSize="13sp"
+                    android:text="99健康网 2017"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+                <TextView
+                    android:id="@+id/guideText"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"
+                    android:padding="5dp"
+                    android:background="#E2EEFD"
+                    android:textColor="@color/hintTextColor"
+                    android:textSize="13sp"
+                    android:text="99健康网 2017"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:id="@+id/contentLayout"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"
+                    android:padding="5dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
+                </LinearLayout>
             </LinearLayout>
-        </LinearLayout>
+
+            <!--错误页面-->
+            <indi.noclay.cloudhealth.myview.YunHealthyErrorView
+                android:id="@+id/errorView"
+                app:errorAnimHeight="wrap_content"
+                app:errorAnimWidth="wrap_content"
+                app:errorAnimFile="cloud_disconnection.json"
+                app:errorTip="加载失败，请点击重试"
+                android:background="@color/white"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            </indi.noclay.cloudhealth.myview.YunHealthyErrorView>
+        </RelativeLayout>
+
     </android.support.v4.widget.NestedScrollView>
 
     <android.support.design.widget.FloatingActionButton

@@ -51,8 +51,16 @@
 
 
     <declare-styleable name="YunHealthyErrorView">
-        <attr name="errorAnimWidth" format="dimension"/>
-        <attr name="errorAnimHeight" format="dimension"/>
+        <attr name="errorAnimWidth" format="dimension">
+            <enum name="wrap_content" value="-2"/>
+            <enum name="match_parent" value="-1"/>
+            <enum name="fill_parent" value="-1"/>
+        </attr>
+        <attr name="errorAnimHeight" format="dimension">
+            <enum name="wrap_content" value="-2"/>
+            <enum name="match_parent" value="-1"/>
+            <enum name="fill_parent" value="-1"/>
+        </attr>
         <attr name="errorAnimFile" format="string"/>
         <attr name="errorTip" format="string"/>
         <attr name="errorTipSize" format="dimension"/>

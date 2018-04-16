@@ -64,8 +64,8 @@ public class YunHealthyErrorView extends LinearLayout {
             TypedArray array = getContext().obtainStyledAttributes(attributeSet, R.styleable.YunHealthyErrorView);
             errorAnimFileName = array.getString(R.styleable.YunHealthyErrorView_errorAnimFile);
             errorHint = array.getString(R.styleable.YunHealthyErrorView_errorTip);
-            errorAnimWidth = array.getDimensionPixelSize(R.styleable.YunHealthyErrorView_errorAnimWidth, LayoutParams.MATCH_PARENT);
-            errorAnimHeight = array.getDimensionPixelSize(R.styleable.YunHealthyErrorView_errorAnimHeight, LayoutParams.WRAP_CONTENT);
+            errorAnimWidth = array.getLayoutDimension(R.styleable.YunHealthyErrorView_errorAnimWidth, LayoutParams.WRAP_CONTENT);
+            errorAnimHeight = array.getLayoutDimension(R.styleable.YunHealthyErrorView_errorAnimHeight, LayoutParams.WRAP_CONTENT);
             errorHintColor = array.getColor(R.styleable.YunHealthyErrorView_errorTipColor, Color.BLACK);
             errorHintSize = array.getDimensionPixelSize(R.styleable.YunHealthyErrorView_errorTipSize, 24);
             array.recycle();
@@ -85,7 +85,7 @@ public class YunHealthyErrorView extends LinearLayout {
         errorView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (onErrorRetryListener != null){
+                if (onErrorRetryListener != null) {
                     onErrorRetryListener.onErrorRetry();
                 }
             }
