@@ -1,5 +1,6 @@
 package indi.noclay.cloudhealth.database;
 
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
@@ -15,6 +16,7 @@ import cn.bmob.v3.datatype.BmobDate;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.QueryListListener;
 import indi.noclay.cloudhealth.database.measuredata.MeasureData;
+import indi.noclay.cloudhealth.util.ConstantsConfig;
 import indi.noclay.cloudhealth.util.SharedPreferenceHelper;
 import indi.noclay.cloudhealth.util.UtilClass;
 
@@ -30,6 +32,28 @@ public class MeasureTableHelper {
     public static final int UPLOAD_SUCCESS = 0;
 
     private static final String TAG = "MeasureTableHelper";
+
+
+    public static void addOneMeasureData(MeasureData measureData, int type, Date date) {
+        String userId = SharedPreferenceHelper.getLoginUserId();
+        LocalDataBase instance = getDefaultInstance();
+        SQLiteDatabase db = instance.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("userId", userId);
+        values.put("name", ConstantsConfig.LABEL_STRING[type]);
+        values.put("type", type);
+        values.put("average", measureData.getAverageData());
+        values.put("max", measureData.getMaxData());
+        values.put("min", measureData.getMinData());
+        values.put("count", measureData.getCount());
+        values.put("isAverageDanger", measureData.getAverageDanger());
+        values.put("isMaxDanger", measureData.getMaxDanger());
+        values.put("isMinDanger", measureData.getMinDanger());
+        values.put("createTime", UtilClass.valueOfDate(date, null));
+        db.insert("MeasureDataCache", null, values);
+        db.close();
+        instance.close();
+    }
     /**
      * 查询一个数据，存在返回true，否则为false
      * @param type

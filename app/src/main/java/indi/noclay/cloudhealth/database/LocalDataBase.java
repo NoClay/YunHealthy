@@ -117,25 +117,5 @@ public class LocalDataBase extends SQLiteOpenHelper {
 
 
 
-    public static void addOneMeasureData(MeasureData measureData, int type, Date date) {
-        String userId = SharedPreferenceHelper.getLoginUserId();
-        LocalDataBase instance = getDefaultInstance();
-        SQLiteDatabase db = instance.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put("userId", userId);
-        values.put("name", ConstantsConfig.LABEL_STRING[type]);
-        values.put("type", type);
-        values.put("average", measureData.getAverageData());
-        values.put("max", measureData.getMaxData());
-        values.put("min", measureData.getMinData());
-        values.put("count", measureData.getCount());
-        values.put("isAverageDanger", measureData.getAverageDanger());
-        values.put("isMaxDanger", measureData.getMaxDanger());
-        values.put("isMinDanger", measureData.getMinDanger());
-        values.put("createTime", UtilClass.valueOfDate(date, null));
-        db.insert("MeasureDataCache", null, values);
-        db.close();
-        instance.close();
-    }
 
 }
