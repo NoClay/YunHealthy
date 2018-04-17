@@ -29,6 +29,8 @@ import indi.noclay.cloudhealth.util.ConstantsConfig;
 import indi.noclay.cloudhealth.util.SharedPreferenceHelper;
 import indi.noclay.cloudhealth.util.UtilClass;
 
+import static indi.noclay.cloudhealth.database.MeasureTableHelper.ERROR_LOAD;
+import static indi.noclay.cloudhealth.database.MeasureTableHelper.upLoadMeasureData;
 import static indi.noclay.cloudhealth.database.MedicineTableHelper.insertMedicineDetail;
 
 /**
@@ -75,8 +77,8 @@ public class SynchronizeDataService extends Service{
                 }
                 final LocalDataBase myDataBase = new LocalDataBase(getApplicationContext(),
                         "LocalStore.db", null, ConstantsConfig.DATABASE_VERSION);
-                int count = myDataBase.upLoadMeasureData(id);
-                if (count == LocalDataBase.ERROR_LOAD){
+                int count = upLoadMeasureData(id);
+                if (count == ERROR_LOAD){
                     makeANotification("数据同步失败");
                 }else{
                     makeANotification("数据同步完成");

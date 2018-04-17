@@ -43,7 +43,7 @@ public class FoodMenuActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private List<String> getMenuDataFromLocal() {
-        return LocalDataBase.getMenuDataFromLocal(true);
+        return null;
     }
 
     private void initMenuByData(List<String> subCategory) {

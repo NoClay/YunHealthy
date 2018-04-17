@@ -22,6 +22,8 @@ import indi.noclay.cloudhealth.R;
 import indi.noclay.cloudhealth.database.LocalDataBase;
 import indi.noclay.cloudhealth.util.ConstantsConfig;
 
+import static indi.noclay.cloudhealth.database.ReportMenuTableHelper.initMenuData;
+
 
 /**
  * Created by 82661 on 2016/11/16.
@@ -80,7 +82,7 @@ public class RecycleAdapterForReportMenu extends
                 "LocalStore.db", null, ConstantsConfig.DATABASE_VERSION);
         String userId = context.getSharedPreferences("LoginState",
                 Context.MODE_PRIVATE).getString("userId", null);
-        LocalDataBase.initMenuData();
+        initMenuData();
         menuInfoList = new ArrayList<>();
         notifyList();
     }

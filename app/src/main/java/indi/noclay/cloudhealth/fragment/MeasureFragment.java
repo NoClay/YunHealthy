@@ -38,6 +38,8 @@ import pers.noclay.bluetooth.BluetoothConfig;
 import pers.noclay.bluetooth.OnConnectListener;
 import pers.noclay.utiltool.BaseHandler;
 
+import static indi.noclay.cloudhealth.database.MeasureTableHelper.checkOneMeasureDataCache;
+
 /*
  * Created by 兆鹏 on 2016/11/2.
  */
@@ -208,8 +210,7 @@ public class MeasureFragment extends Fragment implements
      */
     public void checkMinuteAndCache(int type, int minute) {
         if (minute % ConstantsConfig.CACHE_TIME_LENGTH == 0
-                && ! LocalDataBase.checkOneMeasureDataCache(
-                type, calendar.getTime())) {
+                && ! checkOneMeasureDataCache(type, calendar.getTime())) {
             Log.d("Cache", "checkMinuteAndCache: cache + " +
                     ConstantsConfig.LABEL_STRING[type] + "\tminute" + minute);
             LocalDataBase.addOneMeasureData(measureDataList.get(type), type, calendar.getTime());
