@@ -9,10 +9,9 @@ import android.util.Log;
 
 import java.util.Calendar;
 
-import indi.noclay.cloudhealth.database.LocalDataBase;
 import indi.noclay.cloudhealth.fragment.DataMedicalFragment;
 
-import static indi.noclay.cloudhealth.database.MedicineDetailHelper.isNeedEatMedicine;
+import static indi.noclay.cloudhealth.database.MedicineTableHelper.isNeedEatMedicine;
 
 
 /**

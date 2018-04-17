@@ -19,7 +19,7 @@ import static indi.noclay.cloudhealth.database.LocalDataBase.getDefaultInstance;
  * Created by clay on 2018/4/17.
  */
 
-public class MedicineDetailHelper {
+public class MedicineTableHelper {
     public static final int CLOCK_OPEN = 0;
     public static final int CLOCK_CLOSE = 1;
     /**

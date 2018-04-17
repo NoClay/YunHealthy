@@ -11,12 +11,11 @@ import android.widget.RemoteViewsService;
 import java.util.List;
 
 import indi.noclay.cloudhealth.R;
-import indi.noclay.cloudhealth.database.LocalDataBase;
 import indi.noclay.cloudhealth.database.MedicineDetail;
 import indi.noclay.cloudhealth.fragment.DataMedicalFragment;
 import indi.noclay.cloudhealth.util.UtilClass;
 
-import static indi.noclay.cloudhealth.database.MedicineDetailHelper.getMedicineDetail;
+import static indi.noclay.cloudhealth.database.MedicineTableHelper.getMedicineDetail;
 
 
 /**

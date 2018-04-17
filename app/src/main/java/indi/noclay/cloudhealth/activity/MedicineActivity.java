@@ -22,7 +22,7 @@ import indi.noclay.cloudhealth.fragment.DataMedicalFragment;
 import indi.noclay.cloudhealth.myview.FullLinearLayoutManager;
 import indi.noclay.cloudhealth.util.ConstantsConfig;
 
-import static indi.noclay.cloudhealth.database.MedicineDetailHelper.getMedicineDetail;
+import static indi.noclay.cloudhealth.database.MedicineTableHelper.getMedicineDetail;
 
 
 public class MedicineActivity extends AppCompatActivity implements View.OnClickListener {

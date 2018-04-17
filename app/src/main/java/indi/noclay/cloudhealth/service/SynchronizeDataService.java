@@ -29,7 +29,7 @@ import indi.noclay.cloudhealth.util.ConstantsConfig;
 import indi.noclay.cloudhealth.util.SharedPreferenceHelper;
 import indi.noclay.cloudhealth.util.UtilClass;
 
-import static indi.noclay.cloudhealth.database.MedicineDetailHelper.insertMedicineDetail;
+import static indi.noclay.cloudhealth.database.MedicineTableHelper.insertMedicineDetail;
 
 /**
  * Created by 82661 on 2016/12/3.

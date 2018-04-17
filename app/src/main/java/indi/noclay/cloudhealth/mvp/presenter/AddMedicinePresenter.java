@@ -15,13 +15,12 @@ import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UploadFileListener;
-import indi.noclay.cloudhealth.database.LocalDataBase;
 import indi.noclay.cloudhealth.database.MedicineDetail;
 import indi.noclay.cloudhealth.mvp.base.BasePresenter;
 import indi.noclay.cloudhealth.mvp.view.AddMedicineActivityInterface;
 import indi.noclay.cloudhealth.util.ConstantsConfig;
 
-import static indi.noclay.cloudhealth.database.MedicineDetailHelper.*;
+import static indi.noclay.cloudhealth.database.MedicineTableHelper.*;
 
 
 /**

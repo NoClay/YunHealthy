@@ -19,9 +19,8 @@ import java.util.List;
 
 import indi.noclay.cloudhealth.R;
 import indi.noclay.cloudhealth.database.MedicineDetail;
-import indi.noclay.cloudhealth.database.LocalDataBase;
 
-import static indi.noclay.cloudhealth.database.MedicineDetailHelper.CLOCK_OPEN;
+import static indi.noclay.cloudhealth.database.MedicineTableHelper.CLOCK_OPEN;
 
 
 /**

@@ -38,6 +38,10 @@ import indi.noclay.cloudhealth.service.SynchronizeDataService;
 import indi.noclay.cloudhealth.util.ConstantsConfig;
 import indi.noclay.cloudhealth.util.TabLayoutViewPagerAdapter;
 
+import static indi.noclay.cloudhealth.database.HeightAndWeightTableHelper.checkLastWeight;
+import static indi.noclay.cloudhealth.database.HeightAndWeightTableHelper.checkTodayWeight;
+import static indi.noclay.cloudhealth.database.HeightAndWeightTableHelper.insertHeightAndWeight;
+
 
 /**
  * Created by noclay on 2017/4/15.
@@ -114,10 +118,10 @@ public class MainActivityCopy extends AppCompatActivity {
         if (hasFocus) {
             //窗口获取焦点并且已经登陆
 
-            HeightAndWeight body = LocalDataBase.checkTodayWeight(new Date());
+            HeightAndWeight body = checkTodayWeight(new Date());
             if (body == null) {
                 //当天没有输入了体重
-                body = LocalDataBase.checkLastWeight();
+                body = checkLastWeight();
                 checkWeight(body);
             }
         }
@@ -157,7 +161,6 @@ public class MainActivityCopy extends AppCompatActivity {
 
     /**
      * 每次启动后检查体重时候输入
-     *
      * @param body
      */
     @SuppressLint("WrongConstant")
@@ -175,7 +178,7 @@ public class MainActivityCopy extends AppCompatActivity {
                                     mInputWeightDialog.getInputWeight(),
                                     login);
                             data.setDate(new Date());
-                            LocalDataBase.insertHeightAndWeight(data, new Date());
+                            insertHeightAndWeight(data, new Date());
                             mInputWeightDialog.dismiss();
                         }
                         break;
