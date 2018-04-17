@@ -22,6 +22,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
@@ -41,6 +42,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.regex.Matcher;
@@ -53,7 +55,25 @@ import static android.os.Build.VERSION_CODES.M;
  */
 
 public class UtilClass {
+    public static boolean bundleEquals(final Bundle bundle1, final Bundle bundle2) {
+        if (bundle1 == null || bundle2 == null) return bundle1 == bundle2;
+        final Iterator<String> keys = bundle1.keySet().iterator();
+        while (keys.hasNext()) {
+            final String key = keys.next();
+            if (!objectEquals(bundle1.get(key), bundle2.get(key))) return false;
+        }
+        return true;
+    }
 
+    public static boolean classEquals(final Class<?> cls1, final Class<?> cls2) {
+        if (cls1 == null || cls2 == null) return cls1 == cls2;
+        return cls1.getName().equals(cls2.getName());
+    }
+
+    public static boolean objectEquals(final Object object1, final Object object2) {
+        if (object1 == null || object2 == null) return object1 == object2;
+        return object1.equals(object2);
+    }
 
     public static boolean isActivityContextVaild(Activity activity){
         return activity != null && !activity.isFinishing() && !activity.isRestricted() && activity.getWindow() != null;

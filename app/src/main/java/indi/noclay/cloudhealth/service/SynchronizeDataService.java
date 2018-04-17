@@ -29,6 +29,8 @@ import indi.noclay.cloudhealth.util.ConstantsConfig;
 import indi.noclay.cloudhealth.util.SharedPreferenceHelper;
 import indi.noclay.cloudhealth.util.UtilClass;
 
+import static indi.noclay.cloudhealth.database.MedicineDetailHelper.insertMedicineDetail;
+
 /**
  * Created by 82661 on 2016/12/3.
  */
@@ -92,7 +94,7 @@ public class SynchronizeDataService extends Service{
                                 Log.d(TAG, "done: size = " + list.size());
                                 for (int i = 0; i < list.size(); i++) {
                                     Log.d(TAG, "done: id = " + list.get(i).getObjectId());
-                                    LocalDataBase.insertMedicineDetail(list.get(i));
+                                    insertMedicineDetail(list.get(i));
                                 }
                             }
                         }

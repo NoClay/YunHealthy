@@ -10,10 +10,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
+import java.nio.channels.ClosedChannelException;
 import java.util.ArrayList;
 import java.util.List;
 
 import indi.noclay.cloudhealth.R;
+import indi.noclay.cloudhealth.util.ConstantsConfig;
 import indi.noclay.cloudhealth.util.TabLayoutViewPagerAdapter;
 
 
@@ -26,10 +28,8 @@ public class DoctorsFragment extends Fragment implements
     private View view;
     private RelativeLayout mSearchBar;
     private RelativeLayout mNewFriends;
-    private TabLayout mTabLayout;
     private ViewPager mPageLayout;
     private TabLayout mChanelTab;
-    private List<String> mTitles;
     private List<Fragment> mPages;
     public static final String [] CHANELS = {
             "最近聊天",
@@ -50,21 +50,24 @@ public class DoctorsFragment extends Fragment implements
         mSearchBar.setOnClickListener(this);
         mNewFriends = (RelativeLayout) v.findViewById(R.id.newFriends);
         mNewFriends.setOnClickListener(this);
-        mTabLayout = (TabLayout) v.findViewById(R.id.tabLayout);
         mPageLayout = (ViewPager) v.findViewById(R.id.pageLayout);
         mChanelTab = (TabLayout) v.findViewById(R.id.chanelTab);
-        mTitles = new ArrayList<>();
         mPages = new ArrayList<Fragment>();
+        TabLayoutViewPagerAdapter adapter = new TabLayoutViewPagerAdapter(
+                getChildFragmentManager(), mPages, getContext());
         for (int i = 0; i < CHANELS.length; i++) {
             mChanelTab.addTab(mChanelTab.newTab().setText(CHANELS[i]));
-            mTitles.add(CHANELS[i]);
+            switch (i) {
+                case 0:adapter.addTab(DoctorsTalkFragment.class, null, CHANELS[i], i, null);
+                    break;
+                case 1:adapter.addTab(DoctorsFriendsFragment.class, null, CHANELS[i], i, null);
+                    break;
+                case 2:adapter.addTab(DoctorsIntelligentFragment.class, null, CHANELS[i], i, null);
+                    break;
+                default:adapter.addTab(Fragment.class, null, CHANELS[i], i, null);
+                    break;
+            }
         }
-        mPages.add(new DoctorsTalkFragment());
-        mPages.add(new DoctorsFriendsFragment());
-        mPages.add(new DoctorsIntelligentFragment());
-        TabLayoutViewPagerAdapter adapter = new TabLayoutViewPagerAdapter(
-                getChildFragmentManager(),
-                mTitles, mPages);
         mPageLayout.setAdapter(adapter);
         mPageLayout.addOnPageChangeListener(this);
         mChanelTab.setupWithViewPager(mPageLayout);

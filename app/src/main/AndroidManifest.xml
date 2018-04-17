@@ -36,8 +36,11 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.VIBRATE" /> <!-- 震动权限 -->
     <uses-permission android:name="android.permission.CAMERA" />
+
     <uses-feature android:name="android.hardware.camera" /> <!-- 使用照相机权限 -->
-    <uses-feature android:name="android.hardware.camera.autofocus" /> <!-- 自动聚焦权限 -->
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+
+    <!-- 自动聚焦权限 -->
     <application
         android:name=".util.HealthApplication"
         android:allowBackup="true"
@@ -79,7 +82,6 @@
         <activity
             android:name=".activity.ChangePassWord"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".activity.NewsActivity"
             android:screenOrientation="portrait" />
@@ -104,14 +106,13 @@
             android:launchMode="singleInstance"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
-            android:windowSoftInputMode="adjustPan" >
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
-                <action android:name="cloudHealth.intent.MedicineClock"/>
-                <category android:name="android.intent.category.DEFAULT"/>
+                <action android:name="cloudHealth.intent.MedicineClock" />
+
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-
-
         <activity android:name="com.google.zxing.activity.CaptureActivity" />
         <!-- 添加药物 -->
 
@@ -133,8 +134,9 @@
             android:name=".service.UpdateService"
             android:exported="false"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
-        <service android:name=".service.BluetoothConnectService"
-            android:process=":bluetooth"/>
+        <service
+            android:name=".service.BluetoothConnectService"
+            android:process=":bluetooth" />
 
         <receiver android:name=".myview.AppWidgetMedicineList">
             <intent-filter>
@@ -151,7 +153,8 @@
             android:name=".receiver.UpLoadReceiver"
             android:screenOrientation="portrait" />
         <receiver android:name=".receiver.MedicineAlarmReceiver" />
-        <!--zxing二维码注册-->
+        <!-- zxing二维码注册 -->
+        <activity android:name=".activity.FoodMenuActivity"></activity>
     </application>
 
 </manifest>

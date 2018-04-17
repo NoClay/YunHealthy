@@ -19,7 +19,6 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 
 
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -47,8 +46,6 @@ import indi.noclay.cloudhealth.util.TabLayoutViewPagerAdapter;
 public class MainActivityCopy extends AppCompatActivity {
     private ViewPager mMainVPager;
     private TabLayout mTabLayout;
-    private LinearLayout mMainActivity;
-    private List<String> mTitles;
     private List<Fragment> mPages;
     InputWeightDialog mInputWeightDialog;
     public static final int PAGE_MEASURE = 0;
@@ -67,39 +64,43 @@ public class MainActivityCopy extends AppCompatActivity {
     }
 
 
-
     private void initView() {
         mMainVPager = (ViewPager) findViewById(R.id.main_vPager);
         mTabLayout = (TabLayout) findViewById(R.id.tabLayout);
-        mMainActivity = (LinearLayout) findViewById(R.id.main_activity);
         initTab();
         mMainVPager.setCurrentItem(2);
     }
 
-    public void setCurrentPage(int page){
-        if (page >= mPages.size() || page < 0){
+    public void setCurrentPage(int page) {
+        if (page >= mPages.size() || page < 0) {
             return;
-        }else{
+        } else {
             mMainVPager.setCurrentItem(page);
         }
     }
 
     private void initTab() {
-        mTitles = new ArrayList<>();
         mPages = new ArrayList<>();
         mTabLayout.setTabMode(TabLayout.MODE_FIXED);
-        for (String e :
-                ConstantsConfig.TAB_MENU) {
-            mTitles.add(e);
-            mTabLayout.addTab(mTabLayout.newTab().setText(e));
-        }
-        mPages.add(new MeasureFragment());
-        mPages.add(new DataFragment());
-        mPages.add(new HomeFragment());
-        mPages.add(new DoctorsFragment());
-        mPages.add(new MineFragment());
         TabLayoutViewPagerAdapter adapter = new TabLayoutViewPagerAdapter(getSupportFragmentManager(),
-                mTitles, mPages);
+                mPages, this);
+        for (int i = 0; i < ConstantsConfig.TAB_MENU.length; i++) {
+            mTabLayout.addTab(mTabLayout.newTab().setText(ConstantsConfig.TAB_MENU[i]));
+            switch (i) {
+                case 0:adapter.addTab(MeasureFragment.class, null, ConstantsConfig.TAB_MENU[i], i, null);
+                    break;
+                case 1:adapter.addTab(DataFragment.class, null, ConstantsConfig.TAB_MENU[i], i, null);
+                    break;
+                case 2:adapter.addTab(HomeFragment.class, null, ConstantsConfig.TAB_MENU[i], i, null);
+                    break;
+                case 3:adapter.addTab(DoctorsFragment.class, null, ConstantsConfig.TAB_MENU[i], i, null);
+                    break;
+                case 4:adapter.addTab(MineFragment.class, null, ConstantsConfig.TAB_MENU[i], i, null);
+                    break;
+                default:adapter.addTab(Fragment.class, null, ConstantsConfig.TAB_MENU[i], i, null);
+                    break;
+            }
+        }
         mMainVPager.setAdapter(adapter);
         mMainVPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener());
         mTabLayout.setupWithViewPager(mMainVPager);
@@ -110,11 +111,11 @@ public class MainActivityCopy extends AppCompatActivity {
         super.onWindowFocusChanged(hasFocus);
         ConstantsConfig.userId = getSharedPreferences(
                 "LoginState", MODE_PRIVATE).getString("userId", null);
-        if (hasFocus){
+        if (hasFocus) {
             //窗口获取焦点并且已经登陆
 
             HeightAndWeight body = LocalDataBase.checkTodayWeight(new Date());
-            if (body == null){
+            if (body == null) {
                 //当天没有输入了体重
                 body = LocalDataBase.checkLastWeight();
                 checkWeight(body);
@@ -134,11 +135,11 @@ public class MainActivityCopy extends AppCompatActivity {
     }
 
     private void startAlarm() {
-        Calendar c=Calendar.getInstance();//获取日期对象
+        Calendar c = Calendar.getInstance();//获取日期对象
         c.setTimeInMillis(System.currentTimeMillis());        //设置Calendar对象
-        if (c.get(Calendar.MINUTE) < 30){
+        if (c.get(Calendar.MINUTE) < 30) {
             c.set(Calendar.MINUTE, 30);            //设置闹钟的分钟数
-        }else{
+        } else {
             c.set(Calendar.HOUR_OF_DAY, c.get(Calendar.HOUR_OF_DAY) + 1);
             c.set(Calendar.MINUTE, 00);
         }
@@ -153,8 +154,10 @@ public class MainActivityCopy extends AppCompatActivity {
         alarm.set(AlarmManager.RTC_WAKEUP,
                 c.getTimeInMillis(), pi);        //设置闹钟，当前时间就唤醒
     }
+
     /**
      * 每次启动后检查体重时候输入
+     *
      * @param body
      */
     @SuppressLint("WrongConstant")
@@ -162,9 +165,9 @@ public class MainActivityCopy extends AppCompatActivity {
         mInputWeightDialog = new InputWeightDialog(this, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                switch (v.getId()){
-                    case R.id.commit_action:{
-                        if (mInputWeightDialog.checkData()){
+                switch (v.getId()) {
+                    case R.id.commit_action: {
+                        if (mInputWeightDialog.checkData()) {
                             SignUserData login = new SignUserData();
                             login.setObjectId(ConstantsConfig.userId);
                             HeightAndWeight data = new HeightAndWeight(
@@ -177,14 +180,14 @@ public class MainActivityCopy extends AppCompatActivity {
                         }
                         break;
                     }
-                    case R.id.cancel_action:{
+                    case R.id.cancel_action: {
                         break;
                     }
                 }
                 mInputWeightDialog.dismiss();
             }
         });
-        if (mInputWeightDialog != null && body != null){
+        if (mInputWeightDialog != null && body != null) {
             mInputWeightDialog.setInput(body.getHeight(), body.getWeight());
         }
         mInputWeightDialog.setSoftInputMode(PopupWindow.INPUT_METHOD_NEEDED);

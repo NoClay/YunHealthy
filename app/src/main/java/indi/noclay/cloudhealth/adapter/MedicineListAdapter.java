@@ -21,6 +21,8 @@ import indi.noclay.cloudhealth.R;
 import indi.noclay.cloudhealth.database.MedicineDetail;
 import indi.noclay.cloudhealth.database.LocalDataBase;
 
+import static indi.noclay.cloudhealth.database.MedicineDetailHelper.CLOCK_OPEN;
+
 
 /**
  * Created by noclay on 2017/4/23.
@@ -59,7 +61,7 @@ public class MedicineListAdapter extends RecyclerView.Adapter<MedicineListAdapte
         }
         holder.mShowTag.setText(temp.getTag() + "");
         Integer isOpen = temp.getIsOpen();
-        if (isOpen == null || isOpen == LocalDataBase.CLOCK_OPEN) {
+        if (isOpen == null || isOpen == CLOCK_OPEN) {
             holder.mOpenOrClose.setChecked(true);
         } else {
             holder.mOpenOrClose.setChecked(false);

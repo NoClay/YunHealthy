@@ -12,6 +12,8 @@ import java.util.Calendar;
 import indi.noclay.cloudhealth.database.LocalDataBase;
 import indi.noclay.cloudhealth.fragment.DataMedicalFragment;
 
+import static indi.noclay.cloudhealth.database.MedicineDetailHelper.isNeedEatMedicine;
+
 
 /**
  * Created by noclay on 2017/5/23.
@@ -22,7 +24,7 @@ public class MedicineAlarmReceiver extends BroadcastReceiver{
     @Override
     public void onReceive(Context context, Intent intent) {
         String time = intent.getStringExtra("time");
-        if (LocalDataBase.isNeedEatMedicine(time)){//需要吃药
+        if (isNeedEatMedicine(time)){//需要吃药
             Log.d(TAG, "onReceive: need");
             Intent intent1 = new Intent();
             intent1.setAction("cloudHealth.intent.MedicineClock");

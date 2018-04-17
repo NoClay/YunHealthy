@@ -16,6 +16,8 @@ import indi.noclay.cloudhealth.database.MedicineDetail;
 import indi.noclay.cloudhealth.fragment.DataMedicalFragment;
 import indi.noclay.cloudhealth.util.UtilClass;
 
+import static indi.noclay.cloudhealth.database.MedicineDetailHelper.getMedicineDetail;
+
 
 /**
  * Created by i-gaolonghai on 2017/7/31.
@@ -25,8 +27,7 @@ public class UpdateService extends RemoteViewsService {
     private static final String TAG = "UpdateService";
 
     public List<MedicineDetail> getMedicines() {
-        List<MedicineDetail> temp = LocalDataBase.getMedicineDetail(
-                DataMedicalFragment.NOW_MEDICINE, null);
+        List<MedicineDetail> temp = getMedicineDetail(DataMedicalFragment.NOW_MEDICINE, null);
         return temp;
     }
 

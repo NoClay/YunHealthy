@@ -35,6 +35,7 @@ repositories {
     google()
 }
 dependencies {
+    implementation 'com.android.support.constraint:constraint-layout:1.1.0'
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:multidex:1.0.1'
     compile name: 'SMSSDK-2.1.2', ext: 'aar'

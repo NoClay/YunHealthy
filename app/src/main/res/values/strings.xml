@@ -64,4 +64,5 @@
 
     <string name="encode_qrcode">生成二维码</string>
     <string name="dencode_qrcode">扫描二维码</string>
+    <string name="title_healthy_food_menu">健康食谱</string>
 </resources>

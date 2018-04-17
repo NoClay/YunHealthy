@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="indi.noclay.cloudhealth.activity.FoodMenuActivity">
+    <include layout="@layout/layout_tool_bar"/>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/normal_image_button_size">
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tabLayout"
+            android:layout_marginRight="@dimen/normal_image_button_size"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/normal_image_button_size"
+            app:tabIndicatorColor="@color/lightSeaGreen"
+            app:tabIndicatorHeight="1dp"
+            app:tabTextColor="@color/black"
+            app:tabTextAppearance="@android:style/TextAppearance.Holo.Large"
+            app:tabSelectedTextColor="@color/lightSeaGreen">
+        </android.support.design.widget.TabLayout>
+        <ImageView
+            android:id="@+id/tabSetBt"
+            android:layout_marginLeft="-50dp"
+            android:tint="@color/black"
+            android:src="@drawable/icon_setting"
+            android:padding="@dimen/normal_padding"
+            android:layout_width="@dimen/normal_image_button_size"
+            android:layout_height="@dimen/normal_image_button_size"
+            android:layout_marginStart="-50dp" />
+    </LinearLayout>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </android.support.v4.view.ViewPager>
+</LinearLayout>

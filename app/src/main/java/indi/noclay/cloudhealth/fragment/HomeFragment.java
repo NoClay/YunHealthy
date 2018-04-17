@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 import indi.noclay.cloudhealth.R;
+import indi.noclay.cloudhealth.activity.FoodMenuActivity;
 import indi.noclay.cloudhealth.activity.MedicineActivity;
 import indi.noclay.cloudhealth.activity.NewsActivity;
 import indi.noclay.cloudhealth.adapter.MyAdapter;
@@ -114,18 +115,20 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                         myAdapter.setOnItemClickListener(new MyAdapter.OnItemClickListener() {
                             @Override
                             public  void onItemClick(View view,int position) {
+                                Intent intent;
                                 switch (position){
                                     case 0:
-                                        Toast.makeText(context,"点击了"+position,Toast.LENGTH_SHORT).show();
+                                        intent = new Intent(getContext(), FoodMenuActivity.class);
+                                        startActivity(intent);
                                         break;
                                     case 1:
-                                        Intent intent = new Intent(getContext(), NewsActivity.class);
+                                        intent = new Intent(getContext(), NewsActivity.class);
                                         startActivity(intent);
                                         break;
                                     case 2:
-                                        Intent intent1 = new Intent(getContext(), MedicineActivity.class);
-                                        intent1.putExtra("type", NOW_MEDICINE);
-                                        startActivity(intent1);
+                                        intent = new Intent(getContext(), MedicineActivity.class);
+                                        intent.putExtra("type", NOW_MEDICINE);
+                                        startActivity(intent);
                                         break;
                                     case 3:
                                         Toast.makeText(context,"点击了"+position,Toast.LENGTH_SHORT).show();

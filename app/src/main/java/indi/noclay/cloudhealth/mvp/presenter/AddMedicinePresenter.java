@@ -21,6 +21,8 @@ import indi.noclay.cloudhealth.mvp.base.BasePresenter;
 import indi.noclay.cloudhealth.mvp.view.AddMedicineActivityInterface;
 import indi.noclay.cloudhealth.util.ConstantsConfig;
 
+import static indi.noclay.cloudhealth.database.MedicineDetailHelper.*;
+
 
 /**
  * Created by noclay on 2017/5/7.
@@ -94,14 +96,14 @@ public class AddMedicinePresenter extends BasePresenter<AddMedicineActivityInter
 
     public void saveData(){
         final MedicineDetail medicineDetail = getView().getMedicineDetail();
-        medicineDetail.setIsOpen(LocalDataBase.CLOCK_OPEN);
+        medicineDetail.setIsOpen(CLOCK_OPEN);
         mHandler.sendEmptyMessage(SAVE_START);
         medicineDetail.save(new SaveListener<String>() {
             @Override
             public void done(String s, BmobException e) {
                 if (e == null){
                     mHandler.sendEmptyMessage(SAVE_SUCCESS);
-                    LocalDataBase.insertMedicineDetail(medicineDetail);
+                    insertMedicineDetail(medicineDetail);
                 }else{
                     mHandler.sendEmptyMessage(SAVE_FAILED);
                 }

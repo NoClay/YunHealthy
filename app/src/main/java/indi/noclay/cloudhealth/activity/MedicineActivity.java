@@ -22,6 +22,8 @@ import indi.noclay.cloudhealth.fragment.DataMedicalFragment;
 import indi.noclay.cloudhealth.myview.FullLinearLayoutManager;
 import indi.noclay.cloudhealth.util.ConstantsConfig;
 
+import static indi.noclay.cloudhealth.database.MedicineDetailHelper.getMedicineDetail;
+
 
 public class MedicineActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -113,7 +115,7 @@ public class MedicineActivity extends AppCompatActivity implements View.OnClickL
     }
 
     public List<MedicineDetail> getMedicines() {
-        return LocalDataBase.getMedicineDetail(type, time);
+        return getMedicineDetail(type, time);
     }
 
     @Override

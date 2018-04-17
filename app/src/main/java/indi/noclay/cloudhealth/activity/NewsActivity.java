@@ -37,6 +37,7 @@ import indi.noclay.cloudhealth.database.NewsData;
 import indi.noclay.cloudhealth.myview.AutoLoadMoreRecyclerView;
 import indi.noclay.cloudhealth.myview.FullLinearLayoutManager;
 import indi.noclay.cloudhealth.myview.YunHealthyErrorView;
+import indi.noclay.cloudhealth.util.InternetUrlManager;
 import indi.noclay.cloudhealth.util.YunHealthyLoading;
 
 
@@ -126,7 +127,7 @@ public class NewsActivity extends AppCompatActivity
             public void run() {
                 try {
                     temp = new ArrayList<NewsData>();
-                    document = Jsoup.connect("http://news.99.com.cn/jiankang/" + (nextPage == null ? "" : nextPage)).get();
+                    document = Jsoup.connect(InternetUrlManager.HEALTHY_NEWS_URL + (nextPage == null ? "" : nextPage)).get();
                     Elements elements = document.select("div.DlistWfc");
                     for (Element e : elements) {
                         NewsData newsData = new NewsData();
