@@ -16,7 +16,15 @@ import static indi.noclay.cloudhealth.database.LocalDataBase.getDefaultInstance;
  */
 
 public class HeightAndWeightTableHelper {
+    public static final String TABLE_HEIGHT_AND_WEIGHT_CACHE = "HeightWeightCache";
 
+    public static final String CREATE_HEIGHT_WEIGHT_CACHE = "" +
+            "create table " + TABLE_HEIGHT_AND_WEIGHT_CACHE + " (" +
+            "id integer primary key autoincrement," +
+            "userId text," +
+            "height float," +
+            "weight float," +
+            "createTime text)";
     /**
      * 向身高数据库中添加数据
      * @param data
@@ -35,7 +43,7 @@ public class HeightAndWeightTableHelper {
         values.put("weight", data.getWeight());
         values.put("userId", userId);
         values.put("createTime", UtilClass.valueOfDate(date, "yyyy-MM-dd HH:MM:00"));
-        db.insert("HeightWeightCache", null, values);
+        db.insert(TABLE_HEIGHT_AND_WEIGHT_CACHE, null, values);
         db.close();
         instance.close();
     }
@@ -47,7 +55,7 @@ public class HeightAndWeightTableHelper {
         if (db == null || date == null || userId == null) {
             return null;
         }
-        Cursor cursor = db.rawQuery("select * from HeightWeightCache" +
+        Cursor cursor = db.rawQuery("select * from " + TABLE_HEIGHT_AND_WEIGHT_CACHE +
                 " where userId = '" + userId + "'" +
                 " and createTime like '"
                 + UtilClass.valueOfDate(date, "yyyy-MM-dd 00:00:00").substring(0, 10) + "%'", null);
@@ -73,7 +81,7 @@ public class HeightAndWeightTableHelper {
         if (db == null || userId == null) {
             return null;
         }
-        Cursor cursor = db.rawQuery("select * from HeightWeightCache" +
+        Cursor cursor = db.rawQuery("select * from " + TABLE_HEIGHT_AND_WEIGHT_CACHE +
                 " where userId = '" + userId + "'" +
                 " order by createTime desc ", null);
 

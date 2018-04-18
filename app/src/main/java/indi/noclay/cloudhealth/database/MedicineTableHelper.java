@@ -13,13 +13,32 @@ import indi.noclay.cloudhealth.fragment.DataMedicalFragment;
 import indi.noclay.cloudhealth.util.SharedPreferenceHelper;
 import indi.noclay.cloudhealth.util.UtilClass;
 
-import static indi.noclay.cloudhealth.database.LocalDataBase.getDefaultInstance;
+import static indi.noclay.cloudhealth.database.LocalDataBase.*;
 
 /**
  * Created by clay on 2018/4/17.
  */
 
 public class MedicineTableHelper {
+    public static final String TABLE_MEDICINE_DETAIL = "MedicineDetail";
+
+    public static final String CREATE_MEDICINE_DETAIL = "" +
+            "create table " + TABLE_MEDICINE_DETAIL + " (" +
+            "id text primary key, " +
+            "userId text," +
+            "medicineName text," +
+            "medicinePicture text," +
+            "useType text," +
+            "tag text," +
+            "doctor text," +
+            "dayLength integer," +
+            "dayCount integer," +
+            "times text, " +
+            "doses text, " +
+            "startTime text, " +
+            "unit text, " +
+            "isOpen integer )";
+
     public static final int CLOCK_OPEN = 0;
     public static final int CLOCK_CLOSE = 1;
     /**
@@ -33,7 +52,7 @@ public class MedicineTableHelper {
         if (userId == null){
             return false;
         }
-        Cursor cursor = instance.getReadableDatabase().rawQuery("select * from MedicineDetail" +
+        Cursor cursor = instance.getReadableDatabase().rawQuery("select * from " + TABLE_MEDICINE_DETAIL +
                 " where userId = '" + userId + "' " +
                 " and times like '%" + time + "%' " +
                 " and isOpen = " + CLOCK_OPEN +
@@ -56,15 +75,15 @@ public class MedicineTableHelper {
         Cursor cursor;
         SQLiteDatabase database = instance.getReadableDatabase();
         if (type == DataMedicalFragment.NOW_MEDICINE) {
-            cursor = database.rawQuery("select * from MedicineDetail" +
+            cursor = database.rawQuery("select * from " + TABLE_MEDICINE_DETAIL +
                     " where userId = '" + userId + "' " +
                     " and dayLength - dayCount > 0"  , null);
         } else if (type == DataMedicalFragment.LAST_MEDICINE){
-            cursor = database.rawQuery("select * from MedicineDetail" +
+            cursor = database.rawQuery("select * from " + TABLE_MEDICINE_DETAIL +
                     " where userId = '" + userId + "' " +
                     " and dayLength - dayCount <= 0"  , null);
         } else{
-            cursor = database.rawQuery("select * from MedicineDetail" +
+            cursor = database.rawQuery("select * from " + TABLE_MEDICINE_DETAIL +
                     " where userId = '" + userId + "' " +
                     " and times like '%" + time + "%' " +
                     " and isOpen = " + CLOCK_OPEN +
@@ -134,8 +153,8 @@ public class MedicineTableHelper {
             return;
         }
         SQLiteDatabase db = instance.getWritableDatabase();
-        db.execSQL("delete from MedicineDetail " +
-                "where id = '" + medicine.getObjectId() + "'");
+        db.execSQL("delete from " + TABLE_MEDICINE_DETAIL +
+                " where id = '" + medicine.getObjectId() + "'");
         db.close();
         instance.close();
     }

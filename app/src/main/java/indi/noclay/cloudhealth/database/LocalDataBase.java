@@ -33,54 +33,6 @@ import indi.noclay.cloudhealth.util.UtilClass;
 public class LocalDataBase extends SQLiteOpenHelper {
     private static final String TAG = "MyDataBase";
 
-
-    public static final String CREATE_REPORT_MENU = "" +
-            "create table report_menu (" +
-            "id integer primary key autoincrement," +
-            "userId text," +
-            "content text unique," +
-            "image integer," +
-            "type integer," +
-            "checked integer)";
-    public static final String CREATE_MEASURE_DATA_CACHE = "" +
-            "create table MeasureDataCache (" +
-            "id integer primary key autoincrement," +
-            "userId text," +
-            "name text," +
-            "type integer," +
-            "average float," +
-            "max float," +
-            "min float," +
-            "count integer," +
-            "isAverageDanger boolean," +
-            "isMaxDanger boolean," +
-            "isMinDanger boolean," +
-            "createTime text)";
-    public static final String CREATE_HEIGHT_WEIGHT_CACHE = "" +
-            "create table HeightWeightCache (" +
-            "id integer primary key autoincrement," +
-            "userId text," +
-            "height float," +
-            "weight float," +
-            "createTime text)";
-
-    public static final String CREATE_MEDICINE_DETAIL = "" +
-            "create table MedicineDetail (" +
-            "id text primary key, " +
-            "userId text," +
-            "medicineName text," +
-            "medicinePicture text," +
-            "useType text," +
-            "tag text," +
-            "doctor text," +
-            "dayLength integer," +
-            "dayCount integer," +
-            "times text, " +
-            "doses text, " +
-            "startTime text, " +
-            "unit text, " +
-            "isOpen integer )";
-
     public LocalDataBase(Context context,
                          String name,
                          SQLiteDatabase.CursorFactory factory,
@@ -88,7 +40,7 @@ public class LocalDataBase extends SQLiteOpenHelper {
         super(context, name, factory, version);
     }
 
-    public static LocalDataBase getDefaultInstance(){
+    public static LocalDataBase getDefaultInstance() {
         return new LocalDataBase(HealthApplication.getContext(),
                 ConstantsConfig.DEFAULT_LOCAL_DATABASE, null,
                 ConstantsConfig.DATABASE_VERSION);
@@ -96,26 +48,27 @@ public class LocalDataBase extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(CREATE_REPORT_MENU);
-        db.execSQL(CREATE_MEASURE_DATA_CACHE);
-        db.execSQL(CREATE_HEIGHT_WEIGHT_CACHE);
-        db.execSQL(CREATE_MEDICINE_DETAIL);
+        db.execSQL(ReportMenuTableHelper.CREATE_REPORT_MENU);
+        db.execSQL(MeasureTableHelper.CREATE_MEASURE_DATA_CACHE);
+        db.execSQL(HeightAndWeightTableHelper.CREATE_HEIGHT_WEIGHT_CACHE);
+        db.execSQL(MedicineTableHelper.CREATE_MEDICINE_DETAIL);
+        db.execSQL(FoodKindTableHelper.CREATE_FOOD_KIND);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         switch (oldVersion) {
             case 1:
-                db.execSQL(CREATE_MEASURE_DATA_CACHE);
+                db.execSQL(MeasureTableHelper.CREATE_MEASURE_DATA_CACHE);
             case 2:
-                db.execSQL(CREATE_HEIGHT_WEIGHT_CACHE);
+                db.execSQL(HeightAndWeightTableHelper.CREATE_HEIGHT_WEIGHT_CACHE);
             case 3:
-                db.execSQL(CREATE_MEDICINE_DETAIL);
+                db.execSQL(MedicineTableHelper.CREATE_MEDICINE_DETAIL);
+            case 4:
+                db.execSQL(FoodKindTableHelper.CREATE_FOOD_KIND);
             default:
         }
     }
-
-
 
 
 }

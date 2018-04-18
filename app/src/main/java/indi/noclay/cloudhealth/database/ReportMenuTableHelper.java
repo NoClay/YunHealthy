@@ -6,13 +6,23 @@ import android.database.sqlite.SQLiteDatabase;
 import indi.noclay.cloudhealth.util.ConstantsConfig;
 import indi.noclay.cloudhealth.util.SharedPreferenceHelper;
 
-import static indi.noclay.cloudhealth.database.LocalDataBase.getDefaultInstance;
+import static indi.noclay.cloudhealth.database.LocalDataBase.*;
 
 /**
  * Created by clay on 2018/4/17.
  */
 
 public class ReportMenuTableHelper {
+    public static final String TABLE_REPORT_MENU = "report_menu";
+
+    public static final String CREATE_REPORT_MENU = "" +
+            "create table " + TABLE_REPORT_MENU + " (" +
+            "id integer primary key autoincrement," +
+            "userId text," +
+            "content text unique," +
+            "image integer," +
+            "type integer," +
+            "checked integer)";
     public static void initMenuData() {
         String userId = SharedPreferenceHelper.getLoginUserId();
         LocalDataBase instance = getDefaultInstance();
@@ -27,7 +37,7 @@ public class ReportMenuTableHelper {
             values.put("type", ConstantsConfig.MENU_TYPES[i]);
             values.put("checked", 0);
             values.put("userId", userId);
-            db.insert("report_menu", null, values);
+            db.insert(TABLE_REPORT_MENU, null, values);
             values.clear();
         }
         db.close();

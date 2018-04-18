@@ -19,6 +19,7 @@ import indi.noclay.cloudhealth.database.measuredata.MeasureData;
 import indi.noclay.cloudhealth.util.ConstantsConfig;
 import indi.noclay.cloudhealth.util.SharedPreferenceHelper;
 import indi.noclay.cloudhealth.util.UtilClass;
+import indi.noclay.cloudhealth.database.LocalDataBase.*;
 
 import static indi.noclay.cloudhealth.database.LocalDataBase.getDefaultInstance;
 
@@ -27,6 +28,22 @@ import static indi.noclay.cloudhealth.database.LocalDataBase.getDefaultInstance;
  */
 
 public class MeasureTableHelper {
+    public static final String TABLE_MEASUREDATA_CACHE = "MeasureDataCache";
+
+    public static final String CREATE_MEASURE_DATA_CACHE = "" +
+            "create table " + TABLE_MEASUREDATA_CACHE + " (" +
+            "id integer primary key autoincrement," +
+            "userId text," +
+            "name text," +
+            "type integer," +
+            "average float," +
+            "max float," +
+            "min float," +
+            "count integer," +
+            "isAverageDanger boolean," +
+            "isMaxDanger boolean," +
+            "isMinDanger boolean," +
+            "createTime text)";
     public static final int ERROR_LOAD = -1;
     public static final int UPLOAD_NO_DATABASE = -1;
     public static final int UPLOAD_SUCCESS = 0;
@@ -50,7 +67,7 @@ public class MeasureTableHelper {
         values.put("isMaxDanger", measureData.getMaxDanger());
         values.put("isMinDanger", measureData.getMinDanger());
         values.put("createTime", UtilClass.valueOfDate(date, null));
-        db.insert("MeasureDataCache", null, values);
+        db.insert(TABLE_MEASUREDATA_CACHE, null, values);
         db.close();
         instance.close();
     }
@@ -66,8 +83,8 @@ public class MeasureTableHelper {
         if (date == null || userId == null) {
             return true;
         }
-        Cursor cursor = instance.getReadableDatabase().rawQuery("select * from MeasureDataCache " +
-                "where createTime = " + "'" + UtilClass.valueOfDate(date, null) + " ' and "
+        Cursor cursor = instance.getReadableDatabase().rawQuery("select * from " + TABLE_MEASUREDATA_CACHE +
+                " where createTime = " + "'" + UtilClass.valueOfDate(date, null) + " ' and "
                 + "type = " + type + " and userId = '" + userId + "'" +
                 "", null);
         boolean result = cursor.moveToFirst();
@@ -86,7 +103,8 @@ public class MeasureTableHelper {
             Log.d(TAG, "upLoadMeasureData: db is null");
             return ERROR_LOAD;
         }
-        Cursor cursor = db.rawQuery("select * from MeasureDataCache where userId = '" + objectId + "'", null);
+        Cursor cursor = db.rawQuery("select * from " + TABLE_MEASUREDATA_CACHE +
+                " where userId = '" + objectId + "'", null);
         List<BmobObject> datas = new ArrayList<>();
         SignUserData owner = new SignUserData();
         owner.setObjectId(objectId);
