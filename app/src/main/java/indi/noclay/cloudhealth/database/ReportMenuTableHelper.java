@@ -1,8 +1,15 @@
 package indi.noclay.cloudhealth.database;
 
 import android.content.ContentValues;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.google.zxing.decoding.Intents;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import indi.noclay.cloudhealth.adapter.RecycleAdapterForReportMenu;
 import indi.noclay.cloudhealth.util.ConstantsConfig;
 import indi.noclay.cloudhealth.util.SharedPreferenceHelper;
 
@@ -42,5 +49,41 @@ public class ReportMenuTableHelper {
         }
         db.close();
         instance.close();
+    }
+
+    public static void updateMenuData(int check, MenuInfo menuInfo){
+        if (menuInfo == null){
+            return;
+        }
+        SQLiteDatabase database = getDefaultInstance().getWritableDatabase();
+        database.execSQL("update " + TABLE_REPORT_MENU +
+                " set checked = " + check +
+                " where content = '" + menuInfo.getTitle() + "'" +
+                " and userId = '" + SharedPreferenceHelper.getLoginUserId() + "'");
+        database.close();
+    }
+
+    public static List<MenuInfo> getMenuData(int type){
+        List<MenuInfo> result = new ArrayList<>();
+        SQLiteDatabase db = getDefaultInstance().getReadableDatabase();
+        Cursor cursor = db.rawQuery("select * from " + TABLE_REPORT_MENU +
+                " where type = " + type + " and userId = '" + SharedPreferenceHelper.getLoginUserId() + "'", null);
+        if (cursor.moveToFirst()){
+            do {
+                MenuInfo m = new MenuInfo();
+                m.setType(type);
+                m.setTitle(cursor.getString(cursor.getColumnIndex("content")));
+                m.setImage(cursor.getInt(cursor.getColumnIndex("image")));
+                int flag = cursor.getInt(cursor.getColumnIndex("checked"));
+                if (flag == 0){
+                    m.setChecked(false);
+                }else{
+                    m.setChecked(true);
+                }
+                result.add(m);
+            }while (cursor.moveToNext());
+        }
+        cursor.close();
+        return result;
     }
 }

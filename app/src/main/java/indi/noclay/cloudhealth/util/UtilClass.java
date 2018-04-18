@@ -663,6 +663,14 @@ public class UtilClass {
         return true;
     }
 
+    public static Integer integerValueOfBoolean(Boolean bool){
+        if (bool == null || !bool){
+            return 0;
+        }else{
+            return 1;
+        }
+    }
+
     /**
      * 将Date转换为字符串
      */

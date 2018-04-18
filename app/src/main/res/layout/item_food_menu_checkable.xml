@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_margin="@dimen/card_margin_small"
+    android:background="@drawable/radius_5dp_rectangle_gray_bg"
+    android:id="@+id/foodMenuName"
+    android:clickable="true"
+    android:maxLines="1"
+    android:ellipsize="end"
+    android:textSize="@dimen/text_title_middle"
+    android:padding="@dimen/small_padding"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:focusable="true">
+</TextView>

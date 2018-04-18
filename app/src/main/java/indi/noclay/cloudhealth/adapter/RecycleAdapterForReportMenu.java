@@ -20,9 +20,13 @@ import java.util.List;
 
 import indi.noclay.cloudhealth.R;
 import indi.noclay.cloudhealth.database.LocalDataBase;
+import indi.noclay.cloudhealth.database.MenuInfo;
 import indi.noclay.cloudhealth.util.ConstantsConfig;
+import indi.noclay.cloudhealth.util.SharedPreferenceHelper;
 
+import static indi.noclay.cloudhealth.database.ReportMenuTableHelper.getMenuData;
 import static indi.noclay.cloudhealth.database.ReportMenuTableHelper.initMenuData;
+import static indi.noclay.cloudhealth.database.ReportMenuTableHelper.updateMenuData;
 
 
 /**
@@ -30,7 +34,7 @@ import static indi.noclay.cloudhealth.database.ReportMenuTableHelper.initMenuDat
  */
 
 public class RecycleAdapterForReportMenu extends
-        RecyclerView.Adapter<RecycleAdapterForReportMenu.ViewHolder>{
+        RecyclerView.Adapter<RecycleAdapterForReportMenu.ViewHolder> {
 
     private boolean isManage = false;
     private int layout;
@@ -42,7 +46,8 @@ public class RecycleAdapterForReportMenu extends
     private SQLiteDatabase db;
     private static final String TAG = "RecycleAdapterForReport";
     String userId;
-    public interface OnItemClickListener{
+
+    public interface OnItemClickListener {
         void onItemClick(View view, String title);
     }
 
@@ -62,10 +67,10 @@ public class RecycleAdapterForReportMenu extends
         isManage = manage;
     }
 
-    public void toggleManage(){
-        if (isManage){
+    public void toggleManage() {
+        if (isManage) {
             isManage = false;
-        }else{
+        } else {
             isManage = true;
         }
         this.notifyList();
@@ -78,10 +83,6 @@ public class RecycleAdapterForReportMenu extends
         this.type = type;
         this.context = context;
         //构造List
-        dbHelper = new LocalDataBase(context,
-                "LocalStore.db", null, ConstantsConfig.DATABASE_VERSION);
-        String userId = context.getSharedPreferences("LoginState",
-                Context.MODE_PRIVATE).getString("userId", null);
         initMenuData();
         menuInfoList = new ArrayList<>();
         notifyList();
@@ -90,38 +91,20 @@ public class RecycleAdapterForReportMenu extends
     private void notifyList() {
         //清除备份
         menuInfoList.clear();
-        userId = context.getSharedPreferences("LoginState",
-                Context.MODE_PRIVATE).getString("userId", null);
-        db = dbHelper.getWritableDatabase();
-        Cursor cursor = db.rawQuery("select * from report_menu " +
-                "where type = " + type + " and userId = '" + userId + "'", null);
-        if (cursor.moveToFirst()){
-            do {
-                MenuInfo m = new MenuInfo();
-                m.setType(type);
-                m.setTitle(cursor.getString(cursor.getColumnIndex("content")));
-                m.setImage(cursor.getInt(cursor.getColumnIndex("image")));
-                int flag = cursor.getInt(cursor.getColumnIndex("checked"));
-                if (flag == 0){
-                    m.setChecked(false);
-                }else{
-                    m.setChecked(true);
-                }
-                if (isManage || m.isChecked()){
-                    //管理页面或者已经添加了的菜单
-                    menuInfoList.add(m);
-                }
-            }while (cursor.moveToNext());
-            this.notifyDataSetChanged();
+        List<MenuInfo> temp = getMenuData(type);
+        for (MenuInfo m : temp) {
+            if (isManage || m.isChecked()) {
+                menuInfoList.add(m);
+            }
         }
+        this.notifyDataSetChanged();
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(layout, parent, false);
-        ViewHolder viewHolder = new ViewHolder(view);
-        return viewHolder;
+        return new ViewHolder(view);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -129,33 +112,28 @@ public class RecycleAdapterForReportMenu extends
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         Log.d(TAG, "onBindViewHolder: position" + position);
         Log.d(TAG, "onBindViewHolder: title" + menuInfoList.get(position).getTitle());
-        if (isManage){
+        if (isManage) {
             holder.checkBox.setChecked(menuInfoList.get(position).isChecked());
             holder.checkBox.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int i = 0;
-                    if (holder.checkBox.isChecked()){
+                    if (holder.checkBox.isChecked()) {
                         i = 1;
-                    }else{
-                        i = 0;
                     }
                     //更新表单
-                    db.execSQL("update report_menu " +
-                            "set checked = " + i +
-                            " where content = '" + menuInfoList.get(position).getTitle() + "'" +
-                            " and userId = '" + userId + "'");
+                    updateMenuData(i, menuInfoList.get(position));
                 }
             });
             holder.checkBox.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             holder.checkBox.setVisibility(View.GONE);
         }
         holder.labelText.setText(menuInfoList.get(position).getTitle());
         holder.labelImage.setImageDrawable(context.getResources()
                 .getDrawable(menuInfoList.get(position).getImage(), null));
         //设置子项点击
-        if (onItemClickListener != null && !isManage){
+        if (onItemClickListener != null && !isManage) {
             //如果子项点击事件不为空，且处于管理状态
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -172,10 +150,11 @@ public class RecycleAdapterForReportMenu extends
         return menuInfoList.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder {
         public ImageView labelImage;
         public TextView labelText;
         public CheckBox checkBox;
+
         public ViewHolder(View itemView) {
             super(itemView);
             checkBox = (CheckBox) itemView.findViewById(R.id.report_label_check);
@@ -184,44 +163,4 @@ public class RecycleAdapterForReportMenu extends
         }
     }
 
-    public static class MenuInfo{
-        private int type;
-        private String title;
-        private int image;
-        private boolean checked;
-
-
-
-        public int getType() {
-            return type;
-        }
-
-        public void setType(int type) {
-            this.type = type;
-        }
-
-        public String getTitle() {
-            return title;
-        }
-
-        public void setTitle(String title) {
-            this.title = title;
-        }
-
-        public int getImage() {
-            return image;
-        }
-
-        public void setImage(int image) {
-            this.image = image;
-        }
-
-        public boolean isChecked() {
-            return checked;
-        }
-
-        public void setChecked(boolean checked) {
-            this.checked = checked;
-        }
-    }
 }

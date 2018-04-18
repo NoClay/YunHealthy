@@ -37,5 +37,8 @@ http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
     <dimen name="widget_margin">8dp</dimen>
     <dimen name="widget_content_height">108dp</dimen>
     <dimen name="normal_padding">10dp</dimen>
+    <dimen name="small_padding">3dp</dimen>
     <dimen name="normal_image_button_size">50dp</dimen>
+    <dimen name="divider_line_height_normal">1dp</dimen>
+    <dimen name="card_margin_small">5dp</dimen>
 </resources>

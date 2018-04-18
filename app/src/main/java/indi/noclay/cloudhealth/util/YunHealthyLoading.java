@@ -76,7 +76,7 @@ public class YunHealthyLoading {
     public static void show(Context context) {
         if (!isShowing() && context != null) {
             if (!(context instanceof Activity) || UtilClass.isActivityContextVaild((Activity) context)) {
-                loadingDialog = new YunHealthyLoading.LoadingDialog(context, DIALOG_STYLE_FULLSCREEN);
+                loadingDialog = new YunHealthyLoading.LoadingDialog(context, DIALOG_STYLE_NO_FULLSCREEN);
                 loadingDialog.setCanceledOnTouchOutside(false);
                 initWindow();
                 loadingDialog.show();
