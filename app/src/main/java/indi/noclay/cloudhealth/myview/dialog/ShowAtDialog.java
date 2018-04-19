@@ -55,8 +55,8 @@ public abstract class ShowAtDialog extends Dialog{
     public void initWindow(View parent){
         Window window = this.getWindow();
         WindowManager.LayoutParams lp = window.getAttributes();
-        lp.width = parent.getMeasuredWidth();
-        lp.height = parent.getMeasuredHeight();
+        lp.width = parent.getLayoutParams().width;
+        lp.height = parent.getLayoutParams().height;
         lp.x = (int) parent.getX();
         lp.y = (int) parent.getY();
         window.setAttributes(lp);

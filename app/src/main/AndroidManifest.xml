@@ -155,6 +155,7 @@
         <receiver android:name=".receiver.MedicineAlarmReceiver" />
         <!-- zxing二维码注册 -->
         <activity android:name=".activity.FoodMenuActivity"></activity>
+        <activity android:name=".activity.FoodMenuDetailActivity" />
     </application>
 
 </manifest>

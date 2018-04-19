@@ -13,9 +13,9 @@ import android.view.ViewGroup;
 import java.util.List;
 
 import indi.noclay.cloudhealth.R;
-import indi.noclay.cloudhealth.database.FoodKind;
 import indi.noclay.cloudhealth.viewholder.BaseCard;
 import indi.noclay.cloudhealth.viewholder.FoodMenuCard;
+import indi.noclay.cloudhealth.viewholder.FoodShowItemCard;
 
 /**
  * Created by clay on 2018/4/18.
@@ -26,7 +26,8 @@ public class RecyclerViewAdapterNormal extends RecyclerView.Adapter<BaseCard> {
     public List<Object> datas;
     public Handler mHandler;
     public static final int BASE_CARD = 1024;
-    public static final int FOOD_KIND = BASE_CARD + 1;
+    public static final int FOOD_KIND_CARD = BASE_CARD + 1;
+    public static final int FOOD_SHOW_ITEM_CARD = BASE_CARD + 2;
     public Context mContext;
     public Activity mActivity;
     public Fragment mFragment;
@@ -91,11 +92,13 @@ public class RecyclerViewAdapterNormal extends RecyclerView.Adapter<BaseCard> {
         BaseCard baseCard = null;
         View itemView;
         switch (viewType) {
-            case FOOD_KIND:
+            case FOOD_KIND_CARD:
                 itemView = LayoutInflater.from(mContext).inflate(R.layout.item_food_menu_checkable, parent, false);
                 baseCard = new FoodMenuCard(itemView, mHandler, mActivity, mFragment);
                 break;
-
+            case FOOD_SHOW_ITEM_CARD:
+                itemView = LayoutInflater.from(mContext).inflate(R.layout.item_food_show, parent, false);
+                baseCard = new FoodShowItemCard(itemView, mHandler, mActivity, mFragment);
             default:
         }
         return baseCard;
@@ -105,6 +108,15 @@ public class RecyclerViewAdapterNormal extends RecyclerView.Adapter<BaseCard> {
     public void onBindViewHolder(BaseCard holder, int position) {
         if (datas != null && position < datas.size()){
             holder.initData(datas.get(position));
+            final int pos = position;
+            if (onItemClickListener != null){
+                holder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        onItemClickListener.onItemClick(datas.get(pos), pos);
+                    }
+                });
+            }
         }
     }
 
@@ -122,7 +134,10 @@ public class RecyclerViewAdapterNormal extends RecyclerView.Adapter<BaseCard> {
         int viewType = BASE_CARD;
         switch (className) {
             case "FoodKind":
-                viewType = FOOD_KIND;
+                viewType = FOOD_KIND_CARD;
+                break;
+            case "FoodShowItem":
+                viewType = FOOD_SHOW_ITEM_CARD;
                 break;
         }
         return viewType;

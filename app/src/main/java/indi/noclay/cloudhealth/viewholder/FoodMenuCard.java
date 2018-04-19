@@ -24,10 +24,10 @@ public class FoodMenuCard extends BaseCard implements View.OnClickListener{
     private TextView checkedTextView;
     public FoodMenuCard(View itemView, Handler mHandler, Activity mActivity, Fragment mFragment) {
         super(itemView, mHandler, mActivity, mFragment);
-        initView(itemView);
     }
 
-    private void initView(View itemView) {
+    @Override
+    public void initView(View itemView) {
         checkedTextView = (TextView) itemView.findViewById(R.id.foodMenuName);
     }
 
@@ -41,7 +41,7 @@ public class FoodMenuCard extends BaseCard implements View.OnClickListener{
         }
     }
 
-    private Context getContext(){
+    public Context getContext(){
         if (mActivity != null){
             return mActivity;
         }

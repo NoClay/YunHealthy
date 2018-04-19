@@ -95,6 +95,16 @@
         <item name="android:windowNoTitle">true</item>
     </style>
 
+    <style name="AppTheme.TextViewTag">
+        <item name="android:padding">@dimen/normal_tiny_padding</item>
+        <item name="android:layout_marginRight">@dimen/card_margin_small</item>
+        <item name="android:textColor">@color/contentTextColor</item>
+        <item name="android:textSize">@dimen/text_content_middle</item>
+        <item name="android:background">@drawable/radius_5dp_rectangle_empity_bg</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
 
     <!--&lt;!&ndash; Base application theme. &ndash;&gt;-->
     <!--<style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">-->

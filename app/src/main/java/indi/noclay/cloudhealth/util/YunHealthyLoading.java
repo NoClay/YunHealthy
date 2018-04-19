@@ -89,8 +89,8 @@ public class YunHealthyLoading {
     public static void initWindow(View parent){
         Window window = loadingDialog.getWindow();
         WindowManager.LayoutParams lp = window.getAttributes();
-        lp.width = parent.getMeasuredWidth();
-        lp.height = parent.getMeasuredHeight();
+        lp.width = parent.getLayoutParams().width;
+        lp.height = parent.getLayoutParams().height;
         lp.x = (int) parent.getX();
         lp.y = (int) parent.getY();
         window.setAttributes(lp);
@@ -140,7 +140,6 @@ public class YunHealthyLoading {
             super.onCreate(savedInstanceState);
             this.setContentView(R.layout.dialog_loading);
             this.loading = (LottieAnimationView) this.findViewById(R.id.iv_loading);
-//            this.loadingDrawable = (AnimationDrawable) this.loading.getDrawable();
             this.hint = (TextView) this.findViewById(R.id.iv_hint);
         }
 
@@ -150,12 +149,10 @@ public class YunHealthyLoading {
             } catch (Exception var2) {
                 var2.printStackTrace();
             }
-//            this.loadingDrawable.stop();
         }
 
         public void show() {
             super.show();
-//            this.loadingDrawable.start();
         }
     }
 }

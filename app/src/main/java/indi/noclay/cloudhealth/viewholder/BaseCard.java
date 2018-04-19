@@ -1,6 +1,7 @@
 package indi.noclay.cloudhealth.viewholder;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
@@ -29,6 +30,7 @@ public abstract class BaseCard extends RecyclerView.ViewHolder{
         this.mHandler = mHandler;
         this.mActivity = mActivity;
         this.mFragment = mFragment;
+        initView(itemView);
     }
 
     public String getTAG() {
@@ -76,4 +78,16 @@ public abstract class BaseCard extends RecyclerView.ViewHolder{
     }
 
     public abstract void initData(Object object);
+
+    public abstract void initView(View itemView);
+
+    public Context getContext(){
+        if (mActivity != null){
+            return mActivity;
+        }
+        if (mFragment != null){
+            return mFragment.getContext();
+        }
+        return null;
+    }
 }
