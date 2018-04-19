@@ -4,10 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.v7.widget.RecyclerView
+    <indi.noclay.cloudhealth.myview.AutoLoadMoreRecyclerView
         android:id="@+id/foodList"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    </android.support.v7.widget.RecyclerView>
+    </indi.noclay.cloudhealth.myview.AutoLoadMoreRecyclerView>
 </android.support.constraint.ConstraintLayout>

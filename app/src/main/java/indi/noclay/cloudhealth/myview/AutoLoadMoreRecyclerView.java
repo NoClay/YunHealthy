@@ -153,13 +153,14 @@ public class AutoLoadMoreRecyclerView extends RecyclerView{
             /**
              * 这么做保证layoutManager切换之后能及时的刷新上对的布局
              */
-            if (getLayoutManager() instanceof LinearLayoutManager) {
-                return TYPE_LIST;
-            } else if (getLayoutManager() instanceof StaggeredGridLayoutManager) {
-                return TYPE_STAGGER;
-            } else {
-                return TYPE_NORMAL;
-            }
+//            if (getLayoutManager() instanceof LinearLayoutManager) {
+//                return TYPE_LIST;
+//            } else if (getLayoutManager() instanceof StaggeredGridLayoutManager) {
+//                return TYPE_STAGGER;
+//            } else {
+//                return TYPE_NORMAL;
+//            }
+            return mInternalAdapter.getItemViewType(position);
         }
 
         @Override
@@ -193,7 +194,7 @@ public class AutoLoadMoreRecyclerView extends RecyclerView{
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
             int type = getItemViewType(position);
-            if (type != TYPE_FOOTER && type != TYPE_HEADER && holder instanceof ViewHolder) {
+            if (type != TYPE_FOOTER && type != TYPE_HEADER && holder != null) {
                 mInternalAdapter.onBindViewHolder(holder, position);
             }
         }
@@ -357,7 +358,7 @@ public class AutoLoadMoreRecyclerView extends RecyclerView{
         getAdapter().notifyItemRemoved(mLoadMorePosition);
         mIsLoadingMore = false;
         if (mLoadMorePosition != getAdapter().getItemCount()){
-            getAdapter().notifyItemRangeRemoved(mLoadMorePosition, getAdapter().getItemCount());
+            getAdapter().notifyItemRangeChanged(mLoadMorePosition, getAdapter().getItemCount());
         }
     }
 }

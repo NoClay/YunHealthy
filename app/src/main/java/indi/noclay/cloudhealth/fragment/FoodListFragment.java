@@ -26,6 +26,7 @@ import java.util.List;
 import indi.noclay.cloudhealth.R;
 import indi.noclay.cloudhealth.adapter.RecyclerViewAdapterNormal;
 import indi.noclay.cloudhealth.database.FoodShowItem;
+import indi.noclay.cloudhealth.myview.AutoLoadMoreRecyclerView;
 import indi.noclay.cloudhealth.util.InternetUrlManager;
 import indi.noclay.cloudhealth.util.YunHealthyLoading;
 
@@ -33,11 +34,12 @@ import indi.noclay.cloudhealth.util.YunHealthyLoading;
  * Created by clay on 2018/4/17.
  */
 
-public class FoodListFragment extends Fragment implements RecyclerViewAdapterNormal.OnItemClickListener{
+public class FoodListFragment extends Fragment implements RecyclerViewAdapterNormal.OnItemClickListener,
+        AutoLoadMoreRecyclerView.LoadMoreListener{
 
     View mView;
     RecyclerViewAdapterNormal adapterNormal;
-    RecyclerView mFoodList;
+    AutoLoadMoreRecyclerView mFoodList;
     String mTitle;
     List<Object> mDatas = new ArrayList<>();
 
@@ -78,12 +80,16 @@ public class FoodListFragment extends Fragment implements RecyclerViewAdapterNor
             public void run() {
                 try {
                     String url;
-                    if (mHasNext && TextUtils.isEmpty(mNextPage)){
+                    if (mHasNext && !TextUtils.isEmpty(mNextPage)){
                         url = mNextPage;
                     }else{
                         url = InternetUrlManager.getHealthyFoodListURL(mTitle);
                     }
                     Document document = Jsoup.connect(url).get();
+                    if (document == null){
+                        mHandler.sendEmptyMessage(LOAD_FAILED);
+                        return;
+                    }
                     Elements elements = document.select("#container > div");
                     for (int i = 0; i < elements.size(); i++) {
                         FoodShowItem temp = new FoodShowItem();
@@ -98,7 +104,11 @@ public class FoodListFragment extends Fragment implements RecyclerViewAdapterNor
                     if (TextUtils.isEmpty(mNextPage)){
                         mHasNext = false;
                     }
-                    mHandler.sendEmptyMessage(LOAD_SUCCESS);
+                    if (mDatas.size() == 0){
+                        mHandler.sendEmptyMessage(LOAD_EMPITY);
+                    }else{
+                        mHandler.sendEmptyMessage(LOAD_SUCCESS);
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -108,14 +118,18 @@ public class FoodListFragment extends Fragment implements RecyclerViewAdapterNor
 
     Handler mHandler = new FoodListHandler();
 
+    @Override
+    public void onLoadMore() {
+        getData();
+    }
+
     private class FoodListHandler extends Handler{
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             switch (msg.what){
                 case LOAD_SUCCESS:{
-                    adapterNormal.setDatas(mDatas);
-                    adapterNormal.notifyDataSetChanged();
+                    mFoodList.notifyMoreFinish(mHasNext);
 //                    YunHealthyLoading.dismiss();
                     break;
                 }
@@ -127,7 +141,10 @@ public class FoodListFragment extends Fragment implements RecyclerViewAdapterNor
         }
     }
     private void initView(View mView) {
-        mFoodList = (RecyclerView) mView.findViewById(R.id.foodList);
+        mFoodList = (AutoLoadMoreRecyclerView) mView.findViewById(R.id.foodList);
+        mFoodList.setAutoLoadMoreEnable(true);
+        mFoodList.setLoadMoreListener(this);
+        mFoodList.setHasFixedSize(true);
         adapterNormal = new RecyclerViewAdapterNormal();
         adapterNormal.setmActivity(getActivity());
         adapterNormal.setDatas(mDatas);
