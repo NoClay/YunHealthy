@@ -1,4 +1,4 @@
-package indi.noclay.cloudhealth.database;
+package indi.noclay.cloudhealth.carddata;
 
 /**
  * Created by clay on 2018/4/18.

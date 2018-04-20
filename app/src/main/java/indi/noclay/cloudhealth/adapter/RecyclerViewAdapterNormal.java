@@ -13,9 +13,10 @@ import android.view.ViewGroup;
 import java.util.List;
 
 import indi.noclay.cloudhealth.R;
-import indi.noclay.cloudhealth.viewholder.BaseCard;
-import indi.noclay.cloudhealth.viewholder.FoodMenuCard;
-import indi.noclay.cloudhealth.viewholder.FoodShowItemCard;
+import indi.noclay.cloudhealth.card.BaseCard;
+import indi.noclay.cloudhealth.card.FoodDetailStepCard;
+import indi.noclay.cloudhealth.card.FoodMenuCard;
+import indi.noclay.cloudhealth.card.FoodShowItemCard;
 
 /**
  * Created by clay on 2018/4/18.
@@ -28,6 +29,7 @@ public class RecyclerViewAdapterNormal extends RecyclerView.Adapter<BaseCard> {
     public static final int BASE_CARD = 1024;
     public static final int FOOD_KIND_CARD = BASE_CARD + 1;
     public static final int FOOD_SHOW_ITEM_CARD = BASE_CARD + 2;
+    public static final int FOOD_DETAIL_STEP = BASE_CARD + 3;
     public Context mContext;
     public Activity mActivity;
     public Fragment mFragment;
@@ -99,6 +101,11 @@ public class RecyclerViewAdapterNormal extends RecyclerView.Adapter<BaseCard> {
             case FOOD_SHOW_ITEM_CARD:
                 itemView = LayoutInflater.from(mContext).inflate(R.layout.item_food_show, parent, false);
                 baseCard = new FoodShowItemCard(itemView, mHandler, mActivity, mFragment);
+                break;
+            case FOOD_DETAIL_STEP:
+                itemView = LayoutInflater.from(mContext).inflate(R.layout.item_food_detail_step, parent, false);
+                baseCard = new FoodDetailStepCard(itemView, mHandler, mActivity, mFragment);
+                break;
             default:
         }
         return baseCard;
@@ -138,6 +145,9 @@ public class RecyclerViewAdapterNormal extends RecyclerView.Adapter<BaseCard> {
                 break;
             case "FoodShowItem":
                 viewType = FOOD_SHOW_ITEM_CARD;
+                break;
+            case "FoodDetailStep":
+                viewType = FOOD_DETAIL_STEP;
                 break;
         }
         return viewType;

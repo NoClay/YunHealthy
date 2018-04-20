@@ -1,4 +1,4 @@
-package indi.noclay.cloudhealth.viewholder;
+package indi.noclay.cloudhealth.card;
 
 import android.app.Activity;
 import android.content.Context;

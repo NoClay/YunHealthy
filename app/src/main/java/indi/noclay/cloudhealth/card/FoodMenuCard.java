@@ -1,4 +1,4 @@
-package indi.noclay.cloudhealth.viewholder;
+package indi.noclay.cloudhealth.card;
 
 import android.app.Activity;
 import android.content.Context;
@@ -6,11 +6,10 @@ import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.View;
-import android.widget.CheckedTextView;
 import android.widget.TextView;
 
 import indi.noclay.cloudhealth.R;
-import indi.noclay.cloudhealth.database.FoodKind;
+import indi.noclay.cloudhealth.carddata.FoodKind;
 import indi.noclay.cloudhealth.database.FoodKindTableHelper;
 
 

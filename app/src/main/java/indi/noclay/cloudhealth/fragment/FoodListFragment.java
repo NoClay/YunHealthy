@@ -1,19 +1,16 @@
 package indi.noclay.cloudhealth.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -24,11 +21,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import indi.noclay.cloudhealth.R;
+import indi.noclay.cloudhealth.activity.FoodDetailActivity;
 import indi.noclay.cloudhealth.adapter.RecyclerViewAdapterNormal;
-import indi.noclay.cloudhealth.database.FoodShowItem;
+import indi.noclay.cloudhealth.carddata.FoodShowItem;
 import indi.noclay.cloudhealth.myview.AutoLoadMoreRecyclerView;
 import indi.noclay.cloudhealth.util.InternetUrlManager;
-import indi.noclay.cloudhealth.util.YunHealthyLoading;
 
 /**
  * Created by clay on 2018/4/17.
@@ -155,6 +152,12 @@ public class FoodListFragment extends Fragment implements RecyclerViewAdapterNor
 
     @Override
     public void onItemClick(Object o, int position) {
-        Toast.makeText(getContext(), "position = " + position + " && " + mTitle, Toast.LENGTH_SHORT).show();
+        if (o instanceof FoodShowItem){
+            Intent intent = new Intent(getContext(), FoodDetailActivity.class);
+            intent.putExtra("url", ((FoodShowItem) o).getFoodDetailUrl());
+            intent.putExtra("image", ((FoodShowItem) o).getFoodImageUrl());
+            intent.putExtra("name", ((FoodShowItem) o).getFoodName());
+            startActivity(intent);
+        }
     }
 }

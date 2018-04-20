@@ -1,13 +1,11 @@
-package indi.noclay.cloudhealth.viewholder;
+package indi.noclay.cloudhealth.card;
 
 import android.app.Activity;
-import android.os.Build;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -18,7 +16,7 @@ import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 
 import indi.noclay.cloudhealth.R;
-import indi.noclay.cloudhealth.database.FoodShowItem;
+import indi.noclay.cloudhealth.carddata.FoodShowItem;
 import indi.noclay.cloudhealth.util.ViewUtils;
 
 /**
@@ -42,8 +40,6 @@ public class FoodShowItemCard extends BaseCard {
         if (object instanceof FoodShowItem){
             item = (FoodShowItem) object;
             Glide.with(getContext()).load(item.getFoodImageUrl())
-                    .placeholder(R.drawable.medicine)
-                    .error(R.drawable.medicine)
                     .crossFade().into(new SimpleTarget<GlideDrawable>() {
                 @Override
                 public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {

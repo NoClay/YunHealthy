@@ -106,6 +106,18 @@
     </style>
 
 
+    <style name="AppTheme.TextViewTitle">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">@dimen/text_title_middle</item>
+        <item name="android:paddingTop">@dimen/normal_tiny_padding</item>
+        <item name="android:paddingBottom">@dimen/normal_tiny_padding</item>
+    </style>
+
+    <style name="AppTheme.TextViewContent">
+        <item name="android:textSize">@dimen/text_content_middle</item>
+        <item name="android:textColor">@color/secondary_text</item>
+    </style>
+
     <!--&lt;!&ndash; Base application theme. &ndash;&gt;-->
     <!--<style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">-->
         <!--&lt;!&ndash; Customize your theme here. &ndash;&gt;-->

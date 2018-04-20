@@ -16,9 +16,8 @@ import java.util.List;
 
 import indi.noclay.cloudhealth.R;
 import indi.noclay.cloudhealth.adapter.RecyclerViewAdapterNormal;
-import indi.noclay.cloudhealth.database.FoodKind;
+import indi.noclay.cloudhealth.carddata.FoodKind;
 import indi.noclay.cloudhealth.database.FoodKindTableHelper;
-import indi.noclay.cloudhealth.database.MenuInfo;
 
 /**
  * Created by clay on 2018/4/18.

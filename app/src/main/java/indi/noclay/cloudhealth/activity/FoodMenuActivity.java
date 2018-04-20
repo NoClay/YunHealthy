@@ -11,9 +11,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.PopupMenu;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -21,18 +19,13 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
-import java.security.KeyStore;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import indi.noclay.cloudhealth.R;
-import indi.noclay.cloudhealth.database.FoodKind;
-import indi.noclay.cloudhealth.database.FoodKindTableHelper;
-import indi.noclay.cloudhealth.database.LocalDataBase;
+import indi.noclay.cloudhealth.carddata.FoodKind;
 import indi.noclay.cloudhealth.fragment.FoodListFragment;
 import indi.noclay.cloudhealth.myview.dialog.FoodMenuTabSetDialog;
-import indi.noclay.cloudhealth.util.ConstantsConfig;
 import indi.noclay.cloudhealth.util.InternetUrlManager;
 import indi.noclay.cloudhealth.util.SharedPreferenceHelper;
 import indi.noclay.cloudhealth.util.TabLayoutViewPagerAdapter;

@@ -120,23 +120,30 @@
             android:name=".activity.AddMedicineActivity"
             android:screenOrientation="portrait" />
 
+        <activity android:name=".activity.FoodMenuActivity" />
+        <activity android:name=".activity.FoodMenuDetailActivity" />
+        <activity
+            android:name=".activity.FoodDetailActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/ActivityTheme">
+        </activity>
         <!-- 自定义GlideModule存取 -->
         <meta-data
-            android:name="indi.noclay.cloudhealth.util.DiskCacheModule"
-            android:value="GlideModule" />
+        android:name="indi.noclay.cloudhealth.util.DiskCacheModule"
+        android:value="GlideModule" />
 
         <!-- 上传服务 -->
         <!-- 声明桌面小部件 -->
         <service
-            android:name=".service.SynchronizeDataService"
-            android:screenOrientation="portrait" />
+        android:name=".service.SynchronizeDataService"
+        android:screenOrientation="portrait" />
         <service
-            android:name=".service.UpdateService"
-            android:exported="false"
-            android:permission="android.permission.BIND_REMOTEVIEWS" />
+        android:name=".service.UpdateService"
+        android:exported="false"
+        android:permission="android.permission.BIND_REMOTEVIEWS" />
         <service
-            android:name=".service.BluetoothConnectService"
-            android:process=":bluetooth" />
+        android:name=".service.BluetoothConnectService"
+        android:process=":bluetooth" />
 
         <receiver android:name=".myview.AppWidgetMedicineList">
             <intent-filter>
@@ -144,18 +151,16 @@
             </intent-filter>
 
             <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/app_widget_medicine_list_info" />
+            android:name="android.appwidget.provider"
+            android:resource="@xml/app_widget_medicine_list_info" />
         </receiver>
 
         <!-- 上传服务接收器 -->
         <receiver
-            android:name=".receiver.UpLoadReceiver"
-            android:screenOrientation="portrait" />
+        android:name=".receiver.UpLoadReceiver"
+        android:screenOrientation="portrait" />
         <receiver android:name=".receiver.MedicineAlarmReceiver" />
         <!-- zxing二维码注册 -->
-        <activity android:name=".activity.FoodMenuActivity"></activity>
-        <activity android:name=".activity.FoodMenuDetailActivity" />
     </application>
 
 </manifest>
