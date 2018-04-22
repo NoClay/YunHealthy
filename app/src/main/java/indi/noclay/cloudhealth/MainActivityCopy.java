@@ -83,6 +83,29 @@ public class MainActivityCopy extends AppCompatActivity {
         }
     }
 
+    public void setCurrentPage(int page, int childPage) {
+        setCurrentPage(page);
+        switch (page){
+            case PAGE_DATA:{
+                if (mPages.get(page) instanceof DataFragment){
+                    DataFragment fragment = (DataFragment) mPages.get(page);
+                    fragment.setCurrentPage(childPage);
+                }
+                break;
+            }
+            case PAGE_DOCTOR:{
+                break;
+            }
+            case PAGE_HOME:{
+                break;
+            }
+            case PAGE_MEASURE:{
+                break;
+            }
+            default:break;
+        }
+    }
+
     private void initTab() {
         mPages = new ArrayList<>();
         mTabLayout.setTabMode(TabLayout.MODE_FIXED);

@@ -54,6 +54,13 @@ public class DataFragment extends Fragment implements View.OnClickListener{
     }
 
 
+    public void setCurrentPage(int page){
+        if (page < 0 || page > datas.size()){
+            return;
+        }
+        viewPager.setCurrentItem(page);
+    }
+
     private void findView(View v) {
         viewPager = (ViewPager) v.findViewById(R.id.data_viewPager);
         mDynamic_tv = (TextView) v.findViewById(R.id.data_dynamic);

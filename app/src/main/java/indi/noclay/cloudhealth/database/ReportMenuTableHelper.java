@@ -38,7 +38,9 @@ public class ReportMenuTableHelper {
             return;
         }
         ContentValues values = new ContentValues();
-        for (int i = 0; i < ConstantsConfig.MENU_CONTENTS.length; i++) {
+        for (int i = 0; i < ConstantsConfig.MENU_CONTENTS.length &&
+                i < ConstantsConfig.MENU_ICONS.length &&
+                i < ConstantsConfig.MENU_TYPES.length; i++) {
             values.put("content", ConstantsConfig.MENU_CONTENTS[i]);
             values.put("image", ConstantsConfig.MENU_ICONS[i]);
             values.put("type", ConstantsConfig.MENU_TYPES[i]);
