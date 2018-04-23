@@ -20,7 +20,11 @@ public class ConstantsConfig {
     public static final String CROP_PATH_MEDICINE = ROOT_PATH_IMAGE_DIR + "crop_medicine.jpg";
     public static final String TEMP_USER_IMAGE = ROOT_PATH_IMAGE_DIR + "temp_user.jpg";
     public static final String TEMP_MEDICINE = ROOT_PATH_IMAGE_DIR + "temp_medicine.jpg";
-
+    public static final String API_SHOW_APP_ID = "62682";
+    public static final String API_SHOW_APP_SECRET = "a021a191dd1545c5a0276f470f57729c";
+    public static final String API_BMOB_ID = "d2e2a48caabc1e5c399b20b2adea85eb";
+    public static final String API_MOB_APP_KEY = "195be1e7755e2";
+    public static final String API_MOD_APP_SECRET = "5bdd8a14d2e2f5734797443c982b0db4";
     public static final String[] TIME_ITEM = {
             "1天", "2天", "3天", "4天", "5天", "6天", "1周",
             "2周", "3周", "1月", "2月", "3月", "6月", "1年",

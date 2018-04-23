@@ -10,6 +10,10 @@ import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobConfig;
 import cn.smssdk.SMSSDK;
 
+import static indi.noclay.cloudhealth.util.ConstantsConfig.API_BMOB_ID;
+import static indi.noclay.cloudhealth.util.ConstantsConfig.API_MOB_APP_KEY;
+import static indi.noclay.cloudhealth.util.ConstantsConfig.API_MOD_APP_SECRET;
+
 /**
  * Created by noclay on 2017/4/15.
  */
@@ -62,14 +66,14 @@ public class HealthApplication extends Application {
      */
     public void initDependencies() {
         BmobConfig config = new BmobConfig.Builder(this)
-                .setApplicationId("d2e2a48caabc1e5c399b20b2adea85eb")
+                .setApplicationId(API_BMOB_ID)
                 .setConnectTimeout(15)
                 .setUploadBlockSize(1024 * 1024)
                 .setFileExpiration(2500)
                 .build();
         Bmob.initialize(config);
         //初始化Mob
-        SMSSDK.initSDK(this, "195be1e7755e2", "5bdd8a14d2e2f5734797443c982b0db4");
+        SMSSDK.initSDK(this, API_MOB_APP_KEY, API_MOD_APP_SECRET);
     }
 
 }

@@ -19,6 +19,8 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 
 
+import com.show.api.ShowApiRequest;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -41,6 +43,8 @@ import indi.noclay.cloudhealth.util.TabLayoutViewPagerAdapter;
 import static indi.noclay.cloudhealth.database.HeightAndWeightTableHelper.checkLastWeight;
 import static indi.noclay.cloudhealth.database.HeightAndWeightTableHelper.checkTodayWeight;
 import static indi.noclay.cloudhealth.database.HeightAndWeightTableHelper.insertHeightAndWeight;
+import static indi.noclay.cloudhealth.util.ConstantsConfig.API_SHOW_APP_ID;
+import static indi.noclay.cloudhealth.util.ConstantsConfig.API_SHOW_APP_SECRET;
 
 
 /**
