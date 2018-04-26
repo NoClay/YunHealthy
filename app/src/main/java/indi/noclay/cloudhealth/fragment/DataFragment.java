@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -85,12 +86,22 @@ public class DataFragment extends Fragment implements View.OnClickListener{
         mAdapter = new FragmentPagerAdapter(getChildFragmentManager()) {
             @Override
             public Fragment getItem(int position) {
+                Log.d("fragmentTest", "getItem: position = " + position + ", item = " + datas.get(position) + ", parent = " + viewPager);
                 return datas.get(position);
             }
 
             @Override
             public int getCount() {
                 return datas.size();
+            }
+
+            @Override
+            public void finishUpdate(ViewGroup container) {
+                try {
+                    super.finishUpdate(container);
+                }catch (NullPointerException e){
+                    e.printStackTrace();
+                }
             }
         };
 

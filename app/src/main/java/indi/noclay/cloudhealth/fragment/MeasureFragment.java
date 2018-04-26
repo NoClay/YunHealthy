@@ -92,6 +92,7 @@ public class MeasureFragment extends Fragment implements
                 .build();
         Bluetooth.initialize(config);
         Bluetooth.setOnConnectListener(this);
+        Bluetooth.setApplicationContext(this.getActivity().getApplicationContext());
     }
 
     @Override

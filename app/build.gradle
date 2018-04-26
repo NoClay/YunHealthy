@@ -64,6 +64,6 @@ dependencies {
     implementation project(':ecgwaveview-release')
     implementation project(':foldlineview-release')
     implementation project(':utiltool-release')
-    implementation project(':bluetooth')
     implementation project(':showapi_sdk')
+    implementation project(':bluetooth-debug')
 }
