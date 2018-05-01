@@ -45,4 +45,5 @@ http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
     <dimen name="card_margin_normal">10dp</dimen>
     <dimen name="card_margin_large">15dp</dimen>
     <dimen name="image_big_height">300dp</dimen>
+    <dimen name="margin_tiny">5dp</dimen>
 </resources>
