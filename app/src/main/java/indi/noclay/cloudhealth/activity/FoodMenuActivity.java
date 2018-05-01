@@ -135,8 +135,7 @@ public class FoodMenuActivity extends AppCompatActivity implements View.OnClickL
         adapter = new TabLayoutViewPagerAdapter(getSupportFragmentManager(), mPages, this);
         mTabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         int i = 0;
-        for (FoodKind temp :
-                subCategory) {
+        for (FoodKind temp : subCategory) {
             mTabLayout.addTab(mTabLayout.newTab().setText(temp.getFoodKindName()));
             Bundle bundle = new Bundle();
             bundle.putString("title", temp.getFoodKindName());

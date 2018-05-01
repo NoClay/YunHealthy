@@ -39,6 +39,10 @@ public class ConstantsConfig {
             "测量", "数据", "主页", "百问", "我的"
     };
 
+    public static final String[] TAB_DATA_MENU = {
+            "动态", "数据", "报告单", "用药"
+    };
+
     //目前已经可以使用的功能
     public static final String []LABEL_STRING = {
             "血氧", "脉搏", "心电", "体温", "粉尘浓度",
