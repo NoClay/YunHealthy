@@ -15,11 +15,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.LinearLayout;
 import android.widget.PopupWindow;
-
-
-import com.show.api.ShowApiRequest;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -27,24 +23,22 @@ import java.util.Date;
 import java.util.List;
 
 import indi.noclay.cloudhealth.database.HeightAndWeight;
-import indi.noclay.cloudhealth.database.LocalDataBase;
 import indi.noclay.cloudhealth.database.SignUserData;
 import indi.noclay.cloudhealth.fragment.DataFragment;
-import indi.noclay.cloudhealth.fragment.DoctorsFragment;
 import indi.noclay.cloudhealth.fragment.HomeFragment;
 import indi.noclay.cloudhealth.fragment.MeasureFragment;
 import indi.noclay.cloudhealth.fragment.MineFragment;
+import indi.noclay.cloudhealth.fragment.SearchFragment;
 import indi.noclay.cloudhealth.myview.dialog.InputWeightDialog;
 import indi.noclay.cloudhealth.receiver.MedicineAlarmReceiver;
 import indi.noclay.cloudhealth.service.SynchronizeDataService;
 import indi.noclay.cloudhealth.util.ConstantsConfig;
+import indi.noclay.cloudhealth.util.SharedPreferenceHelper;
 import indi.noclay.cloudhealth.util.TabLayoutViewPagerAdapter;
 
 import static indi.noclay.cloudhealth.database.HeightAndWeightTableHelper.checkLastWeight;
 import static indi.noclay.cloudhealth.database.HeightAndWeightTableHelper.checkTodayWeight;
 import static indi.noclay.cloudhealth.database.HeightAndWeightTableHelper.insertHeightAndWeight;
-import static indi.noclay.cloudhealth.util.ConstantsConfig.API_SHOW_APP_ID;
-import static indi.noclay.cloudhealth.util.ConstantsConfig.API_SHOW_APP_SECRET;
 
 
 /**
@@ -124,7 +118,7 @@ public class MainActivityCopy extends AppCompatActivity {
                     break;
                 case 2:adapter.addTab(HomeFragment.class, null, ConstantsConfig.TAB_MENU[i], i, null);
                     break;
-                case 3:adapter.addTab(DoctorsFragment.class, null, ConstantsConfig.TAB_MENU[i], i, null);
+                case 3:adapter.addTab(SearchFragment.class, null, ConstantsConfig.TAB_MENU[i], i, null);
                     break;
                 case 4:adapter.addTab(MineFragment.class, null, ConstantsConfig.TAB_MENU[i], i, null);
                     break;
@@ -140,8 +134,7 @@ public class MainActivityCopy extends AppCompatActivity {
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        ConstantsConfig.userId = getSharedPreferences(
-                "LoginState", MODE_PRIVATE).getString("userId", null);
+        ConstantsConfig.userId = SharedPreferenceHelper.getLoginUserId();
         if (hasFocus) {
             //窗口获取焦点并且已经登陆
 

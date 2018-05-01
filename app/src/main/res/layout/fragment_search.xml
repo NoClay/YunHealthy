@@ -1,7 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <LinearLayout
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_marginTop="100dp"
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:padding="@dimen/normal_padding"
+                android:src="@drawable/icon_baike"
+                android:layout_width="@dimen/normal_image_button_size"
+                android:layout_height="@dimen/normal_image_button_size"/>
+            <TextView
+                android:gravity="center_vertical"
+                style="@style/AppTheme.TextViewTitle"
+                android:text="健康百问"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"/>
+        </LinearLayout>
+        <include layout="@layout/view_search_bar"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-</android.support.constraint.ConstraintLayout>
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>
+
+

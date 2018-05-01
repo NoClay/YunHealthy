@@ -36,7 +36,7 @@ public class ConstantsConfig {
             730, 1095, ((int) Integer.MAX_VALUE)
     };
     public static final String[] TAB_MENU = {
-            "测量", "数据", "主页", "医生", "我的"
+            "测量", "数据", "主页", "百问", "我的"
     };
 
     //目前已经可以使用的功能
