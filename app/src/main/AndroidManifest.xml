@@ -93,7 +93,8 @@
             android:theme="@style/ActivityTheme" />
         <activity
             android:name=".MainActivityCopy"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan|stateHidden"/>
         <activity
             android:name=".activity.LoginActivityCopy"
             android:screenOrientation="portrait" />

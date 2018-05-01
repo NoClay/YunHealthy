@@ -1,6 +1,10 @@
 package indi.noclay.cloudhealth.util;
 
+import android.app.Activity;
+import android.content.Context;
 import android.view.View;
+import android.view.Window;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
 /**
@@ -9,6 +13,21 @@ import android.widget.TextView;
 
 public class ViewUtils {
 
+    /**
+     * 强制关闭软键盘
+     * @param window
+     * @param context
+     */
+    public static void KeyBoardCancle(Window window, Context context) {
+        View view = window.peekDecorView();
+        if (view != null) {
+            InputMethodManager inputmanger = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
+            if (inputmanger == null){
+                return;
+            }
+            inputmanger.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+    }
     /**
      * 延时显示View
      * @param target

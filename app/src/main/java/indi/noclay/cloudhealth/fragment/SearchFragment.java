@@ -20,6 +20,7 @@ public class SearchFragment extends Fragment {
 
     View mView;
 
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -28,8 +29,11 @@ public class SearchFragment extends Fragment {
         return mView;
     }
 
+
+
     private void initWindowInputMode() {
+        this.getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
         this.getActivity().getWindow().setSoftInputMode(PopupWindow.INPUT_METHOD_NEEDED);
-        this.getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        this.getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
     }
 }

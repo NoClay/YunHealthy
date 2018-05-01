@@ -14,8 +14,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
-import android.view.WindowManager;
-import android.widget.PopupWindow;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -35,6 +33,7 @@ import indi.noclay.cloudhealth.service.SynchronizeDataService;
 import indi.noclay.cloudhealth.util.ConstantsConfig;
 import indi.noclay.cloudhealth.util.SharedPreferenceHelper;
 import indi.noclay.cloudhealth.util.TabLayoutViewPagerAdapter;
+import indi.noclay.cloudhealth.util.ViewUtils;
 
 import static indi.noclay.cloudhealth.database.HeightAndWeightTableHelper.checkLastWeight;
 import static indi.noclay.cloudhealth.database.HeightAndWeightTableHelper.checkTodayWeight;
@@ -55,6 +54,8 @@ public class MainActivityCopy extends AppCompatActivity {
     public static final int PAGE_HOME = 2;
     public static final int PAGE_DOCTOR = 3;
     public static final int PAGE_MINE = 4;
+    //用于测试是否检查体重按钮
+    public static boolean isFirst = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -71,6 +72,22 @@ public class MainActivityCopy extends AppCompatActivity {
         mTabLayout = (TabLayout) findViewById(R.id.tabLayout);
         initTab();
         mMainVPager.setCurrentItem(2);
+        mMainVPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                ViewUtils.KeyBoardCancle(MainActivityCopy.this.getWindow(), MainActivityCopy.this);
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 
     public void setCurrentPage(int page) {
@@ -139,10 +156,11 @@ public class MainActivityCopy extends AppCompatActivity {
             //窗口获取焦点并且已经登陆
 
             HeightAndWeight body = checkTodayWeight(new Date());
-            if (body == null) {
+            if (body == null || isFirst) {
                 //当天没有输入了体重
                 body = checkLastWeight();
                 checkWeight(body);
+                isFirst = false;
             }
         }
     }
@@ -213,8 +231,6 @@ public class MainActivityCopy extends AppCompatActivity {
         if (mInputWeightDialog != null && body != null) {
             mInputWeightDialog.setInput(body.getHeight(), body.getWeight());
         }
-        mInputWeightDialog.setSoftInputMode(PopupWindow.INPUT_METHOD_NEEDED);
-        mInputWeightDialog.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         mInputWeightDialog.showAtLocation(findViewById(R.id.main_activity),
                 Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
 

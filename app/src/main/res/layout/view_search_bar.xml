@@ -5,14 +5,13 @@
               android:layout_height="50dp">
     <RelativeLayout
         android:id="@+id/search_bar"
-        android:layout_marginBottom="7dp"
-        android:layout_marginTop="7dp"
-        android:layout_marginRight="15dp"
-        android:layout_marginLeft="15dp"
+        android:layout_margin="@dimen/card_margin_normal"
         android:background="@drawable/background_search_bar"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <LinearLayout
+            android:paddingRight="@dimen/normal_padding"
+            android:paddingLeft="@dimen/normal_padding"
             android:layout_centerInParent="true"
             android:orientation="horizontal"
             android:layout_width="match_parent"
@@ -23,6 +22,8 @@
                 android:layout_width="19dp"
                 android:layout_height="19dp"/>
             <EditText
+                android:imeOptions="actionSearch"
+                android:id="@+id/search_input"
                 android:layout_marginLeft="10dp"
                 android:layout_gravity="center"
                 android:textColorHint="@color/searchBarTitle"
