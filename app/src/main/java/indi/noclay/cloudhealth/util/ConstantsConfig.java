@@ -14,6 +14,13 @@ public class ConstantsConfig {
     public static final String ROOT_PATH_IMAGE_DIR = APPLICATION_DIR + "userImage/";
     public static final String CACHE_DATA_DIR = APPLICATION_DIR + "userCache/";
 
+    /**
+     * Handler中的msg标识
+     */
+    public static final int MSG_LOAD_SUCCESS = 1;
+    public static final int MSG_LOAD_EMPTY = 0;
+    public static final int MSG_LOAD_FAILED = -1;
+
     public static final String SRC_PATH_USER_IMAGE = ROOT_PATH_IMAGE_DIR + "src_user.jpg";
     public static final String SRC_PATH_MEDICINE = ROOT_PATH_IMAGE_DIR + "src_medicine.jpg";
     public static final String CROP_PATH_USER_IMAGE = ROOT_PATH_IMAGE_DIR + "crop_user.jpg";
@@ -25,6 +32,22 @@ public class ConstantsConfig {
     public static final String API_BMOB_ID = "d2e2a48caabc1e5c399b20b2adea85eb";
     public static final String API_MOB_APP_KEY = "195be1e7755e2";
     public static final String API_MOD_APP_SECRET = "5bdd8a14d2e2f5734797443c982b0db4";
+    public static final String API_MEDICINE_SEARCH = "http://route.showapi.com/93-97";
+    public static final String API_MEDICINE_COMPANY_SEARCH = "http://route.showapi.com/93-95";
+    public static final String API_NORMAL_ILLNESS_SEARCH = "http://route.showapi.com/546-2";
+
+    public static final String PARAMS_KEY_WORD = "keyWord";
+    public static final String PARAMS_SEARCH_TYPE = "searchType";
+    public static final String PARAMS_BUNDLE = "bundle";
+
+
+    public static final int TYPE_MEDICINE_INFO = 0;
+    public static final int TYPE_MEDICINE_COMPANY_INFO = 1;
+    public static final int TYPE_NORMAL_ILLNESS = 2;
+
+    public static final String[] SEARCH_TYPE = {
+            "药品信息", "药企信息", "常见疾病"
+    };
     public static final String[] TIME_ITEM = {
             "1天", "2天", "3天", "4天", "5天", "6天", "1周",
             "2周", "3周", "1月", "2月", "3月", "6月", "1年",

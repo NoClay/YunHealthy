@@ -43,30 +43,33 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"/>
             <RadioGroup
-                android:checkedButton="@id/buttonPanel"
+                android:id="@+id/radioGroup"
+                android:checkedButton="@id/medicineInfoBt"
                 android:gravity="center_horizontal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
                 <android.support.v7.widget.AppCompatRadioButton
-                    android:id="@+id/buttonPanel"
+                    android:id="@+id/medicineInfoBt"
                     style="@style/AppTheme.TextViewTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="药品"/>
+                    android:text="药品信息"/>
 
                 <android.support.v7.widget.AppCompatRadioButton
+                    android:id="@+id/medicineCompanyInfoBt"
                     style="@style/AppTheme.TextViewTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="药品"/>
+                    android:text="药企信息"/>
 
                 <android.support.v7.widget.AppCompatRadioButton
+                    android:id="@+id/normalIllnessBt"
                     style="@style/AppTheme.TextViewTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="药品"/>
+                    android:text="常见疾病"/>
             </RadioGroup>
         </LinearLayout>
 

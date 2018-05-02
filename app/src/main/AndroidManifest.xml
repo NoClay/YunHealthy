@@ -1,44 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="indi.noclay.cloudhealth">
+          package="indi.noclay.cloudhealth">
 
     <!-- 蓝牙相关权限 -->
-    <uses-permission android:name="android.permission.BLUETOOTH" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
-    <uses-permission android:name="android.permission.BLUETOOTH_PRIVILEGED" />
+    <uses-permission android:name="android.permission.BLUETOOTH"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+    <uses-permission android:name="android.permission.BLUETOOTH_PRIVILEGED"/>
 
     <!-- Bmob相关权限 -->
     <!-- 获取GSM（2g）、WCDMA（联通3g）等网络状态的信息 -->
     <!-- 获取wifi网络状态的信息 -->
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <!-- 允许读取手机状态 用于创建BmobInstallation -->
     <!-- 配置Mob短信验证权限 -->
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.READ_CONTACTS" />
-    <uses-permission android:name="android.permission.RECEIVE_SMS" />
-    <uses-permission android:name="android.permission.READ_SMS" />
-    <uses-permission android:name="android.permission.READ_PROFILE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.MANAGE_DOCUMENTS" />
-    <uses-permission android:name="android.permission.MEDIA_CONTENT_CONTROL" />
-    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.READ_CONTACTS"/>
+    <uses-permission android:name="android.permission.RECEIVE_SMS"/>
+    <uses-permission android:name="android.permission.READ_SMS"/>
+    <uses-permission android:name="android.permission.READ_PROFILE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.MANAGE_DOCUMENTS"/>
+    <uses-permission android:name="android.permission.MEDIA_CONTENT_CONTROL"/>
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
     <!-- 保持CPU 运转，屏幕和键盘灯有可能是关闭的,用于文件上传和下载 -->
     <!-- 允许联网 -->
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
     <!-- 获取sd卡写的权限，用于文件上传和下载 -->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.GET_TASKS" />
-    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.VIBRATE" /> <!-- 震动权限 -->
-    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.GET_TASKS"/>
+    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.VIBRATE"/> <!-- 震动权限 -->
+    <uses-permission android:name="android.permission.CAMERA"/>
 
-    <uses-feature android:name="android.hardware.camera" /> <!-- 使用照相机权限 -->
-    <uses-feature android:name="android.hardware.camera.autofocus" />
+    <uses-feature android:name="android.hardware.camera"/> <!-- 使用照相机权限 -->
+    <uses-feature android:name="android.hardware.camera.autofocus"/>
 
     <!-- 自动聚焦权限 -->
     <application
@@ -54,9 +54,9 @@
             android:name=".WelcomeActivity"
             android:theme="@style/AppTheme">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
         <activity
@@ -65,42 +65,42 @@
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
-            android:windowSoftInputMode="stateHidden|adjustResize" />
+            android:windowSoftInputMode="stateHidden|adjustResize"/>
         <!-- 显示心电图的活动 -->
         <activity
             android:name=".activity.ShowHeartWaves"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.InfoActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.InfoActivityForReport"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.SignActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.ChangePassWord"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.NewsActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <!-- 利用另一个进程加载WebView -->
         <activity
             android:name=".activity.NewDetailActivity"
             android:process=":newsDetail"
             android:screenOrientation="portrait"
-            android:theme="@style/ActivityTheme" />
+            android:theme="@style/ActivityTheme"/>
         <activity
             android:name=".MainActivityCopy"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan|stateHidden"/>
         <activity
             android:name=".activity.LoginActivityCopy"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.ChangeMyDataActivityCopy"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.MedicineActivity"
             android:label="@string/title_activity_medicine"
@@ -109,20 +109,19 @@
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
-                <action android:name="cloudHealth.intent.MedicineClock" />
+                <action android:name="cloudHealth.intent.MedicineClock"/>
 
-                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
-        <activity android:name="com.google.zxing.activity.CaptureActivity" />
+        <activity android:name="com.google.zxing.activity.CaptureActivity"/>
         <!-- 添加药物 -->
 
         <activity
             android:name=".activity.AddMedicineActivity"
-            android:screenOrientation="portrait" />
-
-        <activity android:name=".activity.FoodMenuActivity" />
-        <activity android:name=".activity.FoodMenuDetailActivity" />
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.FoodMenuActivity"/>
+        <activity android:name=".activity.FoodMenuDetailActivity"/>
         <activity
             android:name=".activity.FoodDetailActivity"
             android:screenOrientation="portrait"
@@ -130,38 +129,40 @@
         </activity>
         <!-- 自定义GlideModule存取 -->
         <meta-data
-        android:name="indi.noclay.cloudhealth.util.DiskCacheModule"
-        android:value="GlideModule" />
+            android:name="indi.noclay.cloudhealth.util.DiskCacheModule"
+            android:value="GlideModule"/>
 
         <!-- 上传服务 -->
         <!-- 声明桌面小部件 -->
         <service
-        android:name=".service.SynchronizeDataService"
-        android:screenOrientation="portrait" />
+            android:name=".service.SynchronizeDataService"
+            android:screenOrientation="portrait"/>
         <service
-        android:name=".service.UpdateService"
-        android:exported="false"
-        android:permission="android.permission.BIND_REMOTEVIEWS" />
+            android:name=".service.UpdateService"
+            android:exported="false"
+            android:permission="android.permission.BIND_REMOTEVIEWS"/>
         <service
-        android:name=".service.BluetoothConnectService"
-        android:process=":bluetooth" />
+            android:name=".service.BluetoothConnectService"
+            android:process=":bluetooth"/>
 
         <receiver android:name=".myview.AppWidgetMedicineList">
             <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
             </intent-filter>
 
             <meta-data
-            android:name="android.appwidget.provider"
-            android:resource="@xml/app_widget_medicine_list_info" />
+                android:name="android.appwidget.provider"
+                android:resource="@xml/app_widget_medicine_list_info"/>
         </receiver>
 
         <!-- 上传服务接收器 -->
         <receiver
-        android:name=".receiver.UpLoadReceiver"
-        android:screenOrientation="portrait" />
-        <receiver android:name=".receiver.MedicineAlarmReceiver" />
+            android:name=".receiver.UpLoadReceiver"
+            android:screenOrientation="portrait"/>
+        <receiver android:name=".receiver.MedicineAlarmReceiver"/>
         <!-- zxing二维码注册 -->
+        <activity android:name=".activity.SearchResultActivity">
+        </activity>
     </application>
 
 </manifest>

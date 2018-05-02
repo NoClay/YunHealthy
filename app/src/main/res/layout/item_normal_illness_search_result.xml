@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/card_margin_normal"
+    app:cardBackgroundColor="@color/white"
+    app:cardCornerRadius="@dimen/cardRadius">
+
+    <LinearLayout
+        android:padding="@dimen/normal_padding"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:tint="@color/skyBlue"
+                android:padding="@dimen/normal_padding"
+                android:src="@drawable/icon_name"
+                android:layout_width="@dimen/normal_image_button_size"
+                android:layout_height="@dimen/normal_image_button_size"/>
+            <TextView
+                android:id="@+id/name"
+                style="@style/AppTheme.TextViewTitle"
+                android:layout_gravity="center_vertical"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:text="小儿感冒"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:tint="@color/skyBlue"
+
+                android:padding="@dimen/normal_padding"
+                android:src="@drawable/icon_kind"
+                android:layout_width="@dimen/normal_image_button_size"
+                android:layout_height="@dimen/normal_image_button_size"/>
+            <TextView
+                android:id="@+id/kind"
+                style="@style/AppTheme.TextViewTitle"
+                android:layout_gravity="center_vertical"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:text="中医科"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:tint="@color/skyBlue"
+                android:padding="@dimen/normal_padding"
+                android:src="@drawable/icon_summary"
+                android:layout_width="@dimen/normal_image_button_size"
+                android:layout_height="@dimen/normal_image_button_size"/>
+            <TextView
+                android:id="@+id/summary"
+                style="@style/AppTheme.TextViewTitle"
+                android:layout_gravity="center_vertical"
+                android:text="系有各种病原引起的上呼吸道的急性感染，俗称“感冒”，是小儿最常见的疾病。该病主要侵犯鼻、鼻咽、和咽部。"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+    </LinearLayout>
+
+
+</android.support.v7.widget.CardView>

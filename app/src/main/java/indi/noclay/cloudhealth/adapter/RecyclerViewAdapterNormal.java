@@ -17,6 +17,9 @@ import indi.noclay.cloudhealth.card.BaseCard;
 import indi.noclay.cloudhealth.card.FoodDetailStepCard;
 import indi.noclay.cloudhealth.card.FoodMenuCard;
 import indi.noclay.cloudhealth.card.FoodShowItemCard;
+import indi.noclay.cloudhealth.card.SearchCompanyCard;
+import indi.noclay.cloudhealth.card.SearchIllnessCard;
+import indi.noclay.cloudhealth.card.SearchMedicineCard;
 
 /**
  * Created by clay on 2018/4/18.
@@ -30,6 +33,9 @@ public class RecyclerViewAdapterNormal extends RecyclerView.Adapter<BaseCard> {
     public static final int FOOD_KIND_CARD = BASE_CARD + 1;
     public static final int FOOD_SHOW_ITEM_CARD = BASE_CARD + 2;
     public static final int FOOD_DETAIL_STEP = BASE_CARD + 3;
+    public static final int SEARCH_MEDICINE_CARD = BASE_CARD + 4;
+    public static final int SEARCH_COMPANY_CARD = BASE_CARD + 5;
+    public static final int SEARCH_ILLNESS_CARD = BASE_CARD + 6;
     public Context mContext;
     public Activity mActivity;
     public Fragment mFragment;
@@ -106,6 +112,18 @@ public class RecyclerViewAdapterNormal extends RecyclerView.Adapter<BaseCard> {
                 itemView = LayoutInflater.from(mContext).inflate(R.layout.item_food_detail_step, parent, false);
                 baseCard = new FoodDetailStepCard(itemView, mHandler, mActivity, mFragment);
                 break;
+            case SEARCH_MEDICINE_CARD:
+                itemView = LayoutInflater.from(mContext).inflate(R.layout.item_medicine_search_result, parent, false);
+                baseCard = new SearchMedicineCard(itemView, mHandler, mActivity, mFragment);
+                break;
+            case SEARCH_COMPANY_CARD:
+                itemView = LayoutInflater.from(mContext).inflate(R.layout.item_company_search_result, parent, false);
+                baseCard = new SearchCompanyCard(itemView, mHandler, mActivity, mFragment);
+                break;
+            case SEARCH_ILLNESS_CARD:
+                itemView = LayoutInflater.from(mContext).inflate(R.layout.item_normal_illness_search_result, parent, false);
+                baseCard = new SearchIllnessCard(itemView, mHandler, mActivity, mFragment);
+                break;
             default:
         }
         return baseCard;
@@ -148,6 +166,15 @@ public class RecyclerViewAdapterNormal extends RecyclerView.Adapter<BaseCard> {
                 break;
             case "FoodDetailStep":
                 viewType = FOOD_DETAIL_STEP;
+                break;
+            case "Drug":
+                viewType = SEARCH_MEDICINE_CARD;
+                break;
+            case "DrugFactory":
+                viewType = SEARCH_COMPANY_CARD;
+                break;
+            case "Illness":
+                viewType = SEARCH_ILLNESS_CARD;
                 break;
         }
         return viewType;

@@ -28,7 +28,7 @@
             android:layout_width="@dimen/normal_image_button_size"
             android:layout_height="@dimen/normal_image_button_size" />
     </RelativeLayout>
-    <include layout="@layout/view_divider_line"/>
+    <include layout="@layout/view_divider_line_horizontal"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/foodKindList"

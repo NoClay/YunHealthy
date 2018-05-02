@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="indi.noclay.cloudhealth.activity.SearchResultActivity">
+
+    <include layout="@layout/layout_tool_bar"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/actionBarSize"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+        <LinearLayout
+            android:padding="@dimen/normal_tiny_padding"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/AppTheme.TextViewTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="关键词："/>
+
+            <TextView
+                android:textSize="@dimen/text_title_middle"
+                android:id="@+id/keyWord"
+                style="@style/AppTheme.TextViewContent"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:singleLine="true"
+                android:text="盘尼西林"/>
+        </LinearLayout>
+        <LinearLayout
+            android:padding="@dimen/normal_tiny_padding"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/AppTheme.TextViewTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="结果数："/>
+
+            <TextView
+                android:textSize="@dimen/text_title_middle"
+                android:id="@+id/allResultCount"
+                style="@style/AppTheme.TextViewContent"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:singleLine="true"
+                android:text="盘尼西林"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <include layout="@layout/view_divider_line_horizontal"/>
+
+    <indi.noclay.cloudhealth.myview.AutoLoadMoreRecyclerView
+        android:id="@+id/resultListView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </indi.noclay.cloudhealth.myview.AutoLoadMoreRecyclerView>
+</LinearLayout>

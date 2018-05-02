@@ -45,5 +45,9 @@ http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
     <dimen name="card_margin_normal">10dp</dimen>
     <dimen name="card_margin_large">15dp</dimen>
     <dimen name="image_big_height">300dp</dimen>
+    <dimen name="image_middle_height">200dp</dimen>
     <dimen name="margin_tiny">5dp</dimen>
+    <dimen name="search_button_width">60dp</dimen>
+    <dimen name="action_bar_size_tiny">40dp</dimen>
+    <dimen name="actionBarSize">50dp</dimen>
 </resources>

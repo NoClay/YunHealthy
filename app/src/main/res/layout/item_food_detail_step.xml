@@ -26,5 +26,5 @@
             android:scaleType="fitXY" />
     </LinearLayout>
 
-    <include layout="@layout/view_divider_line" />
+    <include layout="@layout/view_divider_line_horizontal" />
 </LinearLayout>
