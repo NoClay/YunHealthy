@@ -22,10 +22,12 @@
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
         android:layout_height="50dp"
+        app:tabMaxWidth="0dp"
+        app:tabMode="fixed"
         app:tabIndicatorColor="@color/lightSeaGreen"
         app:tabIndicatorHeight="1dp"
         app:tabTextColor="@color/black"
-        app:tabGravity="center"
+        app:tabGravity="fill"
         app:tabTextAppearance="@android:style/TextAppearance.Holo.Large"
         app:tabSelectedTextColor="@color/lightSeaGreen">
 

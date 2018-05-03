@@ -68,7 +68,7 @@ public class ConstantsConfig {
     };
 
     public static final String[] TAB_DATA_MENU = {
-            "动态", "数据", "报告单", "用药"
+            "动态", "数据", "用药", "报告单"
     };
 
     //目前已经可以使用的功能

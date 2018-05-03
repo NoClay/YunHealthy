@@ -131,7 +131,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             }
             case R.id.reportInput: {
                 if (getActivity() instanceof MainActivityCopy){
-                    ((MainActivityCopy) getActivity()).setCurrentPage(MainActivityCopy.PAGE_DATA, 2);
+                    ((MainActivityCopy) getActivity()).setCurrentPage(MainActivityCopy.PAGE_DATA, 0);
                 }
                 break;
             }

@@ -54,7 +54,8 @@ public class DataFragment extends Fragment {
         datas = new ArrayList<>();
         adapter = new TabLayoutViewPagerAdapter(getChildFragmentManager(), datas, this.getContext());
         tabLayout.setTabMode(TabLayout.MODE_FIXED);
-        for (int i = 0; i < ConstantsConfig.TAB_DATA_MENU.length; i++) {
+        //不显示报告单
+        for (int i = 0; i < ConstantsConfig.TAB_DATA_MENU.length - 1; i++) {
             tabLayout.addTab(tabLayout.newTab().setText(ConstantsConfig.TAB_DATA_MENU[i]));
             Bundle bundle = new Bundle();
             bundle.putString("title", ConstantsConfig.TAB_DATA_MENU[i]);
@@ -67,10 +68,10 @@ public class DataFragment extends Fragment {
                     cls = DataDataFragment.class;
                     break;
                 case 2:
-                    cls = DataReportFragment.class;
+                    cls = DataMedicalFragment.class;
                     break;
                 case 3:
-                    cls = DataMedicalFragment.class;
+                    cls = DataReportFragment.class;
                     break;
             }
             adapter.addTab(cls, bundle, ConstantsConfig.TAB_DATA_MENU[i], i, null);
