@@ -3,6 +3,7 @@ package indi.noclay.cloudhealth.myview;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
+import android.support.annotation.MainThread;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -94,5 +95,83 @@ public class YunHealthyErrorView extends LinearLayout {
 
     public interface OnErrorRetryListener {
         void onErrorRetry();
+    }
+
+    public LottieAnimationView getErrorView() {
+        return errorView;
+    }
+
+    public TextView getErrorTips() {
+        return errorTips;
+    }
+
+
+    public LinearLayout getErrorLayout() {
+        return errorLayout;
+    }
+
+
+    public String getErrorHint() {
+        return errorHint;
+    }
+
+    @MainThread
+    public void setErrorHint(String errorHint) {
+        this.errorHint = errorHint;
+        errorTips.setText(errorHint);
+    }
+
+    public int getErrorHintSize() {
+        return errorHintSize;
+    }
+
+    @MainThread
+    public void setErrorHintSize(int errorHintSize) {
+        this.errorHintSize = errorHintSize;
+        errorTips.setTextSize(errorHintSize);
+    }
+
+    public String getErrorAnimFileName() {
+        return errorAnimFileName;
+    }
+
+    @MainThread
+    public void setErrorAnimFileName(String errorAnimFileName) {
+        this.errorAnimFileName = errorAnimFileName;
+        errorView.setAnimation(errorAnimFileName);
+    }
+
+    public int getErrorHintColor() {
+        return errorHintColor;
+    }
+
+    @MainThread
+    public void setErrorHintColor(int errorHintColor) {
+        this.errorHintColor = errorHintColor;
+        errorTips.setTextColor(errorHintColor);
+    }
+
+    public int getErrorAnimWidth() {
+        return errorAnimWidth;
+    }
+
+    @MainThread
+    public void setErrorAnimWidth(int errorAnimWidth) {
+        this.errorAnimWidth = errorAnimWidth;
+        ViewGroup.LayoutParams lp = errorView.getLayoutParams();
+        lp.width = errorAnimWidth;
+        errorView.setLayoutParams(lp);
+    }
+
+    public int getErrorAnimHeight() {
+        return errorAnimHeight;
+    }
+
+    @MainThread
+    public void setErrorAnimHeight(int errorAnimHeight) {
+        this.errorAnimHeight = errorAnimHeight;
+        ViewGroup.LayoutParams lp = errorView.getLayoutParams();
+        lp.width = errorAnimWidth;
+        errorView.setLayoutParams(lp);
     }
 }

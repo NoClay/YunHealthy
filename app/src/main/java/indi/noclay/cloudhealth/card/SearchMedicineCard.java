@@ -28,6 +28,62 @@ public class SearchMedicineCard extends BaseCard {
     private TextView manu;
     private MedicineRetData.Drug mDrug;
 
+    public TextView getName() {
+        return name;
+    }
+
+    public void setName(TextView name) {
+        this.name = name;
+    }
+
+    public ImageView getImg() {
+        return img;
+    }
+
+    public void setImg(ImageView img) {
+        this.img = img;
+    }
+
+    public TextView getPrice() {
+        return price;
+    }
+
+    public void setPrice(TextView price) {
+        this.price = price;
+    }
+
+    public TextView getPzwh() {
+        return pzwh;
+    }
+
+    public void setPzwh(TextView pzwh) {
+        this.pzwh = pzwh;
+    }
+
+    public TextView getZxbz() {
+        return zxbz;
+    }
+
+    public void setZxbz(TextView zxbz) {
+        this.zxbz = zxbz;
+    }
+
+    public TextView getManu() {
+        return manu;
+    }
+
+    public void setManu(TextView manu) {
+        this.manu = manu;
+    }
+
+    public MedicineRetData.Drug getDrug() {
+        return mDrug;
+    }
+
+    public void setDrug(MedicineRetData.Drug drug) {
+        mDrug = drug;
+    }
+
     public SearchMedicineCard(View itemView, Handler mHandler, Activity mActivity, Fragment mFragment) {
         super(itemView, mHandler, mActivity, mFragment);
     }

@@ -53,6 +53,7 @@ public class MedicineRetData extends ShowApiRetBase implements Serializable {
     }
 
     public static class Drug implements Serializable {
+        private String id;
         private String blfy; //不良反应
         private String drugName; //药品名称
         private String ggxh; //规格型号
@@ -72,6 +73,14 @@ public class MedicineRetData extends ShowApiRetBase implements Serializable {
         private String zysx; //注意事项
         private String zzjb; //主治疾病
         private String zycf; //主要成分
+
+        public String getId() {
+            return id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
 
         public String getBlfy() {
             return blfy;

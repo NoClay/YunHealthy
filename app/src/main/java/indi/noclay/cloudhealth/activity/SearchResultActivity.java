@@ -1,5 +1,6 @@
 package indi.noclay.cloudhealth.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 import com.alibaba.fastjson.JSONObject;
 import com.show.api.ShowApiRequest;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +26,8 @@ import indi.noclay.cloudhealth.carddata.IllnessRetData;
 import indi.noclay.cloudhealth.carddata.MedicineRetData;
 import indi.noclay.cloudhealth.carddata.ShowApiRetBase;
 import indi.noclay.cloudhealth.myview.AutoLoadMoreRecyclerView;
+import indi.noclay.cloudhealth.myview.YunHealthyErrorView;
+import indi.noclay.cloudhealth.util.YunHealthyLoading;
 
 import static indi.noclay.cloudhealth.util.ConstantsConfig.API_MEDICINE_COMPANY_SEARCH;
 import static indi.noclay.cloudhealth.util.ConstantsConfig.API_MEDICINE_SEARCH;
@@ -32,16 +36,25 @@ import static indi.noclay.cloudhealth.util.ConstantsConfig.API_SHOW_APP_ID;
 import static indi.noclay.cloudhealth.util.ConstantsConfig.API_SHOW_APP_SECRET;
 import static indi.noclay.cloudhealth.util.ConstantsConfig.MSG_LOAD_EMPTY;
 import static indi.noclay.cloudhealth.util.ConstantsConfig.MSG_LOAD_FAILED;
+import static indi.noclay.cloudhealth.util.ConstantsConfig.MSG_LOAD_NO_MORE;
 import static indi.noclay.cloudhealth.util.ConstantsConfig.MSG_LOAD_SUCCESS;
 import static indi.noclay.cloudhealth.util.ConstantsConfig.PARAMS_BUNDLE;
+import static indi.noclay.cloudhealth.util.ConstantsConfig.PARAMS_ID;
 import static indi.noclay.cloudhealth.util.ConstantsConfig.PARAMS_KEY_WORD;
+import static indi.noclay.cloudhealth.util.ConstantsConfig.PARAMS_MEDICINE_DATA;
 import static indi.noclay.cloudhealth.util.ConstantsConfig.PARAMS_SEARCH_TYPE;
+import static indi.noclay.cloudhealth.util.ConstantsConfig.PARAMS_TITLE;
 import static indi.noclay.cloudhealth.util.ConstantsConfig.SEARCH_TYPE;
 import static indi.noclay.cloudhealth.util.ConstantsConfig.TYPE_MEDICINE_COMPANY_INFO;
 import static indi.noclay.cloudhealth.util.ConstantsConfig.TYPE_MEDICINE_INFO;
 import static indi.noclay.cloudhealth.util.ConstantsConfig.TYPE_NORMAL_ILLNESS;
+import static indi.noclay.cloudhealth.util.ViewUtils.hideView;
+import static indi.noclay.cloudhealth.util.ViewUtils.showView;
 
-public class SearchResultActivity extends AppCompatActivity implements View.OnClickListener {
+public class SearchResultActivity extends AppCompatActivity implements View.OnClickListener,
+        AutoLoadMoreRecyclerView.LoadMoreListener,
+        YunHealthyErrorView.OnErrorRetryListener,
+        RecyclerViewAdapterNormal.OnItemClickListener{
 
     private int searchType;
     private String searchKey;
@@ -50,11 +63,13 @@ public class SearchResultActivity extends AppCompatActivity implements View.OnCl
     private AutoLoadMoreRecyclerView resultListView;
     private RecyclerViewAdapterNormal mAdapterNormal;
     private int mCurrentPage = 1;
-    private int limit = 10;
+    private int limit = 20;
     private List<Object> mObjects = new ArrayList<>();
     private static final String TAG = "SearchResultActivity";
     private TextView keyWord;
     private TextView allResultCount;
+    private int allPages;
+    private YunHealthyErrorView errorView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +77,7 @@ public class SearchResultActivity extends AppCompatActivity implements View.OnCl
         setContentView(R.layout.activity_search_result);
         initView();
         handleArgument();
+        YunHealthyLoading.show(this, resultListView);
     }
 
     private void handleArgument() {
@@ -120,6 +136,7 @@ public class SearchResultActivity extends AppCompatActivity implements View.OnCl
                     String resBody = result.getString("showapi_res_body");
                     Log.d(TAG, "run: body = " + resBody);
                     handleResultBody(resBody);
+                    return;
                 }
                 //失败
                 mHandler.obtainMessage(MSG_LOAD_EMPTY, getString(R.string.hint_nothing_but_error)).sendToTarget();
@@ -160,9 +177,10 @@ public class SearchResultActivity extends AppCompatActivity implements View.OnCl
             List<Object> temps = ret.getDataItem();
             mObjects.addAll(temps);
             String allResults = ret.allResults;
-            if (ret instanceof IllnessRetData){
+            if (ret instanceof IllnessRetData) {
                 allResults = ((IllnessRetData) ret).getPagebean().getAllNum().toString();
             }
+            allPages = TextUtils.isEmpty(allResults) ? 0 : (Integer.valueOf(allResults) / limit);
             mHandler.obtainMessage(MSG_LOAD_SUCCESS, allResults).sendToTarget();
         }
     }
@@ -176,12 +194,16 @@ public class SearchResultActivity extends AppCompatActivity implements View.OnCl
         mAdapterNormal.setDatas(mObjects);
         mAdapterNormal.setmActivity(this);
         mAdapterNormal.setmContext(this);
+        mAdapterNormal.setOnItemClickListener(this);
         resultListView.setLayoutManager(new LinearLayoutManager(this));
         resultListView.setHasFixedSize(true);
         resultListView.setAdapter(mAdapterNormal);
         keyWord = (TextView) findViewById(R.id.keyWord);
         allResultCount = (TextView) findViewById(R.id.allResultCount);
         allResultCount.setText("");
+        errorView = (YunHealthyErrorView) findViewById(R.id.errorView);
+        hideView(errorView);
+        resultListView.setLoadMoreListener(this);
     }
 
     @Override
@@ -196,19 +218,65 @@ public class SearchResultActivity extends AppCompatActivity implements View.OnCl
 
     private Handler mHandler = new SearchResultHandler();
 
+    @Override
+    public void onLoadMore() {
+        if (mCurrentPage >= allPages) {
+            mHandler.sendEmptyMessage(MSG_LOAD_NO_MORE);
+            return;
+        }
+        resultListView.setLoadingMore(true);
+        fetchData();
+    }
+
+    @Override
+    public void onErrorRetry() {
+//        fetchData();
+    }
+
+    @Override
+    public void onItemClick(Object o, int position) {
+        Intent intent = new Intent(this, SearchResultInfoActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putInt(PARAMS_SEARCH_TYPE, searchType);
+        if (o instanceof MedicineRetData.Drug){
+            bundle.putString(PARAMS_ID, ((MedicineRetData.Drug) o).getId());
+            bundle.putSerializable(PARAMS_MEDICINE_DATA, (Serializable) o);
+            bundle.putString(PARAMS_TITLE, ((MedicineRetData.Drug) o).getDrugName());
+        }else if (o instanceof IllnessRetData.Illness){
+            bundle.putString(PARAMS_ID, ((IllnessRetData.Illness) o).getId());
+            bundle.putString(PARAMS_TITLE, ((IllnessRetData.Illness) o).getName());
+        }
+        intent.putExtra(PARAMS_BUNDLE, bundle);
+        startActivity(intent);
+    }
+
     public class SearchResultHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
+            resultListView.setLoadingMore(false);
+            YunHealthyLoading.dismiss();
             switch (msg.what) {
                 case MSG_LOAD_EMPTY: {
+                    showView(errorView);
+                    hideView(resultListView);
+                    errorView.setErrorHint((String) msg.obj);
                     break;
                 }
                 case MSG_LOAD_FAILED: {
+                    showView(errorView);
+                    hideView(resultListView);
+                    errorView.setErrorHint((String) msg.obj);
                     break;
                 }
                 case MSG_LOAD_SUCCESS: {
+                    showView(resultListView);
+                    hideView(errorView);
                     allResultCount.setText((String) msg.obj);
                     resultListView.notifyMoreFinish(true);
+                    break;
+                }
+                case MSG_LOAD_NO_MORE: {
+                    resultListView.notifyMoreFinish(false);
                     break;
                 }
             }

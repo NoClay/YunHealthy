@@ -20,6 +20,7 @@ import indi.noclay.cloudhealth.card.FoodShowItemCard;
 import indi.noclay.cloudhealth.card.SearchCompanyCard;
 import indi.noclay.cloudhealth.card.SearchIllnessCard;
 import indi.noclay.cloudhealth.card.SearchMedicineCard;
+import indi.noclay.cloudhealth.card.SearchResultTagCard;
 
 /**
  * Created by clay on 2018/4/18.
@@ -36,6 +37,7 @@ public class RecyclerViewAdapterNormal extends RecyclerView.Adapter<BaseCard> {
     public static final int SEARCH_MEDICINE_CARD = BASE_CARD + 4;
     public static final int SEARCH_COMPANY_CARD = BASE_CARD + 5;
     public static final int SEARCH_ILLNESS_CARD = BASE_CARD + 6;
+    public static final int SSEARCH_RESULT_TAG_CARD = BASE_CARD + 7;
     public Context mContext;
     public Activity mActivity;
     public Fragment mFragment;
@@ -124,6 +126,10 @@ public class RecyclerViewAdapterNormal extends RecyclerView.Adapter<BaseCard> {
                 itemView = LayoutInflater.from(mContext).inflate(R.layout.item_normal_illness_search_result, parent, false);
                 baseCard = new SearchIllnessCard(itemView, mHandler, mActivity, mFragment);
                 break;
+            case SSEARCH_RESULT_TAG_CARD:
+                itemView = LayoutInflater.from(mContext).inflate(R.layout.item_tag, parent, false);
+                baseCard = new SearchResultTagCard(itemView, mHandler, mActivity, mFragment);
+                break;
             default:
         }
         return baseCard;
@@ -175,6 +181,9 @@ public class RecyclerViewAdapterNormal extends RecyclerView.Adapter<BaseCard> {
                 break;
             case "Illness":
                 viewType = SEARCH_ILLNESS_CARD;
+                break;
+            case "TagData":
+                viewType = SSEARCH_RESULT_TAG_CARD;
                 break;
         }
         return viewType;

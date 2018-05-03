@@ -13,13 +13,13 @@ public class ConstantsConfig {
     public static final String APPLICATION_DIR = Environment.getExternalStorageDirectory() + "/CloudHealthy/";
     public static final String ROOT_PATH_IMAGE_DIR = APPLICATION_DIR + "userImage/";
     public static final String CACHE_DATA_DIR = APPLICATION_DIR + "userCache/";
-
     /**
      * Handler中的msg标识
      */
-    public static final int MSG_LOAD_SUCCESS = 1;
-    public static final int MSG_LOAD_EMPTY = 0;
     public static final int MSG_LOAD_FAILED = -1;
+    public static final int MSG_LOAD_EMPTY = 0;
+    public static final int MSG_LOAD_SUCCESS = 1;
+    public static final int MSG_LOAD_NO_MORE = 2;
 
     public static final String SRC_PATH_USER_IMAGE = ROOT_PATH_IMAGE_DIR + "src_user.jpg";
     public static final String SRC_PATH_MEDICINE = ROOT_PATH_IMAGE_DIR + "src_medicine.jpg";
@@ -35,10 +35,15 @@ public class ConstantsConfig {
     public static final String API_MEDICINE_SEARCH = "http://route.showapi.com/93-97";
     public static final String API_MEDICINE_COMPANY_SEARCH = "http://route.showapi.com/93-95";
     public static final String API_NORMAL_ILLNESS_SEARCH = "http://route.showapi.com/546-2";
+    public static final String API_MEDICINE_INFO = "http://route.showapi.com/93-33";
+    public static final String API_ILLNESS_INFO = "http://route.showapi.com/546-3";
 
     public static final String PARAMS_KEY_WORD = "keyWord";
     public static final String PARAMS_SEARCH_TYPE = "searchType";
     public static final String PARAMS_BUNDLE = "bundle";
+    public static final String PARAMS_MEDICINE_DATA = "medicineData";
+    public static final String PARAMS_ID = "id";
+    public static final String PARAMS_TITLE = "title";
 
 
     public static final int TYPE_MEDICINE_INFO = 0;

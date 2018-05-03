@@ -12,7 +12,6 @@
             <option value="$PROJECT_DIR$/bluetooth-debug" />
             <option value="$PROJECT_DIR$/ecgwaveview-release" />
             <option value="$PROJECT_DIR$/foldlineview-release" />
-            <option value="$PROJECT_DIR$/showapi_sdk" />
             <option value="$PROJECT_DIR$/utiltool-release" />
           </set>
         </option>

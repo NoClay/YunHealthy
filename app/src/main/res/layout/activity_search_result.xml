@@ -17,11 +17,11 @@
         android:weightSum="2">
 
         <LinearLayout
-            android:padding="@dimen/normal_tiny_padding"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:padding="@dimen/normal_tiny_padding">
 
             <TextView
                 style="@style/AppTheme.TextViewTitle"
@@ -31,7 +31,6 @@
                 android:text="关键词："/>
 
             <TextView
-                android:textSize="@dimen/text_title_middle"
                 android:id="@+id/keyWord"
                 style="@style/AppTheme.TextViewContent"
                 android:layout_width="match_parent"
@@ -39,14 +38,15 @@
                 android:ellipsize="end"
                 android:gravity="center_vertical"
                 android:singleLine="true"
-                android:text="盘尼西林"/>
+                android:textSize="@dimen/text_title_middle"/>
         </LinearLayout>
+
         <LinearLayout
-            android:padding="@dimen/normal_tiny_padding"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:padding="@dimen/normal_tiny_padding">
 
             <TextView
                 style="@style/AppTheme.TextViewTitle"
@@ -56,7 +56,6 @@
                 android:text="结果数："/>
 
             <TextView
-                android:textSize="@dimen/text_title_middle"
                 android:id="@+id/allResultCount"
                 style="@style/AppTheme.TextViewContent"
                 android:layout_width="match_parent"
@@ -64,17 +63,36 @@
                 android:ellipsize="end"
                 android:gravity="center_vertical"
                 android:singleLine="true"
-                android:text="盘尼西林"/>
+                android:textSize="@dimen/text_title_middle"/>
         </LinearLayout>
 
     </LinearLayout>
 
     <include layout="@layout/view_divider_line_horizontal"/>
 
-    <indi.noclay.cloudhealth.myview.AutoLoadMoreRecyclerView
-        android:id="@+id/resultListView"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    </indi.noclay.cloudhealth.myview.AutoLoadMoreRecyclerView>
+        <indi.noclay.cloudhealth.myview.AutoLoadMoreRecyclerView
+            android:id="@+id/resultListView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </indi.noclay.cloudhealth.myview.AutoLoadMoreRecyclerView>
+
+        <indi.noclay.cloudhealth.myview.YunHealthyErrorView
+            android:id="@+id/errorView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:errorAnimFile="cloud_disconnection.json"
+            app:errorAnimHeight="match_parent"
+            app:errorAnimWidth="match_parent"
+            app:errorTipColor="@color/black"
+            app:errorTipSize="@dimen/text_content_small">
+
+        </indi.noclay.cloudhealth.myview.YunHealthyErrorView>
+    </RelativeLayout>
+
+
 </LinearLayout>

@@ -19,6 +19,38 @@ public class SearchIllnessCard extends BaseCard {
     private TextView summary;
     private IllnessRetData.Illness mIllness;
 
+    public TextView getName() {
+        return name;
+    }
+
+    public void setName(TextView name) {
+        this.name = name;
+    }
+
+    public TextView getKind() {
+        return kind;
+    }
+
+    public void setKind(TextView kind) {
+        this.kind = kind;
+    }
+
+    public TextView getSummary() {
+        return summary;
+    }
+
+    public void setSummary(TextView summary) {
+        this.summary = summary;
+    }
+
+    public IllnessRetData.Illness getIllness() {
+        return mIllness;
+    }
+
+    public void setIllness(IllnessRetData.Illness illness) {
+        mIllness = illness;
+    }
+
     public SearchIllnessCard(View itemView, Handler mHandler, Activity mActivity, Fragment mFragment) {
         super(itemView, mHandler, mActivity, mFragment);
     }

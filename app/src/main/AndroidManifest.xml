@@ -163,6 +163,8 @@
         <!-- zxing二维码注册 -->
         <activity android:name=".activity.SearchResultActivity">
         </activity>
+        <activity android:name=".activity.SearchResultInfoActivity">
+        </activity>
     </application>
 
 </manifest>
