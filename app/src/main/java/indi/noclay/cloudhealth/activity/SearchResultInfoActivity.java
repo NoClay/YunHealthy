@@ -213,6 +213,7 @@ public class SearchResultInfoActivity extends AppCompatActivity implements View.
         tagListView.setLayoutManager(new LinearLayoutManager(this));
         contentLayer = (LinearLayout) findViewById(R.id.contentLayer);
         errorView = (YunHealthyErrorView) findViewById(R.id.errorView);
+        back.setOnClickListener(this);
         hideView(errorView);
     }
 

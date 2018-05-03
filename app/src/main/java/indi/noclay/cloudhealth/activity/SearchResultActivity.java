@@ -204,6 +204,7 @@ public class SearchResultActivity extends AppCompatActivity implements View.OnCl
         errorView = (YunHealthyErrorView) findViewById(R.id.errorView);
         hideView(errorView);
         resultListView.setLoadMoreListener(this);
+        back.setOnClickListener(this);
     }
 
     @Override
