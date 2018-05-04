@@ -172,7 +172,7 @@
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:src="@drawable/icon_report"
+                        android:src="@drawable/icon_dynamic"
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="20dp"
                         />
@@ -181,7 +181,7 @@
                         android:layout_height="match_parent"
                         android:gravity="center_vertical"
                         android:textSize="23sp"
-                        android:text="报告单"
+                        android:text="动态"
                         android:layout_marginLeft="20dp"
                         android:textColor="@color/black"/>
                 </LinearLayout>

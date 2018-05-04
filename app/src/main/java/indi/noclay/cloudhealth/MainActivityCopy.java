@@ -27,6 +27,7 @@ import indi.noclay.cloudhealth.fragment.HomeFragment;
 import indi.noclay.cloudhealth.fragment.MeasureFragment;
 import indi.noclay.cloudhealth.fragment.MineFragment;
 import indi.noclay.cloudhealth.fragment.SearchFragment;
+import indi.noclay.cloudhealth.fragment.V2DataDataFragment;
 import indi.noclay.cloudhealth.myview.dialog.InputWeightDialog;
 import indi.noclay.cloudhealth.receiver.MedicineAlarmReceiver;
 import indi.noclay.cloudhealth.service.SynchronizeDataService;
@@ -131,7 +132,7 @@ public class MainActivityCopy extends AppCompatActivity {
             switch (i) {
                 case 0:adapter.addTab(MeasureFragment.class, null, ConstantsConfig.TAB_MENU[i], i, null);
                     break;
-                case 1:adapter.addTab(DataFragment.class, null, ConstantsConfig.TAB_MENU[i], i, null);
+                case 1:adapter.addTab(V2DataDataFragment.class, null, ConstantsConfig.TAB_MENU[i], i, null);
                     break;
                 case 2:adapter.addTab(HomeFragment.class, null, ConstantsConfig.TAB_MENU[i], i, null);
                     break;

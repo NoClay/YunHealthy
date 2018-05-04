@@ -44,11 +44,13 @@ public class ConstantsConfig {
     public static final String PARAMS_MEDICINE_DATA = "medicineData";
     public static final String PARAMS_ID = "id";
     public static final String PARAMS_TITLE = "title";
-
+    public static final String PARAMS_FRAGMENT_TYPE = "fragmentType";
 
     public static final int TYPE_MEDICINE_INFO = 0;
     public static final int TYPE_MEDICINE_COMPANY_INFO = 1;
     public static final int TYPE_NORMAL_ILLNESS = 2;
+    public static final int TYPE_FRAGMENT_DYNAMIC = 3;
+    public static final int TYPE_FRAGMENT_MEDICINE = 4;
 
     public static final String[] SEARCH_TYPE = {
             "药品信息", "药企信息", "常见疾病"

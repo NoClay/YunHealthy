@@ -17,17 +17,19 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-import indi.noclay.cloudhealth.MainActivityCopy;
 import indi.noclay.cloudhealth.R;
 import indi.noclay.cloudhealth.activity.FoodMenuActivity;
-import indi.noclay.cloudhealth.activity.MedicineActivity;
+import indi.noclay.cloudhealth.activity.FragmentContainerActivity;
 import indi.noclay.cloudhealth.activity.NewsActivity;
 import indi.noclay.cloudhealth.adapter.ResultListViewAdapter;
 import indi.noclay.cloudhealth.myview.ScanView;
 import indi.noclay.cloudhealth.myview.dialog.ResultDialog;
 import indi.noclay.cloudhealth.util.ResultMessage;
 
-import static indi.noclay.cloudhealth.fragment.DataMedicalFragment.NOW_MEDICINE;
+import static indi.noclay.cloudhealth.util.ConstantsConfig.PARAMS_FRAGMENT_TYPE;
+import static indi.noclay.cloudhealth.util.ConstantsConfig.PARAMS_TITLE;
+import static indi.noclay.cloudhealth.util.ConstantsConfig.TYPE_FRAGMENT_DYNAMIC;
+import static indi.noclay.cloudhealth.util.ConstantsConfig.TYPE_FRAGMENT_MEDICINE;
 
 
 /*
@@ -124,15 +126,17 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 break;
             }
             case R.id.medicineInput: {
-                intent = new Intent(getContext(), MedicineActivity.class);
-                intent.putExtra("type", NOW_MEDICINE);
+                intent = new Intent(getContext(), FragmentContainerActivity.class);
+                intent.putExtra(PARAMS_FRAGMENT_TYPE, TYPE_FRAGMENT_MEDICINE);
+                intent.putExtra(PARAMS_TITLE, "用药");
                 startActivity(intent);
                 break;
             }
             case R.id.reportInput: {
-                if (getActivity() instanceof MainActivityCopy){
-                    ((MainActivityCopy) getActivity()).setCurrentPage(MainActivityCopy.PAGE_DATA, 0);
-                }
+                intent = new Intent(getContext(), FragmentContainerActivity.class);
+                intent.putExtra(PARAMS_FRAGMENT_TYPE, TYPE_FRAGMENT_DYNAMIC);
+                intent.putExtra(PARAMS_TITLE, "动态");
+                startActivity(intent);
                 break;
             }
         }
