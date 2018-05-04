@@ -7,6 +7,7 @@
     android:orientation="vertical"
     android:weightSum="10">
 
+
     <indi.noclay.cloudhealth.myview.ScanView
         android:id="@+id/scanButton"
         android:layout_width="match_parent"

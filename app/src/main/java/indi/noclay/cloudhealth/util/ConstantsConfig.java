@@ -45,6 +45,8 @@ public class ConstantsConfig {
     public static final String PARAMS_ID = "id";
     public static final String PARAMS_TITLE = "title";
     public static final String PARAMS_FRAGMENT_TYPE = "fragmentType";
+    public static final String PARAMS_URL = "url";
+    public static final String PARAMS_IS_TOP = "isTop";
 
     public static final int TYPE_MEDICINE_INFO = 0;
     public static final int TYPE_MEDICINE_COMPANY_INFO = 1;

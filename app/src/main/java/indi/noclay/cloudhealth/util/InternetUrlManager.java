@@ -15,4 +15,7 @@ public class InternetUrlManager {
     public static String getHealthyFoodListURL(String subCategory){
         return HEALTHY_FOOD_URL + subCategory;
     }
+
+    public static final String HEALTHY_LIFE = "https://www.sandingtv.com/";
+
 }

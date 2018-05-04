@@ -29,7 +29,7 @@ import rx.schedulers.Schedulers;
  * Created by NoClay on 2018/5/4.
  */
 
-public class V2DataDataFragment extends Fragment {
+public class DataDataFragmentV2 extends Fragment {
 
     private RecyclerView recyclerView;
     private Context context;

@@ -62,7 +62,9 @@ public class MineFragment extends Fragment implements View.OnClickListener{
         title.setText("我的");
         back.setVisibility(View.GONE);
         for (int i = 0; i < layouts.length; i++) {
-            layouts[i].setOnClickListener(this);
+            if (layouts[i] != null){
+                layouts[i].setOnClickListener(this);
+            }
         }
     }
 
@@ -75,10 +77,10 @@ public class MineFragment extends Fragment implements View.OnClickListener{
         title = (TextView) v.findViewById(R.id.info_title);
         back = (ImageView) v.findViewById(R.id.back);
         layouts[0] = (RelativeLayout) v.findViewById(R.id.firstLayout);
-        layouts[1] = (RelativeLayout) v.findViewById(R.id.secondLayout);
-        layouts[2] = (RelativeLayout) v.findViewById(R.id.thirdLayout);
+//        layouts[1] = (RelativeLayout) v.findViewById(R.id.secondLayout);
+//        layouts[2] = (RelativeLayout) v.findViewById(R.id.thirdLayout);
         layouts[3] = (RelativeLayout) v.findViewById(R.id.fourthLayout);
-        layouts[4] = (RelativeLayout) v.findViewById(R.id.fifthLayout);
+//        layouts[4] = (RelativeLayout) v.findViewById(R.id.fifthLayout);
         layouts[5] = (RelativeLayout) v.findViewById(R.id.sixthLayout);
         layouts[6] = (RelativeLayout) v.findViewById(R.id.seventhLayout);
         userImage = (CircleImageView) v.findViewById(R.id.userImageShow);
@@ -96,23 +98,27 @@ public class MineFragment extends Fragment implements View.OnClickListener{
                 startActivityForResult(intent, REQUEST_CHANGE_DATA);
                 break;
             }
-            case R.id.secondLayout:{
-                //管理健康方案
-                break;
-            }
-            case R.id.thirdLayout:{
-                //联系人
-                break;
-            }
+//            case R.id.secondLayout:{
+//                //管理健康方案
+//                Toast.makeText(context, "账户功能尚未投入使用", Toast.LENGTH_SHORT).show();
+//
+//                break;
+//            }
+//            case R.id.thirdLayout:{
+//                //联系人
+//                Toast.makeText(context, "账户功能尚未投入使用", Toast.LENGTH_SHORT).show();
+//                break;
+//            }
             case R.id.fourthLayout:{
                 //云健康账户
                 Toast.makeText(context, "账户功能尚未投入使用", Toast.LENGTH_SHORT).show();
                 break;
             }
-            case R.id.fifthLayout:{
-                //设置
-                break;
-            }
+//            case R.id.fifthLayout:{
+//                //设置
+//                Toast.makeText(context, "账户功能尚未投入使用", Toast.LENGTH_SHORT).show();
+//                break;
+//            }
             case R.id.sixthLayout:{
                 //关于云健康
                 showAboutDialog(getContext());

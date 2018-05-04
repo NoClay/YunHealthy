@@ -1,11 +1,9 @@
 package indi.noclay.cloudhealth.activity;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
@@ -15,7 +13,6 @@ import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
 import android.webkit.WebView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -30,6 +27,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import indi.noclay.cloudhealth.R;
 import indi.noclay.cloudhealth.myview.YunHealthyErrorView;
+import indi.noclay.cloudhealth.util.ConstantsConfig;
 import indi.noclay.cloudhealth.util.ViewUtils;
 import indi.noclay.cloudhealth.util.YunHealthyLoading;
 
@@ -64,6 +62,8 @@ public class NewDetailActivity extends AppCompatActivity {
 
     private String url;
     private Document document;
+    private boolean isTop;
+    private String title;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -95,13 +95,14 @@ public class NewDetailActivity extends AppCompatActivity {
     }
 
     private void initView() {
-        mToolbarLayout.setTitle("健康资讯");
+        isTop = getIntent().getBooleanExtra(ConstantsConfig.PARAMS_IS_TOP, false);
+        url = getIntent().getStringExtra(ConstantsConfig.PARAMS_URL);
+        title = getIntent().getStringExtra(ConstantsConfig.PARAMS_TITLE);
+        mToolbarLayout.setTitle(title);
         setSupportActionBar(mToolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-        Bundle data = getIntent().getBundleExtra("data");
-        url = data.getString("url");
         hideView(errorView);
     }
 
@@ -129,27 +130,11 @@ public class NewDetailActivity extends AppCompatActivity {
                 case 1: {
                     content = new WebView(NewDetailActivity.this);
                     mContentLayout.addView(content);
-                    Elements element = document.select("body > div.wrapper > div.title_box > h1");
-                    Log.d("test", "handleMessage: title = " + element.text());
-                    mToolbarLayout.setTitle(element.text());
-                    String time = "99健康网 " + document.select("body > div.wrapper > div.title_box > div > div.title_txt > span:nth-child(2)").text();
-                    mTimeText.setText(time);
-                    String html = document.select("body > div.wrapper > div.left_box > div.profile_box > p").text();
-                    mGuideText.setText(Html.fromHtml(html));
-                    content.setHorizontalScrollBarEnabled(false);
-                    html = document.select("body > div.wrapper > div.left_box > div.new_cont.detail_con").html();
-                    int pos = html.indexOf("<p align=\"right\">（");
-                    if (pos != -1){
-                        html = html.substring(0, pos);
+                    if (isTop){
+                        handleIfIsTop();
+                    }else{
+                        handleIfNotTop();
                     }
-                    html.replace("<img ", "<img style=\"width:100%\" ");
-                    StringBuilder builder = new StringBuilder();
-                    builder.append("<div class=\"wrap\" style=\"width:100%\">")
-                            .append(html)
-                            .append("</div>");
-                    Log.d("content", "handleMessage: content = " + html);
-                    content.loadDataWithBaseURL(null, html,
-                            "text/html", "utf-8", null);
                     YunHealthyLoading.dismiss();
                     break;
                 }
@@ -157,6 +142,46 @@ public class NewDetailActivity extends AppCompatActivity {
             }
         }
     }
+
+    private void handleIfNotTop() {
+        Elements element;
+        String time = "99健康网 " + document.select("body > div.wrapper > div.title_box > div > div.title_txt > span:nth-child(2)").text();
+        mTimeText.setText(time);
+        String html = document.select("body > div.wrapper > div.left_box > div.profile_box > p").text();
+        mGuideText.setText(Html.fromHtml(html));
+        content.setHorizontalScrollBarEnabled(false);
+        html = document.select("body > div.wrapper > div.left_box > div.new_cont.detail_con").html();
+        int pos = html.indexOf("<p align=\"right\">（");
+        if (pos != -1){
+            html = html.substring(0, pos);
+        }
+        html.replace("<img ", "<img style=\"width:100%\" ");
+        StringBuilder builder = new StringBuilder();
+        builder.append("<div class=\"wrap\" style=\"width:100%\">")
+                .append(html)
+                .append("</div>");
+        Log.d("content", "handleMessage: content = " + html);
+        content.loadDataWithBaseURL(null, html,
+                "text/html", "utf-8", null);
+    }
+
+    private void handleIfIsTop() {
+        ViewUtils.hideView(mGuideText);
+        Elements element;
+        String time = document.select("body > div.container.wrapper.clearfix > div.main.fl > div.article > div.newsinfo").text();
+        mTimeText.setText(time);
+        String html;
+        content.setHorizontalScrollBarEnabled(false);
+        html = document.select("body > div.container.wrapper.clearfix > div.main.fl > div.article > div.newstext").html();
+        html.replace("<img ", "<img style=\"width:100%\" ");
+        StringBuilder builder = new StringBuilder();
+        builder.append("<div class=\"wrap\" style=\"width:100%\">")
+                .append(html)
+                .append("</div>");
+        content.loadDataWithBaseURL(null, html,
+                "text/html", "utf-8", null);
+    }
+
     Handler handler = new NewsDetailHandler();
 
     @Override

@@ -12,12 +12,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
-import android.widget.Toast;
-
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -35,8 +31,7 @@ import indi.noclay.cloudhealth.R;
 import indi.noclay.cloudhealth.adapter.LoadItemAdapterForNews;
 import indi.noclay.cloudhealth.database.NewsData;
 import indi.noclay.cloudhealth.myview.AutoLoadMoreRecyclerView;
-import indi.noclay.cloudhealth.myview.FullLinearLayoutManager;
-import indi.noclay.cloudhealth.myview.YunHealthyErrorView;
+import indi.noclay.cloudhealth.util.ConstantsConfig;
 import indi.noclay.cloudhealth.util.InternetUrlManager;
 import indi.noclay.cloudhealth.util.YunHealthyLoading;
 
@@ -216,9 +211,9 @@ public class NewsActivity extends AppCompatActivity
     public void onItemClick(View view, int position) {
         Intent intent = new Intent(this, NewDetailActivity.class);
         //利用Bundle传输信息
-        Bundle data = new Bundle();
-        data.putString("url", newsList.get(position).getUrl());
-        intent.putExtra("data", data);
+        intent.putExtra(ConstantsConfig.PARAMS_URL, newsList.get(position).getUrl());
+        intent.putExtra(ConstantsConfig.PARAMS_IS_TOP, false);
+        intent.putExtra(ConstantsConfig.PARAMS_TITLE, newsList.get(position).getTitle());
         startActivity(intent);
     }
 

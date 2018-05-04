@@ -22,12 +22,12 @@ import java.util.List;
 
 import indi.noclay.cloudhealth.database.HeightAndWeight;
 import indi.noclay.cloudhealth.database.SignUserData;
+import indi.noclay.cloudhealth.fragment.DataDataFragmentV2;
 import indi.noclay.cloudhealth.fragment.DataFragment;
-import indi.noclay.cloudhealth.fragment.HomeFragment;
+import indi.noclay.cloudhealth.fragment.HomeFragmentV2;
 import indi.noclay.cloudhealth.fragment.MeasureFragment;
 import indi.noclay.cloudhealth.fragment.MineFragment;
 import indi.noclay.cloudhealth.fragment.SearchFragment;
-import indi.noclay.cloudhealth.fragment.V2DataDataFragment;
 import indi.noclay.cloudhealth.myview.dialog.InputWeightDialog;
 import indi.noclay.cloudhealth.receiver.MedicineAlarmReceiver;
 import indi.noclay.cloudhealth.service.SynchronizeDataService;
@@ -132,9 +132,9 @@ public class MainActivityCopy extends AppCompatActivity {
             switch (i) {
                 case 0:adapter.addTab(MeasureFragment.class, null, ConstantsConfig.TAB_MENU[i], i, null);
                     break;
-                case 1:adapter.addTab(V2DataDataFragment.class, null, ConstantsConfig.TAB_MENU[i], i, null);
+                case 1:adapter.addTab(DataDataFragmentV2.class, null, ConstantsConfig.TAB_MENU[i], i, null);
                     break;
-                case 2:adapter.addTab(HomeFragment.class, null, ConstantsConfig.TAB_MENU[i], i, null);
+                case 2:adapter.addTab(HomeFragmentV2.class, null, ConstantsConfig.TAB_MENU[i], i, null);
                     break;
                 case 3:adapter.addTab(SearchFragment.class, null, ConstantsConfig.TAB_MENU[i], i, null);
                     break;

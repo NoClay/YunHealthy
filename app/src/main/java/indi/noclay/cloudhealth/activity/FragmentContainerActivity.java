@@ -58,6 +58,7 @@ public class FragmentContainerActivity extends AppCompatActivity implements View
         infoTitle = (TextView) findViewById(R.id.info_title);
         back = (ImageView) findViewById(R.id.back);
         container = (FrameLayout) findViewById(R.id.container);
+        back.setOnClickListener(this);
     }
 
     @Override

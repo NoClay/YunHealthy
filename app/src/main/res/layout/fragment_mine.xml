@@ -55,68 +55,68 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp" />
             </RelativeLayout>
-            <RelativeLayout
-                android:id="@+id/secondLayout"
-                android:background="@color/white"
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_marginTop="10dp"
-                android:layout_height="50dp">
-                <ImageView
-                    android:layout_centerVertical="true"
-                    android:tint="@color/dimGray"
-                    android:layout_marginLeft="10dp"
-                    android:padding="7dp"
-                    android:src="@drawable/icon_manage"
-                    android:layout_width="45dp"
-                    android:layout_height="45dp"/>
-                <TextView
-                    android:textColor="@color/black"
-                    android:textSize="17sp"
-                    android:layout_marginLeft="70dp"
-                    android:text="健康管理方案"
-                    android:gravity="center_vertical|left"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-                <ImageView
-                    android:layout_marginRight="15dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:src="@drawable/right_arrow"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp" />
-            </RelativeLayout>
-            <RelativeLayout
-                android:id="@+id/thirdLayout"
-                android:background="@color/white"
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_marginTop="10dp"
-                android:layout_height="50dp">
-                <ImageView
-                    android:layout_centerVertical="true"
-                    android:tint="@color/dimGray"
-                    android:layout_marginLeft="10dp"
-                    android:padding="7dp"
-                    android:src="@drawable/icon_contact"
-                    android:layout_width="45dp"
-                    android:layout_height="45dp"/>
-                <TextView
-                    android:textColor="@color/black"
-                    android:textSize="17sp"
-                    android:layout_marginLeft="70dp"
-                    android:text="联系人"
-                    android:gravity="center_vertical|left"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-                <ImageView
-                    android:layout_marginRight="15dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:src="@drawable/right_arrow"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp" />
-            </RelativeLayout>
+            <!--<RelativeLayout-->
+                <!--android:id="@+id/secondLayout"-->
+                <!--android:background="@color/white"-->
+                <!--android:orientation="horizontal"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_marginTop="10dp"-->
+                <!--android:layout_height="50dp">-->
+                <!--<ImageView-->
+                    <!--android:layout_centerVertical="true"-->
+                    <!--android:tint="@color/dimGray"-->
+                    <!--android:layout_marginLeft="10dp"-->
+                    <!--android:padding="7dp"-->
+                    <!--android:src="@drawable/icon_manage"-->
+                    <!--android:layout_width="45dp"-->
+                    <!--android:layout_height="45dp"/>-->
+                <!--<TextView-->
+                    <!--android:textColor="@color/black"-->
+                    <!--android:textSize="17sp"-->
+                    <!--android:layout_marginLeft="70dp"-->
+                    <!--android:text="健康管理方案"-->
+                    <!--android:gravity="center_vertical|left"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="match_parent" />-->
+                <!--<ImageView-->
+                    <!--android:layout_marginRight="15dp"-->
+                    <!--android:layout_alignParentRight="true"-->
+                    <!--android:layout_centerVertical="true"-->
+                    <!--android:src="@drawable/right_arrow"-->
+                    <!--android:layout_width="30dp"-->
+                    <!--android:layout_height="30dp" />-->
+            <!--</RelativeLayout>-->
+            <!--<RelativeLayout-->
+                <!--android:id="@+id/thirdLayout"-->
+                <!--android:background="@color/white"-->
+                <!--android:orientation="horizontal"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_marginTop="10dp"-->
+                <!--android:layout_height="50dp">-->
+                <!--<ImageView-->
+                    <!--android:layout_centerVertical="true"-->
+                    <!--android:tint="@color/dimGray"-->
+                    <!--android:layout_marginLeft="10dp"-->
+                    <!--android:padding="7dp"-->
+                    <!--android:src="@drawable/icon_contact"-->
+                    <!--android:layout_width="45dp"-->
+                    <!--android:layout_height="45dp"/>-->
+                <!--<TextView-->
+                    <!--android:textColor="@color/black"-->
+                    <!--android:textSize="17sp"-->
+                    <!--android:layout_marginLeft="70dp"-->
+                    <!--android:text="联系人"-->
+                    <!--android:gravity="center_vertical|left"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="match_parent" />-->
+                <!--<ImageView-->
+                    <!--android:layout_marginRight="15dp"-->
+                    <!--android:layout_alignParentRight="true"-->
+                    <!--android:layout_centerVertical="true"-->
+                    <!--android:src="@drawable/right_arrow"-->
+                    <!--android:layout_width="30dp"-->
+                    <!--android:layout_height="30dp" />-->
+            <!--</RelativeLayout>-->
             <RelativeLayout
                 android:id="@+id/fourthLayout"
                 android:background="@color/white"
@@ -191,37 +191,37 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp" />
             </RelativeLayout>
-            <RelativeLayout
-                android:id="@+id/fifthLayout"
-                android:background="@color/white"
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_marginTop="10dp"
-                android:layout_height="50dp">
-                <ImageView
-                    android:layout_centerVertical="true"
-                    android:tint="@color/dimGray"
-                    android:layout_marginLeft="10dp"
-                    android:padding="7dp"
-                    android:src="@drawable/icon_setting"
-                    android:layout_width="45dp"
-                    android:layout_height="45dp"/>
-                <TextView
-                    android:textSize="17sp"
-                    android:textColor="@color/black"
-                    android:layout_marginLeft="70dp"
-                    android:text="设置"
-                    android:gravity="center_vertical|left"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-                <ImageView
-                    android:layout_marginRight="15dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:src="@drawable/right_arrow"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp" />
-            </RelativeLayout>
+            <!--<RelativeLayout-->
+                <!--android:id="@+id/fifthLayout"-->
+                <!--android:background="@color/white"-->
+                <!--android:orientation="horizontal"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_marginTop="10dp"-->
+                <!--android:layout_height="50dp">-->
+                <!--<ImageView-->
+                    <!--android:layout_centerVertical="true"-->
+                    <!--android:tint="@color/dimGray"-->
+                    <!--android:layout_marginLeft="10dp"-->
+                    <!--android:padding="7dp"-->
+                    <!--android:src="@drawable/icon_setting"-->
+                    <!--android:layout_width="45dp"-->
+                    <!--android:layout_height="45dp"/>-->
+                <!--<TextView-->
+                    <!--android:textSize="17sp"-->
+                    <!--android:textColor="@color/black"-->
+                    <!--android:layout_marginLeft="70dp"-->
+                    <!--android:text="设置"-->
+                    <!--android:gravity="center_vertical|left"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="match_parent" />-->
+                <!--<ImageView-->
+                    <!--android:layout_marginRight="15dp"-->
+                    <!--android:layout_alignParentRight="true"-->
+                    <!--android:layout_centerVertical="true"-->
+                    <!--android:src="@drawable/right_arrow"-->
+                    <!--android:layout_width="30dp"-->
+                    <!--android:layout_height="30dp" />-->
+            <!--</RelativeLayout>-->
             <RelativeLayout
                 android:id="@+id/sixthLayout"
                 android:background="@color/white"
