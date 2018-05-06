@@ -28,7 +28,7 @@ import indi.noclay.cloudhealth.util.UtilClass;
 import static cn.bmob.v3.Bmob.getApplicationContext;
 
 /**
- * Created by 兆鹏 on 2016/11/5.
+ * Created by NoClay on 2016/11/5.
  */
 public class DataDynamicFragment extends Fragment
         implements SwipeRefreshLayout.OnRefreshListener,

@@ -14,7 +14,7 @@ import indi.noclay.cloudhealth.activity.MedicineActivity;
 
 
 /*
- * Created by 兆鹏 on 2016/11/5.
+ * Created by NoClay on 2016/11/5.
  */
 public class DataMedicalFragment extends Fragment implements View.OnClickListener {
     private View view;

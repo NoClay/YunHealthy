@@ -15,7 +15,7 @@ import indi.noclay.cloudhealth.activity.InfoActivityForReport;
 
 
 /**
- * Created by 兆鹏 on 2016/11/5.
+ * Created by NoClay on 2016/11/5.
  */
 public class DataReportFragment extends Fragment implements View.OnClickListener {
     private RelativeLayout[] layouts;

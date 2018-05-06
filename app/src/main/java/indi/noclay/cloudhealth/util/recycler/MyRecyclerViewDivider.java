@@ -14,7 +14,7 @@ import android.view.View;
 
 /**
  * 自定义RecycleView的分割线
- * Created by 兆鹏 on 2016/11/4.
+ * Created by NoClay on 2016/11/4.
  */
 public class MyRecyclerViewDivider extends RecyclerView.ItemDecoration {
     private static final int[] ATTRS = new int[] { android.R.attr.listDivider };

@@ -15,7 +15,7 @@ import indi.noclay.cloudhealth.R;
 
 
 /*
- * Created by 兆鹏 on 2016/11/3.
+ * Created by NoClay on 2016/11/3.
  */
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
     private List<Map<String,Object>> datas = new ArrayList<>();

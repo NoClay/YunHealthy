@@ -31,7 +31,7 @@ import static android.app.Activity.RESULT_OK;
 import static android.content.Context.MODE_PRIVATE;
 
 /**
- * Created by 兆鹏 on 2016/11/2.
+ * Created by NoClay on 2016/11/2.
  */
 public class MineFragment extends Fragment implements View.OnClickListener{
 

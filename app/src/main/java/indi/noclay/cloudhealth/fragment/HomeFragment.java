@@ -33,7 +33,7 @@ import static indi.noclay.cloudhealth.util.ConstantsConfig.TYPE_FRAGMENT_MEDICIN
 
 
 /*
- * Created by 兆鹏 on 2016/11/2.
+ * Created by NoClay on 2016/11/2.
  */
 public class HomeFragment extends Fragment implements View.OnClickListener {
     private Context context;

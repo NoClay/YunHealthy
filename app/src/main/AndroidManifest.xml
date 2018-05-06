@@ -167,6 +167,8 @@
         </activity>
         <activity android:name=".activity.FragmentContainerActivity">
         </activity>
+        <activity android:name=".activity.HealthyReportActivity">
+        </activity>
     </application>
 
 </manifest>

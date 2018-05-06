@@ -28,8 +28,7 @@
         <ImageView
             android:id="@+id/img"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/image_middle_height"
-            android:src="@drawable/test_medicine"/>
+            android:layout_height="@dimen/image_middle_height"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

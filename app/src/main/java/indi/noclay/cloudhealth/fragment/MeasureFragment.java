@@ -40,9 +40,17 @@ import pers.noclay.utiltool.BaseHandler;
 
 import static indi.noclay.cloudhealth.database.MeasureTableHelper.addOneMeasureData;
 import static indi.noclay.cloudhealth.database.MeasureTableHelper.checkOneMeasureDataCache;
+import static indi.noclay.cloudhealth.database.measuredata.MeasureDataHelper.ERROR_RETURN_VALUE;
+import static indi.noclay.cloudhealth.database.measuredata.MeasureDataHelper.isValidData;
+import static indi.noclay.cloudhealth.util.ConstantsConfig.MEASURE_TYPE_FENCHEN;
+import static indi.noclay.cloudhealth.util.ConstantsConfig.MEASURE_TYPE_MAIBO;
+import static indi.noclay.cloudhealth.util.ConstantsConfig.MEASURE_TYPE_TIWEN;
+import static indi.noclay.cloudhealth.util.ConstantsConfig.MEASURE_TYPE_XINDIAN;
+import static indi.noclay.cloudhealth.util.ConstantsConfig.MEASURE_TYPE_XUETANG;
+import static indi.noclay.cloudhealth.util.ConstantsConfig.MEASURE_TYPE_XUEYANG;
 
 /*
- * Created by 兆鹏 on 2016/11/2.
+ * Created by NoClay on 2016/11/2.
  */
 public class MeasureFragment extends Fragment implements
         View.OnClickListener,
@@ -113,7 +121,7 @@ public class MeasureFragment extends Fragment implements
     @Override
     public void onStop() {
         super.onStop();
-        if (myAdapter != null){
+        if (myAdapter != null) {
             myAdapter.stopRefreshing();
         }
     }
@@ -142,8 +150,6 @@ public class MeasureFragment extends Fragment implements
         //本地缓存所需要的初始化
         calendar = Calendar.getInstance();
         calendar.setTimeInMillis(SystemClock.currentThreadTimeMillis());
-        myDataBase = new LocalDataBase(getActivity().getApplicationContext(),
-                "LocalStore.db", null, ConstantsConfig.DATABASE_VERSION);
 
     }
 
@@ -212,7 +218,7 @@ public class MeasureFragment extends Fragment implements
      */
     public void checkMinuteAndCache(int type, int minute) {
         if (minute % ConstantsConfig.CACHE_TIME_LENGTH == 0
-                && ! checkOneMeasureDataCache(type, calendar.getTime())) {
+                && !checkOneMeasureDataCache(type, calendar.getTime())) {
             Log.d("Cache", "checkMinuteAndCache: cache + " +
                     ConstantsConfig.LABEL_STRING[type] + "\tminute" + minute);
             addOneMeasureData(measureDataList.get(type), type, calendar.getTime());
@@ -269,97 +275,86 @@ public class MeasureFragment extends Fragment implements
                     load.setVisibility(View.INVISIBLE);
                     break;
                 }
-                case MSG_READ_STRING:{
+                case MSG_READ_STRING: {
                     //进行数据的分类设定
                     calendar.setTimeInMillis(System.currentTimeMillis());
-                    int minute=calendar.get(Calendar.MINUTE);
-                    String data=(String)message.obj;
+                    int minute = calendar.get(Calendar.MINUTE);
+                    String data = (String) message.obj;
                     MeasureData temp;
-                    switch(message.arg1){
+                    float result;
+                    switch (message.arg1) {
                         //每次都要求获取数据的字符串
-                        case 0:{//保留
+                        case 0: {//保留
                             break;
                         }
-                        case 1:{
+                        case 1: {
                             //血氧
-                            if(data.length()==8){
-                                Log.d("workItem","handleMessage: 血氧");
-                                Log.d("workItem","handleMessage: 脉搏");
-                                checkMinuteAndCache(ConstantsConfig.MEASURE_TYPE_XUEYANG,minute);
-                                checkMinuteAndCache(ConstantsConfig.MEASURE_TYPE_MAIBO,minute);
+                            if (data.length() == 8) {
+                                Log.d("workItem", "handleMessage: 血氧");
+                                Log.d("workItem", "handleMessage: 脉搏");
+                                checkMinuteAndCache(MEASURE_TYPE_XUEYANG, minute);
+                                checkMinuteAndCache(ConstantsConfig.MEASURE_TYPE_MAIBO, minute);
                                 //进行血氧的结果解析
-                                float result=UtilClass.valueOfHexString(data.substring(0,2));
-                                temp=measureDataList.get(ConstantsConfig.MEASURE_TYPE_XUEYANG);
-                                if(result>0&&result< 100&&compareData(temp,result)){
-                                    myAdapter.notifyItemChanged(ConstantsConfig.MEASURE_TYPE_XUEYANG);
+                                result = isValidData(data.substring(0, 2), MEASURE_TYPE_XUEYANG);
+                                temp = measureDataList.get(MEASURE_TYPE_XUEYANG);
+                                if (result != ERROR_RETURN_VALUE && compareData(temp, result)) {
+                                    myAdapter.notifyItemChanged(MEASURE_TYPE_XUEYANG);
                                 }
                                 //进行脉搏的结果解析
-                                result=UtilClass.valueOfHexString(data.substring(2,4));
-                                temp=measureDataList.get(ConstantsConfig.MEASURE_TYPE_MAIBO);
-                                if(result>0&&result< 255&&compareData(temp,result)){
+                                result = isValidData(data.substring(2, 4), MEASURE_TYPE_MAIBO);
+                                temp = measureDataList.get(ConstantsConfig.MEASURE_TYPE_MAIBO);
+                                if (result != ERROR_RETURN_VALUE && compareData(temp, result)) {
                                     myAdapter.notifyItemChanged(ConstantsConfig.MEASURE_TYPE_MAIBO);
                                 }
                             }
                             break;
                         }
-                        case 2:{
+                        case 2: {
                             //心电
-                            if(data.length()==4){
-                                time=System.currentTimeMillis();
-                                count++;
-                                Log.d("displayHeart","handleMessage: time = "+time/1000+" count = "+count);
-                                checkMinuteAndCache(ConstantsConfig.MEASURE_TYPE_XINDIAN,minute);
-                                int result=UtilClass.valueOfHexString(data);
-                                temp=measureDataList.get(ConstantsConfig.MEASURE_TYPE_XINDIAN);
-//                                myAdapter.drawHeartWavesPoint(result);
-                                if(compareData(temp,(float)(result))){
-                                    myAdapter.notifyItemChanged(ConstantsConfig.MEASURE_TYPE_XINDIAN);
-                                }
+                            checkMinuteAndCache(ConstantsConfig.MEASURE_TYPE_XINDIAN, minute);
+                            result = isValidData(data, MEASURE_TYPE_XINDIAN);
+                            temp = measureDataList.get(ConstantsConfig.MEASURE_TYPE_XINDIAN);
+                            if (result != ERROR_RETURN_VALUE && compareData(temp, (float) (result))) {
+                                myAdapter.drawHeartWavesPoint(result);
+                                myAdapter.notifyItemChanged(ConstantsConfig.MEASURE_TYPE_XINDIAN);
                             }
                             break;
                         }
-                        case 3:{
+                        case 3: {
                             //血糖
-                            if(data.length()==12){
-                                Log.d("workItem","handleMessage: 血糖");
-                                checkMinuteAndCache(ConstantsConfig.MEASURE_TYPE_XUETANG,minute);
-                                float result=UtilClass.valueOfHexString(
-                                        data.substring(10,12))/10.0f;
-                                temp=measureDataList.get(ConstantsConfig.MEASURE_TYPE_XUETANG);
-                                if(result>0&&result< 300&&compareData(temp,result)){
-                                    myAdapter.notifyItemChanged(ConstantsConfig.MEASURE_TYPE_XUETANG);
-                                }
+                            Log.d("workItem", "handleMessage: 血糖");
+                            checkMinuteAndCache(ConstantsConfig.MEASURE_TYPE_XUETANG, minute);
+                            result = isValidData(data, MEASURE_TYPE_XUETANG);
+                            temp = measureDataList.get(ConstantsConfig.MEASURE_TYPE_XUETANG);
+                            if (result != ERROR_RETURN_VALUE && compareData(temp, result)) {
+                                myAdapter.notifyItemChanged(ConstantsConfig.MEASURE_TYPE_XUETANG);
                             }
                             break;
                         }
-                        case 4:{
+                        case 4: {
                             //体温
-                            if(data.length()==4){
-                                Log.d("workItem","handleMessage: 体温");
-                                checkMinuteAndCache(ConstantsConfig.MEASURE_TYPE_TIWEN,minute);
-                                float result=UtilClass.valueOfHexString(data)/100.0f;
-                                temp=measureDataList.get(ConstantsConfig.MEASURE_TYPE_TIWEN);
-                                if(compareData(temp,result)){
-                                    //修改各项
-                                    myAdapter.notifyItemChanged(ConstantsConfig.MEASURE_TYPE_TIWEN);
-                                }
+                            Log.d("workItem", "handleMessage: 体温");
+                            checkMinuteAndCache(ConstantsConfig.MEASURE_TYPE_TIWEN, minute);
+                            result = isValidData(data, MEASURE_TYPE_TIWEN);
+                            temp = measureDataList.get(ConstantsConfig.MEASURE_TYPE_TIWEN);
+                            if (result != ERROR_RETURN_VALUE && compareData(temp, result)) {
+                                myAdapter.notifyItemChanged(ConstantsConfig.MEASURE_TYPE_TIWEN);
                             }
                             break;
                         }
-                        case 5:{
+                        case 5: {
                             //粉尘
-                            if(data.length()==8){
-                                Log.d("workItem","handleMessage: 粉尘");
-                                checkMinuteAndCache(ConstantsConfig.MEASURE_TYPE_FENCHEN,minute);
-                                float result=UtilClass.valueOfHexString(data)/100.0f;
-                                temp=measureDataList.get(ConstantsConfig.MEASURE_TYPE_FENCHEN);
-                                if(result>0&&result< 800&&compareData(temp,result)){
-                                    myAdapter.notifyItemChanged(ConstantsConfig.MEASURE_TYPE_FENCHEN);
-                                }
+                            Log.d("workItem", "handleMessage: 粉尘");
+                            checkMinuteAndCache(ConstantsConfig.MEASURE_TYPE_FENCHEN, minute);
+                            result = isValidData(data, MEASURE_TYPE_FENCHEN);
+                            temp = measureDataList.get(ConstantsConfig.MEASURE_TYPE_FENCHEN);
+                            if (result != ERROR_RETURN_VALUE && compareData(temp, result)) {
+                                myAdapter.notifyItemChanged(ConstantsConfig.MEASURE_TYPE_FENCHEN);
                             }
                             break;
                         }
-                        default:break;
+                        default:
+                            break;
                     }
                 }
             }

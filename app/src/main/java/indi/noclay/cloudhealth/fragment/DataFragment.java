@@ -21,7 +21,7 @@ import indi.noclay.cloudhealth.util.TabLayoutViewPagerAdapter;
 
 
 /*
- * Created by 兆鹏 on 2016/11/2.
+ * Created by NoClay on 2016/11/2.
  */
 public class DataFragment extends Fragment {
     private List<Fragment> datas;

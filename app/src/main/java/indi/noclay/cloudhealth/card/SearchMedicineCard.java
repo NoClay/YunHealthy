@@ -3,6 +3,7 @@ package indi.noclay.cloudhealth.card;
 import android.app.Activity;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -14,6 +15,7 @@ import com.bumptech.glide.request.target.SimpleTarget;
 
 import indi.noclay.cloudhealth.R;
 import indi.noclay.cloudhealth.carddata.MedicineRetData;
+import indi.noclay.cloudhealth.util.ViewUtils;
 
 /**
  * Created by NoClay on 2018/5/2.
@@ -93,12 +95,17 @@ public class SearchMedicineCard extends BaseCard {
         if (object instanceof MedicineRetData.Drug){
             mDrug = (MedicineRetData.Drug) object;
             name.setText(mDrug.getDrugName());
-            Glide.with(getContext()).load(mDrug.getImg()).error(R.drawable.icon_load_failed).crossFade().into(new SimpleTarget<GlideDrawable>() {
-                @Override
-                public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
-                    img.setImageDrawable(resource);
-                }
-            });
+            if(TextUtils.isEmpty(mDrug.getImg())){
+                ViewUtils.hideView(img);
+            }else{
+                ViewUtils.showView(img);
+                Glide.with(getContext()).load(mDrug.getImg()).error(R.drawable.icon_load_failed).crossFade().into(new SimpleTarget<GlideDrawable>() {
+                    @Override
+                    public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
+                        img.setImageDrawable(resource);
+                    }
+                });
+            }
             price.setText(mDrug.getPrice());
             pzwh.setText(mDrug.getPzwh());
             zxbz.setText(mDrug.getZxbz());
