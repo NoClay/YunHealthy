@@ -18,6 +18,8 @@ import static indi.noclay.cloudhealth.database.MeasureTableHelper.addOneMeasureD
 import static indi.noclay.cloudhealth.database.MeasureTableHelper.checkOneMeasureDataCache;
 import static indi.noclay.cloudhealth.database.measuredata.MeasureDataHelper.ERROR_RETURN_VALUE;
 import static indi.noclay.cloudhealth.database.measuredata.MeasureDataHelper.isValidData;
+import static indi.noclay.cloudhealth.util.BinFileHelper.appendToFile;
+import static indi.noclay.cloudhealth.util.BinFileHelper.getCacheFileName;
 import static indi.noclay.cloudhealth.util.ConstantsConfig.MEASURE_TYPE_FENCHEN;
 import static indi.noclay.cloudhealth.util.ConstantsConfig.MEASURE_TYPE_MAIBO;
 import static indi.noclay.cloudhealth.util.ConstantsConfig.MEASURE_TYPE_TIWEN;
@@ -133,10 +135,12 @@ public class BluetoothConnectService extends BluetoothConnectionService implemen
             }
             case 2: {
                 //心电
-                checkMinuteAndCache(ConstantsConfig.MEASURE_TYPE_XINDIAN);
+                //心电缓存，利用二进制文件
+                String fileName = getCacheFileName(MEASURE_TYPE_XINDIAN);
                 tempValue = isValidData(result, MEASURE_TYPE_XINDIAN);
                 temp = sMeasureDataList.get(ConstantsConfig.MEASURE_TYPE_XINDIAN);
                 if (tempValue != ERROR_RETURN_VALUE) {
+                    appendToFile(fileName, ((int) tempValue));
                     compareData(temp, tempValue);
                 }
                 break;

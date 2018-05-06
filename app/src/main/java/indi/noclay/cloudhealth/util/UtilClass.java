@@ -55,6 +55,54 @@ import static android.os.Build.VERSION_CODES.M;
  */
 
 public class UtilClass {
+
+    /**
+     * 获取时间戳 yyyy_mm_dd_hh_mm
+     * @return
+     */
+    public static String getTimeStamp(){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        StringBuilder builder = new StringBuilder();
+        builder.append(calendar.get(Calendar.YEAR))
+                .append("_")
+                .append(calendar.get(Calendar.MONTH) + 1)
+                .append("_")
+                .append(calendar.get(Calendar.DAY_OF_MONTH))
+                .append("_")
+                .append(calendar.get(Calendar.HOUR_OF_DAY))
+                .append("_")
+                .append((calendar.get(Calendar.MINUTE) / 15) * 15);
+        return builder.toString();
+    }
+
+    public static String getTimeStamp(Calendar calendar){
+        StringBuilder builder = new StringBuilder();
+        builder.append(calendar.get(Calendar.YEAR))
+                .append("_")
+                .append(calendar.get(Calendar.MONTH) + 1)
+                .append("_")
+                .append(calendar.get(Calendar.DAY_OF_MONTH))
+                .append("_")
+                .append(calendar.get(Calendar.HOUR_OF_DAY))
+                .append("_")
+                .append((calendar.get(Calendar.MINUTE) / 15) * 15);
+        return builder.toString();
+    }
+
+    public static String getTimeStamp(int year, int month, int day, int hour, int minute){
+        StringBuilder builder = new StringBuilder();
+        builder.append(year)
+                .append("_")
+                .append(month)
+                .append("_")
+                .append(day)
+                .append("_")
+                .append(hour)
+                .append("_")
+                .append((minute / 15) * 15);
+        return builder.toString();
+    }
     public static boolean bundleEquals(final Bundle bundle1, final Bundle bundle2) {
         if (bundle1 == null || bundle2 == null) return bundle1 == bundle2;
         final Iterator<String> keys = bundle1.keySet().iterator();
