@@ -1,5 +1,6 @@
 package indi.noclay.cloudhealth.database.measuredata;
 
+
 import indi.noclay.cloudhealth.util.UtilClass;
 
 import static indi.noclay.cloudhealth.util.ConstantsConfig.MEASURE_TYPE_FENCHEN;
@@ -16,8 +17,10 @@ import static indi.noclay.cloudhealth.util.ConstantsConfig.MEASURE_TYPE_XUEYANG;
 
 public abstract class MeasureDataHelper {
     public static final float ERROR_RETURN_VALUE = -1024.0f;
+
     /**
      * 有效则返回具体数值，否则返回-1024
+     *
      * @param data
      * @param type
      * @return
@@ -28,7 +31,7 @@ public abstract class MeasureDataHelper {
             //每次都要求获取数据的字符串
             case MEASURE_TYPE_XUEYANG: {
                 //血氧
-                if (data.length() == 4){
+                if (data.length() == 4) {
                     result = UtilClass.valueOfHexString(data);
                     if (data.length() == 8) {
                         //进行血氧的结果解析
@@ -39,9 +42,9 @@ public abstract class MeasureDataHelper {
                 }
                 break;
             }
-            case MEASURE_TYPE_MAIBO:{
+            case MEASURE_TYPE_MAIBO: {
                 //进行脉搏的结果解析
-                if (data.length() == 4){
+                if (data.length() == 4) {
                     result = UtilClass.valueOfHexString(data);
                     if (result > 0 && result < 255) {
                         return result;
@@ -51,7 +54,7 @@ public abstract class MeasureDataHelper {
             }
             case MEASURE_TYPE_XINDIAN: {
                 //心电
-                if (data.length() == 4){
+                if (data.length() == 4) {
                     result = UtilClass.valueOfHexString(data);
                     if (result > 0 && result < 4096) {
                         return result;
@@ -61,7 +64,7 @@ public abstract class MeasureDataHelper {
             }
             case MEASURE_TYPE_XUETANG: {
                 //血糖
-                if (data.length() == 12){
+                if (data.length() == 12) {
                     result = UtilClass.valueOfHexString(data.substring(10, 12)) / 10.0f;
                     if (result > 0 && result < 300) {
                         return result;

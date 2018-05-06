@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import indi.noclay.cloudhealth.R;
 
+
 public class HealthyReportActivity extends AppCompatActivity {
 
     @Override
