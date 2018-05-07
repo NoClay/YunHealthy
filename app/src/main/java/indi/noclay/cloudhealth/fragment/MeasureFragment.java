@@ -3,6 +3,7 @@ package indi.noclay.cloudhealth.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
@@ -35,8 +36,8 @@ import indi.noclay.cloudhealth.util.SharedPreferenceHelper;
 import indi.noclay.cloudhealth.util.UtilClass;
 import pers.noclay.bluetooth.Bluetooth;
 import pers.noclay.bluetooth.BluetoothConfig;
+import pers.noclay.bluetooth.BluetoothConnectionService;
 import pers.noclay.bluetooth.OnConnectListener;
-import pers.noclay.utiltool.BaseHandler;
 
 import static indi.noclay.cloudhealth.database.MeasureTableHelper.addOneMeasureData;
 import static indi.noclay.cloudhealth.database.MeasureTableHelper.checkOneMeasureDataCache;
@@ -68,7 +69,7 @@ public class MeasureFragment extends Fragment implements
     private String data;
     long time;
     long count = 0;
-    public static boolean sIsBluetoothWorkable;
+    public static boolean sIsBluetoothWorkable = true;
     //请求
     static final int REQUEST_OPEN_BLUETOOTH = 0;
     static final int MSG_WAIT_CONNECT = 0;
@@ -97,15 +98,18 @@ public class MeasureFragment extends Fragment implements
         BluetoothConfig config = new BluetoothConfig.Builder(getContext())
                 .setAutoPairAble(true)
                 .setUUID("00001101-0000-1000-8000-00805F9B34FB")
+                .setServerEnable(false)
+                .setConnectionServiceClass(BluetoothConnectionService.class)
                 .build();
         Bluetooth.initialize(config);
         Bluetooth.setOnConnectListener(this);
         Bluetooth.setApplicationContext(this.getActivity().getApplicationContext());
     }
 
+
     @Override
-    public void onResume() {
-        super.onResume();
+    public void onStart() {
+        super.onStart();
         if (myAdapter != null) {
             myAdapter.startRefreshing();
         }
@@ -113,14 +117,9 @@ public class MeasureFragment extends Fragment implements
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-        sIsBluetoothWorkable = false;
-    }
-
-    @Override
     public void onStop() {
         super.onStop();
+        sIsBluetoothWorkable = false;
         if (myAdapter != null) {
             myAdapter.stopRefreshing();
         }
@@ -163,6 +162,8 @@ public class MeasureFragment extends Fragment implements
                     toToast("正在连接设备");
                     Bluetooth.setTargetAddress(address);
                     Bluetooth.startConnect();
+                    load.setVisibility(View.VISIBLE);
+                    connectDevice.setVisibility(View.GONE);
                 } else {
                     Snackbar.make(getView(), "暂无设备，请点击我的设备添加设备", Snackbar.LENGTH_SHORT)
                             .setAction("好的", new View.OnClickListener() {
@@ -207,6 +208,7 @@ public class MeasureFragment extends Fragment implements
 
     @Override
     public void onReceiveMessage(byte[] bytes) {
+        Log.d("connectThread", "onReceiveMessage: handle");
         sDataResolver.resolveData(bytes);
     }
 
@@ -255,11 +257,12 @@ public class MeasureFragment extends Fragment implements
         mHandler.sendMessage(message);
     }
 
+    Handler mHandler = new MeasureHandler();
 
-    BaseHandler mHandler = new BaseHandler<BaseHandler.BaseHandlerCallBack>(new BaseHandler.BaseHandlerCallBack() {
+    private class MeasureHandler extends Handler{
         @Override
-        public void callBack(Message message) {
-            switch (message.what) {
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
                 case MSG_CONNECT_FAILED: {
                     Log.d(TAG, "handleMessage: 连接失败");
                     connectDevice.setClickable(true);
@@ -279,10 +282,10 @@ public class MeasureFragment extends Fragment implements
                     //进行数据的分类设定
                     calendar.setTimeInMillis(System.currentTimeMillis());
                     int minute = calendar.get(Calendar.MINUTE);
-                    String data = (String) message.obj;
+                    String data = (String) msg.obj;
                     MeasureData temp;
                     float result;
-                    switch (message.arg1) {
+                    switch (msg.arg1) {
                         //每次都要求获取数据的字符串
                         case 0: {//保留
                             break;
@@ -314,7 +317,9 @@ public class MeasureFragment extends Fragment implements
                             checkMinuteAndCache(ConstantsConfig.MEASURE_TYPE_XINDIAN, minute);
                             result = isValidData(data, MEASURE_TYPE_XINDIAN);
                             temp = measureDataList.get(ConstantsConfig.MEASURE_TYPE_XINDIAN);
-                            if (result != ERROR_RETURN_VALUE && compareData(temp, (float) (result))) {
+                            if (result != ERROR_RETURN_VALUE) {
+                                Log.d(TAG, "handleMessage: drawWaves = " + result);
+                                compareData(temp, (float) (result));
                                 myAdapter.drawHeartWavesPoint(result);
                                 myAdapter.notifyItemChanged(ConstantsConfig.MEASURE_TYPE_XINDIAN);
                             }
@@ -359,12 +364,12 @@ public class MeasureFragment extends Fragment implements
                 }
             }
         }
-    });
+    }
+
 
 
     @Override
     public void onDestroy() {
-        mHandler.onDestory();
         super.onDestroy();
     }
 }

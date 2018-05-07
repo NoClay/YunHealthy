@@ -64,6 +64,6 @@ dependencies {
     implementation project(':ecgwaveview-release')
     implementation project(':foldlineview-release')
     implementation project(':utiltool-release')
-    implementation project(':bluetooth-debug')
     implementation files('libs/showapi_sdk.jar')
+    implementation project(':bluetooth')
 }

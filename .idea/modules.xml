@@ -4,7 +4,8 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/YunHealthy.iml" filepath="$PROJECT_DIR$/YunHealthy.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/bluetooth-debug/bluetooth-debug.iml" filepath="$PROJECT_DIR$/bluetooth-debug/bluetooth-debug.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bluetooth/bluetooth.iml" filepath="$PROJECT_DIR$/bluetooth/bluetooth.iml" />
+      <module fileurl="file://D:\ThoughtCode\AndroidProject\YunHealthy\bluetooth-debug\bluetooth-debug.iml" filepath="D:\ThoughtCode\AndroidProject\YunHealthy\bluetooth-debug\bluetooth-debug.iml" />
       <module fileurl="file://$PROJECT_DIR$/ecgwaveview-release/ecgwaveview-release.iml" filepath="$PROJECT_DIR$/ecgwaveview-release/ecgwaveview-release.iml" />
       <module fileurl="file://$PROJECT_DIR$/foldlineview-release/foldlineview-release.iml" filepath="$PROJECT_DIR$/foldlineview-release/foldlineview-release.iml" />
       <module fileurl="file://$PROJECT_DIR$/utiltool-release/utiltool-release.iml" filepath="$PROJECT_DIR$/utiltool-release/utiltool-release.iml" />

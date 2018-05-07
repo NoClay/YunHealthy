@@ -2,17 +2,14 @@ package indi.noclay.cloudhealth.service;
 
 import android.util.Log;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
 import indi.noclay.cloudhealth.database.measuredata.MeasureData;
-import indi.noclay.cloudhealth.fragment.MeasureFragment;
 import indi.noclay.cloudhealth.util.ABSMeasureDataResolver;
 import indi.noclay.cloudhealth.util.ConstantsConfig;
 import indi.noclay.cloudhealth.util.CustomMeasureDataResolver;
 import pers.noclay.bluetooth.BluetoothConnectionService;
-import pers.noclay.bluetooth.BluetoothConstant;
 
 import static indi.noclay.cloudhealth.database.MeasureTableHelper.addOneMeasureData;
 import static indi.noclay.cloudhealth.database.MeasureTableHelper.checkOneMeasureDataCache;
@@ -38,26 +35,26 @@ public class BluetoothConnectService extends BluetoothConnectionService implemen
     private static Calendar sCalendar;
     private static List<MeasureData> sMeasureDataList;
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        sDataResolver = new CustomMeasureDataResolver();
-        sDataResolver.setOnResolveListener(this);
-        sCalendar = Calendar.getInstance();
-        sCalendar.setTimeInMillis(System.currentTimeMillis());
-        initCacheList();
-    }
-
-    private void initCacheList() {
-        sMeasureDataList = new ArrayList<>();
-        for (int i = 0; i < ConstantsConfig.LABEL_STRING.length; i++) {
-            MeasureData measure = new MeasureData();
-            measure.setName(ConstantsConfig.LABEL_STRING[i]);
-            sMeasureDataList.add(measure);
-        }
-    }
-
-
+//    @Override
+//    public void onCreate() {
+//        super.onCreate();
+//        sDataResolver = new CustomMeasureDataResolver();
+//        sDataResolver.setOnResolveListener(this);
+//        sCalendar = Calendar.getInstance();
+//        sCalendar.setTimeInMillis(System.currentTimeMillis());
+//        initCacheList();
+//    }
+//
+//    private void initCacheList() {
+//        sMeasureDataList = new ArrayList<>();
+//        for (int i = 0; i < ConstantsConfig.LABEL_STRING.length; i++) {
+//            MeasureData measure = new MeasureData();
+//            measure.setName(ConstantsConfig.LABEL_STRING[i]);
+//            sMeasureDataList.add(measure);
+//        }
+//    }
+//
+//
     /**
      * 检查本时段缓存处理
      *
@@ -87,19 +84,20 @@ public class BluetoothConnectService extends BluetoothConnectionService implemen
         flag3 = temp.setMinData(result);
         return flag1 || flag2 || flag3;
     }
-
-    @Override
-    protected void beginBroadcastWrapper(int method, byte[] bytes, int type) {
-        if (MeasureFragment.sIsBluetoothWorkable) {
-            //该页面正在展示中
-            super.beginBroadcastWrapper(method, bytes, type);
-        }
-        //本地进行缓存等
-        if (method == BluetoothConstant.METHOD_ON_RECEIVE_MESSAGE) {
-            sDataResolver.resolveData(bytes);
-        }
-
-    }
+//
+//    @Override
+//    protected void beginBroadcastWrapper(int method, byte[] bytes, int type) {
+//        if (MeasureFragment.sIsBluetoothWorkable) {
+//            //该页面正在展示中
+//            super.beginBroadcastWrapper(method, bytes, type);
+//        }
+//        //本地进行缓存等
+//        if (method == BluetoothConstant.METHOD_ON_RECEIVE_MESSAGE) {
+//            Log.d("connectThread", "onReceiveMessage: handle");
+//            sDataResolver.resolveData(bytes);
+//        }
+//
+//    }
 
     @Override
     public void onResolve(String result, int type) {

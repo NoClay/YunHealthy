@@ -1,1 +1,1 @@
-include ':app', ':ecgwaveview-release', ':foldlineview-release', ':utiltool-release', ':bluetooth-debug'
+include ':app', ':ecgwaveview-release', ':foldlineview-release', ':utiltool-release', ':bluetooth'

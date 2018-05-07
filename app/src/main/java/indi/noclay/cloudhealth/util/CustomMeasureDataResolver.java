@@ -24,7 +24,7 @@ public class CustomMeasureDataResolver extends ABSMeasureDataResolver {
             if (start != -1 && data.length() > 4) {
                 end = data.indexOf("dcba", start + 1);
             }
-            if (start != -1 && end != -1 && start != end) {
+            if (start != -1 && end != -1 && start < end && end < data.length()) {
                 analysisData(data.substring(start, end));
                 data = data.substring(end);
             }
