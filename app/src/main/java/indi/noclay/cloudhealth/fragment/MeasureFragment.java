@@ -29,6 +29,7 @@ import indi.noclay.cloudhealth.R;
 import indi.noclay.cloudhealth.adapter.RecycleAdapterForMeasureOnly;
 import indi.noclay.cloudhealth.database.LocalDataBase;
 import indi.noclay.cloudhealth.database.measuredata.MeasureData;
+import indi.noclay.cloudhealth.service.BluetoothConnectService;
 import indi.noclay.cloudhealth.util.ABSMeasureDataResolver;
 import indi.noclay.cloudhealth.util.ConstantsConfig;
 import indi.noclay.cloudhealth.util.CustomMeasureDataResolver;
@@ -36,7 +37,6 @@ import indi.noclay.cloudhealth.util.SharedPreferenceHelper;
 import indi.noclay.cloudhealth.util.UtilClass;
 import pers.noclay.bluetooth.Bluetooth;
 import pers.noclay.bluetooth.BluetoothConfig;
-import pers.noclay.bluetooth.BluetoothConnectionService;
 import pers.noclay.bluetooth.OnConnectListener;
 
 import static indi.noclay.cloudhealth.database.MeasureTableHelper.addOneMeasureData;
@@ -99,7 +99,7 @@ public class MeasureFragment extends Fragment implements
                 .setAutoPairAble(true)
                 .setUUID("00001101-0000-1000-8000-00805F9B34FB")
                 .setServerEnable(false)
-                .setConnectionServiceClass(BluetoothConnectionService.class)
+                .setConnectionServiceClass(BluetoothConnectService.class)
                 .build();
         Bluetooth.initialize(config);
         Bluetooth.setOnConnectListener(this);

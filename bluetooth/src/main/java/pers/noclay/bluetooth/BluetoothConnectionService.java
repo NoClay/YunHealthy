@@ -10,7 +10,6 @@ import android.os.Message;
 import android.os.RemoteCallbackList;
 import android.os.RemoteException;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import java.lang.ref.SoftReference;
 import java.util.Timer;
@@ -28,7 +27,7 @@ import static pers.noclay.bluetooth.BluetoothConstant.MESSAGE_START_CONNECT;
  * Created by i-gaolonghai on 2017/8/21.
  */
 
-public class BluetoothConnectionService extends Service {
+public class BluetoothConnectionService extends Service{
     RemoteCallbackList<IBluetoothReceiverListener> mListeners = new RemoteCallbackList<>();
     ClientThread mClientThread;
     ServerThread mServerThread;
@@ -90,7 +89,6 @@ public class BluetoothConnectionService extends Service {
                 case MESSAGE_READ_STRING: {
                     service.get().beginBroadcastWrapper(BluetoothConstant.METHOD_ON_RECEIVE_MESSAGE, ((byte[]) msg.obj), -1);
                     //针对收到的信息进行判定
-                    Log.d("connectThread", "run: sendMessage handle ");
 
                     break;
                 }

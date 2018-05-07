@@ -45,22 +45,16 @@ public class CustomMeasureDataResolver extends ABSMeasureDataResolver {
         if (len < 12) {
             return;
         }
-        if (!UtilClass.checkHexString(substring)) {
-            return;
-        }
-        if (!substring.startsWith("dcbae")) {
-            return;
-        }
-        int type = Integer.valueOf(substring.substring(5, 6), 16);
-        int highLength = Integer.valueOf(substring.substring(6, 8), 16);
-        int lowLength = Integer.valueOf(substring.substring(8, 10), 16);
+        int type = Integer.valueOf(substring.indexOf(5) + "", 16);
+        int highLength = Integer.valueOf(substring.indexOf(6) + substring.indexOf(7) + "", 16);
+        int lowLength = Integer.valueOf(substring.indexOf(7) + substring.indexOf(8) + "", 16);
         if (len != (12 + (highLength + lowLength) * 2)) {
             //长度不符合
             return;
         }
         int sum = 0;
         for (int i = 2; i < len; ) {
-            sum += Integer.valueOf(substring.substring(i - 2, i), 16);
+            sum += Integer.valueOf(substring.indexOf(i - 2) + "" + substring.indexOf(i - 1), 16);
             i += 2;
         }
         String sumString = Integer.toHexString(sum);
