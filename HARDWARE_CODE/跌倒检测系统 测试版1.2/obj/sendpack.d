@@ -1,0 +1,12 @@
+..\obj\sendpack.o: ..\hardware\SendPack.c
+..\obj\sendpack.o: ..\hardware\SendPack.h
+..\obj\sendpack.o: ..\system\usart\usart.h
+..\obj\sendpack.o: ..\system\sys\sys.h
+..\obj\sendpack.o: ..\system\sys\stm32f10x.h
+..\obj\sendpack.o: d:\Keil_v5\ARM\PACK\ARM\CMSIS\3.20.4\CMSIS\Include\core_cm3.h
+..\obj\sendpack.o: d:\Keil_v5\ARM\ARMCC\bin\..\include\stdint.h
+..\obj\sendpack.o: d:\Keil_v5\ARM\PACK\ARM\CMSIS\3.20.4\CMSIS\Include\core_cmInstr.h
+..\obj\sendpack.o: d:\Keil_v5\ARM\PACK\ARM\CMSIS\3.20.4\CMSIS\Include\core_cmFunc.h
+..\obj\sendpack.o: ..\system\sys\system_stm32f10x.h
+..\obj\sendpack.o: d:\Keil_v5\ARM\ARMCC\bin\..\include\stdio.h
+..\obj\sendpack.o: ..\hardware\usart2.h

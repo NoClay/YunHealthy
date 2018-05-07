@@ -1,0 +1,10 @@
+..\obj\gps.o: ..\hardware\gps.c
+..\obj\gps.o: ..\hardware\usart2.h
+..\obj\gps.o: ..\system\sys\sys.h
+..\obj\gps.o: ..\system\sys\stm32f10x.h
+..\obj\gps.o: d:\Keil_v5\ARM\PACK\ARM\CMSIS\3.20.4\CMSIS\Include\core_cm3.h
+..\obj\gps.o: d:\Keil_v5\ARM\ARMCC\bin\..\include\stdint.h
+..\obj\gps.o: d:\Keil_v5\ARM\PACK\ARM\CMSIS\3.20.4\CMSIS\Include\core_cmInstr.h
+..\obj\gps.o: d:\Keil_v5\ARM\PACK\ARM\CMSIS\3.20.4\CMSIS\Include\core_cmFunc.h
+..\obj\gps.o: ..\system\sys\system_stm32f10x.h
+..\obj\gps.o: d:\Keil_v5\ARM\ARMCC\bin\..\include\math.h

@@ -1,0 +1,12 @@
+..\obj\read24c16.o: ..\hardware\read24c16.c
+..\obj\read24c16.o: ..\hardware\read24c16.h
+..\obj\read24c16.o: ..\hardware\STMIIC.h
+..\obj\read24c16.o: ..\system\usart\usart.h
+..\obj\read24c16.o: ..\system\sys\sys.h
+..\obj\read24c16.o: ..\system\sys\stm32f10x.h
+..\obj\read24c16.o: d:\Keil_v5\ARM\PACK\ARM\CMSIS\3.20.4\CMSIS\Include\core_cm3.h
+..\obj\read24c16.o: d:\Keil_v5\ARM\ARMCC\bin\..\include\stdint.h
+..\obj\read24c16.o: d:\Keil_v5\ARM\PACK\ARM\CMSIS\3.20.4\CMSIS\Include\core_cmInstr.h
+..\obj\read24c16.o: d:\Keil_v5\ARM\PACK\ARM\CMSIS\3.20.4\CMSIS\Include\core_cmFunc.h
+..\obj\read24c16.o: ..\system\sys\system_stm32f10x.h
+..\obj\read24c16.o: d:\Keil_v5\ARM\ARMCC\bin\..\include\stdio.h

@@ -19,6 +19,19 @@ import static indi.noclay.cloudhealth.util.ConstantsConfig.MEASURE_TYPE_XINDIAN;
 
 public class BinFileHelper {
 
+
+    public static String getCacheFileName(int type, String timeStamp) {
+        String cacheDir = CACHE_DATA_DIR + SharedPreferenceHelper.getLoginUserId() + "/";
+        if (type == MEASURE_TYPE_XINDIAN) {
+            cacheDir = cacheDir + "xindian/";
+        }
+        File dir = new File(cacheDir);
+        if (!dir.exists() || dir.isFile()) {
+            dir.delete();
+            dir.mkdirs();
+        }
+        return cacheDir + timeStamp + ".bin";
+    }
     public static String getCacheFileName(int type) {
         String cacheDir = CACHE_DATA_DIR + SharedPreferenceHelper.getLoginUserId() + "/";
         if (type == MEASURE_TYPE_XINDIAN) {

@@ -1,0 +1,10 @@
+..\obj\key.o: ..\hardware\key.c
+..\obj\key.o: ..\hardware\key.h
+..\obj\key.o: ..\system\sys\sys.h
+..\obj\key.o: ..\system\sys\stm32f10x.h
+..\obj\key.o: d:\Keil_v5\ARM\PACK\ARM\CMSIS\3.20.4\CMSIS\Include\core_cm3.h
+..\obj\key.o: d:\Keil_v5\ARM\ARMCC\bin\..\include\stdint.h
+..\obj\key.o: d:\Keil_v5\ARM\PACK\ARM\CMSIS\3.20.4\CMSIS\Include\core_cmInstr.h
+..\obj\key.o: d:\Keil_v5\ARM\PACK\ARM\CMSIS\3.20.4\CMSIS\Include\core_cmFunc.h
+..\obj\key.o: ..\system\sys\system_stm32f10x.h
+..\obj\key.o: ..\system\delay\delay.h

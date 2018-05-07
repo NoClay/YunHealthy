@@ -1,0 +1,11 @@
+..\obj\jlx_lcd_stm.o: ..\hardware\JLX_LCD_STM.c
+..\obj\jlx_lcd_stm.o: ..\hardware\JLX_LCD_STM.h
+..\obj\jlx_lcd_stm.o: ..\hardware\LCD_Font.h
+..\obj\jlx_lcd_stm.o: ..\system\delay\delay.h
+..\obj\jlx_lcd_stm.o: ..\system\sys\sys.h
+..\obj\jlx_lcd_stm.o: ..\system\sys\stm32f10x.h
+..\obj\jlx_lcd_stm.o: d:\Keil_v5\ARM\PACK\ARM\CMSIS\3.20.4\CMSIS\Include\core_cm3.h
+..\obj\jlx_lcd_stm.o: d:\Keil_v5\ARM\ARMCC\bin\..\include\stdint.h
+..\obj\jlx_lcd_stm.o: d:\Keil_v5\ARM\PACK\ARM\CMSIS\3.20.4\CMSIS\Include\core_cmInstr.h
+..\obj\jlx_lcd_stm.o: d:\Keil_v5\ARM\PACK\ARM\CMSIS\3.20.4\CMSIS\Include\core_cmFunc.h
+..\obj\jlx_lcd_stm.o: ..\system\sys\system_stm32f10x.h

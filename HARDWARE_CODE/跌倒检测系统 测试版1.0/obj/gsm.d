@@ -1,0 +1,13 @@
+..\obj\gsm.o: ..\hardware\gsm.c
+..\obj\gsm.o: ..\hardware\gsm.h
+..\obj\gsm.o: ..\system\usart\usart.h
+..\obj\gsm.o: ..\system\sys\sys.h
+..\obj\gsm.o: ..\system\sys\stm32f10x.h
+..\obj\gsm.o: d:\Keil_v5\ARM\PACK\ARM\CMSIS\3.20.4\CMSIS\Include\core_cm3.h
+..\obj\gsm.o: d:\Keil_v5\ARM\ARMCC\bin\..\include\stdint.h
+..\obj\gsm.o: d:\Keil_v5\ARM\PACK\ARM\CMSIS\3.20.4\CMSIS\Include\core_cmInstr.h
+..\obj\gsm.o: d:\Keil_v5\ARM\PACK\ARM\CMSIS\3.20.4\CMSIS\Include\core_cmFunc.h
+..\obj\gsm.o: ..\system\sys\system_stm32f10x.h
+..\obj\gsm.o: d:\Keil_v5\ARM\ARMCC\bin\..\include\stdio.h
+..\obj\gsm.o: ..\system\delay\delay.h
+..\obj\gsm.o: ..\hardware\gps.h

@@ -1,0 +1,14 @@
+..\obj\ili93xx.o: ..\hardware\ILI93xx.c
+..\obj\ili93xx.o: ..\hardware\lcd.h
+..\obj\ili93xx.o: ..\system\sys\sys.h
+..\obj\ili93xx.o: ..\system\sys\stm32f10x.h
+..\obj\ili93xx.o: d:\Keil_v5\ARM\PACK\ARM\CMSIS\3.20.4\CMSIS\Include\core_cm3.h
+..\obj\ili93xx.o: d:\Keil_v5\ARM\ARMCC\bin\..\include\stdint.h
+..\obj\ili93xx.o: d:\Keil_v5\ARM\PACK\ARM\CMSIS\3.20.4\CMSIS\Include\core_cmInstr.h
+..\obj\ili93xx.o: d:\Keil_v5\ARM\PACK\ARM\CMSIS\3.20.4\CMSIS\Include\core_cmFunc.h
+..\obj\ili93xx.o: ..\system\sys\system_stm32f10x.h
+..\obj\ili93xx.o: d:\Keil_v5\ARM\ARMCC\bin\..\include\stdlib.h
+..\obj\ili93xx.o: ..\hardware\font.h
+..\obj\ili93xx.o: ..\system\usart\usart.h
+..\obj\ili93xx.o: d:\Keil_v5\ARM\ARMCC\bin\..\include\stdio.h
+..\obj\ili93xx.o: ..\system\delay\delay.h
