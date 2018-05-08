@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -46,6 +47,7 @@ import indi.noclay.cloudhealth.myview.dialog.ChooseImageDialog;
 import indi.noclay.cloudhealth.myview.dialog.InputDayLengthDialog;
 import indi.noclay.cloudhealth.myview.dialog.InputTimeAndDoseDialog;
 import indi.noclay.cloudhealth.util.ConstantsConfig;
+import indi.noclay.cloudhealth.util.FileUtils;
 import indi.noclay.cloudhealth.util.SharedPreferenceHelper;
 import indi.noclay.cloudhealth.util.UtilClass;
 
@@ -98,6 +100,7 @@ public class AddMedicineActivity extends
         setContentView(R.layout.activity_add_medicine);
         initView();
         mPresenter.initView();
+        mPresenter.setContext(this);
         UtilClass.requestPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE);
         UtilClass.requestPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
     }
@@ -213,7 +216,12 @@ public class AddMedicineActivity extends
                             if (tempFile.exists() && tempFile.isFile()) {
                                 tempFile.delete();
                             }
-                            getImageByCamera.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(tempFile));
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
+                                getImageByCamera.putExtra(MediaStore.EXTRA_OUTPUT,
+                                        FileUtils.getUriForFile(getApplicationContext(), tempFile));
+                            }else{
+                                getImageByCamera.putExtra(MediaStore.EXTRA_OUTPUT, tempFile);
+                            }
                             getImageByCamera.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 1);
                             startActivityForResult(getImageByCamera,
                                     ChangeMyDataActivityPresenter.REQUEST_CODE_CAPTURE_CAMERA);
@@ -421,28 +429,37 @@ public class AddMedicineActivity extends
             switch (requestCode) {
                 case ChangeMyDataActivityPresenter.REQUEST_CODE_CAPTURE_CAMERA: {
                     //直接拍照获取头像
-                    if (data == null) {
-                        imageUri = Uri.fromFile(new File(ConstantsConfig.SRC_PATH_MEDICINE));
-                    } else {
-                        imageUri = data.getData();
-                        Log.d("test", "onActivityResult: 使用相机返回" + imageUri);
-                        if (imageUri == null) {
-                            Bundle bundle = data.getExtras();
-                            if (bundle != null) {
-                                Bitmap bitMap = (Bitmap) bundle.get("data"); //get bitmap
-                                imageUri = Uri.parse(MediaStore.Images.Media.
-                                        insertImage(getContentResolver(), bitMap, null, null));
-                                Log.d("test", "onActivityResult: " + imageUri);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
+                        File file = new File(ConstantsConfig.SRC_PATH_MEDICINE);
+                        mPresenter.uploadFile(file);
+                    }else{
+                        if (data == null) {
+                            imageUri = Uri.fromFile(new File(ConstantsConfig.SRC_PATH_MEDICINE));
+                        } else {
+                            imageUri = data.getData();
+                            Log.d("test", "onActivityResult: 使用相机返回" + imageUri);
+                            if (imageUri == null) {
+                                Bundle bundle = data.getExtras();
+                                if (bundle != null) {
+                                    Bitmap bitMap = (Bitmap) bundle.get("data"); //get bitmap
+                                    imageUri = Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), bitMap, null, null));
+                                    Log.d("test", "onActivityResult: " + imageUri);
+                                }
                             }
                         }
+                        userImageUri = mPresenter.resizeImage(imageUri, AddMedicineActivity.this);
                     }
-                    userImageUri = mPresenter.resizeImage(imageUri, AddMedicineActivity.this);
                     break;
                 }
                 case ChangeMyDataActivityPresenter.REQUEST_CODE_PICK_IMAGE: {
                     //从文件中选择图片
                     imageUri = data.getData();
-                    userImageUri = mPresenter.resizeImage(imageUri, this);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
+                        File file = new File(pers.noclay.utiltool.FileUtils.getFilePathFromUri(mContext, imageUri));
+                        mPresenter.uploadFile(file);
+                    }else{
+                        userImageUri = mPresenter.resizeImage(imageUri, this);
+                    }
                     break;
                 }
                 case ChangeMyDataActivityPresenter.REQUEST_RESIZE_REQUEST_CODE: {

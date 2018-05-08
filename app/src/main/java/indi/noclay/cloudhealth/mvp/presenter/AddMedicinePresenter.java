@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -19,6 +20,7 @@ import indi.noclay.cloudhealth.database.MedicineDetail;
 import indi.noclay.cloudhealth.mvp.base.BasePresenter;
 import indi.noclay.cloudhealth.mvp.view.AddMedicineActivityInterface;
 import indi.noclay.cloudhealth.util.ConstantsConfig;
+import indi.noclay.cloudhealth.util.FileUtils;
 
 import static indi.noclay.cloudhealth.database.MedicineTableHelper.*;
 
@@ -95,14 +97,17 @@ public class AddMedicinePresenter extends BasePresenter<AddMedicineActivityInter
 
     public void saveData(){
         final MedicineDetail medicineDetail = getView().getMedicineDetail();
+        if (medicineDetail == null){
+            return;
+        }
         medicineDetail.setIsOpen(CLOCK_OPEN);
         mHandler.sendEmptyMessage(SAVE_START);
         medicineDetail.save(new SaveListener<String>() {
             @Override
             public void done(String s, BmobException e) {
                 if (e == null){
-                    mHandler.sendEmptyMessage(SAVE_SUCCESS);
                     insertMedicineDetail(medicineDetail);
+                    mHandler.sendEmptyMessage(SAVE_SUCCESS);
                 }else{
                     mHandler.sendEmptyMessage(SAVE_FAILED);
                 }
@@ -130,7 +135,12 @@ public class AddMedicinePresenter extends BasePresenter<AddMedicineActivityInter
         } catch (Exception e) {
             e.printStackTrace();
         }
-        Uri userImageUri = Uri.fromFile(outputImage);
+        Uri userImageUri;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
+            userImageUri = FileUtils.getUriForFile(mContext.getApplicationContext(), outputImage);
+        }else{
+            userImageUri = Uri.fromFile(outputImage);
+        }
         Intent intent = new Intent("com.android.camera.action.CROP");
         intent.setType("image");
         intent.setDataAndType(imageUri, "image/*");

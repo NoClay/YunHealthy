@@ -1,8 +1,8 @@
 package indi.noclay.cloudhealth.util;
 
-import android.Manifest;
 import android.app.Application;
 import android.content.Context;
+import android.os.StrictMode;
 
 import java.io.File;
 
@@ -28,6 +28,9 @@ public class HealthApplication extends Application {
         sContext = getApplicationContext();
         initDirs();
         initDependencies();
+        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(builder.build());
+        builder.detectFileUriExposure();
     }
 
 

@@ -4,13 +4,12 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.provider.MediaStore;
 import android.util.Log;
-
-
 
 import java.io.File;
 
@@ -22,8 +21,8 @@ import indi.noclay.cloudhealth.database.SignUserData;
 import indi.noclay.cloudhealth.mvp.base.BasePresenter;
 import indi.noclay.cloudhealth.mvp.view.ChangeMyDataActivityInterface;
 import indi.noclay.cloudhealth.util.ConstantsConfig;
+import indi.noclay.cloudhealth.util.FileUtils;
 import indi.noclay.cloudhealth.util.SharedPreferenceHelper;
-import indi.noclay.cloudhealth.util.UtilClass;
 
 
 /**
@@ -153,8 +152,20 @@ public class ChangeMyDataActivityPresenter
         } catch (Exception e) {
             e.printStackTrace();
         }
-        Uri userImageUri = Uri.fromFile(outputImage);
+        Uri userImageUri;
+        Log.d(TAG, "resizeImage: before = " + imageUri.toString());
+
+        Log.d(TAG, "resizeImage: after = " + imageUri.toString());
         Intent intent = new Intent("com.android.camera.action.CROP");
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+            userImageUri = FileUtils.getUriForFile(mContext.getApplicationContext(), outputImage);
+            imageUri = FileUtils.getUriForFile(mContext.getApplicationContext(), new File(ConstantsConfig.SRC_PATH_USER_IMAGE));
+            FileUtils.grantUriPermission(mContext.getApplicationContext(), imageUri, intent);
+        }else{
+            userImageUri = Uri.fromFile(outputImage);
+        }
         intent.setType("image");
         intent.setDataAndType(imageUri, "image/*");
         // 下面这个crop=true是设置在开启的Intent中设置显示的VIEW可裁剪

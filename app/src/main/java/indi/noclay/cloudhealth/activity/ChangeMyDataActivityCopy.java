@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -29,7 +30,6 @@ import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 
-
 import java.io.File;
 import java.util.Calendar;
 import java.util.Date;
@@ -43,6 +43,7 @@ import indi.noclay.cloudhealth.mvp.presenter.ChangeMyDataActivityPresenter;
 import indi.noclay.cloudhealth.mvp.view.ChangeMyDataActivityInterface;
 import indi.noclay.cloudhealth.myview.dialog.ChooseImageDialog;
 import indi.noclay.cloudhealth.util.ConstantsConfig;
+import indi.noclay.cloudhealth.util.FileUtils;
 import indi.noclay.cloudhealth.util.SharedPreferenceHelper;
 import indi.noclay.cloudhealth.util.UtilClass;
 
@@ -174,7 +175,12 @@ public class ChangeMyDataActivityCopy extends
                             if (tempFile.exists() && tempFile.isFile()) {
                                 tempFile.delete();
                             }
-                            getImageByCamera.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(tempFile));
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
+                                getImageByCamera.putExtra(MediaStore.EXTRA_OUTPUT, FileUtils.getUriForFile(getApplicationContext(), tempFile));
+                            }else{
+                                getImageByCamera.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(tempFile));
+
+                            }
                             getImageByCamera.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 1);
                             startActivityForResult(getImageByCamera,
                                     ChangeMyDataActivityPresenter.REQUEST_CODE_CAPTURE_CAMERA);
@@ -382,18 +388,31 @@ public class ChangeMyDataActivityCopy extends
                             }
                         }
                     }
-                    userImageUri = mPresenter.resizeImage(imageUri, ChangeMyDataActivityCopy.this);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
+                        File file = new File(ConstantsConfig.SRC_PATH_USER_IMAGE);
+                        mPresenter.uploadFile(file);
+                    }else{
+                        userImageUri = mPresenter.resizeImage(imageUri, this);
+                    }
                     break;
                 }
                 case REQUEST_CODE_PICK_IMAGE: {
                     //从文件中选择图片
                     imageUri = data.getData();
-                    userImageUri = mPresenter.resizeImage(imageUri, this);
+                    Log.d(TAG, "onActivityResult: " + imageUri.toString());
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
+                        File file = new File(pers.noclay.utiltool.FileUtils.getFilePathFromUri(mContext, imageUri));
+                        mPresenter.uploadFile(file);
+                    }else{
+                        userImageUri = mPresenter.resizeImage(imageUri, this);
+                    }
                     break;
                 }
                 case ChangeMyDataActivityPresenter.REQUEST_RESIZE_REQUEST_CODE: {
                     //重新截取后的头像
                     //剪切图片返回
+                    Log.d(TAG, "onActivityResult: uri = " + data.getData().toString());
+                    Log.d(TAG, "onActivityResult: userImageUri = " + userImageUri);
                     if (userImageUri == null) {
                         Toast.makeText(mContext, "error", Toast.LENGTH_SHORT).show();
                     } else {//截取图片完成
