@@ -165,7 +165,7 @@ public class LoginActivityCopy extends
     @Override
     public void loadImage(String path) {
         if (path == null){
-            Toast.makeText(context, "查询账户失败", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(context, "查询账户失败", Toast.LENGTH_SHORT).show();
         }
         Glide.with(context)
                 .load(path)

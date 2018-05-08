@@ -70,7 +70,6 @@ public class ShowHeartWaves extends AppCompatActivity
         heartWaves = (ECGWaveView) findViewById(R.id.heartWaves);
         showAverage = (TextView) findViewById(R.id.averageHeart);
         showMax = (TextView) findViewById(R.id.maxHeart);
-        heartWaves.setOnDataChangedListener(this);
         back = (ImageView) findViewById(R.id.back);
         back.setOnClickListener(this);
     }

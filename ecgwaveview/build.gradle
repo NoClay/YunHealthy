@@ -1,2 +1,2 @@
 configurations.maybeCreate("default")
-artifacts.add("default", file('ecgwaveview-release.aar'))
+artifacts.add("default", file('ecgwaveview-debug.aar'))

@@ -96,6 +96,7 @@ public class MeasureFragment extends Fragment implements
         UtilClass.requestPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
         sDataResolver = new CustomMeasureDataResolver();
         sDataResolver.setOnResolveListener(this);
+
         return v;
     }
 
@@ -115,19 +116,21 @@ public class MeasureFragment extends Fragment implements
     @Override
     public void onStart() {
         super.onStart();
-        if (myAdapter != null) {
-            myAdapter.startRefreshing();
-        }
         sIsBluetoothWorkable = true;
+        if (myAdapter != null){
+            myAdapter.startRefresh();
+        }
+        Log.d(TAG, "onStart: iswork = " + sIsBluetoothWorkable);
     }
 
     @Override
     public void onStop() {
         super.onStop();
         sIsBluetoothWorkable = false;
-        if (myAdapter != null) {
-            myAdapter.stopRefreshing();
+        if (myAdapter != null){
+            myAdapter.stopRefresh();
         }
+        Log.d(TAG, "onStop: iswork = " + sIsBluetoothWorkable);
     }
 
     private void findView(View v) {
@@ -154,7 +157,6 @@ public class MeasureFragment extends Fragment implements
         //本地缓存所需要的初始化
         calendar = Calendar.getInstance();
         calendar.setTimeInMillis(SystemClock.currentThreadTimeMillis());
-
     }
 
 
@@ -205,7 +207,7 @@ public class MeasureFragment extends Fragment implements
     public void checkMinuteAndCache(int type, int minute) {
         if (minute % ConstantsConfig.CACHE_TIME_LENGTH == 0
                 && !checkOneMeasureDataCache(type, calendar.getTime())) {
-            Log.d("Cache", "checkMinuteAndCache: cache + " +
+            Log.d("LocalCache", "checkMinuteAndCache: cache + " +
                     ConstantsConfig.LABEL_STRING[type] + "\tminute" + minute);
             addOneMeasureData(measureDataList.get(type), type, calendar.getTime());
             measureDataList.get(type).reset();
@@ -253,13 +255,13 @@ public class MeasureFragment extends Fragment implements
                     //进行血氧的结果解析
                     resultValue = isValidData(result.substring(0, 2), MEASURE_TYPE_XUEYANG);
                     temp = measureDataList.get(MEASURE_TYPE_XUEYANG);
-                    if (resultValue != ERROR_RETURN_VALUE && compareData(temp, resultValue)) {
+                    if (resultValue != ERROR_RETURN_VALUE && compareData(temp, resultValue) && sIsBluetoothWorkable) {
                         myAdapter.notifyItemChanged(MEASURE_TYPE_XUEYANG);
                     }
                     //进行脉搏的结果解析
                     resultValue = isValidData(result.substring(2, 4), MEASURE_TYPE_MAIBO);
                     temp = measureDataList.get(ConstantsConfig.MEASURE_TYPE_MAIBO);
-                    if (resultValue != ERROR_RETURN_VALUE && compareData(temp, resultValue)) {
+                    if (resultValue != ERROR_RETURN_VALUE && compareData(temp, resultValue) && sIsBluetoothWorkable) {
                         myAdapter.notifyItemChanged(ConstantsConfig.MEASURE_TYPE_MAIBO);
                     }
                 }
@@ -267,14 +269,16 @@ public class MeasureFragment extends Fragment implements
             }
             case 2: {
                 //心电
-                checkMinuteAndCache(ConstantsConfig.MEASURE_TYPE_XINDIAN, minute);
+//                checkMinuteAndCache(ConstantsConfig.MEASURE_TYPE_XINDIAN, minute);
                 resultValue = isValidData(result, MEASURE_TYPE_XINDIAN);
                 temp = measureDataList.get(ConstantsConfig.MEASURE_TYPE_XINDIAN);
                 if (resultValue != ERROR_RETURN_VALUE){
-                    myAdapter.startRefreshing();
-                    myAdapter.drawHeartWavesPoint(resultValue);
                     FileCacheUtil.appendToFile(((int) resultValue));
-                    if (compareData(temp, resultValue)) {
+                    if (sIsBluetoothWorkable){
+                        myAdapter.startRefresh();
+                        myAdapter.drawHeartWavesPoint(resultValue);
+                    }
+                    if (compareData(temp, resultValue) && sIsBluetoothWorkable) {
                         myAdapter.notifyItemChanged(ConstantsConfig.MEASURE_TYPE_XINDIAN);
                     }
                 }
@@ -286,7 +290,7 @@ public class MeasureFragment extends Fragment implements
                 checkMinuteAndCache(ConstantsConfig.MEASURE_TYPE_XUETANG, minute);
                 resultValue = isValidData(result, MEASURE_TYPE_XUETANG);
                 temp = measureDataList.get(ConstantsConfig.MEASURE_TYPE_XUETANG);
-                if (resultValue != ERROR_RETURN_VALUE && compareData(temp, resultValue)) {
+                if (resultValue != ERROR_RETURN_VALUE && compareData(temp, resultValue) && sIsBluetoothWorkable) {
                     myAdapter.notifyItemChanged(ConstantsConfig.MEASURE_TYPE_XUETANG);
                 }
                 break;
@@ -297,7 +301,7 @@ public class MeasureFragment extends Fragment implements
                 checkMinuteAndCache(ConstantsConfig.MEASURE_TYPE_TIWEN, minute);
                 resultValue = isValidData(result, MEASURE_TYPE_TIWEN);
                 temp = measureDataList.get(ConstantsConfig.MEASURE_TYPE_TIWEN);
-                if (resultValue != ERROR_RETURN_VALUE && compareData(temp, resultValue)) {
+                if (resultValue != ERROR_RETURN_VALUE && compareData(temp, resultValue) && sIsBluetoothWorkable) {
                     myAdapter.notifyItemChanged(ConstantsConfig.MEASURE_TYPE_TIWEN);
                 }
                 break;
@@ -308,7 +312,7 @@ public class MeasureFragment extends Fragment implements
                 checkMinuteAndCache(ConstantsConfig.MEASURE_TYPE_FENCHEN, minute);
                 resultValue = isValidData(result, MEASURE_TYPE_FENCHEN);
                 temp = measureDataList.get(ConstantsConfig.MEASURE_TYPE_FENCHEN);
-                if (resultValue != ERROR_RETURN_VALUE && compareData(temp, resultValue)) {
+                if (resultValue != ERROR_RETURN_VALUE && compareData(temp, resultValue) && sIsBluetoothWorkable) {
                     myAdapter.notifyItemChanged(ConstantsConfig.MEASURE_TYPE_FENCHEN);
                 }
                 break;

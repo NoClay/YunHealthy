@@ -55,13 +55,15 @@ public class RecycleAdapterForMeasureOnly extends RecyclerView.Adapter<RecycleAd
             heartWavesView.drawNextPoint(y);
         }
     }
-    public void startRefreshing(){
+
+    public void startRefresh(){
         if (heartWavesView != null){
             heartWavesView.startRefresh();
         }
     }
 
-    public void stopRefreshing(){
+
+    public void stopRefresh(){
         if (heartWavesView != null){
             heartWavesView.stopRefresh();
         }

@@ -10,9 +10,8 @@ import android.graphics.BitmapFactory;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
+import android.text.TextUtils;
 import android.util.Log;
-
-
 
 import java.util.Calendar;
 import java.util.List;
@@ -22,7 +21,6 @@ import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 import indi.noclay.cloudhealth.R;
 import indi.noclay.cloudhealth.database.MedicineDetail;
-import indi.noclay.cloudhealth.database.LocalDataBase;
 import indi.noclay.cloudhealth.database.SignUserData;
 import indi.noclay.cloudhealth.receiver.UpLoadReceiver;
 import indi.noclay.cloudhealth.util.ConstantsConfig;
@@ -32,6 +30,7 @@ import indi.noclay.cloudhealth.util.UtilClass;
 import static indi.noclay.cloudhealth.database.MeasureTableHelper.ERROR_LOAD;
 import static indi.noclay.cloudhealth.database.MeasureTableHelper.upLoadMeasureData;
 import static indi.noclay.cloudhealth.database.MedicineTableHelper.insertMedicineDetail;
+import static indi.noclay.cloudhealth.util.ConstantsConfig.LOAD_CACHE_MINUTE;
 
 /**
  * Created by 82661 on 2016/12/3.
@@ -65,24 +64,23 @@ public class SynchronizeDataService extends Service{
             @Override
             public void run() {
                 //在这里进行上传操作
-                if (UtilClass.checkNetwork(getApplicationContext())){
+                if (!UtilClass.checkNetwork(getApplicationContext())){
                     makeANotification("网络异常，无法同步");
+                    return;
                 }
-                String id = getApplicationContext()
-                        .getSharedPreferences("LoginState", MODE_PRIVATE)
-                        .getString("userId", "");
+                String id = SharedPreferenceHelper.getLoginUserId();
                 Log.d(TAG, "run: id" + id);
-                if (id.isEmpty() || id.length() != 10){
+                if (TextUtils.isEmpty(id) || id.length() != 10){
                     makeANotification("您还没有登录");
                 }
-                final LocalDataBase myDataBase = new LocalDataBase(getApplicationContext(),
-                        "LocalStore.db", null, ConstantsConfig.DATABASE_VERSION);
                 int count = upLoadMeasureData(id);
                 if (count == ERROR_LOAD){
                     makeANotification("数据同步失败");
                 }else{
                     makeANotification("数据同步完成");
                 }
+
+                //同步用药闹钟数据
                 final SignUserData userData = SharedPreferenceHelper.getLoginUser();
                 if (userData != null){
                     BmobQuery<MedicineDetail> query = new BmobQuery<MedicineDetail>();
@@ -110,16 +108,7 @@ public class SynchronizeDataService extends Service{
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
         Log.d(TAG, "onStartCommand: nowTime " + UtilClass.valueOfCalendar(calendar));
-        if (calendar.get(Calendar.MINUTE) < ConstantsConfig.LOAD_CACHE_MINUTE){
-            calendar.set(Calendar.MINUTE, ConstantsConfig.LOAD_CACHE_MINUTE);
-            calendar.set(Calendar.SECOND, 0);
-            calendar.set(Calendar.MILLISECOND, 0);
-        }else{
-            calendar.set(Calendar.HOUR_OF_DAY, calendar.get(Calendar.HOUR_OF_DAY) + 1);
-            calendar.set(Calendar.MINUTE, ConstantsConfig.LOAD_CACHE_MINUTE);
-            calendar.set(Calendar.SECOND, 0);
-            calendar.set(Calendar.MILLISECOND, 0);
-        }
+        calendar.setTimeInMillis(System.currentTimeMillis() + LOAD_CACHE_MINUTE * 60 * 1000);
         Log.d(TAG, "onStartCommand: clickTime  " + UtilClass.valueOfCalendar(calendar));
         long triggerAtTime = calendar.getTimeInMillis();
         Intent i = new Intent(this, UpLoadReceiver.class);

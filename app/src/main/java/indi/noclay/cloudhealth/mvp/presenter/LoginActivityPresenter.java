@@ -34,23 +34,26 @@ public class LoginActivityPresenter extends BasePresenter<LoginActivityInterface
             getView().badNet();
         }
         BmobQuery<SignUserData> userQuery = new BmobQuery<>();
+        Log.d(TAG, "loadImage: phone = " + userName);
         userQuery.addWhereEqualTo("phoneNumber", userName);
         userQuery.setLimit(10);
         userQuery.findObjects(new FindListener<SignUserData>() {
             @Override
             public void done(List<SignUserData> list, BmobException e) {
-                Log.e(TAG, "done: ", e);
                 Log.d(TAG, "done: " + (list == null));
                 if (e == null){
                     if (list == null){
                         getView().loadImage(null);
                     }else{
                         user = list.get(0);
+                        Log.d(TAG, "done: user.phone = " + user.getPhoneNumber());
+                        Log.d(TAG, "done: user.pass = " + user.getPassWord());
                         getView().loadImage(user.getUserImage());
                     }
                 }else{
                     e.printStackTrace();
                     getView().loadImage(null);
+                    Log.e(TAG, "done: ", e);
                 }
             }
         });
