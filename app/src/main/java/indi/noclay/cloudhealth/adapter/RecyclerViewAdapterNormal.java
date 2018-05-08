@@ -14,6 +14,7 @@ import java.util.List;
 
 import indi.noclay.cloudhealth.R;
 import indi.noclay.cloudhealth.card.BaseCard;
+import indi.noclay.cloudhealth.card.FileCacheListCard;
 import indi.noclay.cloudhealth.card.FoodDetailStepCard;
 import indi.noclay.cloudhealth.card.FoodMenuCard;
 import indi.noclay.cloudhealth.card.FoodShowItemCard;
@@ -37,7 +38,8 @@ public class RecyclerViewAdapterNormal extends RecyclerView.Adapter<BaseCard> {
     public static final int SEARCH_MEDICINE_CARD = BASE_CARD + 4;
     public static final int SEARCH_COMPANY_CARD = BASE_CARD + 5;
     public static final int SEARCH_ILLNESS_CARD = BASE_CARD + 6;
-    public static final int SSEARCH_RESULT_TAG_CARD = BASE_CARD + 7;
+    public static final int SEARCH_RESULT_TAG_CARD = BASE_CARD + 7;
+    public static final int FILE_CACHE_LIST_CARD = BASE_CARD + 8;
     public Context mContext;
     public Activity mActivity;
     public Fragment mFragment;
@@ -126,10 +128,13 @@ public class RecyclerViewAdapterNormal extends RecyclerView.Adapter<BaseCard> {
                 itemView = LayoutInflater.from(mContext).inflate(R.layout.item_normal_illness_search_result, parent, false);
                 baseCard = new SearchIllnessCard(itemView, mHandler, mActivity, mFragment);
                 break;
-            case SSEARCH_RESULT_TAG_CARD:
+            case SEARCH_RESULT_TAG_CARD:
                 itemView = LayoutInflater.from(mContext).inflate(R.layout.item_tag, parent, false);
                 baseCard = new SearchResultTagCard(itemView, mHandler, mActivity, mFragment);
                 break;
+            case FILE_CACHE_LIST_CARD:
+                itemView = LayoutInflater.from(mContext).inflate(R.layout.item_file_cache_list, parent, false);
+                baseCard = new FileCacheListCard(itemView, mHandler, mActivity, mFragment);
             default:
         }
         return baseCard;
@@ -183,7 +188,10 @@ public class RecyclerViewAdapterNormal extends RecyclerView.Adapter<BaseCard> {
                 viewType = SEARCH_ILLNESS_CARD;
                 break;
             case "TagData":
-                viewType = SSEARCH_RESULT_TAG_CARD;
+                viewType = SEARCH_RESULT_TAG_CARD;
+                break;
+            case "FileCacheListItem":
+                viewType = FILE_CACHE_LIST_CARD;
                 break;
         }
         return viewType;

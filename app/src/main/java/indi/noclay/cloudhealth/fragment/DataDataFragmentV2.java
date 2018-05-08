@@ -19,6 +19,7 @@ import java.util.Map;
 
 import indi.noclay.cloudhealth.R;
 import indi.noclay.cloudhealth.activity.InfoActivity;
+import indi.noclay.cloudhealth.activity.InfoActivityForXinDian;
 import indi.noclay.cloudhealth.adapter.RecycleAdapterForData;
 import rx.Observable;
 import rx.Subscriber;
@@ -106,6 +107,11 @@ public class DataDataFragmentV2 extends Fragment {
                             @Override
                             public void onItemClick(View view, int position) {
                                 switch (position){
+                                    case 2:{
+                                        Intent intent = new Intent(context, InfoActivityForXinDian.class);
+                                        startActivity(intent);
+                                        break;
+                                    }
                                     case 6:{
                                         Toast.makeText(context, "暂无更多", Toast.LENGTH_SHORT).show();
                                     }

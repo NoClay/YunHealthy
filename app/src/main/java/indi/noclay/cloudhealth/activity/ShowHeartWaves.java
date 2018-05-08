@@ -10,9 +10,13 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.Random;
+import java.io.DataInputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import indi.noclay.cloudhealth.R;
+import indi.noclay.cloudhealth.util.ConstantsConfig;
 import pers.noclay.ecgwaveview.ECGWaveView;
 
 
@@ -27,17 +31,29 @@ public class ShowHeartWaves extends AppCompatActivity
     private TextView showAverage;
     private TextView showMax;
     private ImageView back;
+    private String fileName;
+    private String filePath;
 
     private static final int MSG_FOR_HEART = 0;
     private static final String TAG = "ShowHeartWaves";
+    private TextView infoTitle;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_heart_waves);
         ActivityCollector.addActivity(this);
+        handleArguments();
         initView();
         initData();
+    }
+
+    private void handleArguments() {
+        if (getIntent() == null) {
+            return;
+        }
+        fileName = getIntent().getStringExtra(ConstantsConfig.PARAMS_FILE_NAME);
+        filePath = getIntent().getStringExtra(ConstantsConfig.PARAMS_FILE_PATH);
     }
 
     @Override
@@ -50,36 +66,67 @@ public class ShowHeartWaves extends AppCompatActivity
         new Thread() {
             @Override
             public void run() {
-                while (true){
-                    Message me = new Message();
-                    me.what = MSG_FOR_HEART;
+                while (true) {
+                    DataInputStream in = null;
                     try {
-                        sleep(100);
+                        in = new DataInputStream(new FileInputStream(filePath));
+                        byte[] bytes = new byte[2];
+                        int count = 0;
+                        while (in.read(bytes) != -1) {
+                            int value = 0;
+                            value += (bytes[0] & 0xFF) * 256;
+                            value += (bytes[1] & 0xFF);
+                            heartWaves.startRefresh();
+                            heartWaves.drawNextPoint(value);
+                            Thread.sleep(10);
+                        }
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     } catch (InterruptedException e) {
-                        // TODO Auto-generated catch block
                         e.printStackTrace();
                     }
-                    me.arg1 = new Random().nextInt(4000) - 2000;
-                    handler.sendMessage(me);
                 }
             }
         }.start();
     }
 
     private void initView() {
+
         heartWaves = (ECGWaveView) findViewById(R.id.heartWaves);
-        showAverage = (TextView) findViewById(R.id.averageHeart);
-        showMax = (TextView) findViewById(R.id.maxHeart);
+//        showAverage = (TextView) findViewById(R.id.averageHeart);
+        heartWaves.setOnDataChangedListener(this);
+//        showMax = (TextView) findViewById(R.id.maxHeart);
         back = (ImageView) findViewById(R.id.back);
         back.setOnClickListener(this);
+        heartWaves.startRefresh();
+        infoTitle = (TextView) findViewById(R.id.info_title);
+        infoTitle.setText(fileName);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (heartWaves != null) {
+            heartWaves.startRefresh();
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (heartWaves != null) {
+            heartWaves.stopRefresh();
+        }
     }
 
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            switch (msg.what){
-                case MSG_FOR_HEART:{
+            switch (msg.what) {
+                case MSG_FOR_HEART: {
                     Log.d(TAG, "handleMessage: " + msg.arg1);
                     heartWaves.drawNextPoint(msg.arg1);
                     break;
@@ -101,12 +148,12 @@ public class ShowHeartWaves extends AppCompatActivity
 
     @Override
     public void onMaxDataChanged(float max) {
-        showMax.setText("峰值：" + max);
+//        showMax.setText("峰值：" + max);
     }
 
     @Override
     public void onAverageDataChanged(float average) {
-        showAverage.setText("平均值： " + average);
+//        showAverage.setText("平均值： " + average);
     }
 
     @Override

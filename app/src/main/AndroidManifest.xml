@@ -170,16 +170,18 @@
         <activity android:name=".activity.HealthyReportActivity">
         </activity>
 
-
         <provider
-            android:authorities="indi.noclay.cloudhealth.fileprovider"
             android:name="android.support.v4.content.FileProvider"
-            android:grantUriPermissions="true"
-            android:exported="false">
+            android:authorities="indi.noclay.cloudhealth.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/filepaths"/>
         </provider>
+
+        <activity android:name=".activity.InfoActivityForXinDian">
+        </activity>
     </application>
 
 </manifest>
