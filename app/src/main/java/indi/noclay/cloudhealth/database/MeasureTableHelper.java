@@ -120,7 +120,7 @@ public class MeasureTableHelper {
                 measureData.setAverageData(cursor.getFloat(cursor.getColumnIndex("average")));
                 measureData.setCount(cursor.getInt(cursor.getColumnIndex("count")));
                 measureData.setMaxData(cursor.getFloat(cursor.getColumnIndex("max")));
-                measureData.setMaxData(cursor.getFloat(cursor.getColumnIndex("min")));
+                measureData.setMinData(cursor.getFloat(cursor.getColumnIndex("min")));
                 measureData.setAverageDanger(UtilClass.booleanValueOfInteger(
                         cursor.getInt(cursor.getColumnIndex("isAverageDanger"))));
                 measureData.setMaxDanger(UtilClass.booleanValueOfInteger(
@@ -158,11 +158,11 @@ public class MeasureTableHelper {
     }
 
     public static void deleteAll() {
-        LocalDataBase instance = getDefaultInstance();
-        SQLiteDatabase db = instance.getWritableDatabase();
-        db.delete("MeasureDataCache", null, null);
-        db.close();
-        instance.close();
+//        LocalDataBase instance = getDefaultInstance();
+//        SQLiteDatabase db = instance.getWritableDatabase();
+//        db.delete("MeasureDataCache", null, null);
+//        db.close();
+//        instance.close();
     }
 
     public static void upLoadFiftyData(List<BmobObject> dataArray, final int beginIndex, final Handler handler) {
@@ -197,5 +197,18 @@ public class MeasureTableHelper {
                 }
             }
         });
+    }
+
+    public static void selectAllData(){
+        LocalDataBase instance = getDefaultInstance();
+        SQLiteDatabase db = instance.getReadableDatabase();
+        Cursor cursor = db.rawQuery("select * from " + TABLE_MEASUREDATA_CACHE, null);
+        if (cursor.moveToFirst()){
+            do {
+                Log.d(TAG, "selectAllData: min = " + cursor.getFloat(cursor.getColumnIndex("min")));
+            }while (cursor.moveToNext());
+        }
+        db.close();
+        instance.close();
     }
 }

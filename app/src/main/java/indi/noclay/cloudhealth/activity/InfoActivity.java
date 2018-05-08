@@ -499,6 +499,7 @@ public class InfoActivity extends AppCompatActivity
             average = temp[2];
             handler.sendMessage(message);
             Log.d(TAG, "onScroll: left = " + i + "... right = " + i1);
+            Log.d(TAG, "onScroll: average = " + average);
         }
     }
 
@@ -508,13 +509,15 @@ public class InfoActivity extends AppCompatActivity
             result[0] = mDatas.get(i).getAverageData();
             result[1] = mDatas.get(i).getAverageData();
             result[2] = 0;
-            for (int j = i + 1; j < i1; j++) {
-                float temp = mDatas.get(i).getAverageData();
+            for (int j = i; j <= i1; j++) {
+                float temp = mDatas.get(j).getAverageData();
                 result[0] = result[0] < temp ? temp : result[0];
                 result[1] = result[1] > temp ? temp : result[1];
                 result[2] += temp;
             }
+            result[2] *= 100;
             result[2] /= (i1 - i + 1);
+            result[2] /= 100.0;
         }
         return result;
     }

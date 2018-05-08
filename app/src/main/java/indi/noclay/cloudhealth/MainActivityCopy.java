@@ -22,6 +22,7 @@ import java.util.Date;
 import java.util.List;
 
 import indi.noclay.cloudhealth.database.HeightAndWeight;
+import indi.noclay.cloudhealth.database.MeasureTableHelper;
 import indi.noclay.cloudhealth.database.SignUserData;
 import indi.noclay.cloudhealth.fragment.DataDataFragmentV2;
 import indi.noclay.cloudhealth.fragment.DataFragment;

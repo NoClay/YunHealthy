@@ -208,7 +208,11 @@ public class MeasureFragment extends Fragment implements
         if (minute % ConstantsConfig.CACHE_TIME_LENGTH == 0
                 && !checkOneMeasureDataCache(type, calendar.getTime())) {
             Log.d("LocalCache", "checkMinuteAndCache: cache + " +
-                    ConstantsConfig.LABEL_STRING[type] + "\tminute" + minute);
+                    ConstantsConfig.LABEL_STRING[type]
+                    + "\tmax = " + measureDataList.get(type).getMaxData()
+                    + "\tmin = " + measureDataList.get(type).getMinData()
+                    + "\taverage = " + measureDataList.get(type).getAverageData()
+            );
             addOneMeasureData(measureDataList.get(type), type, calendar.getTime());
             measureDataList.get(type).reset();
         }
