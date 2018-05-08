@@ -158,11 +158,11 @@ public class MeasureTableHelper {
     }
 
     public static void deleteAll() {
-//        LocalDataBase instance = getDefaultInstance();
-//        SQLiteDatabase db = instance.getWritableDatabase();
-//        db.delete("MeasureDataCache", null, null);
-//        db.close();
-//        instance.close();
+        LocalDataBase instance = getDefaultInstance();
+        SQLiteDatabase db = instance.getWritableDatabase();
+        db.delete("MeasureDataCache", null, null);
+        db.close();
+        instance.close();
     }
 
     public static void upLoadFiftyData(List<BmobObject> dataArray, final int beginIndex, final Handler handler) {

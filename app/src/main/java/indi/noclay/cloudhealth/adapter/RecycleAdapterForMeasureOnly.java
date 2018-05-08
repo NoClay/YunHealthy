@@ -101,8 +101,10 @@ public class RecycleAdapterForMeasureOnly extends RecyclerView.Adapter<RecycleAd
         });
         //判定心电数据
         if (position != 2){
+            holder.bottomPanel.setVisibility(View.VISIBLE);
             holder.heartWavesView.setVisibility(View.GONE);
         }else{
+            holder.bottomPanel.setVisibility(View.GONE);
             holder.heartWavesView.setVisibility(View.VISIBLE);
             //保持引用
             heartWavesView = holder.heartWavesView;
@@ -149,6 +151,7 @@ public class RecycleAdapterForMeasureOnly extends RecyclerView.Adapter<RecycleAd
         public TextView averageData;
         public TextView maxData;
         public TextView minData;
+        public LinearLayout bottomPanel;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -160,6 +163,7 @@ public class RecycleAdapterForMeasureOnly extends RecyclerView.Adapter<RecycleAd
             averageData = (TextView) itemView.findViewById(R.id.averageData);
             maxData = (TextView) itemView.findViewById(R.id.maxData);
             minData = (TextView) itemView.findViewById(R.id.minData);
+            bottomPanel = (LinearLayout)itemView.findViewById(R.id.bottomPanel);
         }
     }
 }

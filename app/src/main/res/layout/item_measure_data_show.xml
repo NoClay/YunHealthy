@@ -60,90 +60,96 @@
             app:refreshHZ="1"
             app:tableLineColor="@color/hintTextColor"
             app:wavesLineColor="#71A423" />
-
         <LinearLayout
+            android:id="@+id/bottomPanel"
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:orientation="horizontal"
-            android:weightSum="10">
+            android:layout_height="wrap_content">
 
-            <indi.noclay.cloudhealth.myview.CircleImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:src="@drawable/average"
-                app:circleColor="@color/bg1" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="horizontal"
+                android:weightSum="10">
+
+                <indi.noclay.cloudhealth.myview.CircleImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:src="@drawable/average"
+                    app:circleColor="@color/bg1" />
 
 
-            <TextView
-                android:id="@+id/averageData"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="8"
-                android:gravity="center_vertical|left"
-                android:maxLines="1"
-                android:text="平均值：0"
-                android:textColor="@color/black"
-                android:textSize="17sp" />
+                <TextView
+                    android:id="@+id/averageData"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="8"
+                    android:gravity="center_vertical|left"
+                    android:maxLines="1"
+                    android:text="平均值：0"
+                    android:textColor="@color/black"
+                    android:textSize="17sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="horizontal"
+                android:weightSum="10">
+
+                <indi.noclay.cloudhealth.myview.CircleImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/max"
+                    app:circleColor="@color/bg2" />
+
+                <TextView
+                    android:id="@+id/maxData"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="8"
+                    android:gravity="center_vertical|left"
+                    android:maxLines="1"
+                    android:text="高峰值：0"
+                    android:textColor="@color/black"
+                    android:textSize="17sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="horizontal"
+                android:weightSum="10">
+
+                <indi.noclay.cloudhealth.myview.CircleImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:src="@drawable/min"
+                    app:circleColor="@color/bg3" />
+
+                <TextView
+                    android:id="@+id/minData"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="8"
+                    android:gravity="center_vertical|left"
+                    android:maxLines="1"
+                    android:text="低谷值：0"
+                    android:textColor="@color/black"
+                    android:textSize="17sp" />
+            </LinearLayout>
+
         </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:orientation="horizontal"
-            android:weightSum="10">
-
-            <indi.noclay.cloudhealth.myview.CircleImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:scaleType="fitCenter"
-                android:src="@drawable/max"
-                app:circleColor="@color/bg2" />
-
-            <TextView
-                android:id="@+id/maxData"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="8"
-                android:gravity="center_vertical|left"
-                android:maxLines="1"
-                android:text="高峰值：0"
-                android:textColor="@color/black"
-                android:textSize="17sp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:orientation="horizontal"
-            android:weightSum="10">
-
-            <indi.noclay.cloudhealth.myview.CircleImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:src="@drawable/min"
-                app:circleColor="@color/bg3" />
-
-            <TextView
-                android:id="@+id/minData"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="8"
-                android:gravity="center_vertical|left"
-                android:maxLines="1"
-                android:text="低谷值：0"
-                android:textColor="@color/black"
-                android:textSize="17sp" />
-        </LinearLayout>
-
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
