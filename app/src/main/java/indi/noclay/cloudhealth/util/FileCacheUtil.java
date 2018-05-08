@@ -19,6 +19,13 @@ import static indi.noclay.cloudhealth.util.ConstantsConfig.CACHE_DATA_DIR;
 
 public class FileCacheUtil {
 
+
+    public static String getCacheDirName(){
+        String cacheDir = CACHE_DATA_DIR
+                + SharedPreferenceHelper.getLoginUserId()
+                + "/xindian/";
+        return cacheDir;
+    }
     public static String getCacheFileName(){
         return getCacheFileName(UtilClass.getTimeStamp());
     }
@@ -29,9 +36,7 @@ public class FileCacheUtil {
      * @return
      */
     public static String getCacheFileName(String timeStamp){
-        String cacheDir = CACHE_DATA_DIR
-                + SharedPreferenceHelper.getLoginUserId()
-                + "/xindian/";
+        String cacheDir = getCacheDirName();
         File dir = new File(cacheDir);
         if (!dir.exists() || dir.isFile()){
             dir.delete();
