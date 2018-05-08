@@ -7,7 +7,9 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
@@ -20,6 +22,7 @@ import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 import indi.noclay.cloudhealth.R;
+import indi.noclay.cloudhealth.database.MeasureTableHelper;
 import indi.noclay.cloudhealth.database.MedicineDetail;
 import indi.noclay.cloudhealth.database.SignUserData;
 import indi.noclay.cloudhealth.receiver.UpLoadReceiver;
@@ -38,6 +41,50 @@ import static indi.noclay.cloudhealth.util.ConstantsConfig.LOAD_CACHE_MINUTE;
 
 public class SynchronizeDataService extends Service{
     private static final String TAG = "tongzhi";
+    public static final int UP_LOAD_START = 0;
+    public static final int UP_LOAD_ING = 1;
+    public static final int UP_LOAD_END = 2;
+    public static final int UP_LOAD_FAIL = 3;
+
+    private Handler mHandler = new SynchronizedHandler();
+    private class SynchronizedHandler extends Handler{
+        int count = 0;
+        int threshold = 0;
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what){
+                case UP_LOAD_START:{
+                    threshold = msg.arg1;
+                    Log.d(TAG, "开始上传: size = " + msg.arg1);
+                    break;
+                }
+                case UP_LOAD_ING:{
+                    count += msg.arg1;
+                    if (msg.arg2 == threshold / 50){
+                        if (count < threshold * 0.8){
+                            //上传失败
+                            makeANotification("数据上传失败，之后重试");
+                        }else{
+                            MeasureTableHelper.deleteAll();
+                            makeANotification("数据上传成功" + count + "条");
+                        }
+                    }
+                    Log.d(TAG, "上传中: successCount = " + msg.arg1 + "... groupIndex = " + msg.arg2);
+                    break;
+                }
+                case UP_LOAD_END:{
+                    Log.d(TAG, "上传结束: ");
+                    break;
+                }
+                case UP_LOAD_FAIL:{
+                    makeANotification("数据上传失败，之后重试");
+                    Log.d(TAG, "上传失败: ");
+                    break;
+                }
+            }
+        }
+    }
 
     @Override
     public void onDestroy() {
@@ -73,7 +120,7 @@ public class SynchronizeDataService extends Service{
                 if (TextUtils.isEmpty(id) || id.length() != 10){
                     makeANotification("您还没有登录");
                 }
-                int count = upLoadMeasureData(id);
+                int count = upLoadMeasureData(id, mHandler);
                 if (count == ERROR_LOAD){
                     makeANotification("数据同步失败");
                 }else{

@@ -1,5 +1,6 @@
 package indi.noclay.cloudhealth;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -34,6 +35,7 @@ import indi.noclay.cloudhealth.service.SynchronizeDataService;
 import indi.noclay.cloudhealth.util.ConstantsConfig;
 import indi.noclay.cloudhealth.util.SharedPreferenceHelper;
 import indi.noclay.cloudhealth.util.TabLayoutViewPagerAdapter;
+import indi.noclay.cloudhealth.util.UtilClass;
 import indi.noclay.cloudhealth.util.ViewUtils;
 
 import static indi.noclay.cloudhealth.database.HeightAndWeightTableHelper.checkLastWeight;
@@ -65,6 +67,7 @@ public class MainActivityCopy extends AppCompatActivity {
         initView();
         initUpLoadThread();
         startAlarm();
+        UtilClass.requestPermission(this, Manifest.permission.READ_PHONE_STATE);
     }
 
 

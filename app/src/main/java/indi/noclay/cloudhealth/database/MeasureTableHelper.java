@@ -3,6 +3,7 @@ package indi.noclay.cloudhealth.database;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Handler;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -13,15 +14,18 @@ import cn.bmob.v3.BmobBatch;
 import cn.bmob.v3.BmobObject;
 import cn.bmob.v3.datatype.BatchResult;
 import cn.bmob.v3.datatype.BmobDate;
+import cn.bmob.v3.datatype.BmobPointer;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.QueryListListener;
 import indi.noclay.cloudhealth.database.measuredata.MeasureData;
 import indi.noclay.cloudhealth.util.ConstantsConfig;
 import indi.noclay.cloudhealth.util.SharedPreferenceHelper;
 import indi.noclay.cloudhealth.util.UtilClass;
-import indi.noclay.cloudhealth.database.LocalDataBase.*;
 
 import static indi.noclay.cloudhealth.database.LocalDataBase.getDefaultInstance;
+import static indi.noclay.cloudhealth.service.SynchronizeDataService.UP_LOAD_FAIL;
+import static indi.noclay.cloudhealth.service.SynchronizeDataService.UP_LOAD_ING;
+import static indi.noclay.cloudhealth.service.SynchronizeDataService.UP_LOAD_START;
 
 /**
  * Created by clay on 2018/4/17.
@@ -71,8 +75,10 @@ public class MeasureTableHelper {
         db.close();
         instance.close();
     }
+
     /**
      * 查询一个数据，存在返回true，否则为false
+     *
      * @param type
      * @param date
      * @return
@@ -94,8 +100,7 @@ public class MeasureTableHelper {
     }
 
 
-
-    public static int upLoadMeasureData(String objectId) {
+    public static int upLoadMeasureData(String objectId, Handler handler) {
         LocalDataBase instance = getDefaultInstance();
         SQLiteDatabase db = instance.getWritableDatabase();
         //检查网络状态
@@ -127,29 +132,21 @@ public class MeasureTableHelper {
                         null
                 );
                 measureData.setMeasureTime(new BmobDate(createTime));
-                datas.add(MeasureData.getBmobObject(type, measureData, owner));
+                datas.add(MeasureData.getBmobObject(type, measureData, new BmobPointer(owner)));
             } while (cursor.moveToNext());
         } else {
             db.close();
             return 0;
         }
         Log.d(TAG, "upLoadMeasureData: datas.size" + datas.size());
-        boolean[] flags = new boolean[datas.size() / 50 + 1];
+        handler.obtainMessage(UP_LOAD_START, datas.size(), 50).sendToTarget();
+        //开始上传
         for (int i = 0; i < datas.size(); i += 50) {
-            flags[i / 50] = upLoadFiftyData(datas, i);
+            upLoadFiftyData(datas, i, handler);
             Log.d(TAG, "upLoadMeasureData: i = " + i);
-            Log.d(TAG, "upLoadMeasureData: load = " + flags[i / 50]);
         }
-        boolean flag = false;
-        for (boolean flag1 : flags) {
-            if (flag1) {
-                flag = true;
-                break;
-            }
-        }
-        if (flag) {
+        if (datas.size() > 0) {
             //有一批上传成功
-            db.delete("MeasureDataCache", null, null);
             db.close();
             instance.close();
             return datas.size();
@@ -160,25 +157,45 @@ public class MeasureTableHelper {
         }
     }
 
-    public static boolean upLoadFiftyData(List<BmobObject> dataArray, int length) {
+    public static void deleteAll() {
+        LocalDataBase instance = getDefaultInstance();
+        SQLiteDatabase db = instance.getWritableDatabase();
+        db.delete("MeasureDataCache", null, null);
+        db.close();
+        instance.close();
+    }
+
+    public static void upLoadFiftyData(List<BmobObject> dataArray, final int beginIndex, final Handler handler) {
         if (dataArray == null) {
-            return true;
+            return;
         }
         List<BmobObject> item = new ArrayList<>();
-        for (int i = length; i < length + 50 && i < dataArray.size(); i++) {
+        for (int i = beginIndex; i < beginIndex + 50 && i < dataArray.size(); i++) {
             item.add(dataArray.get(i));
         }
-        final boolean[] flag = new boolean[1];
         //进行上传操作
-        new BmobBatch().insertBatch(item);
-        new BmobBatch().doBatch(new QueryListListener<BatchResult>() {
+        new BmobBatch().insertBatch(item).doBatch(new QueryListListener<BatchResult>() {
+
             @Override
-            public void done(List<BatchResult> list, BmobException e) {
+            public void done(List<BatchResult> o, BmobException e) {
                 if (e == null) {
-                    flag[0] = true;
+                    int count = 0;
+                    for (int i = 0; i < o.size(); i++) {
+                        BatchResult result = o.get(i);
+                        BmobException ex = result.getError();
+                        if (ex == null) {
+                            count++;
+                            Log.d(TAG, "done: 成功");
+                        } else {
+                            Log.d(TAG,"第" + (i + beginIndex) + "个失败：" + ex.getErrorCode() + "," + ex.getMessage());
+                        }
+                    }
+                    handler.obtainMessage(UP_LOAD_ING, count, beginIndex / 50).sendToTarget();
+                } else {
+                    handler.obtainMessage(UP_LOAD_FAIL, 0, beginIndex / 50).sendToTarget();
+                    Log.i("bmob", "失败：" + e.getMessage() + "," + e.getErrorCode());
                 }
             }
         });
-        return flag[0];
     }
 }

@@ -108,9 +108,9 @@ public class ConstantsConfig {
     //数据库版本
     public static final int DATABASE_VERSION = 1;
     //进行本地数据库缓存的间隔, 每小时的0, 15, 30 , 45
-    public static final int CACHE_TIME_LENGTH = 1;
+    public static final int CACHE_TIME_LENGTH = 2;
 
-    public static final int LOAD_CACHE_MINUTE = 30;
+    public static final int LOAD_CACHE_MINUTE = 3;
     //上传的Receiver
     public static final int RECEIVER_TYPE_UPLOAD = 0;
     public static final int ANIMATION_DURATION = 200;

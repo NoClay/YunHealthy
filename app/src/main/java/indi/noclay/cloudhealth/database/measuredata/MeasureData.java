@@ -6,7 +6,7 @@ import java.util.List;
 
 import cn.bmob.v3.BmobObject;
 import cn.bmob.v3.datatype.BmobDate;
-import indi.noclay.cloudhealth.database.SignUserData;
+import cn.bmob.v3.datatype.BmobPointer;
 import indi.noclay.cloudhealth.util.ConstantsConfig;
 import pers.noclay.foldlineview.FoldLineInterface;
 
@@ -23,7 +23,7 @@ public class MeasureData extends BmobObject implements FoldLineInterface{
     private Boolean isAverageDanger;
     private Boolean isMaxDanger;
     private Boolean isMinDanger;
-    public SignUserData owner;
+    private BmobPointer owner;
     private BmobDate measureTime;
 
     public BmobDate getMeasureTime() {
@@ -34,11 +34,11 @@ public class MeasureData extends BmobObject implements FoldLineInterface{
         this.measureTime = measureTime;
     }
 
-    public SignUserData getOwner() {
+    public BmobPointer getOwner() {
         return owner;
     }
 
-    public void setOwner(SignUserData owner) {
+    public void setOwner(BmobPointer owner) {
         this.owner = owner;
     }
 
@@ -52,8 +52,8 @@ public class MeasureData extends BmobObject implements FoldLineInterface{
      */
     public void reset(){
         averageData = 0.0f;
-        maxData = Float.MIN_VALUE;
-        minData = Float.MAX_VALUE;
+        maxData = -5000f;
+        minData = 5000f;
         count = 0;
         isAverageDanger = false;
         isMaxDanger = false;
@@ -174,7 +174,7 @@ public class MeasureData extends BmobObject implements FoldLineInterface{
         return getDate();
     }
 
-    public static BmobObject getBmobObject(int type, MeasureData measureData, SignUserData owner){
+    public static BmobObject getBmobObject(int type, MeasureData measureData, BmobPointer owner){
         switch (type) {
             case ConstantsConfig.MEASURE_TYPE_XUEYANG: {
                 MeasureXueYang measureXueYang = new MeasureXueYang();

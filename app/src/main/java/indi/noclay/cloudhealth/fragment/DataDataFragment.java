@@ -106,11 +106,11 @@ public class DataDataFragment extends Fragment {
                             @Override
                             public void onItemClick(View view, int position) {
                                 switch (position){
-                                    case 6:{
-                                        Toast.makeText(context, "暂无更多", Toast.LENGTH_SHORT).show();
-                                    }
+                                    case 5:
+                                    case 6:
                                     case 7:{
                                         Toast.makeText(context, "暂无更多", Toast.LENGTH_SHORT).show();
+                                        break;
                                     }
                                     default:{
                                         Intent intent = new Intent(context, InfoActivity.class);
