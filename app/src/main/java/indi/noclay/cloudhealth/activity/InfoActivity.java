@@ -484,7 +484,7 @@ public class InfoActivity extends AppCompatActivity
     public void onDateChanged(int year, int month, int day) {
         Log.d(TAG, "onDateChanged: time = " + year + "-" + month + "-" + day);
         showLoading();
-//        getDatas(year, month, day);
+        getDatas(year, month, day);
     }
 
     @Override
