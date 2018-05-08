@@ -1,5 +1,6 @@
 package indi.noclay.cloudhealth.fragment;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -33,11 +34,11 @@ import indi.noclay.cloudhealth.service.BluetoothConnectService;
 import indi.noclay.cloudhealth.util.ABSMeasureDataResolver;
 import indi.noclay.cloudhealth.util.ConstantsConfig;
 import indi.noclay.cloudhealth.util.CustomMeasureDataResolver;
+import indi.noclay.cloudhealth.util.FileCacheUtil;
 import indi.noclay.cloudhealth.util.SharedPreferenceHelper;
 import indi.noclay.cloudhealth.util.UtilClass;
 import pers.noclay.bluetooth.Bluetooth;
 import pers.noclay.bluetooth.BluetoothConfig;
-import pers.noclay.bluetooth.OnConnectListener;
 
 import static indi.noclay.cloudhealth.database.MeasureTableHelper.addOneMeasureData;
 import static indi.noclay.cloudhealth.database.MeasureTableHelper.checkOneMeasureDataCache;
@@ -49,13 +50,15 @@ import static indi.noclay.cloudhealth.util.ConstantsConfig.MEASURE_TYPE_TIWEN;
 import static indi.noclay.cloudhealth.util.ConstantsConfig.MEASURE_TYPE_XINDIAN;
 import static indi.noclay.cloudhealth.util.ConstantsConfig.MEASURE_TYPE_XUETANG;
 import static indi.noclay.cloudhealth.util.ConstantsConfig.MEASURE_TYPE_XUEYANG;
+import static pers.noclay.bluetooth.BluetoothConstant.MESSAGE_CONNECT_FAILED;
+import static pers.noclay.bluetooth.BluetoothConstant.MESSAGE_CONNECT_SUCCESS;
+import static pers.noclay.bluetooth.BluetoothConstant.MESSAGE_READ_STRING;
 
 /*
  * Created by NoClay on 2016/11/2.
  */
 public class MeasureFragment extends Fragment implements
         View.OnClickListener,
-        OnConnectListener,
         ABSMeasureDataResolver.OnResolveListener {
     private TextView connectDevice;
     private RecyclerView recyclerView;
@@ -75,7 +78,7 @@ public class MeasureFragment extends Fragment implements
     static final int MSG_WAIT_CONNECT = 0;
     static final int MSG_CONNECT_SUCCESS = 1;
     static final int MSG_START_CONNECT = 2;
-    static final int MSG_READ_STRING = 3;
+    static final int MSG_READ_DATA = 3;
     static final int MSG_CONNECT_FAILED = 4;
     static CustomMeasureDataResolver sDataResolver;
     private static final String TAG = "MeasureFragment";
@@ -89,6 +92,8 @@ public class MeasureFragment extends Fragment implements
         mView = v;
         findView(v);
         initBluetoothSDK();
+        UtilClass.requestPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE);
+        UtilClass.requestPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
         sDataResolver = new CustomMeasureDataResolver();
         sDataResolver.setOnResolveListener(this);
         return v;
@@ -101,8 +106,8 @@ public class MeasureFragment extends Fragment implements
                 .setServerEnable(false)
                 .setConnectionServiceClass(BluetoothConnectService.class)
                 .build();
+        Bluetooth.setHandler(((Bluetooth.Handler) mHandler));
         Bluetooth.initialize(config);
-        Bluetooth.setOnConnectListener(this);
         Bluetooth.setApplicationContext(this.getActivity().getApplicationContext());
     }
 
@@ -191,27 +196,6 @@ public class MeasureFragment extends Fragment implements
         Bluetooth.onResult(requestCode, resultCode, data);
     }
 
-    @Override
-    public void onConnectFail(int i) {
-        mHandler.sendEmptyMessage(MSG_CONNECT_FAILED);
-    }
-
-    @Override
-    public void onConnectSuccess() {
-        mHandler.sendEmptyMessage(MSG_CONNECT_SUCCESS);
-    }
-
-    @Override
-    public void onConnectStart() {
-        mHandler.sendEmptyMessage(MSG_START_CONNECT);
-    }
-
-    @Override
-    public void onReceiveMessage(byte[] bytes) {
-        Log.d("connectThread", "onReceiveMessage: handle");
-        sDataResolver.resolveData(bytes);
-    }
-
     /**
      * 检查本时段缓存处理
      *
@@ -250,20 +234,98 @@ public class MeasureFragment extends Fragment implements
 
     @Override
     public void onResolve(String result, int type) {
-        Message message = Message.obtain();
-        message.what = MSG_READ_STRING;
-        message.arg1 = type;
-        message.obj = result;
-        mHandler.sendMessage(message);
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        int minute = calendar.get(Calendar.MINUTE);
+        MeasureData temp;
+        float resultValue;
+        switch (type) {
+            //每次都要求获取数据的字符串
+            case 0: {//保留
+                break;
+            }
+            case 1: {
+                //血氧
+                if (result.length() == 8) {
+                    Log.d("workItem", "handleMessage: 血氧");
+                    Log.d("workItem", "handleMessage: 脉搏");
+                    checkMinuteAndCache(MEASURE_TYPE_XUEYANG, minute);
+                    checkMinuteAndCache(ConstantsConfig.MEASURE_TYPE_MAIBO, minute);
+                    //进行血氧的结果解析
+                    resultValue = isValidData(result.substring(0, 2), MEASURE_TYPE_XUEYANG);
+                    temp = measureDataList.get(MEASURE_TYPE_XUEYANG);
+                    if (resultValue != ERROR_RETURN_VALUE && compareData(temp, resultValue)) {
+                        myAdapter.notifyItemChanged(MEASURE_TYPE_XUEYANG);
+                    }
+                    //进行脉搏的结果解析
+                    resultValue = isValidData(result.substring(2, 4), MEASURE_TYPE_MAIBO);
+                    temp = measureDataList.get(ConstantsConfig.MEASURE_TYPE_MAIBO);
+                    if (resultValue != ERROR_RETURN_VALUE && compareData(temp, resultValue)) {
+                        myAdapter.notifyItemChanged(ConstantsConfig.MEASURE_TYPE_MAIBO);
+                    }
+                }
+                break;
+            }
+            case 2: {
+                //心电
+                checkMinuteAndCache(ConstantsConfig.MEASURE_TYPE_XINDIAN, minute);
+                resultValue = isValidData(result, MEASURE_TYPE_XINDIAN);
+                temp = measureDataList.get(ConstantsConfig.MEASURE_TYPE_XINDIAN);
+                if (resultValue != ERROR_RETURN_VALUE){
+                    myAdapter.startRefreshing();
+                    myAdapter.drawHeartWavesPoint(resultValue);
+                    FileCacheUtil.appendToFile(((int) resultValue));
+                    if (compareData(temp, resultValue)) {
+                        myAdapter.notifyItemChanged(ConstantsConfig.MEASURE_TYPE_XINDIAN);
+                    }
+                }
+                break;
+            }
+            case 3: {
+                //血糖
+                Log.d("workItem", "handleMessage: 血糖");
+                checkMinuteAndCache(ConstantsConfig.MEASURE_TYPE_XUETANG, minute);
+                resultValue = isValidData(result, MEASURE_TYPE_XUETANG);
+                temp = measureDataList.get(ConstantsConfig.MEASURE_TYPE_XUETANG);
+                if (resultValue != ERROR_RETURN_VALUE && compareData(temp, resultValue)) {
+                    myAdapter.notifyItemChanged(ConstantsConfig.MEASURE_TYPE_XUETANG);
+                }
+                break;
+            }
+            case 4: {
+                //体温
+                Log.d("workItem", "handleMessage: 体温");
+                checkMinuteAndCache(ConstantsConfig.MEASURE_TYPE_TIWEN, minute);
+                resultValue = isValidData(result, MEASURE_TYPE_TIWEN);
+                temp = measureDataList.get(ConstantsConfig.MEASURE_TYPE_TIWEN);
+                if (resultValue != ERROR_RETURN_VALUE && compareData(temp, resultValue)) {
+                    myAdapter.notifyItemChanged(ConstantsConfig.MEASURE_TYPE_TIWEN);
+                }
+                break;
+            }
+            case 5: {
+                //粉尘
+                Log.d("workItem", "handleMessage: 粉尘");
+                checkMinuteAndCache(ConstantsConfig.MEASURE_TYPE_FENCHEN, minute);
+                resultValue = isValidData(result, MEASURE_TYPE_FENCHEN);
+                temp = measureDataList.get(ConstantsConfig.MEASURE_TYPE_FENCHEN);
+                if (resultValue != ERROR_RETURN_VALUE && compareData(temp, resultValue)) {
+                    myAdapter.notifyItemChanged(ConstantsConfig.MEASURE_TYPE_FENCHEN);
+                }
+                break;
+            }
+            default:
+                break;
+        }
     }
 
     Handler mHandler = new MeasureHandler();
 
-    private class MeasureHandler extends Handler{
+    private class MeasureHandler extends Bluetooth.Handler{
         @Override
         public void handleMessage(Message msg) {
+            super.handleMessage(msg);
             switch (msg.what) {
-                case MSG_CONNECT_FAILED: {
+                case MESSAGE_CONNECT_FAILED: {
                     Log.d(TAG, "handleMessage: 连接失败");
                     connectDevice.setClickable(true);
                     connectDevice.setText("连接失败");
@@ -271,96 +333,23 @@ public class MeasureFragment extends Fragment implements
                     load.setVisibility(View.INVISIBLE);
                     break;
                 }
-                case MSG_CONNECT_SUCCESS: {
+                case MESSAGE_CONNECT_SUCCESS: {
                     Log.d(TAG, "handleMessage: 连接成功");
                     connectDevice.setText("已连接");
                     connectDevice.setVisibility(View.VISIBLE);
                     load.setVisibility(View.INVISIBLE);
                     break;
                 }
-                case MSG_READ_STRING: {
+                case MESSAGE_READ_STRING: {
                     //进行数据的分类设定
-                    calendar.setTimeInMillis(System.currentTimeMillis());
-                    int minute = calendar.get(Calendar.MINUTE);
-                    String data = (String) msg.obj;
-                    MeasureData temp;
-                    float result;
-                    switch (msg.arg1) {
-                        //每次都要求获取数据的字符串
-                        case 0: {//保留
-                            break;
-                        }
-                        case 1: {
-                            //血氧
-                            if (data.length() == 8) {
-                                Log.d("workItem", "handleMessage: 血氧");
-                                Log.d("workItem", "handleMessage: 脉搏");
-                                checkMinuteAndCache(MEASURE_TYPE_XUEYANG, minute);
-                                checkMinuteAndCache(ConstantsConfig.MEASURE_TYPE_MAIBO, minute);
-                                //进行血氧的结果解析
-                                result = isValidData(data.substring(0, 2), MEASURE_TYPE_XUEYANG);
-                                temp = measureDataList.get(MEASURE_TYPE_XUEYANG);
-                                if (result != ERROR_RETURN_VALUE && compareData(temp, result)) {
-                                    myAdapter.notifyItemChanged(MEASURE_TYPE_XUEYANG);
-                                }
-                                //进行脉搏的结果解析
-                                result = isValidData(data.substring(2, 4), MEASURE_TYPE_MAIBO);
-                                temp = measureDataList.get(ConstantsConfig.MEASURE_TYPE_MAIBO);
-                                if (result != ERROR_RETURN_VALUE && compareData(temp, result)) {
-                                    myAdapter.notifyItemChanged(ConstantsConfig.MEASURE_TYPE_MAIBO);
-                                }
-                            }
-                            break;
-                        }
-                        case 2: {
-                            //心电
-                            checkMinuteAndCache(ConstantsConfig.MEASURE_TYPE_XINDIAN, minute);
-                            result = isValidData(data, MEASURE_TYPE_XINDIAN);
-                            temp = measureDataList.get(ConstantsConfig.MEASURE_TYPE_XINDIAN);
-                            if (result != ERROR_RETURN_VALUE) {
-                                Log.d(TAG, "handleMessage: drawWaves = " + result);
-                                compareData(temp, (float) (result));
-                                myAdapter.drawHeartWavesPoint(result);
-                                myAdapter.notifyItemChanged(ConstantsConfig.MEASURE_TYPE_XINDIAN);
-                            }
-                            break;
-                        }
-                        case 3: {
-                            //血糖
-                            Log.d("workItem", "handleMessage: 血糖");
-                            checkMinuteAndCache(ConstantsConfig.MEASURE_TYPE_XUETANG, minute);
-                            result = isValidData(data, MEASURE_TYPE_XUETANG);
-                            temp = measureDataList.get(ConstantsConfig.MEASURE_TYPE_XUETANG);
-                            if (result != ERROR_RETURN_VALUE && compareData(temp, result)) {
-                                myAdapter.notifyItemChanged(ConstantsConfig.MEASURE_TYPE_XUETANG);
-                            }
-                            break;
-                        }
-                        case 4: {
-                            //体温
-                            Log.d("workItem", "handleMessage: 体温");
-                            checkMinuteAndCache(ConstantsConfig.MEASURE_TYPE_TIWEN, minute);
-                            result = isValidData(data, MEASURE_TYPE_TIWEN);
-                            temp = measureDataList.get(ConstantsConfig.MEASURE_TYPE_TIWEN);
-                            if (result != ERROR_RETURN_VALUE && compareData(temp, result)) {
-                                myAdapter.notifyItemChanged(ConstantsConfig.MEASURE_TYPE_TIWEN);
-                            }
-                            break;
-                        }
-                        case 5: {
-                            //粉尘
-                            Log.d("workItem", "handleMessage: 粉尘");
-                            checkMinuteAndCache(ConstantsConfig.MEASURE_TYPE_FENCHEN, minute);
-                            result = isValidData(data, MEASURE_TYPE_FENCHEN);
-                            temp = measureDataList.get(ConstantsConfig.MEASURE_TYPE_FENCHEN);
-                            if (result != ERROR_RETURN_VALUE && compareData(temp, result)) {
-                                myAdapter.notifyItemChanged(ConstantsConfig.MEASURE_TYPE_FENCHEN);
-                            }
-                            break;
-                        }
-                        default:
-                            break;
-                    }
+                    Log.d("connectThread", "handleMessage: handle ");
+                    sDataResolver.resolveData((byte[]) msg.obj);
+                    break;
+                }
+                case MSG_READ_DATA:{
+                    Log.d(TAG, "handleMessage: type = " + msg.arg1);
+
+                    break;
                 }
             }
         }

@@ -3,13 +3,11 @@ package pers.noclay.bluetooth;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.content.ComponentName;
+import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.ServiceConnection;
-import android.os.IBinder;
-import android.os.RemoteException;
+import android.os.Message;
 import android.util.Log;
 
 import java.lang.reflect.Method;
@@ -22,6 +20,8 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static android.app.Activity.RESULT_OK;
+import static pers.noclay.bluetooth.BluetoothConstant.ARG_FROM_CLIENT;
+import static pers.noclay.bluetooth.BluetoothConstant.ARG_FROM_SERVER;
 
 /**
  * Created by i-gaolonghai on 2017/8/18.
@@ -35,104 +35,47 @@ public class Bluetooth {
     private static OnPrepareBluetoothListener sPrepareBluetoothListener;
     private static ABSCreateBondStrategy sCustomCreateBondStrategy;
     private static OnCreateBondResultListener sOnCreateBondResultListener;
-    private static IBluetoothConnection sIBluetoothConnection;
-    private static OnConnectListener sOnConnectListener;
     private static Timer sTimer;
     private static boolean sHasConnected = false;
     private static AtomicBoolean sIsSupportBluetooth;
-    private static final String TAG = "BluetoothLogger";
+    public static final String TAG = "BluetoothLogger";
     private static Context sContext;
+    private static ClientThread sClientThread;
+    private static ServerThread sServerThread;
+    private static ConnectThread sConnectThread;
+    private static Handler sHandler;
+
+    public static void setHandler(Handler handler) {
+        sHandler = handler;
+    }
+
     public static void setApplicationContext(Context applicationContext){
         sContext = applicationContext;
     }
-
-    private static IBinder.DeathRecipient sDeathRecipient = new IBinder.DeathRecipient() {
+    public static class Handler extends android.os.Handler{
         @Override
-        public void binderDied() {
-            if (sIBluetoothConnection != null){
-                sIBluetoothConnection.asBinder().unlinkToDeath(sDeathRecipient, 0);
-                sIBluetoothConnection = null;
-                bindService();
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if (msg.what == BluetoothConstant.MESSAGE_CONNECT_SUCCESS){
+                onConnectSuccess(msg);
+                Log.d(TAG, "handleMessage: success");
+            }else if (msg.what == BluetoothConstant.MESSAGE_CONNECT_FAILED){
+                sHasConnected = false;
             }
         }
-    };
-
-
-    private static IBluetoothReceiverListener sIBluetoothReceiverListener = new IBluetoothReceiverListener.Stub() {
-        @Override
-        public void onConnectStart() throws RemoteException {
-            Log.d(TAG, "onConnectStart: 开始连接");
-            if (sOnConnectListener != null){
-                sOnConnectListener.onConnectStart();
-            }
-            sTimer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    sBluetoothWrapper.getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (!sHasConnected && sOnConnectListener != null){
-                                sOnConnectListener.onConnectFail(BluetoothConstant.ERROR_TIME_OUT);
-                            }
-                        }
-                    });
-                }
-            }, sBluetoothWrapper.getConnectTimeThreshold() * 1000);
-        }
-
-        @Override
-        public void onConnectSuccess() throws RemoteException {
-            Log.d(TAG, "onConnectSuccess: 连接成功");
-            if (sOnConnectListener != null){
-                sOnConnectListener.onConnectSuccess();
-            }
-            sHasConnected = true;
-        }
-
-        @Override
-        public void onConnectFailed(int errorCode) throws RemoteException {
-            Log.d(TAG, "onConnectFailed: 连接失败");
-            if (sOnConnectListener != null){
-                sOnConnectListener.onConnectFail(BluetoothConstant.ERROR_TIME_OUT);
-            }
-        }
-
-        @Override
-        public void onReceiveMessage(byte[] bytes) throws RemoteException {
-            Log.d(TAG, "onReceiveMessage: 收到 = " + new String(bytes));
-            if (sOnConnectListener != null){
-                sOnConnectListener.onReceiveMessage(bytes);
-            }
-        }
-
-    };
-
-    private static void bindService(){
-        Intent intent = new Intent(sBluetoothWrapper.getApplicationContext(), sBluetoothWrapper.getConnectionServiceClass());
-        intent.putExtra(BluetoothConstant.VALUE_UUID, sBluetoothWrapper.getUUID().toString());
-        intent.putExtra(BluetoothConstant.VALUE_HOLD_LONG_CONNECT, Bluetooth.isHoldLongConnectAble());
-        intent.putExtra(BluetoothConstant.VALUE_SERVER_ENABLE, Bluetooth.isServerEnable());
-        sBluetoothWrapper.getApplicationContext().bindService(intent, sServiceConnection, Context.BIND_AUTO_CREATE);
     }
 
-    private static ServiceConnection sServiceConnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-            sIBluetoothConnection = IBluetoothConnection.Stub.asInterface(iBinder);
-            try {
-                sIBluetoothConnection.asBinder().linkToDeath(sDeathRecipient, 0);
-                sIBluetoothConnection.registerListener(sIBluetoothReceiverListener);
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
+    public static void onConnectSuccess(Message msg){
+        BluetoothSocket socket = null;
+        if (msg.arg1 == ARG_FROM_CLIENT) {
+            socket = sClientThread.getBluetoothSocket();
+        } else if (msg.arg1 == ARG_FROM_SERVER) {
+            socket = sServerThread.getBluetoothSocket();
         }
-
-        @Override
-        public void onServiceDisconnected(ComponentName componentName) {
-            sIBluetoothConnection = null;
-        }
-    };
-
+        sConnectThread = new ConnectThread(socket, sHandler, msg.arg1);
+        sConnectThread.start();
+        sHasConnected = true;
+    }
 
     /**
      * BluetoothConfig，初始化蓝牙SDK
@@ -143,7 +86,10 @@ public class Bluetooth {
             BluetoothWrapper.config(config);
             sBluetoothWrapper = BluetoothWrapper.getInstance();
             registerBluetoothReceiver();
-            bindService();
+            if (sBluetoothWrapper.isServerEnable()){
+                sServerThread = new ServerThread(sHandler, sBluetoothWrapper.getUUID());
+                sServerThread.start();
+            }
             sHasConnected = false;
             //设置定时器
             sTimer = new Timer(BluetoothConstant.getConnectName());
@@ -155,12 +101,8 @@ public class Bluetooth {
      * @param message
      */
     public static void sendMessage(String message) throws BluetoothException {
-        if (sHasConnected){
-            try {
-                sIBluetoothConnection.sendMessage(message);
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
+        if (sHasConnected && sConnectThread != null && sConnectThread.isAlive()){
+            sConnectThread.write(message);
         }
         throw new BluetoothException(BluetoothConstant.ERROR_NOT_CONNECTED);
     }
@@ -204,11 +146,12 @@ public class Bluetooth {
         }
         //开始配对
         if (isBonded(getTargetAddress())){
-            try {
-                sIBluetoothConnection.connect(getTargetAddress());
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
+            Log.d(TAG, "startConnect: 开始连接");
+            sClientThread = new ClientThread(
+                    sBluetoothWrapper.getTargetAddress(),
+                    sBluetoothWrapper.getUUID(),
+                    sHandler);
+            sClientThread.start();
         }
     }
 
@@ -305,14 +248,6 @@ public class Bluetooth {
 
     public static void onDestroy() {
         unregisterBluetoothReceiver();
-        if (sIBluetoothConnection != null && sIBluetoothConnection.asBinder().isBinderAlive()){
-            try {
-                sIBluetoothConnection.unregisterListener(sIBluetoothReceiverListener);
-                sBluetoothWrapper.getApplicationContext().unbindService(sServiceConnection);
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
-        }
     }
 
 
@@ -453,14 +388,6 @@ public class Bluetooth {
 
     public static boolean isHasConnected() {
         return sHasConnected;
-    }
-
-    public static OnConnectListener getOnConnectListener() {
-        return sOnConnectListener;
-    }
-
-    public static void setOnConnectListener(OnConnectListener onConnectListener) {
-        sOnConnectListener = onConnectListener;
     }
 
     public static BluetoothDevice getTargetDevice(){

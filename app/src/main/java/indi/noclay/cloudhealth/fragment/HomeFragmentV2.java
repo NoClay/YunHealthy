@@ -83,29 +83,31 @@ public class HomeFragmentV2 extends Fragment implements View.OnClickListener {
                         titles[i] = texts.get(i).select("h2 > a").text();
                         urls[i] = texts.get(i).select("h2 > a").attr("href");
                     }
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            for (int i = 0; i < images.length; i++) {
-                                View view = LayoutInflater.from(context).inflate(R.layout.view_filpper, null);
-                                ((TextView) view.findViewById(R.id.title)).setText(titles[i]);
-                                Glide.with(context).load(images[i])
-                                        .into(((ImageView) view.findViewById(R.id.image)));
-                                final int index = i;
-                                view.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        Intent intent = new Intent(context, NewDetailActivity.class);
-                                        intent.putExtra(ConstantsConfig.PARAMS_IS_TOP, true);
-                                        intent.putExtra(ConstantsConfig.PARAMS_URL, urls[index]);
-                                        intent.putExtra(ConstantsConfig.PARAMS_TITLE, titles[index]);
-                                        startActivity(intent);
-                                    }
-                                });
-                                viewFilpper.addView(view);
+                    if (getActivity() != null){
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                for (int i = 0; i < images.length; i++) {
+                                    View view = LayoutInflater.from(context).inflate(R.layout.view_filpper, null);
+                                    ((TextView) view.findViewById(R.id.title)).setText(titles[i]);
+                                    Glide.with(context).load(images[i])
+                                            .into(((ImageView) view.findViewById(R.id.image)));
+                                    final int index = i;
+                                    view.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            Intent intent = new Intent(context, NewDetailActivity.class);
+                                            intent.putExtra(ConstantsConfig.PARAMS_IS_TOP, true);
+                                            intent.putExtra(ConstantsConfig.PARAMS_URL, urls[index]);
+                                            intent.putExtra(ConstantsConfig.PARAMS_TITLE, titles[index]);
+                                            startActivity(intent);
+                                        }
+                                    });
+                                    viewFilpper.addView(view);
+                                }
                             }
-                        }
-                    });
+                        });
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

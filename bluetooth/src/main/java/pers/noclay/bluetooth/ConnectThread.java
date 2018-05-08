@@ -19,8 +19,8 @@ public class ConnectThread extends Thread {
     private BluetoothSocket mBluetoothSocket;
     private OutputStream mOutputStream;
     private InputStream mInputStream;
-    byte[] bytes = new byte[10240];
-    byte[] temp = new byte[1024];
+    byte[] bytes = new byte[1024];
+    byte[] buffer = new byte[1024];
     private int count = 0;
     private int mArg;
     private Handler mHandler;
@@ -71,22 +71,26 @@ public class ConnectThread extends Thread {
             return;
         do {
             try {
-                i = mInputStream.read(temp);
-                for (int j = 0; j < i; j++) {
-                    if (count + j < bytes.length){
-                        bytes[count + j] = temp[j];
-                    }
-                }
-                count += i;
-                if (System.currentTimeMillis() - lastSendTime > 5000){
-                    //5秒发送一次
-                    Log.d("connectThread", "run: sendMessage count = " + count);
-                    Message message = mHandler.obtainMessage(BluetoothConstant.MESSAGE_READ_STRING);
-                    message.obj = Arrays.copyOf(bytes, count);
-                    message.sendToTarget();
-                    lastSendTime = System.currentTimeMillis();
-                    count = 0;
-                }
+                i = mInputStream.read(bytes);
+                Message message = mHandler.obtainMessage(BluetoothConstant.MESSAGE_READ_STRING);
+                message.obj = Arrays.copyOf(bytes, i);
+                message.sendToTarget();
+                Log.d("connectThread", "run: sendMessage = " + count);
+//                if (System.currentTimeMillis() - lastSendTime > 1000 || count + i >= 1024) {
+//                    //清除byte缓冲区
+//                    Message message = mHandler.obtainMessage(BluetoothConstant.MESSAGE_READ_STRING);
+//                    message.obj = Arrays.copyOf(buffer, count);
+//                    message.sendToTarget();
+//                    Log.d("connectThread", "run: sendMessage = " + count);
+//                    lastSendTime = System.currentTimeMillis();
+//                    count = 0;
+//                }
+//                //进如缓冲区
+//                for (int j = 0; j < i; j++) {
+//                    buffer[count + j] = bytes[j];
+//                }
+//                count += i;
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -102,5 +106,9 @@ public class ConnectThread extends Thread {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public interface OnReceiveMessage{
+        public void onReceive(byte[] bytes);
     }
 }

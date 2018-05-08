@@ -61,9 +61,9 @@ dependencies {
     compile 'com.google.zxing:android-core:3.3.0'
     compile 'com.airbnb.android:lottie:2.1.0'
     compile 'com.alibaba:fastjson:1.2.26'
-    implementation project(':ecgwaveview-release')
     implementation project(':foldlineview-release')
     implementation project(':utiltool-release')
     implementation files('libs/showapi_sdk.jar')
     implementation project(':bluetooth')
+    implementation project(':ecgwaveview')
 }
