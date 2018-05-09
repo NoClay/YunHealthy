@@ -10,7 +10,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import com.bumptech.glide.Glide;
@@ -49,6 +51,7 @@ public class HomeFragmentV2 extends Fragment implements View.OnClickListener {
     private LinearLayout mNewsInput;
     private LinearLayout mMedicineInput;
     private LinearLayout mReportInput;
+    private RelativeLayout mHealthyReport;
     private String[] images;
     private String[] titles;
     private String[] urls;
@@ -129,10 +132,13 @@ public class HomeFragmentV2 extends Fragment implements View.OnClickListener {
         mMedicineInput = (LinearLayout) view.findViewById(R.id.medicineInput);
         mReportInput = (LinearLayout) view.findViewById(R.id.reportInput);
         viewFilpper = (ViewFlipper) view.findViewById(R.id.viewFilpper);
+        mHealthyReport = (RelativeLayout) view.findViewById(R.id.healthyReportBt);
+        mHealthyReport.setOnClickListener(this);
         mFoodInput.setOnClickListener(this);
         mMedicineInput.setOnClickListener(this);
         mReportInput.setOnClickListener(this);
         mNewsInput.setOnClickListener(this);
+        
     }
 
     @Override
@@ -162,6 +168,9 @@ public class HomeFragmentV2 extends Fragment implements View.OnClickListener {
                 intent.putExtra(PARAMS_TITLE, "动态");
                 startActivity(intent);
                 break;
+            }
+            case R.id.healthyReportBt:{
+                Toast.makeText(context, "健康报告计划开发中，敬请期待", Toast.LENGTH_SHORT).show();
             }
         }
 
