@@ -12,7 +12,7 @@
             <option value="$PROJECT_DIR$/bluetooth" />
             <option value="$PROJECT_DIR$/ecgwaveview" />
             <option value="$PROJECT_DIR$/foldlineview-release" />
-            <option value="$PROJECT_DIR$/utiltool-release" />
+            <option value="$PROJECT_DIR$/utiltool" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.jakewharton.butterknife'
 
 android {
-    compileSdkVersion 25
+    compileSdkVersion 26
     buildToolsVersion '26.0.2'
 //    **兼容Android6.0系统所需，如果这句话报错，可在dependencies标签下使用compile 'cn.bmob.android:http-legacy:1.0'**
     useLibrary 'org.apache.http.legacy'
@@ -11,7 +11,7 @@ android {
         multiDexEnabled true
         applicationId "indi.noclay.cloudhealth"
         minSdkVersion 15
-        targetSdkVersion 25
+        targetSdkVersion 26
         versionCode 1
         versionName "1.0"
 
@@ -62,8 +62,8 @@ dependencies {
     compile 'com.airbnb.android:lottie:2.1.0'
     compile 'com.alibaba:fastjson:1.2.26'
     implementation project(':foldlineview-release')
-    implementation project(':utiltool-release')
     implementation files('libs/showapi_sdk.jar')
     implementation project(':bluetooth')
     implementation project(':ecgwaveview')
+    implementation project(':utiltool')
 }

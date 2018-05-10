@@ -13,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.webkit.WebView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -33,12 +34,13 @@ import indi.noclay.cloudhealth.util.YunHealthyLoading;
 
 import static indi.noclay.cloudhealth.util.ViewUtils.hideView;
 import static indi.noclay.cloudhealth.util.ViewUtils.showView;
+import static pers.noclay.utiltool.ShareUtils.shareText;
 
 /**
  * Created by no_clay on 2017/2/7.
  */
 
-public class NewDetailActivity extends AppCompatActivity {
+public class NewDetailActivity extends AppCompatActivity implements View.OnClickListener {
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
     @BindView(R.id.toolbar_layout)
@@ -99,6 +101,7 @@ public class NewDetailActivity extends AppCompatActivity {
         url = getIntent().getStringExtra(ConstantsConfig.PARAMS_URL);
         title = getIntent().getStringExtra(ConstantsConfig.PARAMS_TITLE);
         mToolbarLayout.setTitle(title);
+        mFab.setOnClickListener(this);
         setSupportActionBar(mToolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -118,7 +121,19 @@ public class NewDetailActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public class NewsDetailHandler extends Handler{
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.fab) {
+            if (isTop) {
+                shareText(this, title, "我正在看【" + title + "】，\n查看详情：" + url);
+            } else {
+                //健康资讯的分享
+                shareText(this, title, "我正在看【" + title + "】:\n" + mGuideText.getText() + "\n查看详情：" + url);
+            }
+        }
+    }
+
+    public class NewsDetailHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
@@ -130,9 +145,9 @@ public class NewDetailActivity extends AppCompatActivity {
                 case 1: {
                     content = new WebView(NewDetailActivity.this);
                     mContentLayout.addView(content);
-                    if (isTop){
+                    if (isTop) {
                         handleIfIsTop();
-                    }else{
+                    } else {
                         handleIfNotTop();
                     }
                     YunHealthyLoading.dismiss();
@@ -152,7 +167,7 @@ public class NewDetailActivity extends AppCompatActivity {
         content.setHorizontalScrollBarEnabled(false);
         html = document.select("body > div.wrapper > div.left_box > div.new_cont.detail_con").html();
         int pos = html.indexOf("<p align=\"right\">（");
-        if (pos != -1){
+        if (pos != -1) {
             html = html.substring(0, pos);
         }
         html.replace("<img ", "<img style=\"width:100%\" ");
