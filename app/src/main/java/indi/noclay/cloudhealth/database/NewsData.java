@@ -1,10 +1,12 @@
 package indi.noclay.cloudhealth.database;
 
+import java.io.Serializable;
+
 /**
  * Created by no_clay on 2017/2/7.
  */
 
-public class NewsData {
+public class NewsData implements Serializable{
     private String date;
     private String content;
     private String url;

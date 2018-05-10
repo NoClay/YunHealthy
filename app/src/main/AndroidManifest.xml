@@ -121,7 +121,6 @@
             android:name=".activity.AddMedicineActivity"
             android:screenOrientation="portrait"/>
         <activity android:name=".activity.FoodMenuActivity"/>
-        <activity android:name=".activity.FoodMenuDetailActivity"/>
         <activity
             android:name=".activity.FoodDetailActivity"
             android:screenOrientation="portrait"
