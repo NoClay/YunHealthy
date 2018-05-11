@@ -25,6 +25,7 @@ import indi.noclay.cloudhealth.R;
 import indi.noclay.cloudhealth.database.MeasureTableHelper;
 import indi.noclay.cloudhealth.database.MedicineDetail;
 import indi.noclay.cloudhealth.database.SignUserData;
+import indi.noclay.cloudhealth.database.XinDianCacheHelper;
 import indi.noclay.cloudhealth.receiver.UpLoadReceiver;
 import indi.noclay.cloudhealth.util.ConstantsConfig;
 import indi.noclay.cloudhealth.util.SharedPreferenceHelper;
@@ -126,29 +127,8 @@ public class SynchronizeDataService extends Service{
                 }else{
                     makeANotification("数据同步完成");
                 }
-                //上传文件
-//                File dir = new File(FileCacheUtil.getCacheDirName());
-//                if (dir.exists() && dir.isDirectory()){
-//                    File[] files = dir.listFiles();
-//                    for (final File file: files) {
-//                        if (file.exists() && file.isFile() && file.getName().endsWith(".bin")){
-//                            final BmobFile upLoadFile = new BmobFile(file);
-//                            upLoadFile.upload(new UploadFileListener() {
-//                                @Override
-//                                public void done(BmobException e) {
-//                                    if (e == null){
-//                                        String url = upLoadFile.getUrl();
-//                                        MeasureXinDianCacheFile measuerXinDianCacheFile = new MeasureXinDianCacheFile();
-//                                        measuerXinDianCacheFile.setFileName(file.getName());
-//                                        measuerXinDianCacheFile.setFileUrl(url);
-//                                        measuerXinDianCacheFile.setOwner(new BmobPointer(SharedPreferenceHelper.getLoginUser()));
-//                                        measuerXinDianCacheFile.save();
-//                                    }
-//                                }
-//                            });
-//                        }
-//                    }
-//                }
+                XinDianCacheHelper.upLoadCacheFile();
+
                 //同步用药闹钟数据
                 final SignUserData userData = SharedPreferenceHelper.getLoginUser();
                 if (userData != null){

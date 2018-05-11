@@ -22,7 +22,6 @@ import java.util.Date;
 import java.util.List;
 
 import indi.noclay.cloudhealth.database.HeightAndWeight;
-import indi.noclay.cloudhealth.database.MeasureTableHelper;
 import indi.noclay.cloudhealth.database.SignUserData;
 import indi.noclay.cloudhealth.fragment.DataDataFragmentV2;
 import indi.noclay.cloudhealth.fragment.DataFragment;
@@ -198,8 +197,7 @@ public class MainActivityCopy extends AppCompatActivity {
         //alarmManager.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pi);        //设置闹钟
         AlarmManager alarm = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         Log.d("clock", "startAlarm: " + c.get(Calendar.HOUR_OF_DAY) + ":" + c.get(Calendar.MINUTE));
-        alarm.set(AlarmManager.RTC_WAKEUP,
-                c.getTimeInMillis(), pi);        //设置闹钟，当前时间就唤醒
+        alarm.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pi);        //设置闹钟，当前时间就唤醒
     }
 
     /**

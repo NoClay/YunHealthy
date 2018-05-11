@@ -21,6 +21,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -42,6 +43,7 @@ import pers.noclay.bluetooth.BluetoothConfig;
 
 import static indi.noclay.cloudhealth.database.MeasureTableHelper.addOneMeasureData;
 import static indi.noclay.cloudhealth.database.MeasureTableHelper.checkOneMeasureDataCache;
+import static indi.noclay.cloudhealth.database.XinDianCacheHelper.addOneCache;
 import static indi.noclay.cloudhealth.database.measuredata.MeasureDataHelper.ERROR_RETURN_VALUE;
 import static indi.noclay.cloudhealth.database.measuredata.MeasureDataHelper.isValidData;
 import static indi.noclay.cloudhealth.util.ConstantsConfig.MEASURE_TYPE_FENCHEN;
@@ -117,7 +119,7 @@ public class MeasureFragment extends Fragment implements
     public void onStart() {
         super.onStart();
         sIsBluetoothWorkable = true;
-        if (myAdapter != null){
+        if (myAdapter != null) {
             myAdapter.startRefresh();
         }
         Log.d(TAG, "onStart: iswork = " + sIsBluetoothWorkable);
@@ -127,7 +129,7 @@ public class MeasureFragment extends Fragment implements
     public void onStop() {
         super.onStop();
         sIsBluetoothWorkable = false;
-        if (myAdapter != null){
+        if (myAdapter != null) {
             myAdapter.stopRefresh();
         }
         Log.d(TAG, "onStop: iswork = " + sIsBluetoothWorkable);
@@ -213,8 +215,23 @@ public class MeasureFragment extends Fragment implements
                     + "\tmin = " + measureDataList.get(type).getMinData()
                     + "\taverage = " + measureDataList.get(type).getAverageData()
             );
-            addOneMeasureData(measureDataList.get(type), type, calendar.getTime());
-            measureDataList.get(type).reset();
+            if (type != ConstantsConfig.MEASURE_TYPE_XINDIAN) {
+                addOneMeasureData(measureDataList.get(type), type, calendar.getTime());
+                measureDataList.get(type).reset();
+            } else {
+                //添加一条文件缓存记录
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTimeInMillis(System.currentTimeMillis());
+                calendar.set(Calendar.SECOND, 0);
+                calendar.set(Calendar.MILLISECOND, 0);
+                calendar.setTimeInMillis(calendar.getTimeInMillis() - 1000 * 60 * 15 - 2000);
+                String filePath = FileCacheUtil.getCacheFileName(UtilClass.getTimeStamp(calendar));
+                File file = new File(filePath);
+                if (file.exists() && file.isFile()) {
+                    addOneCache(file);
+                }
+                //检查之前没有上传的文件
+            }
         }
     }
 
@@ -273,12 +290,12 @@ public class MeasureFragment extends Fragment implements
             }
             case 2: {
                 //心电
-//                checkMinuteAndCache(ConstantsConfig.MEASURE_TYPE_XINDIAN, minute);
+                checkMinuteAndCache(ConstantsConfig.MEASURE_TYPE_XINDIAN, minute);
                 resultValue = isValidData(result, MEASURE_TYPE_XINDIAN);
                 temp = measureDataList.get(ConstantsConfig.MEASURE_TYPE_XINDIAN);
-                if (resultValue != ERROR_RETURN_VALUE){
+                if (resultValue != ERROR_RETURN_VALUE) {
                     FileCacheUtil.appendToFile(((int) resultValue));
-                    if (sIsBluetoothWorkable){
+                    if (sIsBluetoothWorkable) {
                         myAdapter.startRefresh();
                         myAdapter.drawHeartWavesPoint(resultValue);
                     }
@@ -328,7 +345,7 @@ public class MeasureFragment extends Fragment implements
 
     Handler mHandler = new MeasureHandler();
 
-    private class MeasureHandler extends Bluetooth.Handler{
+    private class MeasureHandler extends Bluetooth.Handler {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
@@ -354,7 +371,7 @@ public class MeasureFragment extends Fragment implements
                     sDataResolver.resolveData((byte[]) msg.obj);
                     break;
                 }
-                case MSG_READ_DATA:{
+                case MSG_READ_DATA: {
                     Log.d(TAG, "handleMessage: type = " + msg.arg1);
 
                     break;
@@ -362,7 +379,6 @@ public class MeasureFragment extends Fragment implements
             }
         }
     }
-
 
 
     @Override

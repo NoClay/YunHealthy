@@ -119,6 +119,7 @@ public class MedicineTableHelper {
         deleteMedicineDetail(medicineDetail);
         insertMedicineDetail(medicineDetail);
     }
+
     public static void insertMedicineDetail(MedicineDetail medicine){
         String userId = SharedPreferenceHelper.getLoginUserId();
         LocalDataBase instance = getDefaultInstance();

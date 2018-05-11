@@ -11,6 +11,15 @@ public class MeasureXinDianCacheFile extends BmobObject{
     private String fileName;
     private String fileUrl;
     private BmobPointer owner;
+    private String fileLength;
+
+    public String getFileLength() {
+        return fileLength;
+    }
+
+    public void setFileLength(String fileLength) {
+        this.fileLength = fileLength;
+    }
 
     public String getFileName() {
         return fileName;

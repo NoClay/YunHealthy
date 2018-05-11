@@ -1,29 +1,11 @@
 package indi.noclay.cloudhealth.database;
 
-import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-
-import cn.bmob.v3.BmobBatch;
-import cn.bmob.v3.BmobObject;
-import cn.bmob.v3.datatype.BatchResult;
-import cn.bmob.v3.datatype.BmobDate;
-import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.QueryListListener;
-import indi.noclay.cloudhealth.database.measuredata.MeasureData;
-import indi.noclay.cloudhealth.fragment.DataMedicalFragment;
 import indi.noclay.cloudhealth.util.ConstantsConfig;
 import indi.noclay.cloudhealth.util.HealthApplication;
-import indi.noclay.cloudhealth.util.SharedPreferenceHelper;
-import indi.noclay.cloudhealth.util.UtilClass;
 
 
 /**
@@ -53,6 +35,7 @@ public class LocalDataBase extends SQLiteOpenHelper {
         db.execSQL(HeightAndWeightTableHelper.CREATE_HEIGHT_WEIGHT_CACHE);
         db.execSQL(MedicineTableHelper.CREATE_MEDICINE_DETAIL);
         db.execSQL(FoodKindTableHelper.CREATE_FOOD_KIND);
+        db.execSQL(XinDianCacheHelper.CREATE_XINDIAN_CHCHE);
     }
 
     @Override
@@ -66,6 +49,8 @@ public class LocalDataBase extends SQLiteOpenHelper {
                 db.execSQL(MedicineTableHelper.CREATE_MEDICINE_DETAIL);
             case 4:
                 db.execSQL(FoodKindTableHelper.CREATE_FOOD_KIND);
+            case 5:
+                db.execSQL(XinDianCacheHelper.CREATE_XINDIAN_CHCHE);
             default:
         }
     }

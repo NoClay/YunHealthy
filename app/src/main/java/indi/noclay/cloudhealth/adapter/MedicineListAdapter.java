@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -19,7 +20,9 @@ import java.util.List;
 
 import indi.noclay.cloudhealth.R;
 import indi.noclay.cloudhealth.database.MedicineDetail;
+import indi.noclay.cloudhealth.database.MedicineTableHelper;
 
+import static indi.noclay.cloudhealth.database.MedicineTableHelper.CLOCK_CLOSE;
 import static indi.noclay.cloudhealth.database.MedicineTableHelper.CLOCK_OPEN;
 
 
@@ -48,7 +51,7 @@ public class MedicineListAdapter extends RecyclerView.Adapter<MedicineListAdapte
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        MedicineDetail temp = medicineList.get(position);
+        final MedicineDetail temp = medicineList.get(position);
         Integer nextTimePos = temp.getNextTime();
         Log.d(TAG, "onBindViewHolder: size = " + medicineList.size());
         if (nextTimePos != null) {
@@ -65,6 +68,14 @@ public class MedicineListAdapter extends RecyclerView.Adapter<MedicineListAdapte
         } else {
             holder.mOpenOrClose.setChecked(false);
         }
+        holder.mOpenOrClose.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                temp.setIsOpen(isChecked ? CLOCK_OPEN : CLOCK_CLOSE);
+                MedicineTableHelper.updateMedicineDetail(temp);
+                temp.update();
+            }
+        });
         Glide.with(mContext).load(temp.getMedicinePicture())
                 .placeholder(R.drawable.medicine)
                 .error(R.drawable.medicine)
