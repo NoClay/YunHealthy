@@ -12,12 +12,22 @@ import java.util.Calendar;
 import java.util.List;
 
 import static indi.noclay.cloudhealth.util.ConstantsConfig.CACHE_DATA_DIR;
+import static indi.noclay.cloudhealth.util.ConstantsConfig.DOWNLOAD_DATA_DIR;
 
 /**
  * Created by clay on 2018/3/28.
  */
 
 public class FileCacheUtil {
+
+    public static String getDownloadDirName(){
+        return DOWNLOAD_DATA_DIR + SharedPreferenceHelper.getLoginUserId()
+                + "/xindian/";
+    }
+
+    public static String getDownloadFilePath(String fileName){
+        return getDownloadDirName() + fileName;
+    }
 
     public static String getCacheFilePath(String userId, String fileName) {
         return CACHE_DATA_DIR

@@ -53,6 +53,11 @@ public class HealthApplication extends Application {
             file.delete();
             file.mkdirs();
         }
+        file = new File(ConstantsConfig.DOWNLOAD_DATA_DIR);
+        if (!file.exists() || file.isFile()){
+            file.delete();
+            file.mkdirs();
+        }
     }
 
 

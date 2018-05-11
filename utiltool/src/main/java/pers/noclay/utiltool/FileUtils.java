@@ -23,6 +23,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.RandomAccessFile;
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -37,17 +38,46 @@ import java.text.DecimalFormat;
  */
 
 public class FileUtils {
+
+    public static void copyFile(String src, String dest) {
+        File srcFile = new File(src);
+        File destFile = new File(dest);
+        if (!srcFile.exists() || srcFile.isDirectory()) {
+            return;
+        }
+        if (!destFile.exists() || destFile.isFile()) {
+            try {
+                destFile.delete();
+                destFile.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        try {
+            InputStream fosfrom = new FileInputStream(src);
+            OutputStream fosto = new FileOutputStream(dest);
+            byte bt[] = new byte[1024];
+            int c;
+            while ((c = fosfrom.read(bt)) > 0) {
+                fosto.write(bt, 0, c);
+            }
+            fosfrom.close();
+            fosto.close();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
     public static final int SIZETYPE_B = 1;// 获取文件大小单位为B的double值
     public static final int SIZETYPE_KB = 2;// 获取文件大小单位为KB的double值
     public static final int SIZETYPE_MB = 3;// 获取文件大小单位为MB的double值
     public static final int SIZETYPE_GB = 4;// 获取文件大小单位为GB的double值
+
     /**
      * 获取文件指定文件的指定单位的大小
      *
-     * @param filePath
-     *            文件路径
-     * @param sizeType
-     *            获取大小的类型1为B、2为KB、3为MB、4为GB
+     * @param filePath 文件路径
+     * @param sizeType 获取大小的类型1为B、2为KB、3为MB、4为GB
      * @return double值的大小
      */
     public static double getFileOrFilesSize(String filePath, int sizeType) {
@@ -65,11 +95,11 @@ public class FileUtils {
         }
         return FormetFileSize(blockSize, sizeType);
     }
+
     /**
      * 调用此方法自动计算指定文件或指定文件夹的大小
      *
-     * @param filePath
-     *            文件路径
+     * @param filePath 文件路径
      * @return 计算好的带B、KB、MB、GB的字符串
      */
     public static String getAutoFileOrFilesSize(String filePath) {
@@ -87,6 +117,7 @@ public class FileUtils {
         }
         return FormetFileSize(blockSize);
     }
+
     /**
      * 获取指定文件大小
      *
@@ -106,6 +137,7 @@ public class FileUtils {
         }
         return size;
     }
+
     /**
      * 获取指定文件夹
      *
@@ -125,6 +157,7 @@ public class FileUtils {
         }
         return size;
     }
+
     /**
      * 转换文件大小
      *
@@ -149,6 +182,7 @@ public class FileUtils {
         }
         return fileSizeString;
     }
+
     /**
      * 转换文件大小,指定转换的类型
      *
@@ -178,8 +212,10 @@ public class FileUtils {
         }
         return fileSizeLong;
     }
+
     /**
      * 安卓4.4从uri获取图片文件
+     *
      * @param context
      * @param uri
      * @return
@@ -309,6 +345,7 @@ public class FileUtils {
 
     /**
      * 将String存储在对应的文件中
+     *
      * @param res
      * @param filePath
      * @return
@@ -348,6 +385,7 @@ public class FileUtils {
 
     /**
      * 将String追加到对应的文件
+     *
      * @param res
      * @param filePath
      * @return
@@ -366,7 +404,7 @@ public class FileUtils {
 //                 zipin = new ZipInputStream(in);
             byte buf[] = new byte[1024];
             int len;
-            while ((len = in.read(buf))!=-1) {
+            while ((len = in.read(buf)) != -1) {
                 randfile.write(buf, 0, len);
             }
             randfile.close();
@@ -378,7 +416,7 @@ public class FileUtils {
             return flag;
         } finally {
             try {
-                if(in!=null)in.close();
+                if (in != null) in.close();
 //                if(zipin!=null)zipin.close();
             } catch (Exception e2) {
                 // TODO: handle exception
@@ -389,6 +427,7 @@ public class FileUtils {
 
     /**
      * 将文件中的信息读取出来
+     *
      * @param file
      * @param encoding
      * @return
@@ -427,6 +466,7 @@ public class FileUtils {
 
     /**
      * 指定路径的文件是否存在
+     *
      * @param filePath
      * @return
      */
@@ -440,6 +480,7 @@ public class FileUtils {
 
     /**
      * 获取指定路径文件的md5
+     *
      * @param filePath
      * @return
      */
@@ -476,12 +517,13 @@ public class FileUtils {
 
     /**
      * 复制一个文件
+     *
      * @param file
      * @param targetFileFullName
      * @return
      */
-    public static boolean copyFile(File file, String targetFileFullName){
-        if (file.exists() && file.isFile()){
+    public static boolean copyFile(File file, String targetFileFullName) {
+        if (file.exists() && file.isFile()) {
             try {
                 InputStream in = new FileInputStream(file);
                 return copyFile(in, targetFileFullName);
@@ -491,8 +533,10 @@ public class FileUtils {
         }
         return false;
     }
+
     /**
      * 复制一个文件
+     *
      * @param is
      * @param fullFileName
      * @return

@@ -13,6 +13,7 @@ public class ConstantsConfig {
     public static final String APPLICATION_DIR = Environment.getExternalStorageDirectory() + "/CloudHealthy/";
     public static final String ROOT_PATH_IMAGE_DIR = APPLICATION_DIR + "userImage/";
     public static final String CACHE_DATA_DIR = APPLICATION_DIR + "userCache/";
+    public static final String DOWNLOAD_DATA_DIR = APPLICATION_DIR + "userDownload/";
     /**
      * Handler中的msg标识
      */

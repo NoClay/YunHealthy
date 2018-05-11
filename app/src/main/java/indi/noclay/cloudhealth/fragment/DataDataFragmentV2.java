@@ -112,11 +112,17 @@ public class DataDataFragmentV2 extends Fragment {
                                         startActivity(intent);
                                         break;
                                     }
+                                    case 5:{
+                                        Toast.makeText(context, "暂无更多", Toast.LENGTH_SHORT).show();
+                                        break;
+                                    }
                                     case 6:{
                                         Toast.makeText(context, "暂无更多", Toast.LENGTH_SHORT).show();
+                                        break;
                                     }
                                     case 7:{
                                         Toast.makeText(context, "暂无更多", Toast.LENGTH_SHORT).show();
+                                        break;
                                     }
                                     default:{
                                         Intent intent = new Intent(context, InfoActivity.class);

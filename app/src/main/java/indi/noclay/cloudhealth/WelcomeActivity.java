@@ -10,9 +10,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import cn.bmob.v3.Bmob;
-import cn.bmob.v3.BmobConfig;
-import cn.bmob.v3.BmobWrapper;
 import indi.noclay.cloudhealth.activity.LoginActivityCopy;
 import indi.noclay.cloudhealth.util.UtilClass;
 

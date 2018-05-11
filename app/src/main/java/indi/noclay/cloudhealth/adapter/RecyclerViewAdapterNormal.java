@@ -229,7 +229,7 @@ public class RecyclerViewAdapterNormal extends RecyclerView.Adapter<BaseCard> {
             case "TagData":
                 viewType = SEARCH_RESULT_TAG_CARD;
                 break;
-            case "FileCacheListItem":
+            case "MeasureXinDian":
                 viewType = FILE_CACHE_LIST_CARD;
                 break;
             case "NewsData":

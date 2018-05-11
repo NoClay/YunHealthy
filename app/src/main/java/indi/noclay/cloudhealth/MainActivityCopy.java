@@ -65,6 +65,7 @@ public class MainActivityCopy extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_copy);
         initView();
+        UtilClass.requestPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
         initUpLoadThread();
         startAlarm();
         UtilClass.requestPermission(this, Manifest.permission.READ_PHONE_STATE);
