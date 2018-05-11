@@ -7,7 +7,7 @@
     android:orientation="vertical"
     tools:context="indi.noclay.cloudhealth.activity.FoodDetailActivity">
 
-    <include layout="@layout/layout_tool_bar" />
+    <include layout="@layout/layout_tool_bar_with_star" />
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"

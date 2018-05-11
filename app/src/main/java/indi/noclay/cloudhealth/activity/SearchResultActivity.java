@@ -234,8 +234,9 @@ public class SearchResultActivity extends AppCompatActivity implements View.OnCl
 //        fetchData();
     }
 
+
     @Override
-    public void onItemClick(Object o, int position) {
+    public void onItemClick(Object o, int position, int layoutPosition) {
         Intent intent = new Intent(this, SearchResultInfoActivity.class);
         Bundle bundle = new Bundle();
         bundle.putInt(PARAMS_SEARCH_TYPE, searchType);

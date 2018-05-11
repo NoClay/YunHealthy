@@ -220,8 +220,45 @@ public class AutoLoadMoreRecyclerView extends RecyclerView{
         public void addHeaderView(int resId) {
             mHeaderResId = resId;
         }
+
+        public Adapter getInternalAdapter() {
+            return mInternalAdapter;
+        }
+
+        public void setInternalAdapter(Adapter internalAdapter) {
+            mInternalAdapter = internalAdapter;
+        }
+
+        public boolean isHeaderEnable() {
+            return mIsHeaderEnable;
+        }
+
+        public int getHeaderResId() {
+            return mHeaderResId;
+        }
+
+        public void setHeaderResId(int headerResId) {
+            mHeaderResId = headerResId;
+        }
+
+
     }
 
+
+    public void notifyItemRemoved(int pos){
+        int realPos = pos;
+        if (((AutoLoadAdapter) getAdapter()).mIsHeaderEnable){
+            realPos ++;
+        }
+        getAdapter().notifyItemRemoved(realPos);
+    }
+    public void notifyItemRangeRemoved(int start, int itemCount){
+        int realPos = start;
+        if (((AutoLoadAdapter) getAdapter()).mIsHeaderEnable){
+            realPos ++;
+        }
+        getAdapter().notifyItemRangeRemoved(realPos, itemCount);
+    }
     @Override
     public void setAdapter(Adapter adapter) {
         if (adapter != null) {
@@ -361,4 +398,5 @@ public class AutoLoadMoreRecyclerView extends RecyclerView{
             getAdapter().notifyItemRangeChanged(mLoadMorePosition, getAdapter().getItemCount());
         }
     }
+
 }

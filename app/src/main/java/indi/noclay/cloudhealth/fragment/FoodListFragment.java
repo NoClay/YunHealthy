@@ -17,6 +17,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +26,7 @@ import indi.noclay.cloudhealth.activity.FoodDetailActivity;
 import indi.noclay.cloudhealth.adapter.RecyclerViewAdapterNormal;
 import indi.noclay.cloudhealth.carddata.FoodShowItem;
 import indi.noclay.cloudhealth.myview.AutoLoadMoreRecyclerView;
+import indi.noclay.cloudhealth.util.ConstantsConfig;
 import indi.noclay.cloudhealth.util.InternetUrlManager;
 
 /**
@@ -120,6 +122,15 @@ public class FoodListFragment extends Fragment implements RecyclerViewAdapterNor
         getData();
     }
 
+    @Override
+    public void onItemClick(Object o, int position, int layoutPosition) {
+        if (o instanceof FoodShowItem){
+            Intent intent = new Intent(getContext(), FoodDetailActivity.class);
+            intent.putExtra(ConstantsConfig.PARAMS_OBJECT, (Serializable) o);
+            startActivity(intent);
+        }
+    }
+
     private class FoodListHandler extends Handler{
         @Override
         public void handleMessage(Message msg) {
@@ -150,14 +161,4 @@ public class FoodListFragment extends Fragment implements RecyclerViewAdapterNor
         adapterNormal.setOnItemClickListener(this);
     }
 
-    @Override
-    public void onItemClick(Object o, int position) {
-        if (o instanceof FoodShowItem){
-            Intent intent = new Intent(getContext(), FoodDetailActivity.class);
-            intent.putExtra("url", ((FoodShowItem) o).getFoodDetailUrl());
-            intent.putExtra("image", ((FoodShowItem) o).getFoodImageUrl());
-            intent.putExtra("name", ((FoodShowItem) o).getFoodName());
-            startActivity(intent);
-        }
-    }
 }

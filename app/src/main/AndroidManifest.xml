@@ -181,6 +181,8 @@
 
         <activity android:name=".activity.InfoActivityForXinDian">
         </activity>
+        <activity android:name=".activity.CollectionActivity">
+        </activity>
     </application>
 
 </manifest>

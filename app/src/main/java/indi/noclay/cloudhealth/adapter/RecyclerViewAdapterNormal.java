@@ -18,6 +18,7 @@ import indi.noclay.cloudhealth.card.FileCacheListCard;
 import indi.noclay.cloudhealth.card.FoodDetailStepCard;
 import indi.noclay.cloudhealth.card.FoodMenuCard;
 import indi.noclay.cloudhealth.card.FoodShowItemCard;
+import indi.noclay.cloudhealth.card.NewsCard;
 import indi.noclay.cloudhealth.card.SearchCompanyCard;
 import indi.noclay.cloudhealth.card.SearchIllnessCard;
 import indi.noclay.cloudhealth.card.SearchMedicineCard;
@@ -40,10 +41,32 @@ public class RecyclerViewAdapterNormal extends RecyclerView.Adapter<BaseCard> {
     public static final int SEARCH_ILLNESS_CARD = BASE_CARD + 6;
     public static final int SEARCH_RESULT_TAG_CARD = BASE_CARD + 7;
     public static final int FILE_CACHE_LIST_CARD = BASE_CARD + 8;
+    public static final int NEWS_CARD = BASE_CARD + 9;
     public Context mContext;
     public Activity mActivity;
     public Fragment mFragment;
     public OnItemClickListener onItemClickListener;
+    public OnItemLongClickListener onItemLongClickListener;
+
+    public RecyclerViewAdapterNormal(List<Object> datas, Handler handler, Context context, Activity activity, Fragment fragment) {
+        this.datas = datas;
+        mHandler = handler;
+        mContext = context;
+        mActivity = activity;
+        mFragment = fragment;
+    }
+
+    public RecyclerViewAdapterNormal() {
+        //需要自己设置，兼容之前的用法
+    }
+
+    public OnItemLongClickListener getOnItemLongClickListener() {
+        return onItemLongClickListener;
+    }
+
+    public void setOnItemLongClickListener(OnItemLongClickListener onItemLongClickListener) {
+        this.onItemLongClickListener = onItemLongClickListener;
+    }
 
     public OnItemClickListener getOnItemClickListener() {
         return onItemClickListener;
@@ -54,7 +77,11 @@ public class RecyclerViewAdapterNormal extends RecyclerView.Adapter<BaseCard> {
     }
 
     public interface OnItemClickListener{
-        void onItemClick(Object o, int position);
+        void onItemClick(Object o, int position, int layoutPosition);
+    }
+
+    public interface OnItemLongClickListener{
+        boolean onItemLongClick(Object o, int position, int layoutPosition);
     }
 
     public List<Object> getDatas() {
@@ -135,13 +162,17 @@ public class RecyclerViewAdapterNormal extends RecyclerView.Adapter<BaseCard> {
             case FILE_CACHE_LIST_CARD:
                 itemView = LayoutInflater.from(mContext).inflate(R.layout.item_file_cache_list, parent, false);
                 baseCard = new FileCacheListCard(itemView, mHandler, mActivity, mFragment);
+                break;
+            case NEWS_CARD:
+                itemView = LayoutInflater.from(mContext).inflate(R.layout.item_news, parent, false);
+                baseCard = new NewsCard(itemView, mHandler, mActivity, mFragment);
             default:
         }
         return baseCard;
     }
 
     @Override
-    public void onBindViewHolder(BaseCard holder, int position) {
+    public void onBindViewHolder(final BaseCard holder, int position) {
         if (datas != null && position < datas.size()){
             holder.initData(datas.get(position));
             final int pos = position;
@@ -149,7 +180,15 @@ public class RecyclerViewAdapterNormal extends RecyclerView.Adapter<BaseCard> {
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        onItemClickListener.onItemClick(datas.get(pos), pos);
+                        onItemClickListener.onItemClick(datas.get(pos), pos, holder.getLayoutPosition());
+                    }
+                });
+            }
+            if (onItemLongClickListener != null){
+                holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        return onItemLongClickListener.onItemLongClick(datas.get(pos), pos, holder.getLayoutPosition());
                     }
                 });
             }
@@ -192,6 +231,9 @@ public class RecyclerViewAdapterNormal extends RecyclerView.Adapter<BaseCard> {
                 break;
             case "FileCacheListItem":
                 viewType = FILE_CACHE_LIST_CARD;
+                break;
+            case "NewsData":
+                viewType = NEWS_CARD;
                 break;
         }
         return viewType;

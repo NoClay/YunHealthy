@@ -49,6 +49,9 @@ public class ConstantsConfig {
     public static final String PARAMS_IS_TOP = "isTop";
     public static final String PARAMS_FILE_PATH = "filePath";
     public static final String PARAMS_FILE_NAME = "fileName";
+    public static final String PARAMS_NAME = "name";
+    public static final String PARAMS_OBJECT = "object";
+    public static final String PARAMS_IS_NEWS = "isNews";
 
     public static final int TYPE_MEDICINE_INFO = 0;
     public static final int TYPE_MEDICINE_COMPANY_INFO = 1;

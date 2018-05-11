@@ -2,15 +2,30 @@ package indi.noclay.cloudhealth.database;
 
 import java.io.Serializable;
 
+import cn.bmob.v3.BmobObject;
+import indi.noclay.cloudhealth.interfaces.CollectionFormat;
+
 /**
  * Created by no_clay on 2017/2/7.
  */
 
-public class NewsData implements Serializable{
+public class NewsData extends BmobObject implements Serializable, CollectionFormat{
     private String date;
     private String content;
     private String url;
     private String title;
+    private SignUserData owner;
+
+    public String getName(){
+        return title;
+    }
+    public SignUserData getOwner() {
+        return owner;
+    }
+
+    public void setOwner(SignUserData owner) {
+        this.owner = owner;
+    }
 
     public String getDate() {
         return date;

@@ -213,6 +213,7 @@ public class NewsActivity extends AppCompatActivity
         intent.putExtra(ConstantsConfig.PARAMS_URL, newsList.get(position).getUrl());
         intent.putExtra(ConstantsConfig.PARAMS_IS_TOP, false);
         intent.putExtra(ConstantsConfig.PARAMS_TITLE, newsList.get(position).getTitle());
+        intent.putExtra(ConstantsConfig.PARAMS_OBJECT, newsList.get(position));
         startActivity(intent);
     }
 

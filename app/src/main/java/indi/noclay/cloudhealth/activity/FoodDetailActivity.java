@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
@@ -28,10 +29,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.SaveListener;
 import indi.noclay.cloudhealth.R;
 import indi.noclay.cloudhealth.adapter.RecyclerViewAdapterNormal;
 import indi.noclay.cloudhealth.carddata.FoodDetailStep;
+import indi.noclay.cloudhealth.carddata.FoodShowItem;
 import indi.noclay.cloudhealth.myview.FullLinearLayoutManager;
+import indi.noclay.cloudhealth.util.ConstantsConfig;
+import indi.noclay.cloudhealth.util.SharedPreferenceHelper;
 
 import static indi.noclay.cloudhealth.util.ViewUtils.hideView;
 
@@ -40,10 +46,6 @@ public class FoodDetailActivity extends AppCompatActivity implements View.OnClic
     private TextView mInfoTitle;
     private ImageView mBack;
     private LinearLayout mContainer;
-    private String tip;
-    private String url;
-    private String name;
-    private String image;
     private String mainFoodDosing;
     private String otherFoodDosing;
     private String foodStepTitle;
@@ -66,6 +68,9 @@ public class FoodDetailActivity extends AppCompatActivity implements View.OnClic
     public static final int STATUS_OTHER_DOSING = 2;
     private LinearLayout mTipsLayer;
     private TextView mTips;
+    private FoodShowItem item;
+    private String tip;
+    private ImageView mStar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,11 +83,9 @@ public class FoodDetailActivity extends AppCompatActivity implements View.OnClic
 
     private void handleArgument(Intent intent) {
         if (intent != null) {
-            url = intent.getStringExtra("url");
-            image = intent.getStringExtra("image");
-            name = intent.getStringExtra("name");
-            mInfoTitle.setText(name);
-            Glide.with(mContext).load(image).crossFade().into(new SimpleTarget<GlideDrawable>() {
+            item = (FoodShowItem) intent.getSerializableExtra(ConstantsConfig.PARAMS_OBJECT);
+            mInfoTitle.setText(item.getFoodName());
+            Glide.with(mContext).load(item.getFoodImageUrl()).crossFade().into(new SimpleTarget<GlideDrawable>() {
                 @Override
                 public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
                     mFoodImage.setImageDrawable(resource);
@@ -97,7 +100,7 @@ public class FoodDetailActivity extends AppCompatActivity implements View.OnClic
             @Override
             public void run() {
                 try {
-                    Document document = Jsoup.connect(url).get();
+                    Document document = Jsoup.connect(item.getFoodDetailUrl()).get();
                     if (document == null) {
                         mHandler.sendEmptyMessage(LOAD_FAILED);
                         return;
@@ -174,9 +177,9 @@ public class FoodDetailActivity extends AppCompatActivity implements View.OnClic
                         hideView(mOtherDosingLayer);
                     }
 
-                    if (!TextUtils.isEmpty(tip)){
+                    if (!TextUtils.isEmpty(tip)) {
                         mTips.setText(tip);
-                    }else{
+                    } else {
                         hideView(mTipsLayer);
                     }
                     mFoodStepTitle.setText(foodStepTitle);
@@ -219,11 +222,42 @@ public class FoodDetailActivity extends AppCompatActivity implements View.OnClic
         mFoodSteps.setAdapter(adapterNormal);
         mTipsLayer = (LinearLayout) findViewById(R.id.tipsLayer);
         mTips = (TextView) findViewById(R.id.tips);
+        mStar = (ImageView) findViewById(R.id.star);
+        mStar.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
-
+        switch (v.getId()) {
+            case R.id.back: {
+                finish();
+                break;
+            }
+            case R.id.star: {
+                Toast.makeText(mContext, "请到我的食谱查看", Toast.LENGTH_SHORT).show();
+                mStar.setVisibility(View.GONE);
+                item.setOwner(SharedPreferenceHelper.getLoginUser());
+                item.save(new SaveListener<String>() {
+                    @Override
+                    public void done(String s, BmobException e) {
+                        if (e == null){
+                            Log.d(TAG, "done: collection success");
+                        }else{
+                            if (!e.toString().contains("unique index cannot has duplicate value")){
+                                Log.d(TAG, "done: collection failed");
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(mContext, "添加失败，请重试", Toast.LENGTH_SHORT).show();
+                                        mStar.setVisibility(View.VISIBLE);
+                                    }
+                                });
+                            }
+                        }
+                    }
+                });
+            }
+        }
     }
 
     @Override

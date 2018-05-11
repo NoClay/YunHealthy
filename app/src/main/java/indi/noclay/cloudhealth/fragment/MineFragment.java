@@ -24,6 +24,8 @@ import com.google.zxing.activity.CaptureActivity;
 import de.hdodenhof.circleimageview.CircleImageView;
 import indi.noclay.cloudhealth.R;
 import indi.noclay.cloudhealth.activity.ChangeMyDataActivityCopy;
+import indi.noclay.cloudhealth.activity.CollectionActivity;
+import indi.noclay.cloudhealth.util.ConstantsConfig;
 import indi.noclay.cloudhealth.util.SharedPreferenceHelper;
 import indi.noclay.cloudhealth.util.UtilClass;
 
@@ -77,8 +79,8 @@ public class MineFragment extends Fragment implements View.OnClickListener{
         title = (TextView) v.findViewById(R.id.info_title);
         back = (ImageView) v.findViewById(R.id.back);
         layouts[0] = (RelativeLayout) v.findViewById(R.id.firstLayout);
-//        layouts[1] = (RelativeLayout) v.findViewById(R.id.secondLayout);
-//        layouts[2] = (RelativeLayout) v.findViewById(R.id.thirdLayout);
+        layouts[1] = (RelativeLayout) v.findViewById(R.id.secondLayout);
+        layouts[2] = (RelativeLayout) v.findViewById(R.id.thirdLayout);
         layouts[3] = (RelativeLayout) v.findViewById(R.id.fourthLayout);
 //        layouts[4] = (RelativeLayout) v.findViewById(R.id.fifthLayout);
         layouts[5] = (RelativeLayout) v.findViewById(R.id.sixthLayout);
@@ -98,17 +100,21 @@ public class MineFragment extends Fragment implements View.OnClickListener{
                 startActivityForResult(intent, REQUEST_CHANGE_DATA);
                 break;
             }
-//            case R.id.secondLayout:{
-//                //管理健康方案
-//                Toast.makeText(context, "账户功能尚未投入使用", Toast.LENGTH_SHORT).show();
-//
-//                break;
-//            }
-//            case R.id.thirdLayout:{
-//                //联系人
-//                Toast.makeText(context, "账户功能尚未投入使用", Toast.LENGTH_SHORT).show();
-//                break;
-//            }
+            case R.id.secondLayout:{
+                //我的食谱
+                Intent intent = new Intent(getContext(), CollectionActivity.class);
+                intent.putExtra(ConstantsConfig.PARAMS_IS_NEWS, false);
+                startActivity(intent);
+
+                break;
+            }
+            case R.id.thirdLayout:{
+                //我的资讯
+                Intent intent = new Intent(getContext(), CollectionActivity.class);
+                intent.putExtra(ConstantsConfig.PARAMS_IS_NEWS, true);
+                startActivity(intent);
+                break;
+            }
             case R.id.fourthLayout:{
                 //云健康账户
                 Toast.makeText(context, "账户功能尚未投入使用", Toast.LENGTH_SHORT).show();

@@ -2,6 +2,8 @@ package indi.noclay.cloudhealth.database;
 
 //import cn.bmob.v3.BmobObject;
 
+import java.io.Serializable;
+
 import cn.bmob.v3.BmobObject;
 import cn.bmob.v3.datatype.BmobDate;
 
@@ -9,7 +11,7 @@ import cn.bmob.v3.datatype.BmobDate;
  * Created by 82661 on 2016/11/25.
  */
 
-public class SignUserData extends BmobObject {
+public class SignUserData extends BmobObject implements Serializable{
     private String userName;//昵称
     private String passWord;//用于修改密码
     private String phoneNumber;//用于储存手机号

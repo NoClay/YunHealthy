@@ -77,8 +77,9 @@ public class InfoActivityForXinDian extends AppCompatActivity
         getFileList(year, month, day);
     }
 
+
     @Override
-    public void onItemClick(Object o, int position) {
+    public void onItemClick(Object o, int position, int layoutPosition) {
         if (o instanceof FileCacheListItem){
             Intent intent = new Intent(this, ShowHeartWaves.class);
             intent.putExtra(ConstantsConfig.PARAMS_FILE_NAME, ((FileCacheListItem) o).getName());

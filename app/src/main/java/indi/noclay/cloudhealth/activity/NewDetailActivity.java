@@ -12,11 +12,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -26,9 +28,13 @@ import java.io.IOException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.SaveListener;
 import indi.noclay.cloudhealth.R;
+import indi.noclay.cloudhealth.database.NewsData;
 import indi.noclay.cloudhealth.myview.YunHealthyErrorView;
 import indi.noclay.cloudhealth.util.ConstantsConfig;
+import indi.noclay.cloudhealth.util.SharedPreferenceHelper;
 import indi.noclay.cloudhealth.util.ViewUtils;
 import indi.noclay.cloudhealth.util.YunHealthyLoading;
 
@@ -66,6 +72,8 @@ public class NewDetailActivity extends AppCompatActivity implements View.OnClick
     private Document document;
     private boolean isTop;
     private String title;
+    private NewsData mNewsData;
+    private static final String TAG = "NewDetailActivity";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -100,6 +108,9 @@ public class NewDetailActivity extends AppCompatActivity implements View.OnClick
         isTop = getIntent().getBooleanExtra(ConstantsConfig.PARAMS_IS_TOP, false);
         url = getIntent().getStringExtra(ConstantsConfig.PARAMS_URL);
         title = getIntent().getStringExtra(ConstantsConfig.PARAMS_TITLE);
+        if (!isTop){
+            mNewsData = (NewsData) getIntent().getSerializableExtra(ConstantsConfig.PARAMS_OBJECT);
+        }
         mToolbarLayout.setTitle(title);
         mFab.setOnClickListener(this);
         setSupportActionBar(mToolbar);
@@ -110,16 +121,54 @@ public class NewDetailActivity extends AppCompatActivity implements View.OnClick
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(final MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home: {
                 System.exit(0);
                 finish();
                 return true;
             }
+            case R.id.star:{
+                item.setVisible(false);
+                Toast.makeText(this, "请到我的资讯查看", Toast.LENGTH_SHORT).show();
+                if (mNewsData != null){
+                    mNewsData.setOwner(SharedPreferenceHelper.getLoginUser());
+                    mNewsData.save(new SaveListener<String>() {
+                        @Override
+                        public void done(String s, BmobException e) {
+                            if (e == null){
+                                Log.d(TAG, "done: collection success");
+                            }else{
+                                if (!e.toString().contains("unique index cannot has duplicate value")){
+                                    Log.e(TAG, "done: " + e.toString(), e);
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Toast.makeText(NewDetailActivity.this, "添加失败，请重试", Toast.LENGTH_SHORT).show();
+                                            item.setVisible(true);
+                                        }
+                                    });
+                                }
+                            }
+                        }
+                    });
+                }
+                break;
+            }
         }
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        if (isTop){
+            return false;
+        }
+        getMenuInflater().inflate(R.menu.menu_collection, menu);
+        return true;
+    }
+
+
 
     @Override
     public void onClick(View v) {

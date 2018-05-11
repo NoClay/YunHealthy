@@ -56,6 +56,7 @@
         android:paddingBottom="5dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
         <android.support.v7.widget.RecyclerView
+            tools:listitem="@layout/item_medicine"
             android:id="@+id/medicineList"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
