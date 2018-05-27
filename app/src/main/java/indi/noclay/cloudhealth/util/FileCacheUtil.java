@@ -101,9 +101,7 @@ public class FileCacheUtil {
                 byte[] bytes = new byte[2];
                 int count = 0;
                 while (in.read(bytes) != -1) {
-                    int value = 0;
-                    value += (bytes[0] & 0xFF) * 256;
-                    value += (bytes[1] & 0xFF);
+                    int value = (bytes[0] & 0xFF) * 256 + (bytes[1] & 0xFF);
                     integers.add(value);
                 }
             } catch (FileNotFoundException e) {

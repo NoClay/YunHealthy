@@ -35,8 +35,10 @@ public class DataDataFragmentV2 extends Fragment {
     private RecyclerView recyclerView;
     private Context context;
     private RecycleAdapterForData myAdapter;
+//    String[] titleArrays = {"血氧", "脉搏", "心电", "体温",
+//            "粉尘浓度", "血糖（待定）", "脑电（待定）", "血压（待定）"};
     String[] titleArrays = {"血氧", "脉搏", "心电", "体温",
-            "粉尘浓度", "血糖（待定）", "脑电（待定）", "血压（待定）"};
+            "粉尘浓度"};
     int[] idArrays = {
             R.drawable.bloodoxygen,
             R.drawable.file_icon_ecg,

@@ -1,5 +1,7 @@
 package indi.noclay.cloudhealth.util;
 
+import java.util.Arrays;
+
 import pers.noclay.utiltool.NormalUtils;
 
 /**
@@ -16,7 +18,6 @@ public class CustomMeasureDataResolver extends ABSMeasureDataResolver {
 
     @Override
     public void resolveData(byte[] datas) {
-//        String data = last + NormalUtils.hexValueOfBytes(datas);
         int start = -1;
         int end = 0;
         for (int i = 0; i < datas.length; i++) {
@@ -32,42 +33,29 @@ public class CustomMeasureDataResolver extends ABSMeasureDataResolver {
                     for (int j = 0; j < end - start; j++) {
                         data[j] = datas[start + j];
                     }
+                    data = Arrays.copyOfRange(datas, start, end);
                     analysisData(data);
                     start = end;
                 }
             }
         }
-//        while (start != -1 && end != -1){
-//            start = data.indexOf("dcba");
-//            if (start != -1 && data.length() > 4) {
-//                end = data.indexOf("dcba", start + 1);
-//            }
-//            if (start != -1 && end != -1 && start < end && end < data.length()) {
-//                analysisData(data.substring(start, end));
-//                data = data.substring(end);
-//            }
-//        }
-//        last = data.substring(end);
     }
     private void analysisData(byte[] datas){
-        if (datas == null){
+        if (datas == null || datas.length < 6){
             return;
         }
         int len = datas.length;
-        if (len < 6){
-            return;
-        }
         int type = datas[2] & 0x0f;
         int dataLength = (datas[3] & 0xff) * 256 + (datas[4] & 0xff);
         if (len != 6 + dataLength){
-            return;
+            return; //校验数据包长度
         }
         int sum = 0;
         for (int i = 0; i < len - 1; i++) {
-            sum += datas[i];
+            sum += datas[i]; //累加得出校验和
         }
         if ((sum & 0xff) != (datas[len - 1] & 0xff)){
-            return;
+            return; //校验和
         }
         String data = NormalUtils.hexValueOfBytes(datas);
         if (data != null && data.length() == len * 2){

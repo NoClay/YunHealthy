@@ -82,9 +82,13 @@ public class ConstantsConfig {
     };
 
     //目前已经可以使用的功能
+//    public static final String []LABEL_STRING = {
+//            "血氧", "脉搏", "心电", "体温", "粉尘浓度",
+//            "血糖（待定）", "脑电（待定）", "血压（待定）"
+//    };
+//    2018.5.27 暂时去掉血糖、脑电、血压item
     public static final String []LABEL_STRING = {
-            "血氧", "脉搏", "心电", "体温", "粉尘浓度",
-            "血糖（待定）", "脑电（待定）", "血压（待定）"
+            "血氧", "脉搏", "心电", "体温", "粉尘浓度"
     };
     public static final String []SECTIONS = {
             "我的群组", "内科", "外科", "手外科", "妇产科", "五官科",

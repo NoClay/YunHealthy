@@ -180,6 +180,7 @@ public class Bluetooth {
                 Log.d(TAG, "createBond: target = " + getTargetAddress());
                 BluetoothUtils.createBond(getTargetDevice().getClass(), getTargetDevice());
             } catch (Exception e) {
+                Log.e(TAG, "createBond: ", e);
                 e.printStackTrace();
             }
         }else if (sOnCreateBondResultListener != null){

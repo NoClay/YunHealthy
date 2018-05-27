@@ -269,14 +269,14 @@ public class MeasureFragment extends Fragment implements
             case 1: {
                 //血氧
                 if (result.length() == 8) {
-                    Log.d("workItem", "handleMessage: 血氧");
-                    Log.d("workItem", "handleMessage: 脉搏");
+                    Log.d("workItem", "handleMessage: 血氧  "  + result);
                     checkMinuteAndCache(MEASURE_TYPE_XUEYANG, minute);
                     checkMinuteAndCache(ConstantsConfig.MEASURE_TYPE_MAIBO, minute);
                     //进行血氧的结果解析
                     resultValue = isValidData(result.substring(0, 2), MEASURE_TYPE_XUEYANG);
                     temp = measureDataList.get(MEASURE_TYPE_XUEYANG);
                     if (resultValue != ERROR_RETURN_VALUE && compareData(temp, resultValue) && sIsBluetoothWorkable) {
+                        Log.d(TAG, "onResolve: 血氧 " + resultValue);
                         myAdapter.notifyItemChanged(MEASURE_TYPE_XUEYANG);
                     }
                     //进行脉搏的结果解析

@@ -31,20 +31,18 @@ public abstract class MeasureDataHelper {
             //每次都要求获取数据的字符串
             case MEASURE_TYPE_XUEYANG: {
                 //血氧
-                if (data.length() == 4) {
+                if (data.length() == 2) {
                     result = UtilClass.valueOfHexString(data);
-                    if (data.length() == 8) {
-                        //进行血氧的结果解析
-                        if (result > 0 && result < 100) {
-                            return result;
-                        }
+                    //进行血氧的结果解析
+                    if (result > 0 && result < 100) {
+                        return result;
                     }
                 }
                 break;
             }
             case MEASURE_TYPE_MAIBO: {
                 //进行脉搏的结果解析
-                if (data.length() == 4) {
+                if (data.length() == 2) {
                     result = UtilClass.valueOfHexString(data);
                     if (result > 0 && result < 255) {
                         return result;
